@@ -5,6 +5,21 @@
       "source": "vercel-labs/agent-browser",
       "sourceType": "github",
       "computedHash": "91782f423f6fad0fe4e2159350f2eb8c3cf66cfa4d2387b2c8d927d443c9a603"
+    },
+    "grill-me": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "computedHash": "784f0dbb7403b0f00324bce9a112f715342777a0daee7bbb7385f9c6f0a170ea"
+    },
+    "prd-to-issues": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "computedHash": "32192340c1a14317b25741f5a0a38d162b387b6d4bfd09e0ed3859367321e98f"
+    },
+    "prd-to-plan": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "computedHash": "b0fad4a6e8097a5095fe00bfc2ebd98827c2d599e8b0a974c9d3c50b59295ac8"
     }
   }
 }
