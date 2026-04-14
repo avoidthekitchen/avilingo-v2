@@ -1,0 +1,376 @@
+{
+  "version": "0.1.0",
+  "tier": 1,
+  "region": "Seattle, WA (98115 — Ravenna / University District)",
+  "target_species_count": 15,
+  "curation_date": "2026-04-13",
+  "data_sources": {
+    "audio": {
+      "primary": "Xeno-canto (xeno-canto.org)",
+      "license_filter": "CC-BY, CC-BY-SA, CC-BY-NC, CC-BY-NC-SA, CC0 — no ND variants",
+      "quality_filter": "A or B rated only",
+      "region_preference": "Washington > Oregon/BC/Idaho > rest of US",
+      "clips_per_species": "3 songs + 2 calls (target)"
+    },
+    "photos": {
+      "primary": "Wikimedia Commons (CC-BY, CC-BY-SA, CC0)",
+      "fallback": "USFWS National Digital Library (public domain)",
+      "per_species": "1 primary photo showing key field marks"
+    },
+    "frequency_data": "eBird checklists, King County WA, annual average"
+  },
+  "species": [
+    {
+      "id": "amro",
+      "common_name": "American Robin",
+      "scientific_name": "Turdus migratorius",
+      "family": "Turdidae",
+      "ebird_frequency_pct": 45,
+      "habitat": ["backyard", "parkland", "forest edge"],
+      "seasonality": "year-round",
+      "mnemonic": "Cheerily, cheer-up, cheerily — a caroling whistle at dawn and dusk",
+      "sound_types": {
+        "song": "Rich caroling whistle, phrases of 2-3 syllables with rising and falling pitch",
+        "call": "Sharp tut-tut-tut alarm; also a thin, high seep in flight"
+      },
+      "confuser_species": ["Varied Thrush", "Black-headed Grosbeak"],
+      "confuser_notes": "Varied Thrush has a single eerie buzzy note on one pitch, not a caroling phrase",
+      "xc_api_query": "https://xeno-canto.org/api/2/recordings?query=Turdus+migratorius+cnt:%22United+States%22+q:A",
+      "wikimedia_search": "https://commons.wikimedia.org/w/index.php?search=American+Robin+Turdus+migratorius&type=image",
+      "audio_clips": []
+    },
+    {
+      "id": "amcr",
+      "common_name": "American Crow",
+      "scientific_name": "Corvus brachyrhynchos",
+      "family": "Corvidae",
+      "ebird_frequency_pct": 42,
+      "habitat": ["urban", "backyard", "parkland"],
+      "seasonality": "year-round",
+      "mnemonic": "Loud, harsh caw-caw-caw — evenly spaced, no rattle",
+      "sound_types": {
+        "song": "N/A — crows don't have a true song",
+        "call": "Harsh caw-caw-caw, usually 3-8 caws in a series"
+      },
+      "confuser_species": ["Common Raven"],
+      "confuser_notes": "Raven is deeper, hoarser, and gives a croaking pruk-pruk rather than a clean caw",
+      "xc_api_query": "https://xeno-canto.org/api/2/recordings?query=Corvus+brachyrhynchos+cnt:%22United+States%22+q:A",
+      "wikimedia_search": "https://commons.wikimedia.org/w/index.php?search=American+Crow+Corvus+brachyrhynchos&type=image",
+      "audio_clips": []
+    },
+    {
+      "id": "sosp",
+      "common_name": "Song Sparrow",
+      "scientific_name": "Melospiza melodia",
+      "family": "Passerellidae",
+      "ebird_frequency_pct": 38,
+      "habitat": ["backyard", "wetland edge", "brush"],
+      "seasonality": "year-round",
+      "mnemonic": "Starts with 3 clear notes (sweet-sweet-sweet), then a buzzy trill — Beethoven's 5th opening",
+      "sound_types": {
+        "song": "3 clear introductory notes followed by varied buzzy trills",
+        "call": "Sharp chimp call note"
+      },
+      "confuser_species": ["Fox Sparrow", "Lincoln's Sparrow", "Savannah Sparrow"],
+      "confuser_notes": "Fox Sparrow is richer and more musical; Lincoln's is buzzier throughout; Savannah is more insect-like",
+      "xc_api_query": "https://xeno-canto.org/api/2/recordings?query=Melospiza+melodia+cnt:%22United+States%22+q:A",
+      "wikimedia_search": "https://commons.wikimedia.org/w/index.php?search=Song+Sparrow+Melospiza+melodia&type=image",
+      "audio_clips": []
+    },
+    {
+      "id": "deju",
+      "common_name": "Dark-eyed Junco",
+      "scientific_name": "Junco hyemalis",
+      "family": "Passerellidae",
+      "ebird_frequency_pct": 35,
+      "habitat": ["backyard", "forest floor", "brush"],
+      "seasonality": "year-round (Oregon subspecies in Seattle)",
+      "mnemonic": "Simple even trill on one pitch — like a ringing telephone",
+      "sound_types": {
+        "song": "Even-pitched musical trill, 1-2 seconds long",
+        "call": "Sharp ticking tsik notes, often in rapid series when flushed"
+      },
+      "confuser_species": ["Chipping Sparrow", "Pine Siskin"],
+      "confuser_notes": "Chipping Sparrow trill is drier and faster; Pine Siskin trill rises at the end",
+      "xc_api_query": "https://xeno-canto.org/api/2/recordings?query=Junco+hyemalis+cnt:%22United+States%22+q:A",
+      "wikimedia_search": "https://commons.wikimedia.org/w/index.php?search=Dark-eyed+Junco+Junco+hyemalis&type=image",
+      "audio_clips": []
+    },
+    {
+      "id": "bcch",
+      "common_name": "Black-capped Chickadee",
+      "scientific_name": "Poecile atricapillus",
+      "family": "Paridae",
+      "ebird_frequency_pct": 33,
+      "habitat": ["backyard", "deciduous forest", "parkland"],
+      "seasonality": "year-round",
+      "mnemonic": "Song: clear whistled fee-bee (2 notes, second lower). Call: chick-a-dee-dee-dee",
+      "sound_types": {
+        "song": "Clear 2-note whistle: fee-bee, second note lower",
+        "call": "Chick-a-dee-dee-dee — more dees = higher alarm level"
+      },
+      "confuser_species": ["Chestnut-backed Chickadee"],
+      "confuser_notes": "Chestnut-backed is faster, higher-pitched, and lacks the clear fee-bee song",
+      "xc_api_query": "https://xeno-canto.org/api/2/recordings?query=Poecile+atricapillus+cnt:%22United+States%22+q:A",
+      "wikimedia_search": "https://commons.wikimedia.org/w/index.php?search=Black-capped+Chickadee+Poecile+atricapillus&type=image",
+      "audio_clips": []
+    },
+    {
+      "id": "spto",
+      "common_name": "Spotted Towhee",
+      "scientific_name": "Pipilo maculatus",
+      "family": "Passerellidae",
+      "ebird_frequency_pct": 30,
+      "habitat": ["brush", "backyard thickets", "forest edge"],
+      "seasonality": "year-round",
+      "mnemonic": "Drink-your-teeeee — two short intro notes then a buzzy trill",
+      "sound_types": {
+        "song": "2 short clear notes followed by a fast trill",
+        "call": "Cat-like mewing call; also a sharp chewink from underbrush"
+      },
+      "confuser_species": ["Dark-eyed Junco"],
+      "confuser_notes": "Junco trill is more even and simpler; Towhee has the distinctive 2-note intro",
+      "xc_api_query": "https://xeno-canto.org/api/2/recordings?query=Pipilo+maculatus+cnt:%22United+States%22+q:A",
+      "wikimedia_search": "https://commons.wikimedia.org/w/index.php?search=Spotted+Towhee+Pipilo+maculatus&type=image",
+      "audio_clips": []
+    },
+    {
+      "id": "hofi",
+      "common_name": "House Finch",
+      "scientific_name": "Haemorhous mexicanus",
+      "family": "Fringillidae",
+      "ebird_frequency_pct": 29,
+      "habitat": ["urban", "backyard", "buildings"],
+      "seasonality": "year-round",
+      "mnemonic": "Long warbling jumble ending with a harsh buzzy zhreee — sounds happy but messy",
+      "sound_types": {
+        "song": "Rapid warbling series, often ending with a buzzy downslurred note",
+        "call": "Sharp chirp in flight"
+      },
+      "confuser_species": ["Purple Finch", "Cassin's Finch"],
+      "confuser_notes": "Purple Finch is richer and more musical without the harsh ending; Cassin's is higher and clearer",
+      "xc_api_query": "https://xeno-canto.org/api/2/recordings?query=Haemorhous+mexicanus+cnt:%22United+States%22+q:A",
+      "wikimedia_search": "https://commons.wikimedia.org/w/index.php?search=House+Finch+Haemorhous+mexicanus&type=image",
+      "audio_clips": []
+    },
+    {
+      "id": "nofl",
+      "common_name": "Northern Flicker",
+      "scientific_name": "Colaptes auratus",
+      "family": "Picidae",
+      "ebird_frequency_pct": 28,
+      "habitat": ["backyard", "parkland", "open woodland"],
+      "seasonality": "year-round (Red-shafted subspecies)",
+      "mnemonic": "Loud wick-wick-wick-wick (like rapid laughter) or a single loud kyeer",
+      "sound_types": {
+        "song": "Loud, rapid wick-wick-wick-wick lasting several seconds",
+        "call": "Single loud kyeer or klee-yer; also drums on metal for resonance"
+      },
+      "confuser_species": ["Pileated Woodpecker"],
+      "confuser_notes": "Pileated is louder, slower, and has a wilder irregular rhythm; Flicker is evenly spaced",
+      "xc_api_query": "https://xeno-canto.org/api/2/recordings?query=Colaptes+auratus+cnt:%22United+States%22+q:A",
+      "wikimedia_search": "https://commons.wikimedia.org/w/index.php?search=Northern+Flicker+Colaptes+auratus&type=image",
+      "audio_clips": []
+    },
+    {
+      "id": "stja",
+      "common_name": "Steller's Jay",
+      "scientific_name": "Cyanocitta stelleri",
+      "family": "Corvidae",
+      "ebird_frequency_pct": 27,
+      "habitat": ["coniferous forest", "backyard", "parkland"],
+      "seasonality": "year-round",
+      "mnemonic": "Harsh shack-shack-shack — also a great mimic (imitates Red-tailed Hawk screams)",
+      "sound_types": {
+        "song": "N/A — jays don't have a traditional song",
+        "call": "Harsh shack-shack-shack alarm; also a variety of squeaky, rattling calls"
+      },
+      "confuser_species": ["Blue Jay"],
+      "confuser_notes": "Blue Jay (rare in Seattle) has a clearer jay-jay call; Steller's is harsher and more grating",
+      "xc_api_query": "https://xeno-canto.org/api/2/recordings?query=Cyanocitta+stelleri+cnt:%22United+States%22+q:A",
+      "wikimedia_search": "https://commons.wikimedia.org/w/index.php?search=Steller%27s+Jay+Cyanocitta+stelleri&type=image",
+      "audio_clips": []
+    },
+    {
+      "id": "bewr",
+      "common_name": "Bewick's Wren",
+      "scientific_name": "Thryomanes bewickii",
+      "family": "Troglodytidae",
+      "ebird_frequency_pct": 26,
+      "habitat": ["brush", "backyard thickets", "forest edge"],
+      "seasonality": "year-round",
+      "mnemonic": "Bright, complex buzzy song — like a miniature mockingbird with trills and buzzes",
+      "sound_types": {
+        "song": "Varied, complex song with clear whistles and buzzy trills",
+        "call": "Harsh scolding chatter when alarmed"
+      },
+      "confuser_species": ["Pacific Wren", "House Wren"],
+      "confuser_notes": "Pacific Wren is much faster and more cascading; House Wren is bubblier and less structured",
+      "xc_api_query": "https://xeno-canto.org/api/2/recordings?query=Thryomanes+bewickii+cnt:%22United+States%22+q:A",
+      "wikimedia_search": "https://commons.wikimedia.org/w/index.php?search=Bewick%27s+Wren+Thryomanes+bewickii&type=image",
+      "audio_clips": []
+    },
+    {
+      "id": "anhu",
+      "common_name": "Anna's Hummingbird",
+      "scientific_name": "Calypte anna",
+      "family": "Trochilidae",
+      "ebird_frequency_pct": 26,
+      "habitat": ["backyard", "gardens", "urban"],
+      "seasonality": "year-round",
+      "mnemonic": "Scratchy, buzzy, metallic series of chips and squeals — surprisingly loud for its size",
+      "sound_types": {
+        "song": "Complex scratchy buzzing and squealing song, often from an exposed perch",
+        "call": "Sharp chip note; also a loud chirp during dive display"
+      },
+      "confuser_species": ["Rufous Hummingbird"],
+      "confuser_notes": "Rufous (seasonal visitor) has a simpler, lower-pitched buzz; Anna's song is longer and more complex",
+      "xc_api_query": "https://xeno-canto.org/api/2/recordings?query=Calypte+anna+cnt:%22United+States%22+q:A",
+      "wikimedia_search": "https://commons.wikimedia.org/w/index.php?search=Anna%27s+Hummingbird+Calypte+anna&type=image",
+      "audio_clips": []
+    },
+    {
+      "id": "cbch",
+      "common_name": "Chestnut-backed Chickadee",
+      "scientific_name": "Poecile rufescens",
+      "family": "Paridae",
+      "ebird_frequency_pct": 25,
+      "habitat": ["coniferous forest", "backyard", "parkland"],
+      "seasonality": "year-round",
+      "mnemonic": "Faster, higher-pitched tsee-dee-dee than Black-capped — like a sped-up version",
+      "sound_types": {
+        "song": "Less distinct than Black-capped; doesn't give the clear fee-bee whistle",
+        "call": "Rapid, high tsee-dee-dee, faster and buzzier than Black-capped"
+      },
+      "confuser_species": ["Black-capped Chickadee"],
+      "confuser_notes": "Key confuser pair — Black-capped is slower with clear fee-bee song; Chestnut-backed is higher and faster",
+      "xc_api_query": "https://xeno-canto.org/api/2/recordings?query=Poecile+rufescens+cnt:%22United+States%22+q:A",
+      "wikimedia_search": "https://commons.wikimedia.org/w/index.php?search=Chestnut-backed+Chickadee+Poecile+rufescens&type=image",
+      "audio_clips": []
+    },
+    {
+      "id": "bush",
+      "common_name": "Bushtit",
+      "scientific_name": "Psaltriparus minimus",
+      "family": "Aegithalidae",
+      "ebird_frequency_pct": 25,
+      "habitat": ["brush", "backyard", "deciduous woodland"],
+      "seasonality": "year-round",
+      "mnemonic": "Tiny high-pitched tsit-tsit-tsit in constant flocks — sounds like a flock of squeaky toys",
+      "sound_types": {
+        "song": "N/A — Bushtits give contact calls rather than a true song",
+        "call": "Constant thin, high tsit-tsit-tsit contact calls from flock"
+      },
+      "confuser_species": ["Golden-crowned Kinglet"],
+      "confuser_notes": "Kinglet is even higher-pitched with a sibilant see-see-see; Bushtit is slightly lower with a harder tsit quality",
+      "xc_api_query": "https://xeno-canto.org/api/2/recordings?query=Psaltriparus+minimus+cnt:%22United+States%22+q:A",
+      "wikimedia_search": "https://commons.wikimedia.org/w/index.php?search=American+Bushtit+Psaltriparus+minimus&type=image",
+      "audio_clips": []
+    },
+    {
+      "id": "gcsp",
+      "common_name": "Golden-crowned Sparrow",
+      "scientific_name": "Zonotrichia atricapilla",
+      "family": "Passerellidae",
+      "ebird_frequency_pct": 25,
+      "habitat": ["brush", "backyard", "thickets"],
+      "seasonality": "winter visitor (Oct–Apr)",
+      "mnemonic": "Oh dear me — three descending whistled notes, melancholy and clear",
+      "sound_types": {
+        "song": "Three clear descending whistles: oh-dear-me",
+        "call": "Sharp tsik note, similar to White-crowned Sparrow"
+      },
+      "confuser_species": ["White-crowned Sparrow"],
+      "confuser_notes": "White-crowned has a more complex song with buzzy trills; Golden-crowned is simpler — just the 3 descending whistles",
+      "xc_api_query": "https://xeno-canto.org/api/2/recordings?query=Zonotrichia+atricapilla+cnt:%22United+States%22+q:A",
+      "wikimedia_search": "https://commons.wikimedia.org/w/index.php?search=Golden-crowned+Sparrow+Zonotrichia+atricapilla&type=image",
+      "audio_clips": []
+    },
+    {
+      "id": "eust",
+      "common_name": "European Starling",
+      "scientific_name": "Sturnus vulgaris",
+      "family": "Sturnidae",
+      "ebird_frequency_pct": 25,
+      "habitat": ["urban", "backyard", "buildings"],
+      "seasonality": "year-round",
+      "mnemonic": "Chattering mimic — whistles, clicks, squeals, and borrowed songs all jumbled together",
+      "sound_types": {
+        "song": "Long rambling series of whistles, clicks, rattles, and mimicked sounds",
+        "call": "Descending whistle; also a harsh chatter"
+      },
+      "confuser_species": ["Northern Mockingbird"],
+      "confuser_notes": "Mockingbird (rare in Seattle) repeats phrases 3+ times; Starling jumbles everything without repeating",
+      "xc_api_query": "https://xeno-canto.org/api/2/recordings?query=Sturnus+vulgaris+cnt:%22United+States%22+q:A",
+      "wikimedia_search": "https://commons.wikimedia.org/w/index.php?search=European+Starling+Sturnus+vulgaris&type=image",
+      "audio_clips": []
+    }
+  ],
+  "confuser_pairs": [
+    {
+      "pair": ["bcch", "cbch"],
+      "label": "Black-capped vs Chestnut-backed Chickadee",
+      "difficulty": "medium",
+      "key_difference": "Black-capped: slower dee-dee-dee + clear fee-bee song. Chestnut-backed: faster, higher, no fee-bee."
+    },
+    {
+      "pair": ["sosp", "gcsp"],
+      "label": "Song Sparrow vs Golden-crowned Sparrow",
+      "difficulty": "easy",
+      "key_difference": "Song Sparrow: 3 notes + complex trill. Golden-crowned: 3 pure descending whistles, no trill."
+    },
+    {
+      "pair": ["amcr", "stja"],
+      "label": "American Crow vs Steller's Jay",
+      "difficulty": "easy",
+      "key_difference": "Crow: clean caw-caw. Jay: harsh shack-shack, more grating and varied."
+    },
+    {
+      "pair": ["deju", "spto"],
+      "label": "Dark-eyed Junco vs Spotted Towhee",
+      "difficulty": "medium",
+      "key_difference": "Junco: even trill on one pitch. Towhee: 2 intro notes THEN a trill."
+    },
+    {
+      "pair": ["hofi", "sosp"],
+      "label": "House Finch vs Song Sparrow",
+      "difficulty": "hard",
+      "key_difference": "House Finch: continuous warble ending in buzz. Song Sparrow: structured 3-note opening."
+    }
+  ],
+  "lesson_plan": {
+    "description": "5 lessons of 3 birds each, ordered by distinctiveness (most distinctive first)",
+    "lessons": [
+      {
+        "lesson": 1,
+        "title": "The unmistakable three",
+        "species": ["amcr", "stja", "nofl"],
+        "rationale": "Loud, distinctive, impossible to confuse with each other. Builds confidence."
+      },
+      {
+        "lesson": 2,
+        "title": "Backyard singers",
+        "species": ["amro", "bcch", "spto"],
+        "rationale": "Classic songs you'll hear every morning. Introduces the fee-bee mnemonic."
+      },
+      {
+        "lesson": 3,
+        "title": "The sparrow start",
+        "species": ["sosp", "deju", "gcsp"],
+        "rationale": "First confuser challenge — three sparrow-like species with distinct songs."
+      },
+      {
+        "lesson": 4,
+        "title": "Small and buzzy",
+        "species": ["bewr", "anhu", "hofi"],
+        "rationale": "Complex songs that reward repeated listening. Wren vs finch structure."
+      },
+      {
+        "lesson": 5,
+        "title": "Flock sounds and mimics",
+        "species": ["cbch", "bush", "eust"],
+        "rationale": "Contact calls and mimicry. Introduces the chickadee confuser pair."
+      }
+    ]
+  }
+}
