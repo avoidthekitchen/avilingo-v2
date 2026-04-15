@@ -31,7 +31,7 @@ if not XC_API_KEY:
 
 SESSION = requests.Session()
 SESSION.headers.update({
-    "User-Agent": "BirdSongApp/0.1 (educational bird sound learning app; contact: mistercheese@gmail.com)"
+    "User-Agent": "BeakSpeakApp/0.1 (educational bird sound learning app; contact: mistercheese@gmail.com)"
 })
 
 
@@ -348,7 +348,7 @@ def main():
 
     species = manifest["species"]
     print("=" * 60)
-    print("  Birdsong App — Content Population")
+    print("  BeakSpeak — Content Population")
     print("=" * 60)
     print(f"  Species: {len(species)}")
     print(f"  Photo source: Wikipedia infobox (CC-BY-SA)")

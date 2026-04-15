@@ -2,15 +2,17 @@
 
 A Duolingo-style web app for learning Seattle-area bird songs and calls. Flash-card style introduction, spaced repetition reviews, and discrimination exercises — all in a mobile-first PWA.
 
+**Live at:** [unformedideas.com/beakspeak](https://unformedideas.com/beakspeak/)
+
 ## What's been built
 
-**Content pipeline** (`populate_content.py`, `download_media.py`) → **React app** (`birdsong/`)
+**Content pipeline** (`populate_content.py`, `download_media.py`) → **React app** (`beakspeak/`)
 
 ### Content (Sprint 0)
 - 15 Seattle-area species across 5 lessons, curated by learnability
 - Each species: 3 songs + 2 calls from Xeno-canto, normalized to OGG Opus 96kbps
 - Mnemonics, habitat tags, Wikipedia photos, and 5 confuser pairs per species
-- `tier1_seattle_birds_populated.json` → `birdsong/public/content/manifest.json`
+- `tier1_seattle_birds_populated.json` → `beakspeak/public/content/manifest.json`
 
 ### Learn mode (Sprint 1)
 - Swipeable bird cards (framer-motion) with edge-to-edge photo, song/call playback, mnemonic
@@ -36,7 +38,7 @@ A Duolingo-style web app for learning Seattle-area bird songs and calls. Flash-c
 
 ```bash
 # 1. Install dependencies
-cd birdsong
+cd beakspeak
 npm install
 
 # 2. Start dev server
@@ -44,7 +46,7 @@ npm run dev
 # → http://localhost:5173
 ```
 
-The app is a single-page app with no backend — all data is served as static files from `birdsong/public/content/`.
+The app is a single-page app with no backend — all data is served as static files from `beakspeak/public/content/`.
 
 ## Re-generating media
 
@@ -55,31 +57,37 @@ If you need to re-download or update the audio/photos:
 uv run python3 download_media.py
 ```
 
-This downloads ~25–40 MB of audio and photos into `birdsong/public/content/` and regenerates `manifest.json` with local paths. Audio and photos are gitignored; the manifest is checked in.
+This downloads ~25–40 MB of audio and photos into `beakspeak/public/content/` and regenerates `manifest.json` with local paths. Audio and photos are gitignored; the manifest is checked in.
 
 ## Running tests
 
 ```bash
-cd birdsong
+cd beakspeak
 npx vitest run        # 36 unit tests across core modules
 ```
 
 Tests cover: manifest loading, lesson gating/progression, FSRS rating logic, quiz session building.
 
-## Production build
+## Deploying
+
+The site is deployed to Cloudflare Workers (static assets only, no Worker invocations):
 
 ```bash
-cd birdsong
-npm run build         # outputs to birdsong/dist/
-npm run preview       # preview the production build locally
+# Build and assemble the combined site
+bash scripts/build-site.sh
+
+# Deploy to Cloudflare
+npx --prefix beakspeak wrangler deploy
 ```
 
-Build size: ~468 KB JS / 147 KB gzipped.
+This serves:
+- `unformedideas.com/` — landing page
+- `unformedideas.com/beakspeak/` — BeakSpeak app
 
 ## Project structure
 
 ```
-birdsong/
+beakspeak/
   public/content/
     manifest.json          # Species data with local audio/photo paths
     audio/{species_id}/    # OGG Opus clips (gitignored)

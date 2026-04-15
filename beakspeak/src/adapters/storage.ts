@@ -10,12 +10,12 @@ export interface StorageAdapter {
   clearAll(): Promise<void>
 }
 
-class BirdsongDB extends Dexie {
+class BeakSpeakDB extends Dexie {
   progress!: Dexie.Table<UserProgress, string>
   confusions!: Dexie.Table<ConfusionEvent, number>
 
   constructor() {
-    super('birdsong')
+    super('beakspeak')
     this.version(1).stores({
       progress: 'speciesId, state, nextReview',
       confusions: '++id, timestamp',
@@ -24,10 +24,10 @@ class BirdsongDB extends Dexie {
 }
 
 export class DexieStorage implements StorageAdapter {
-  private db: BirdsongDB
+  private db: BeakSpeakDB
 
   constructor() {
-    this.db = new BirdsongDB()
+    this.db = new BeakSpeakDB()
   }
 
   async getProgress(speciesId: string): Promise<UserProgress | undefined> {
