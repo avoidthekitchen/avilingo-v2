@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useAppStore } from '../../store/appStore'
 
 export default function Dashboard() {
@@ -6,6 +7,8 @@ export default function Dashboard() {
   const getIntroducedSpecies = useAppStore(s => s.getIntroducedSpecies)
   const setTab = useAppStore(s => s.setTab)
   const getDueForReview = useAppStore(s => s.getDueForReview)
+  const resetProgress = useAppStore(s => s.resetProgress)
+  const [confirming, setConfirming] = useState(false)
 
   if (!manifest) return null
 
@@ -86,6 +89,40 @@ export default function Dashboard() {
             </div>
           )
         })}
+      </div>
+
+      <div className="mt-8 pt-6 border-t border-border">
+        {!confirming ? (
+          <button
+            onClick={() => setConfirming(true)}
+            className="w-full px-4 py-3 text-sm text-text-muted border border-border rounded-xl hover:border-error hover:text-error transition-colors"
+          >
+            Reset All Progress
+          </button>
+        ) : (
+          <div className="space-y-2">
+            <p className="text-sm text-center text-text-muted">
+              This will erase all progress. Are you sure?
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setConfirming(false)}
+                className="flex-1 px-4 py-3 text-sm border border-border rounded-xl text-text-muted"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => {
+                  await resetProgress()
+                  setConfirming(false)
+                }}
+                className="flex-1 px-4 py-3 text-sm bg-error text-white rounded-xl font-medium"
+              >
+                Yes, Reset
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

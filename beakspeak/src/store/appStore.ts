@@ -29,6 +29,8 @@ interface AppState {
   introduceSpecies: (speciesIds: string[]) => Promise<void>
   logConfusion: (targetId: string, chosenId: string) => Promise<void>
   setLastPlayedClip: (speciesId: string, clipId: string) => void
+  resetProgress: () => Promise<void>
+  fastForwardToLesson: (lessonNum: number) => Promise<void>
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -132,5 +134,44 @@ export const useAppStore = create<AppState>((set, get) => ({
     const updated = new Map(lastPlayedClipId)
     updated.set(speciesId, clipId)
     set({ lastPlayedClipId: updated })
+  },
+
+  resetProgress: async () => {
+    const { storage } = get()
+    await storage.clearAll()
+    set({ allProgress: new Map() })
+  },
+
+  fastForwardToLesson: async (lessonNum: number) => {
+    const { manifest, storage, allProgress } = get()
+    if (!manifest) return
+    const updated = new Map(allProgress)
+    const now = Date.now()
+    const oneWeekMs = 7 * 24 * 60 * 60 * 1000
+
+    for (const lesson of manifest.lesson_plan.lessons) {
+      if (lesson.lesson >= lessonNum) break
+      for (const speciesId of lesson.species) {
+        if (!updated.get(speciesId)?.introduced) {
+          const progress: UserProgress = {
+            speciesId,
+            introduced: true,
+            introducedAt: now - oneWeekMs,
+            stability: 10,
+            difficulty: 5,
+            elapsedDays: 7,
+            scheduledDays: 14,
+            reps: 3,
+            lapses: 0,
+            state: 'review',
+            lastReview: now - oneWeekMs,
+            nextReview: now + oneWeekMs,
+          }
+          updated.set(speciesId, progress)
+          await storage.saveProgress(progress)
+        }
+      }
+    }
+    set({ allProgress: updated })
   },
 }))
