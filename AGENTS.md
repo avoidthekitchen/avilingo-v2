@@ -35,6 +35,9 @@ scripts/             ← Build/deploy scripts
 download_media.py    ← Content pipeline: fetches audio + photos
 populate_content.py  ← Content pipeline: populates species data from APIs
 wrangler.toml        ← Cloudflare Workers config
+rpi/                 ← Timestamped research and plan documents
+  plans/             ← Sprint plans and implementation specs
+  research/          ← Learning science and design research
 ```
 
 No backend. No client-side router. All data served as static files. State managed in-memory (Zustand) with persistence to IndexedDB (Dexie).
