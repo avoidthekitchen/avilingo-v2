@@ -1,0 +1,1812 @@
+{
+  "version": "0.1.0",
+  "tier": 1,
+  "region": "Seattle, WA (98115 \u2014 Ravenna / University District)",
+  "target_species_count": 15,
+  "curation_date": "2026-04-13",
+  "data_sources": {
+    "audio": {
+      "primary": "Xeno-canto (xeno-canto.org)",
+      "license_filter": "CC-BY, CC-BY-SA, CC-BY-NC, CC-BY-NC-SA, CC0 \u2014 no ND variants",
+      "quality_filter": "A or B rated only",
+      "region_preference": "Washington > Oregon/BC/Idaho > rest of US",
+      "clips_per_species": "3 songs + 2 calls (target)"
+    },
+    "photos": {
+      "primary": "Wikimedia Commons (CC-BY, CC-BY-SA, CC0)",
+      "fallback": "USFWS National Digital Library (public domain)",
+      "per_species": "1 primary photo showing key field marks"
+    },
+    "frequency_data": "eBird checklists, King County WA, annual average"
+  },
+  "species": [
+    {
+      "id": "amro",
+      "common_name": "American Robin",
+      "scientific_name": "Turdus migratorius",
+      "family": "Turdidae",
+      "ebird_frequency_pct": 45,
+      "habitat": [
+        "backyard",
+        "parkland",
+        "forest edge"
+      ],
+      "seasonality": "year-round",
+      "mnemonic": "Cheerily, cheer-up, cheerily \u2014 a caroling whistle at dawn and dusk",
+      "sound_types": {
+        "song": "Rich caroling whistle, phrases of 2-3 syllables with rising and falling pitch",
+        "call": "Sharp tut-tut-tut alarm; also a thin, high seep in flight"
+      },
+      "confuser_species": [
+        "Varied Thrush",
+        "Black-headed Grosbeak"
+      ],
+      "confuser_notes": "Varied Thrush has a single eerie buzzy note on one pitch, not a caroling phrase",
+      "audio_clips": {
+        "songs": [
+          {
+            "xc_id": "550087",
+            "xc_url": "https://xeno-canto.org/550087",
+            "audio_url": "/content/audio/amro/550087.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:08",
+            "recordist": "Bruce Lagerquist",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Thornton Creek Ravine, Seattle, King County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "666135",
+            "xc_url": "https://xeno-canto.org/666135",
+            "audio_url": "/content/audio/amro/666135.ogg",
+            "type": "dawn song",
+            "quality": "A",
+            "length": "0:45",
+            "recordist": "Steve Hampton",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Port Townsend, Jefferson County, Washington",
+            "country": "United States",
+            "score": 10.5
+          },
+          {
+            "xc_id": "319833",
+            "xc_url": "https://xeno-canto.org/319833",
+            "audio_url": "/content/audio/amro/319833.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:39",
+            "recordist": "John Leszczynski",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Washington, District of Columbia, District of Columbia",
+            "country": "United States",
+            "score": 10.5
+          }
+        ],
+        "calls": [
+          {
+            "xc_id": "550893",
+            "xc_url": "https://xeno-canto.org/550893",
+            "audio_url": "/content/audio/amro/550893.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:10",
+            "recordist": "Bruce Lagerquist",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Thornton Creek Ravine, Seattle, King County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "550889",
+            "xc_url": "https://xeno-canto.org/550889",
+            "audio_url": "/content/audio/amro/550889.ogg",
+            "type": "alarm call",
+            "quality": "A",
+            "length": "0:14",
+            "recordist": "Bruce Lagerquist",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Thornton Creek Ravine, Seattle, King County, Washington",
+            "country": "United States",
+            "score": 11.5
+          }
+        ]
+      },
+      "photo": {
+        "url": "/content/photos/amro.jpg",
+        "width": 3444,
+        "height": 2584,
+        "filename": "American_robin_(71307).jpg",
+        "source": "wikipedia_infobox",
+        "license": "CC-BY-SA (Wikipedia)",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/American%20robin"
+      },
+      "wikipedia_audio": [
+        {
+          "url": "/content/audio/amro/wp_0.ogg",
+          "filename": "File:American Robin.ogg",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3AAmerican%20Robin.ogg"
+        },
+        {
+          "url": "/content/audio/amro/wp_1.ogg",
+          "filename": "File:Turdus-migratorius-003.ogg",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3ATurdus-migratorius-003.ogg"
+        }
+      ]
+    },
+    {
+      "id": "amcr",
+      "common_name": "American Crow",
+      "scientific_name": "Corvus brachyrhynchos",
+      "family": "Corvidae",
+      "ebird_frequency_pct": 42,
+      "habitat": [
+        "urban",
+        "backyard",
+        "parkland"
+      ],
+      "seasonality": "year-round",
+      "mnemonic": "Loud, harsh caw-caw-caw \u2014 evenly spaced, no rattle",
+      "sound_types": {
+        "song": "N/A \u2014 crows don't have a true song",
+        "call": "Harsh caw-caw-caw, usually 3-8 caws in a series"
+      },
+      "confuser_species": [
+        "Common Raven"
+      ],
+      "confuser_notes": "Raven is deeper, hoarser, and gives a croaking pruk-pruk rather than a clean caw",
+      "audio_clips": {
+        "songs": [
+          {
+            "xc_id": "481136",
+            "xc_url": "https://xeno-canto.org/481136",
+            "audio_url": "/content/audio/amcr/481136.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "0:26",
+            "recordist": "Meena Haribal",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Pinnacles National Park, San Benito County, California",
+            "country": "United States",
+            "score": 8.0
+          },
+          {
+            "xc_id": "420594",
+            "xc_url": "https://xeno-canto.org/420594",
+            "audio_url": "/content/audio/amcr/420594.ogg",
+            "type": "song",
+            "quality": "B",
+            "length": "0:39",
+            "recordist": "Meena Haribal",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Brinnon, Jefferson County, Washington",
+            "country": "United States",
+            "score": 8
+          },
+          {
+            "xc_id": "114556",
+            "xc_url": "https://xeno-canto.org/114556",
+            "audio_url": "/content/audio/amcr/114556.ogg",
+            "type": "song, whisper song",
+            "quality": "A",
+            "length": "0:26",
+            "recordist": "Nathan Pieplow",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/3.0/",
+            "location": "Moraine Park, Rocky Mountain National Park, Larimer, Colorado",
+            "country": "United States",
+            "score": 7.5
+          }
+        ],
+        "calls": [
+          {
+            "xc_id": "550085",
+            "xc_url": "https://xeno-canto.org/550085",
+            "audio_url": "/content/audio/amcr/550085.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:17",
+            "recordist": "Bruce Lagerquist",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Thornton Creek Ravine, Seattle, King County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "289011",
+            "xc_url": "https://xeno-canto.org/289011",
+            "audio_url": "/content/audio/amcr/289011.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:15",
+            "recordist": "David Vander Pluym",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Marymoor Park, King County, Washington",
+            "country": "United States",
+            "score": 11.5
+          }
+        ]
+      },
+      "photo": {
+        "url": "/content/photos/amcr.jpg",
+        "width": 1536,
+        "height": 1536,
+        "filename": "Corvus-brachyrhynchos-001.jpg",
+        "source": "wikipedia_infobox",
+        "license": "CC-BY-SA (Wikipedia)",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/American%20crow"
+      },
+      "wikipedia_audio": [
+        {
+          "url": "/content/audio/amcr/wp_0.ogg",
+          "filename": "File:American crow in spring.ogg",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3AAmerican%20crow%20in%20spring.ogg"
+        },
+        {
+          "url": "/content/audio/amcr/wp_1.ogg",
+          "filename": "File:Corvus brachyrhynchos - American Crow - XC115429.ogg",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3ACorvus%20brachyrhynchos%20-%20American%20Crow%20-%20XC115429.ogg"
+        }
+      ]
+    },
+    {
+      "id": "sosp",
+      "common_name": "Song Sparrow",
+      "scientific_name": "Melospiza melodia",
+      "family": "Passerellidae",
+      "ebird_frequency_pct": 38,
+      "habitat": [
+        "backyard",
+        "wetland edge",
+        "brush"
+      ],
+      "seasonality": "year-round",
+      "mnemonic": "Starts with 3 clear notes (sweet-sweet-sweet), then a buzzy trill \u2014 Beethoven's 5th opening",
+      "sound_types": {
+        "song": "3 clear introductory notes followed by varied buzzy trills",
+        "call": "Sharp chimp call note"
+      },
+      "confuser_species": [
+        "Fox Sparrow",
+        "Lincoln's Sparrow",
+        "Savannah Sparrow"
+      ],
+      "confuser_notes": "Fox Sparrow is richer and more musical; Lincoln's is buzzier throughout; Savannah is more insect-like",
+      "audio_clips": {
+        "songs": [
+          {
+            "xc_id": "663787",
+            "xc_url": "https://xeno-canto.org/663787",
+            "audio_url": "/content/audio/sosp/663787.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:26",
+            "recordist": "Whitney Neufeld-Kaiser",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Yost Park (near  Edmonds), Snohomish County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "473434",
+            "xc_url": "https://xeno-canto.org/473434",
+            "audio_url": "/content/audio/sosp/473434.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:21",
+            "recordist": "bowtyler",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Olympia, Thurston County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "473424",
+            "xc_url": "https://xeno-canto.org/473424",
+            "audio_url": "/content/audio/sosp/473424.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:29",
+            "recordist": "bowtyler",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Olympia, Thurston County, Washington",
+            "country": "United States",
+            "score": 11.5
+          }
+        ],
+        "calls": [
+          {
+            "xc_id": "972394",
+            "xc_url": "https://xeno-canto.org/972394",
+            "audio_url": "/content/audio/sosp/972394.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:17",
+            "recordist": "Whitney Neufeld-Kaiser",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Seattle, King County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "644849",
+            "xc_url": "https://xeno-canto.org/644849",
+            "audio_url": "/content/audio/sosp/644849.ogg",
+            "type": "alarm call",
+            "quality": "A",
+            "length": "0:07",
+            "recordist": "Larry Sirvio",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Denmark Township (near  Hastings), Washington County, Minnesota",
+            "country": "United States",
+            "score": 11.5
+          }
+        ]
+      },
+      "photo": {
+        "url": "/content/photos/sosp.jpg",
+        "width": 3257,
+        "height": 2284,
+        "filename": "Song_sparrow_in_Prospect_Park_(93031).jpg",
+        "source": "wikipedia_infobox",
+        "license": "CC-BY-SA (Wikipedia)",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Song%20sparrow"
+      },
+      "wikipedia_audio": [
+        {
+          "url": "/content/audio/sosp/wp_0.ogg",
+          "filename": "File:Melospiza-melodia-001.ogg",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3AMelospiza-melodia-001.ogg"
+        }
+      ]
+    },
+    {
+      "id": "deju",
+      "common_name": "Dark-eyed Junco",
+      "scientific_name": "Junco hyemalis",
+      "family": "Passerellidae",
+      "ebird_frequency_pct": 35,
+      "habitat": [
+        "backyard",
+        "forest floor",
+        "brush"
+      ],
+      "seasonality": "year-round (Oregon subspecies in Seattle)",
+      "mnemonic": "Simple even trill on one pitch \u2014 like a ringing telephone",
+      "sound_types": {
+        "song": "Even-pitched musical trill, 1-2 seconds long",
+        "call": "Sharp ticking tsik notes, often in rapid series when flushed"
+      },
+      "confuser_species": [
+        "Chipping Sparrow",
+        "Pine Siskin"
+      ],
+      "confuser_notes": "Chipping Sparrow trill is drier and faster; Pine Siskin trill rises at the end",
+      "audio_clips": {
+        "songs": [
+          {
+            "xc_id": "766386",
+            "xc_url": "https://xeno-canto.org/766386",
+            "audio_url": "/content/audio/deju/766386.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:22",
+            "recordist": "Bruce Lagerquist",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Dawson Canyon, Kittitas County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "178940",
+            "xc_url": "https://xeno-canto.org/178940",
+            "audio_url": "/content/audio/deju/178940.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:29",
+            "recordist": "Eric Cannizzaro",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Olympic National Forest (near  Montesano), Mason County, Washington",
+            "country": "United States",
+            "score": 11
+          },
+          {
+            "xc_id": "1083920",
+            "xc_url": "https://xeno-canto.org/1083920",
+            "audio_url": "/content/audio/deju/1083920.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "0:48",
+            "recordist": "Greg Irving",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Dungeness Recreation Area, Clallam County, Washington",
+            "country": "United States",
+            "score": 10
+          }
+        ],
+        "calls": [
+          {
+            "xc_id": "1024572",
+            "xc_url": "https://xeno-canto.org/1024572",
+            "audio_url": "/content/audio/deju/1024572.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:19",
+            "recordist": "Greg Irving",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Deer Park Campground, Olympic National Park, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "477131",
+            "xc_url": "https://xeno-canto.org/477131",
+            "audio_url": "/content/audio/deju/477131.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:14",
+            "recordist": "Bates Estabrooks",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Bremerton, Kitsap County, Washington",
+            "country": "United States",
+            "score": 11.5
+          }
+        ]
+      },
+      "photo": {
+        "url": "/content/photos/deju.jpg",
+        "width": 2536,
+        "height": 1692,
+        "filename": "Junco_hyemalis_hyemalis_CT1_(cropped).jpg",
+        "source": "wikipedia_infobox",
+        "license": "CC-BY-SA (Wikipedia)",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Dark-eyed%20junco"
+      }
+    },
+    {
+      "id": "bcch",
+      "common_name": "Black-capped Chickadee",
+      "scientific_name": "Poecile atricapillus",
+      "family": "Paridae",
+      "ebird_frequency_pct": 33,
+      "habitat": [
+        "backyard",
+        "deciduous forest",
+        "parkland"
+      ],
+      "seasonality": "year-round",
+      "mnemonic": "Song: clear whistled fee-bee (2 notes, second lower). Call: chick-a-dee-dee-dee",
+      "sound_types": {
+        "song": "Clear 2-note whistle: fee-bee, second note lower",
+        "call": "Chick-a-dee-dee-dee \u2014 more dees = higher alarm level"
+      },
+      "confuser_species": [
+        "Chestnut-backed Chickadee"
+      ],
+      "confuser_notes": "Chestnut-backed is faster, higher-pitched, and lacks the clear fee-bee song",
+      "audio_clips": {
+        "songs": [
+          {
+            "xc_id": "549584",
+            "xc_url": "https://xeno-canto.org/549584",
+            "audio_url": "/content/audio/bcch/549584.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:43",
+            "recordist": "Bruce Lagerquist",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Thornton Creek Ravine, Seattle, King County, Washington",
+            "country": "United States",
+            "score": 10.5
+          },
+          {
+            "xc_id": "624457",
+            "xc_url": "https://xeno-canto.org/624457",
+            "audio_url": "/content/audio/bcch/624457.ogg",
+            "type": "aberrant, song",
+            "quality": "A",
+            "length": "0:25",
+            "recordist": "Thomas Magarian",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "2310 North Wygant Street, North Portland, Multnomah County, Oregon",
+            "country": "United States",
+            "score": 9.5
+          },
+          {
+            "xc_id": "624456",
+            "xc_url": "https://xeno-canto.org/624456",
+            "audio_url": "/content/audio/bcch/624456.ogg",
+            "type": "aberrant, song",
+            "quality": "A",
+            "length": "0:20",
+            "recordist": "Thomas Magarian",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "2310 North Wygant Street, North Portland, Multnomah County, Oregon",
+            "country": "United States",
+            "score": 9.5
+          }
+        ],
+        "calls": [
+          {
+            "xc_id": "582380",
+            "xc_url": "https://xeno-canto.org/582380",
+            "audio_url": "/content/audio/bcch/582380.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:18",
+            "recordist": "James Link",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Quilcene, Jefferson County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "473414",
+            "xc_url": "https://xeno-canto.org/473414",
+            "audio_url": "/content/audio/bcch/473414.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:46",
+            "recordist": "bowtyler",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Olympia, Thurston County, Washington",
+            "country": "United States",
+            "score": 10.5
+          }
+        ]
+      },
+      "photo": {
+        "url": "/content/photos/bcch.jpg",
+        "width": 1024,
+        "height": 1024,
+        "filename": "Poecile-atricapilla-001.jpg",
+        "source": "wikipedia_infobox",
+        "license": "CC-BY-SA (Wikipedia)",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Black-capped%20chickadee"
+      },
+      "wikipedia_audio": [
+        {
+          "url": "/content/audio/bcch/wp_0.ogg",
+          "filename": "File:Poecile-atricapilla-004.ogg",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3APoecile-atricapilla-004.ogg"
+        },
+        {
+          "url": "/content/audio/bcch/wp_1.ogg",
+          "filename": "File:Poecile atricapillus - Black-capped Chickadee - XC70185.ogg",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3APoecile%20atricapillus%20-%20Black-capped%20Chickadee%20-%20XC70185.ogg"
+        }
+      ]
+    },
+    {
+      "id": "spto",
+      "common_name": "Spotted Towhee",
+      "scientific_name": "Pipilo maculatus",
+      "family": "Passerellidae",
+      "ebird_frequency_pct": 30,
+      "habitat": [
+        "brush",
+        "backyard thickets",
+        "forest edge"
+      ],
+      "seasonality": "year-round",
+      "mnemonic": "Drink-your-teeeee \u2014 two short intro notes then a buzzy trill",
+      "sound_types": {
+        "song": "2 short clear notes followed by a fast trill",
+        "call": "Cat-like mewing call; also a sharp chewink from underbrush"
+      },
+      "confuser_species": [
+        "Dark-eyed Junco"
+      ],
+      "confuser_notes": "Junco trill is more even and simpler; Towhee has the distinctive 2-note intro",
+      "audio_clips": {
+        "songs": [
+          {
+            "xc_id": "948903",
+            "xc_url": "https://xeno-canto.org/948903",
+            "audio_url": "/content/audio/spto/948903.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:19",
+            "recordist": "Whitney Neufeld-Kaiser",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Twisp, Okanogan County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "647613",
+            "xc_url": "https://xeno-canto.org/647613",
+            "audio_url": "/content/audio/spto/647613.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:26",
+            "recordist": "Whitney Neufeld-Kaiser",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Stanwood, Snohomish County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "547332",
+            "xc_url": "https://xeno-canto.org/547332",
+            "audio_url": "/content/audio/spto/547332.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:20",
+            "recordist": "Bruce Lagerquist",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Maple Leaf, Seattle, King County, Washington",
+            "country": "United States",
+            "score": 11.5
+          }
+        ],
+        "calls": [
+          {
+            "xc_id": "582159",
+            "xc_url": "https://xeno-canto.org/582159",
+            "audio_url": "/content/audio/spto/582159.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:29",
+            "recordist": "James Link",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Port Hadlock-Irondale, Jefferson County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "473453",
+            "xc_url": "https://xeno-canto.org/473453",
+            "audio_url": "/content/audio/spto/473453.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:29",
+            "recordist": "bowtyler",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Mission Creek Nature Park (near  Olympia), Thurston County, Washington",
+            "country": "United States",
+            "score": 11.5
+          }
+        ]
+      },
+      "photo": {
+        "url": "/content/photos/spto.jpg",
+        "width": 2273,
+        "height": 1818,
+        "filename": "Spotted_Towhee_(32684403303).jpg",
+        "source": "wikipedia_infobox",
+        "license": "CC-BY-SA (Wikipedia)",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Spotted%20towhee"
+      },
+      "wikipedia_audio": [
+        {
+          "url": "/content/audio/spto/wp_0.ogg",
+          "filename": "File:Pipilo maculatus - Spotted Towhee - XC104528.ogg",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3APipilo%20maculatus%20-%20Spotted%20Towhee%20-%20XC104528.ogg"
+        }
+      ]
+    },
+    {
+      "id": "hofi",
+      "common_name": "House Finch",
+      "scientific_name": "Haemorhous mexicanus",
+      "family": "Fringillidae",
+      "ebird_frequency_pct": 29,
+      "habitat": [
+        "urban",
+        "backyard",
+        "buildings"
+      ],
+      "seasonality": "year-round",
+      "mnemonic": "Long warbling jumble ending with a harsh buzzy zhreee \u2014 sounds happy but messy",
+      "sound_types": {
+        "song": "Rapid warbling series, often ending with a buzzy downslurred note",
+        "call": "Sharp chirp in flight"
+      },
+      "confuser_species": [
+        "Purple Finch",
+        "Cassin's Finch"
+      ],
+      "confuser_notes": "Purple Finch is richer and more musical without the harsh ending; Cassin's is higher and clearer",
+      "audio_clips": {
+        "songs": [
+          {
+            "xc_id": "638608",
+            "xc_url": "https://xeno-canto.org/638608",
+            "audio_url": "/content/audio/hofi/638608.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "0:37",
+            "recordist": "Bruce Lagerquist",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Cassimer Bar, Okanogan County, Washington",
+            "country": "United States",
+            "score": 10.5
+          },
+          {
+            "xc_id": "468779",
+            "xc_url": "https://xeno-canto.org/468779",
+            "audio_url": "/content/audio/hofi/468779.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:45",
+            "recordist": "Bruce Lagerquist",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Deadman Creek, Garfield County, Washington",
+            "country": "United States",
+            "score": 10.5
+          },
+          {
+            "xc_id": "584861",
+            "xc_url": "https://xeno-canto.org/584861",
+            "audio_url": "/content/audio/hofi/584861.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:29",
+            "recordist": "Thomas Magarian",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Columbia Childrens Arboretum, Portland, Multnomah County, Oregon",
+            "country": "United States",
+            "score": 9
+          }
+        ],
+        "calls": [
+          {
+            "xc_id": "638608",
+            "xc_url": "https://xeno-canto.org/638608",
+            "audio_url": "/content/audio/hofi/638608.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "0:37",
+            "recordist": "Bruce Lagerquist",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Cassimer Bar, Okanogan County, Washington",
+            "country": "United States",
+            "score": 10.5
+          },
+          {
+            "xc_id": "1056012",
+            "xc_url": "https://xeno-canto.org/1056012",
+            "audio_url": "/content/audio/hofi/1056012.ogg",
+            "type": "call",
+            "quality": "B",
+            "length": "0:11",
+            "recordist": "Denis Dujardin",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Tualatin River NWR, Washington County, Oregon",
+            "country": "United States",
+            "score": 9
+          }
+        ]
+      },
+      "photo": {
+        "url": "/content/photos/hofi.jpg",
+        "width": 3975,
+        "height": 3122,
+        "filename": "House_finch_(33688)2.jpg",
+        "source": "wikipedia_infobox",
+        "license": "CC-BY-SA (Wikipedia)",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/House%20finch"
+      },
+      "wikipedia_audio": [
+        {
+          "url": "/content/audio/hofi/wp_0.ogg",
+          "filename": "File:Carpodacus mexicanus vocalizations - pone.0027052.s006.oga",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3ACarpodacus%20mexicanus%20vocalizations%20-%20pone.0027052.s006.oga"
+        }
+      ]
+    },
+    {
+      "id": "nofl",
+      "common_name": "Northern Flicker",
+      "scientific_name": "Colaptes auratus",
+      "family": "Picidae",
+      "ebird_frequency_pct": 28,
+      "habitat": [
+        "backyard",
+        "parkland",
+        "open woodland"
+      ],
+      "seasonality": "year-round (Red-shafted subspecies)",
+      "mnemonic": "Loud wick-wick-wick-wick (like rapid laughter) or a single loud kyeer",
+      "sound_types": {
+        "song": "Loud, rapid wick-wick-wick-wick lasting several seconds",
+        "call": "Single loud kyeer or klee-yer; also drums on metal for resonance"
+      },
+      "confuser_species": [
+        "Pileated Woodpecker"
+      ],
+      "confuser_notes": "Pileated is louder, slower, and has a wilder irregular rhythm; Flicker is evenly spaced",
+      "audio_clips": {
+        "songs": [
+          {
+            "xc_id": "613548",
+            "xc_url": "https://xeno-canto.org/613548",
+            "audio_url": "/content/audio/nofl/613548.ogg",
+            "type": "begging call, song",
+            "quality": "A",
+            "length": "0:30",
+            "recordist": "Peter Ward and Ken Hall",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Icicle River near Leavenworth, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "604689",
+            "xc_url": "https://xeno-canto.org/604689",
+            "audio_url": "/content/audio/nofl/604689.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:26",
+            "recordist": "Bruce Lagerquist",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Maple Leaf, Seattle, King County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "1007124",
+            "xc_url": "https://xeno-canto.org/1007124",
+            "audio_url": "/content/audio/nofl/1007124.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:26",
+            "recordist": "Ed Pandolfino",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Dean's Crick, Sierra County, California",
+            "country": "United States",
+            "score": 7.5
+          }
+        ],
+        "calls": [
+          {
+            "xc_id": "613548",
+            "xc_url": "https://xeno-canto.org/613548",
+            "audio_url": "/content/audio/nofl/613548.ogg",
+            "type": "begging call, song",
+            "quality": "A",
+            "length": "0:30",
+            "recordist": "Peter Ward and Ken Hall",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Icicle River near Leavenworth, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "550950",
+            "xc_url": "https://xeno-canto.org/550950",
+            "audio_url": "/content/audio/nofl/550950.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:06",
+            "recordist": "Bruce Lagerquist",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Thornton Creek Ravine, Seattle, King County, Washington",
+            "country": "United States",
+            "score": 11.5
+          }
+        ]
+      },
+      "photo": {
+        "url": "/content/photos/nofl.jpg",
+        "width": 2441,
+        "height": 2442,
+        "filename": "Northern_yellow-shafted_flicker_male_(33737)_(cropped).jpg",
+        "source": "wikipedia_infobox",
+        "license": "CC-BY-SA (Wikipedia)",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Northern%20flicker"
+      },
+      "wikipedia_audio": [
+        {
+          "url": "/content/audio/nofl/wp_0.ogg",
+          "filename": "File:Colaptes auratus.ogg",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3AColaptes%20auratus.ogg"
+        },
+        {
+          "url": "/content/audio/nofl/wp_1.ogg",
+          "filename": "File:Northern Flicker Yosemite National Park.ogg",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3ANorthern%20Flicker%20Yosemite%20National%20Park.ogg"
+        }
+      ]
+    },
+    {
+      "id": "stja",
+      "common_name": "Steller's Jay",
+      "scientific_name": "Cyanocitta stelleri",
+      "family": "Corvidae",
+      "ebird_frequency_pct": 27,
+      "habitat": [
+        "coniferous forest",
+        "backyard",
+        "parkland"
+      ],
+      "seasonality": "year-round",
+      "mnemonic": "Harsh shack-shack-shack \u2014 also a great mimic (imitates Red-tailed Hawk screams)",
+      "sound_types": {
+        "song": "N/A \u2014 jays don't have a traditional song",
+        "call": "Harsh shack-shack-shack alarm; also a variety of squeaky, rattling calls"
+      },
+      "confuser_species": [
+        "Blue Jay"
+      ],
+      "confuser_notes": "Blue Jay (rare in Seattle) has a clearer jay-jay call; Steller's is harsher and more grating",
+      "audio_clips": {
+        "songs": [
+          {
+            "xc_id": "456270",
+            "xc_url": "https://xeno-canto.org/456270",
+            "audio_url": "/content/audio/stja/456270.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "0:56",
+            "recordist": "Alan Knue",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Ballinger Park, Mountlake Terrace, Snohomish County, Washington",
+            "country": "United States",
+            "score": 10.5
+          },
+          {
+            "xc_id": "456269",
+            "xc_url": "https://xeno-canto.org/456269",
+            "audio_url": "/content/audio/stja/456269.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "0:36",
+            "recordist": "Alan Knue",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Ballinger Park, Mountlake Terrace, Snohomish County, Washington",
+            "country": "United States",
+            "score": 10.5
+          },
+          {
+            "xc_id": "456271",
+            "xc_url": "https://xeno-canto.org/456271",
+            "audio_url": "/content/audio/stja/456271.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "1:12",
+            "recordist": "Alan Knue",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Ballinger Park, Mountlake Terrace, Snohomish County, Washington",
+            "country": "United States",
+            "score": 9.5
+          }
+        ],
+        "calls": [
+          {
+            "xc_id": "703911",
+            "xc_url": "https://xeno-canto.org/703911",
+            "audio_url": "/content/audio/stja/703911.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:11",
+            "recordist": "Steve Hampton",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Port Townsend, Jefferson County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "670954",
+            "xc_url": "https://xeno-canto.org/670954",
+            "audio_url": "/content/audio/stja/670954.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:14",
+            "recordist": "Phoebe Barnes",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Quarry Ridge Farm (private), Clark County, Washington",
+            "country": "United States",
+            "score": 11.5
+          }
+        ]
+      },
+      "photo": {
+        "url": "/content/photos/stja.jpg",
+        "width": 1226,
+        "height": 1854,
+        "filename": "Steller's_Jay_flagstaff_arizona.jpg",
+        "source": "wikipedia_infobox",
+        "license": "CC-BY-SA (Wikipedia)",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Steller%27s%20jay"
+      },
+      "wikipedia_audio": [
+        {
+          "url": "/content/audio/stja/wp_0.ogg",
+          "filename": "File:Cyanocitta stelleri - Steller's Jay - XC109654.ogg",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3ACyanocitta%20stelleri%20-%20Steller%27s%20Jay%20-%20XC109654.ogg"
+        }
+      ]
+    },
+    {
+      "id": "bewr",
+      "common_name": "Bewick's Wren",
+      "scientific_name": "Thryomanes bewickii",
+      "family": "Troglodytidae",
+      "ebird_frequency_pct": 26,
+      "habitat": [
+        "brush",
+        "backyard thickets",
+        "forest edge"
+      ],
+      "seasonality": "year-round",
+      "mnemonic": "Bright, complex buzzy song \u2014 like a miniature mockingbird with trills and buzzes",
+      "sound_types": {
+        "song": "Varied, complex song with clear whistles and buzzy trills",
+        "call": "Harsh scolding chatter when alarmed"
+      },
+      "confuser_species": [
+        "Pacific Wren",
+        "House Wren"
+      ],
+      "confuser_notes": "Pacific Wren is much faster and more cascading; House Wren is bubblier and less structured",
+      "audio_clips": {
+        "songs": [
+          {
+            "xc_id": "490934",
+            "xc_url": "https://xeno-canto.org/490934",
+            "audio_url": "/content/audio/bewr/490934.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:21",
+            "recordist": "Steve Hampton",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Vashon, King County, Washington",
+            "country": "United States",
+            "score": 11
+          },
+          {
+            "xc_id": "784043",
+            "xc_url": "https://xeno-canto.org/784043",
+            "audio_url": "/content/audio/bewr/784043.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:46",
+            "recordist": "Whitney Neufeld-Kaiser",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Wedgwood, Seattle, King County, Washington",
+            "country": "United States",
+            "score": 10.5
+          },
+          {
+            "xc_id": "557838",
+            "xc_url": "https://xeno-canto.org/557838",
+            "audio_url": "/content/audio/bewr/557838.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:33",
+            "recordist": "Whitney Neufeld-Kaiser",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Arlington, Snohomish County, Washington",
+            "country": "United States",
+            "score": 10.5
+          }
+        ],
+        "calls": [
+          {
+            "xc_id": "584936",
+            "xc_url": "https://xeno-canto.org/584936",
+            "audio_url": "/content/audio/bewr/584936.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:49",
+            "recordist": "James Link",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Quilcene, Jefferson County, Washington",
+            "country": "United States",
+            "score": 10.5
+          },
+          {
+            "xc_id": "624555",
+            "xc_url": "https://xeno-canto.org/624555",
+            "audio_url": "/content/audio/bewr/624555.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:24",
+            "recordist": "Thomas Magarian",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Smith Bybee Wetlands, North Portland, Multnomah County, Oregon",
+            "country": "United States",
+            "score": 9
+          }
+        ]
+      },
+      "photo": {
+        "url": "/content/photos/bewr.jpg",
+        "width": 1746,
+        "height": 1746,
+        "filename": "Bewicks_Wren.jpg",
+        "source": "wikipedia_infobox",
+        "license": "CC-BY-SA (Wikipedia)",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Bewick%27s%20wren"
+      },
+      "wikipedia_audio": [
+        {
+          "url": "/content/audio/bewr/wp_0.ogg",
+          "filename": "File:Thryomanes bewickii - Bewick's Wren - XC109604.ogg",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3AThryomanes%20bewickii%20-%20Bewick%27s%20Wren%20-%20XC109604.ogg"
+        },
+        {
+          "url": "/content/audio/bewr/wp_1.ogg",
+          "filename": "File:Thryomanes bewickii - Bewick's Wren - XC109632.ogg",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3AThryomanes%20bewickii%20-%20Bewick%27s%20Wren%20-%20XC109632.ogg"
+        }
+      ]
+    },
+    {
+      "id": "anhu",
+      "common_name": "Anna's Hummingbird",
+      "scientific_name": "Calypte anna",
+      "family": "Trochilidae",
+      "ebird_frequency_pct": 26,
+      "habitat": [
+        "backyard",
+        "gardens",
+        "urban"
+      ],
+      "seasonality": "year-round",
+      "mnemonic": "Scratchy, buzzy, metallic series of chips and squeals \u2014 surprisingly loud for its size",
+      "sound_types": {
+        "song": "Complex scratchy buzzing and squealing song, often from an exposed perch",
+        "call": "Sharp chip note; also a loud chirp during dive display"
+      },
+      "confuser_species": [
+        "Rufous Hummingbird"
+      ],
+      "confuser_notes": "Rufous (seasonal visitor) has a simpler, lower-pitched buzz; Anna's song is longer and more complex",
+      "audio_clips": {
+        "songs": [
+          {
+            "xc_id": "549602",
+            "xc_url": "https://xeno-canto.org/549602",
+            "audio_url": "/content/audio/anhu/549602.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:12",
+            "recordist": "Bruce Lagerquist",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Thornton Creek Ravine, Seattle, King County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "473411",
+            "xc_url": "https://xeno-canto.org/473411",
+            "audio_url": "/content/audio/anhu/473411.ogg",
+            "type": "flight call, song, display sound",
+            "quality": "A",
+            "length": "0:20",
+            "recordist": "bowtyler",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Olympia, Thurston County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "958844",
+            "xc_url": "https://xeno-canto.org/958844",
+            "audio_url": "/content/audio/anhu/958844.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:26",
+            "recordist": "Ayala Berger",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Arboretum Garden (near  Seattle), King County, Washington",
+            "country": "United States",
+            "score": 11
+          }
+        ],
+        "calls": [
+          {
+            "xc_id": "473411",
+            "xc_url": "https://xeno-canto.org/473411",
+            "audio_url": "/content/audio/anhu/473411.ogg",
+            "type": "flight call, song, display sound",
+            "quality": "A",
+            "length": "0:20",
+            "recordist": "bowtyler",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Olympia, Thurston County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "1080235",
+            "xc_url": "https://xeno-canto.org/1080235",
+            "audio_url": "/content/audio/anhu/1080235.ogg",
+            "type": "call, Dive-sound",
+            "quality": "A",
+            "length": "0:23",
+            "recordist": "Greg Irving",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Dungeness Recreation Area, Clallam County, Washington",
+            "country": "United States",
+            "score": 11
+          }
+        ]
+      },
+      "photo": {
+        "url": "/content/photos/anhu.jpg",
+        "width": 2763,
+        "height": 1784,
+        "filename": "Anna's_hummingbird.jpg",
+        "source": "wikipedia_infobox",
+        "license": "CC-BY-SA (Wikipedia)",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Anna%27s%20hummingbird"
+      },
+      "wikipedia_audio": [
+        {
+          "url": "/content/audio/anhu/wp_0.ogg",
+          "filename": "File:Calypte anna - Anna's Hummingbird - XC109651.ogg",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3ACalypte%20anna%20-%20Anna%27s%20Hummingbird%20-%20XC109651.ogg"
+        }
+      ]
+    },
+    {
+      "id": "cbch",
+      "common_name": "Chestnut-backed Chickadee",
+      "scientific_name": "Poecile rufescens",
+      "family": "Paridae",
+      "ebird_frequency_pct": 25,
+      "habitat": [
+        "coniferous forest",
+        "backyard",
+        "parkland"
+      ],
+      "seasonality": "year-round",
+      "mnemonic": "Faster, higher-pitched tsee-dee-dee than Black-capped \u2014 like a sped-up version",
+      "sound_types": {
+        "song": "Less distinct than Black-capped; doesn't give the clear fee-bee whistle",
+        "call": "Rapid, high tsee-dee-dee, faster and buzzier than Black-capped"
+      },
+      "confuser_species": [
+        "Black-capped Chickadee"
+      ],
+      "confuser_notes": "Key confuser pair \u2014 Black-capped is slower with clear fee-bee song; Chestnut-backed is higher and faster",
+      "audio_clips": {
+        "songs": [
+          {
+            "xc_id": "582163",
+            "xc_url": "https://xeno-canto.org/582163",
+            "audio_url": "/content/audio/cbch/582163.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "0:27",
+            "recordist": "James Link",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Center Road at Milepost 7.36 (across from Olympic Music Fest (near  Quilcene), Jefferson County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "1023857",
+            "xc_url": "https://xeno-canto.org/1023857",
+            "audio_url": "/content/audio/cbch/1023857.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:30",
+            "recordist": "Greg Irving",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Dungeness Trails, Sequim, Clallam County, Washington",
+            "country": "United States",
+            "score": 11
+          },
+          {
+            "xc_id": "420593",
+            "xc_url": "https://xeno-canto.org/420593",
+            "audio_url": "/content/audio/cbch/420593.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:14",
+            "recordist": "Meena Haribal",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Brinnon, Jefferson County, Washington",
+            "country": "United States",
+            "score": 11
+          }
+        ],
+        "calls": [
+          {
+            "xc_id": "582163",
+            "xc_url": "https://xeno-canto.org/582163",
+            "audio_url": "/content/audio/cbch/582163.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "0:27",
+            "recordist": "James Link",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Center Road at Milepost 7.36 (across from Olympic Music Fest (near  Quilcene), Jefferson County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "540321",
+            "xc_url": "https://xeno-canto.org/540321",
+            "audio_url": "/content/audio/cbch/540321.ogg",
+            "type": "alarm call",
+            "quality": "A",
+            "length": "0:27",
+            "recordist": "Whitney Neufeld-Kaiser",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Wedgwood, Seattle, King County, Washington",
+            "country": "United States",
+            "score": 11.5
+          }
+        ]
+      },
+      "photo": {
+        "url": "/content/photos/cbch.jpg",
+        "width": 2447,
+        "height": 1855,
+        "filename": "Chestnut-backed_Chickadee_2154ab_(cropped).jpg",
+        "source": "wikipedia_infobox",
+        "license": "CC-BY-SA (Wikipedia)",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Chestnut-backed%20chickadee"
+      }
+    },
+    {
+      "id": "bush",
+      "common_name": "Bushtit",
+      "scientific_name": "Psaltriparus minimus",
+      "family": "Aegithalidae",
+      "ebird_frequency_pct": 25,
+      "habitat": [
+        "brush",
+        "backyard",
+        "deciduous woodland"
+      ],
+      "seasonality": "year-round",
+      "mnemonic": "Tiny high-pitched tsit-tsit-tsit in constant flocks \u2014 sounds like a flock of squeaky toys",
+      "sound_types": {
+        "song": "N/A \u2014 Bushtits give contact calls rather than a true song",
+        "call": "Constant thin, high tsit-tsit-tsit contact calls from flock"
+      },
+      "confuser_species": [
+        "Golden-crowned Kinglet"
+      ],
+      "confuser_notes": "Kinglet is even higher-pitched with a sibilant see-see-see; Bushtit is slightly lower with a harder tsit quality",
+      "audio_clips": {
+        "songs": [
+          {
+            "xc_id": "417736",
+            "xc_url": "https://xeno-canto.org/417736",
+            "audio_url": "/content/audio/bush/417736.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "0:19",
+            "recordist": "Paula Caycedo &amp; Mitch Covington",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Grand Canyon Village, Coconino County, Arizona",
+            "country": "United States",
+            "score": 7.5
+          },
+          {
+            "xc_id": "215759",
+            "xc_url": "https://xeno-canto.org/215759",
+            "audio_url": "/content/audio/bush/215759.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:11",
+            "recordist": "Ted Floyd",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Lafayette, Boulder, Colorado",
+            "country": "United States",
+            "score": 7.5
+          },
+          {
+            "xc_id": "215758",
+            "xc_url": "https://xeno-canto.org/215758",
+            "audio_url": "/content/audio/bush/215758.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:08",
+            "recordist": "Ted Floyd",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Lafayette, Boulder, Colorado",
+            "country": "United States",
+            "score": 7.5
+          }
+        ],
+        "calls": [
+          {
+            "xc_id": "1024967",
+            "xc_url": "https://xeno-canto.org/1024967",
+            "audio_url": "/content/audio/bush/1024967.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:47",
+            "recordist": "Greg Irving",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Dungeness Trails, Sequim, Clallam County, Washington",
+            "country": "United States",
+            "score": 10.5
+          },
+          {
+            "xc_id": "1012283",
+            "xc_url": "https://xeno-canto.org/1012283",
+            "audio_url": "/content/audio/bush/1012283.ogg",
+            "type": "call",
+            "quality": "B",
+            "length": "0:22",
+            "recordist": "Greg Irving",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "ODT Access - Runnion & Sawmill, Sequim, Clallam County, Washington",
+            "country": "United States",
+            "score": 9
+          }
+        ]
+      },
+      "photo": {
+        "url": "/content/photos/bush.jpg",
+        "width": 2868,
+        "height": 2294,
+        "filename": "BushtitMale.jpg",
+        "source": "wikipedia_infobox",
+        "license": "CC-BY-SA (Wikipedia)",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/American%20bushtit"
+      },
+      "wikipedia_audio": [
+        {
+          "url": "/content/audio/bush/wp_0.ogg",
+          "filename": "File:Psaltriparus minimus (American Bushtit) vocalizations - pone.0027052.s004.oga",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3APsaltriparus%20minimus%20%28American%20Bushtit%29%20vocalizations%20-%20pone.0027052.s004.oga"
+        }
+      ]
+    },
+    {
+      "id": "gcsp",
+      "common_name": "Golden-crowned Sparrow",
+      "scientific_name": "Zonotrichia atricapilla",
+      "family": "Passerellidae",
+      "ebird_frequency_pct": 25,
+      "habitat": [
+        "brush",
+        "backyard",
+        "thickets"
+      ],
+      "seasonality": "winter visitor (Oct\u2013Apr)",
+      "mnemonic": "Oh dear me \u2014 three descending whistled notes, melancholy and clear",
+      "sound_types": {
+        "song": "Three clear descending whistles: oh-dear-me",
+        "call": "Sharp tsik note, similar to White-crowned Sparrow"
+      },
+      "confuser_species": [
+        "White-crowned Sparrow"
+      ],
+      "confuser_notes": "White-crowned has a more complex song with buzzy trills; Golden-crowned is simpler \u2014 just the 3 descending whistles",
+      "audio_clips": {
+        "songs": [
+          {
+            "xc_id": "506204",
+            "xc_url": "https://xeno-canto.org/506204",
+            "audio_url": "/content/audio/gcsp/506204.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:25",
+            "recordist": "Bruce Lagerquist",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Yakima, Yakima County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "440249",
+            "xc_url": "https://xeno-canto.org/440249",
+            "audio_url": "/content/audio/gcsp/440249.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "0:18",
+            "recordist": "Rachel Hudson",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Chehalis, Lewis County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "680976",
+            "xc_url": "https://xeno-canto.org/680976",
+            "audio_url": "/content/audio/gcsp/680976.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:48",
+            "recordist": "Steve Hampton",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Port Townsend, Jefferson County, Washington",
+            "country": "United States",
+            "score": 10
+          }
+        ],
+        "calls": [
+          {
+            "xc_id": "440249",
+            "xc_url": "https://xeno-canto.org/440249",
+            "audio_url": "/content/audio/gcsp/440249.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "0:18",
+            "recordist": "Rachel Hudson",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Chehalis, Lewis County, Washington",
+            "country": "United States",
+            "score": 11.5
+          },
+          {
+            "xc_id": "697248",
+            "xc_url": "https://xeno-canto.org/697248",
+            "audio_url": "/content/audio/gcsp/697248.ogg",
+            "type": "alarm call",
+            "quality": "A",
+            "length": "0:42",
+            "recordist": "Greg Irving",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Wolf Creek Trail, Olympic National Park, Washington",
+            "country": "United States",
+            "score": 10.5
+          }
+        ]
+      },
+      "photo": {
+        "url": "/content/photos/gcsp.jpg",
+        "width": 4928,
+        "height": 3264,
+        "filename": "Zonotrichia_atricapilla_-British_Columbia,_Canada-8.jpg",
+        "source": "wikipedia_infobox",
+        "license": "CC-BY-SA (Wikipedia)",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Golden-crowned%20sparrow"
+      }
+    },
+    {
+      "id": "eust",
+      "common_name": "European Starling",
+      "scientific_name": "Sturnus vulgaris",
+      "family": "Sturnidae",
+      "ebird_frequency_pct": 25,
+      "habitat": [
+        "urban",
+        "backyard",
+        "buildings"
+      ],
+      "seasonality": "year-round",
+      "mnemonic": "Chattering mimic \u2014 whistles, clicks, squeals, and borrowed songs all jumbled together",
+      "sound_types": {
+        "song": "Long rambling series of whistles, clicks, rattles, and mimicked sounds",
+        "call": "Descending whistle; also a harsh chatter"
+      },
+      "confuser_species": [
+        "Northern Mockingbird"
+      ],
+      "confuser_notes": "Mockingbird (rare in Seattle) repeats phrases 3+ times; Starling jumbles everything without repeating",
+      "audio_clips": {
+        "songs": [
+          {
+            "xc_id": "1065863",
+            "xc_url": "https://xeno-canto.org/1065863",
+            "audio_url": "/content/audio/eust/1065863.ogg",
+            "type": "call, imitation, song",
+            "quality": "A",
+            "length": "4:10",
+            "recordist": "Greg Irving",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "3 Crabs Road, Clallam County, Washington",
+            "country": "United States",
+            "score": 8.5
+          },
+          {
+            "xc_id": "584859",
+            "xc_url": "https://xeno-canto.org/584859",
+            "audio_url": "/content/audio/eust/584859.ogg",
+            "type": "song",
+            "quality": "B",
+            "length": "0:19",
+            "recordist": "Thomas Magarian",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Kelley Point Park, North Portland, Multnomah County, Oregon",
+            "country": "United States",
+            "score": 7
+          },
+          {
+            "xc_id": "697243",
+            "xc_url": "https://xeno-canto.org/697243",
+            "audio_url": "/content/audio/eust/697243.ogg",
+            "type": "song",
+            "quality": "B",
+            "length": "2:16",
+            "recordist": "Greg Irving",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Port Angeles, Clallam, Washington",
+            "country": "United States",
+            "score": 6
+          }
+        ],
+        "calls": [
+          {
+            "xc_id": "240287",
+            "xc_url": "https://xeno-canto.org/240287",
+            "audio_url": "/content/audio/eust/240287.ogg",
+            "type": "call",
+            "quality": "B",
+            "length": "0:10",
+            "recordist": "Samsonite",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Washington, District of Columbia, District of Columbia",
+            "country": "United States",
+            "score": 9.5
+          },
+          {
+            "xc_id": "445787",
+            "xc_url": "https://xeno-canto.org/445787",
+            "audio_url": "/content/audio/eust/445787.ogg",
+            "type": "call",
+            "quality": "B",
+            "length": "0:15",
+            "recordist": "Thomas ARMAND",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Washington, Prince George's County, District of Columbia",
+            "country": "United States",
+            "score": 9
+          }
+        ]
+      },
+      "photo": {
+        "url": "/content/photos/eust.jpg",
+        "width": 1776,
+        "height": 2372,
+        "filename": "Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg",
+        "source": "wikipedia_infobox",
+        "license": "CC-BY-SA (Wikipedia)",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Common%20starling"
+      },
+      "wikipedia_audio": [
+        {
+          "url": "/content/audio/eust/wp_0.ogg",
+          "filename": "File:Common Starling (Sturnus vulgaris) (W1CDR0001431 BD8).ogg",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3ACommon%20Starling%20%28Sturnus%20vulgaris%29%20%28W1CDR0001431%20BD8%29.ogg"
+        },
+        {
+          "url": "/content/audio/eust/wp_1.ogg",
+          "filename": "File:Sturnus vulgaris.ogg",
+          "source": "wikimedia_commons",
+          "license": "CC (see Commons page)",
+          "commons_page": "https://commons.wikimedia.org/wiki/File%3ASturnus%20vulgaris.ogg"
+        }
+      ]
+    }
+  ],
+  "confuser_pairs": [
+    {
+      "pair": [
+        "bcch",
+        "cbch"
+      ],
+      "label": "Black-capped vs Chestnut-backed Chickadee",
+      "difficulty": "medium",
+      "key_difference": "Black-capped: slower dee-dee-dee + clear fee-bee song. Chestnut-backed: faster, higher, no fee-bee."
+    },
+    {
+      "pair": [
+        "sosp",
+        "gcsp"
+      ],
+      "label": "Song Sparrow vs Golden-crowned Sparrow",
+      "difficulty": "easy",
+      "key_difference": "Song Sparrow: 3 notes + complex trill. Golden-crowned: 3 pure descending whistles, no trill."
+    },
+    {
+      "pair": [
+        "amcr",
+        "stja"
+      ],
+      "label": "American Crow vs Steller's Jay",
+      "difficulty": "easy",
+      "key_difference": "Crow: clean caw-caw. Jay: harsh shack-shack, more grating and varied."
+    },
+    {
+      "pair": [
+        "deju",
+        "spto"
+      ],
+      "label": "Dark-eyed Junco vs Spotted Towhee",
+      "difficulty": "medium",
+      "key_difference": "Junco: even trill on one pitch. Towhee: 2 intro notes THEN a trill."
+    },
+    {
+      "pair": [
+        "hofi",
+        "sosp"
+      ],
+      "label": "House Finch vs Song Sparrow",
+      "difficulty": "hard",
+      "key_difference": "House Finch: continuous warble ending in buzz. Song Sparrow: structured 3-note opening."
+    }
+  ],
+  "lesson_plan": {
+    "description": "5 lessons of 3 birds each, ordered by distinctiveness (most distinctive first)",
+    "lessons": [
+      {
+        "lesson": 1,
+        "title": "The unmistakable three",
+        "species": [
+          "amcr",
+          "stja",
+          "nofl"
+        ],
+        "rationale": "Loud, distinctive, impossible to confuse with each other. Builds confidence."
+      },
+      {
+        "lesson": 2,
+        "title": "Backyard singers",
+        "species": [
+          "amro",
+          "bcch",
+          "spto"
+        ],
+        "rationale": "Classic songs you'll hear every morning. Introduces the fee-bee mnemonic."
+      },
+      {
+        "lesson": 3,
+        "title": "The sparrow start",
+        "species": [
+          "sosp",
+          "deju",
+          "gcsp"
+        ],
+        "rationale": "First confuser challenge \u2014 three sparrow-like species with distinct songs."
+      },
+      {
+        "lesson": 4,
+        "title": "Small and buzzy",
+        "species": [
+          "bewr",
+          "anhu",
+          "hofi"
+        ],
+        "rationale": "Complex songs that reward repeated listening. Wren vs finch structure."
+      },
+      {
+        "lesson": 5,
+        "title": "Flock sounds and mimics",
+        "species": [
+          "cbch",
+          "bush",
+          "eust"
+        ],
+        "rationale": "Contact calls and mimicry. Introduces the chickadee confuser pair."
+      }
+    ]
+  }
+}
