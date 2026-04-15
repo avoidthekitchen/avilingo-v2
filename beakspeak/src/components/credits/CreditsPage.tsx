@@ -70,7 +70,7 @@ export default function CreditsPage() {
       </div>
 
       <div className="mt-8 text-center text-xs text-text-muted pb-4">
-        <p>Birdsong v{manifest.version}</p>
+        <p>BeakSpeak v{manifest.version}</p>
         <p>Audio from Xeno-canto · Photos from Wikipedia</p>
       </div>
     </div>

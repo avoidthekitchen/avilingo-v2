@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Download and normalize all audio/photo assets for the Birdsong app.
+"""Download and normalize all audio/photo assets for the BeakSpeak app.
 
 Reads tier1_seattle_birds_populated.json, downloads all audio clips and photos,
 normalizes audio with ffmpeg (loudnorm, trim ≤20s, OGG Opus 96kbps),
@@ -22,7 +22,7 @@ import requests
 from PIL import Image
 
 INPUT_FILE = "tier1_seattle_birds_populated.json"
-OUTPUT_DIR = Path("birdsong/public/content")
+OUTPUT_DIR = Path("beakspeak/public/content")
 AUDIO_DIR = OUTPUT_DIR / "audio"
 PHOTO_DIR = OUTPUT_DIR / "photos"
 MANIFEST_OUT = OUTPUT_DIR / "manifest.json"
@@ -38,7 +38,7 @@ FFMPEG_AUDIO_ARGS = [
 PHOTO_MAX_WIDTH = 800
 
 HEADERS = {
-    "User-Agent": "BirdsongApp/0.1 (https://github.com/birdsong-app; birdsong.app.dev@gmail.com) python-requests"
+    "User-Agent": "BeakSpeakApp/0.1 (https://github.com/avoidthekitchen; mistercheese@gmail.com) python-requests"
 }
 
 RETRY_COUNT = 3

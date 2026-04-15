@@ -1,0 +1,11 @@
+name = "unformedideas"
+compatibility_date = "2026-04-14"
+
+routes = [
+  { pattern = "unformedideas.com/*", zone_name = "unformedideas.com" },
+  { pattern = "www.unformedideas.com/*", zone_name = "unformedideas.com" },
+]
+
+[assets]
+directory = "./dist"
+not_found_handling = "single-page-application"
