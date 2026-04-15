@@ -16,7 +16,7 @@ A Duolingo-style bird song identification trainer. Static SPA deployed to Cloudf
 | Language | TypeScript | 6.0 |
 | Testing | Vitest + Testing Library | 4.1 / 16.3 |
 | Linting | ESLint + typescript-eslint | 9.39 / 8.58 |
-| Deploy | Cloudflare Workers (static assets) | wrangler 4.82 |
+| Deploy | Cloudflare Workers (static assets) | wrangler 4.83 |
 | Content pipeline | Python 3 + requests + Pillow | 3.12+ |
 
 ## Architecture
