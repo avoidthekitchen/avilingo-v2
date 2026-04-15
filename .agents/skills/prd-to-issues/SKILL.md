@@ -1,88 +1,98 @@
 ---
 name: prd-to-issues
-description: Break a PRD into independently-grabbable GitHub issues using tracer-bullet vertical slices. Use when user wants to convert a PRD to issues, create implementation tickets, or break down a PRD into work items.
+description: Break a PRD into independently-grabbable issues using tracer-bullet vertical slices. Use when the user wants to convert a PRD to issues, create implementation tickets, or break down a PRD into work items.
 ---
 
 # PRD to Issues
 
-Break a PRD into independently-grabbable GitHub issues using vertical slices (tracer bullets).
+Break a PRD into independently-grabbable issues using vertical slices (tracer bullets).
 
 ## Process
 
-### 1. Locate the PRD
+### 1. Locate the files
 
-Ask the user for the PRD GitHub issue number (or URL).
-
-If the PRD is not already in your context window, fetch it with `gh issue view <number>` (with comments).
+Ask the user for the PRD file. Ask the user for the format, name, and location where the issue list should be saved.
 
 ### 2. Explore the codebase (optional)
 
-If you have not already explored the codebase, do so to understand the current state of the code.
+If you have not already explored the codebase, do so to understand the current state of the implementation. Focus on the modules identified in the PRD's Module Design section.
 
 ### 3. Draft vertical slices
 
-Break the PRD into **tracer bullet** issues. Each issue is a thin vertical slice that cuts through ALL integration layers end-to-end, NOT a horizontal slice of one layer.
+Break the PRD into **tracer bullet** issues. Each issue is a thin vertical slice that cuts through ALL integration layers end-to-end — schema, logic, API, UI, and tests — not a horizontal slice of a single layer.
 
-Slices may be 'HITL' or 'AFK'. HITL slices require human interaction, such as an architectural decision or a design review. AFK slices can be implemented and merged without human interaction. Prefer AFK over HITL where possible.
+Slices may be **HITL** or **AFK**:
+
+- **HITL** (Human In The Loop): requires a human decision or review at some point during implementation — for example, an architectural decision, a design review, or approval of a schema migration
+- **AFK** (Away From Keyboard): can be implemented and merged without human interaction
+
+Prefer AFK over HITL wherever possible.
 
 <vertical-slice-rules>
-- Each slice delivers a narrow but COMPLETE path through every layer (schema, API, UI, tests)
-- A completed slice is demoable or verifiable on its own
+- Each slice delivers a narrow but complete path through every relevant layer
+- A completed slice is demoable or independently verifiable
 - Prefer many thin slices over few thick ones
+- Slices that cannot be verified on their own are too coarse
 </vertical-slice-rules>
 
 ### 4. Quiz the user
 
-Present the proposed breakdown as a numbered list. For each slice, show:
+Present the proposed breakdown as a numbered list. For each slice show:
 
 - **Title**: short descriptive name
 - **Type**: HITL / AFK
 - **Blocked by**: which other slices (if any) must complete first
-- **User stories covered**: which user stories from the PRD this addresses
+- **User stories covered**: which numbered user stories from the PRD this addresses
 
 Ask the user:
 
 - Does the granularity feel right? (too coarse / too fine)
 - Are the dependency relationships correct?
 - Should any slices be merged or split further?
-- Are the correct slices marked as HITL and AFK?
+- Are all HITL slices correctly identified?
+
+Flag any slice that addresses more than 2–3 user stories or would likely take more than half a day — it is probably too coarse and should be split.
 
 Iterate until the user approves the breakdown.
 
-### 5. Create the GitHub issues
+### 5. Write the issue file
 
-For each approved slice, create a GitHub issue using `gh issue create`. Use the issue body template below.
+Write all approved issues to the file the user specified. Number issues sequentially and use those numbers for cross-references within the file.
 
-Create issues in dependency order (blockers first) so you can reference real issue numbers in the "Blocked by" field.
+Use the issue template below for each issue. Write issues in dependency order (blockers first).
+
+Do NOT modify the PRD file.
 
 <issue-template>
-## Parent PRD
+## Issue <n>: <title>
 
-#<prd-issue-number>
+**Type**: HITL / AFK
+**Blocked by**: Issue <n> / None — can start immediately
 
-## What to build
+### Parent PRD
 
-A concise description of this vertical slice. Describe the end-to-end behavior, not layer-by-layer implementation. Reference specific sections of the parent PRD rather than duplicating content.
+`<prd-filename>`
 
-## Acceptance criteria
+### What to build
 
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] Criterion 3
+A concise description of this vertical slice. Describe the end-to-end behaviour, not layer-by-layer implementation steps. Reference sections of the PRD rather than duplicating content.
 
-## Blocked by
+### How to verify
 
-- Blocked by #<issue-number> (if any)
+Exactly how a developer (or the AI implementing this) confirms the slice is complete:
 
-Or "None - can start immediately" if no blockers.
+- **Manual**: step-by-step instructions to demo it
+- **Automated**: what the test asserts
 
-## User stories addressed
+### Acceptance criteria
 
-Reference by number from the parent PRD:
+- [ ] Given <context>, when <action>, then <outcome>
+- [ ] Given <failure condition>, then <expected behaviour>
 
-- User story 3
-- User story 7
+### User stories addressed
 
+- User story <n>: <short title>
+- User story <n>: <short title>
+
+---
 </issue-template>
-
-Do NOT close or modify the parent PRD issue.
