@@ -53,11 +53,11 @@ In LearnSession: no changes needed — it already calls `audioPlayer.stop()` on 
 
 ### Acceptance criteria
 
-- [ ] Given two AudioButtons on the same BirdCard, when the user taps one while the other is playing, then only the newly tapped button shows as playing and the previous button shows idle
-- [ ] Given audio is playing, when `stop()` is called, then audio fades out over ~100ms rather than cutting abruptly
-- [ ] Given audio is playing, when `play()` is called with a different URL, then `getActiveUrl()` returns the new URL
-- [ ] Given no audio is playing, when `getActiveUrl()` is called, then it returns `null`
-- [ ] Given a user swipes between BirdCards in LearnSession, when audio is playing, then audio stops and the button on the previous card does not remain in a playing state
+- [x] Given two AudioButtons on the same BirdCard, when the user taps one while the other is playing, then only the newly tapped button shows as playing and the previous button shows idle
+- [x] Given audio is playing, when `stop()` is called, then audio fades out over ~100ms rather than cutting abruptly
+- [x] Given audio is playing, when `play()` is called with a different URL, then `getActiveUrl()` returns the new URL
+- [x] Given no audio is playing, when `getActiveUrl()` is called, then it returns `null`
+- [x] Given a user swipes between BirdCards in LearnSession, when audio is playing, then audio stops and the button on the previous card does not remain in a playing state
 
 ### User stories addressed
 
@@ -131,12 +131,12 @@ Update the `AudioPlayer` interface type to include the new methods.
 
 ### Acceptance criteria
 
-- [ ] Given audio is playing, when `getProgress()` is called, then it returns `{ currentTime, duration }` where `currentTime` increases over time and `duration` matches the buffer length
-- [ ] Given audio is playing at position 3s, when `seek(10.0)` is called, then playback resumes from 10s of the same clip without interruption in the audio output (beyond the seek discontinuity)
-- [ ] Given audio is stopped, when `seek()` is called, then nothing happens and no error is thrown
-- [ ] Given `play(url, 7.0)` is called, then playback starts from the 7-second mark
-- [ ] Given a URL has been played, when `getBuffer(url)` is called, then the cached `AudioBuffer` is returned
-- [ ] Given a URL has not been played or prefetched, when `getBuffer(url)` is called, then `null` is returned
+- [x] Given audio is playing, when `getProgress()` is called, then it returns `{ currentTime, duration }` where `currentTime` increases over time and `duration` matches the buffer length
+- [x] Given audio is playing at position 3s, when `seek(10.0)` is called, then playback resumes from 10s of the same clip without interruption in the audio output (beyond the seek discontinuity)
+- [x] Given audio is stopped, when `seek()` is called, then nothing happens and no error is thrown
+- [x] Given `play(url, 7.0)` is called, then playback starts from the 7-second mark
+- [x] Given a URL has been played, when `getBuffer(url)` is called, then the cached `AudioBuffer` is returned
+- [x] Given a URL has not been played or prefetched, when `getBuffer(url)` is called, then it returns `null`
 
 ### User stories addressed
 
@@ -152,7 +152,7 @@ Update the `AudioPlayer` interface type to include the new methods.
 **Output**: `audio.ts` extended with offset param, `seek()`, `getProgress()`, `onProgress()`, `getBuffer()`
 **Depends on**: 1.2
 
-- [ ] Modify `adapters/audio.ts`. Extend `play(url: string, offset?: number)` to pass the offset to `source.start(0, offset ?? 0)`. Track `playbackStartTime` (from `AudioContext.currentTime` at the moment `source.start` is called) and `playbackOffset` (the offset value) as private fields for progress calculation. Add `seek(time: number)`: if currently playing, call `play(activeUrl, time)`; if stopped, no-op. Add `getProgress(): { currentTime: number; duration: number }` that returns `{ currentTime: playbackOffset + (ctx.currentTime - playbackStartTime), duration: buffer.duration }`, or `{ currentTime: 0, duration: 0 }` if not playing. Add `onProgress(cb)`: manage a `requestAnimationFrame` loop that calls the callback with `getProgress()` values while state is `'playing'`; return an unsubscribe function; start/stop the rAF loop on state transitions. Add `getBuffer(url: string): AudioBuffer | null` that returns `this.cache.get(url) ?? null`. Update the `AudioPlayer` interface type with all new method signatures.
+- [x] Modify `adapters/audio.ts`. Extend `play(url: string, offset?: number)` to pass the offset to `source.start(0, offset ?? 0)`. Track `playbackStartTime` (from `AudioContext.currentTime` at the moment `source.start` is called) and `playbackOffset` (the offset value) as private fields for progress calculation. Add `seek(time: number)`: if currently playing, call `play(activeUrl, time)`; if stopped, no-op. Add `getProgress(): { currentTime: number; duration: number }` that returns `{ currentTime: playbackOffset + (ctx.currentTime - playbackStartTime), duration: buffer.duration }`, or `{ currentTime: 0, duration: 0 }` if not playing. Add `onProgress(cb)`: manage a `requestAnimationFrame` loop that calls the callback with `getProgress()` values while state is `'playing'`; return an unsubscribe function; start/stop the rAF loop on state transitions. Add `getBuffer(url: string): AudioBuffer | null` that returns `this.cache.get(url) ?? null`. Update the `AudioPlayer` interface type with all new method signatures.
 
 ---
 
@@ -162,7 +162,7 @@ Update the `AudioPlayer` interface type to include the new methods.
 **Output**: Extended `adapters/audio.test.ts` passes
 **Depends on**: 2.1
 
-- [ ] Extend `adapters/audio.test.ts` with a new `describe` block for progress and seeking. Test: `play(url, 5.0)` → `getProgress().currentTime` is approximately 5.0. Test: `seek(10.0)` while playing → `getProgress().currentTime` is approximately 10.0 and `getActiveUrl()` is unchanged. Test: `seek()` while stopped → no error, no state change, `getActiveUrl()` remains `null`. Test: `getBuffer(knownUrl)` returns the cached `AudioBuffer` after play. Test: `getBuffer(unknownUrl)` returns `null`. The rAF-based `onProgress` callback may need a manual timer advance or mock `requestAnimationFrame` to test.
+- [x] Extend `adapters/audio.test.ts` with a new `describe` block for progress and seeking. Test: `play(url, 5.0)` → `getProgress().currentTime` is approximately 5.0. Test: `seek(10.0)` while playing → `getProgress().currentTime` is approximately 10.0 and `getActiveUrl()` is unchanged. Test: `seek()` while stopped → no error, no state change, `getActiveUrl()` remains `null`. Test: `getBuffer(knownUrl)` returns the cached `AudioBuffer` after play. Test: `getBuffer(unknownUrl)` returns `null`. The rAF-based `onProgress` callback may need a manual timer advance or mock `requestAnimationFrame` to test.
 
 ---
 
@@ -199,11 +199,11 @@ New file `core/spectrogram.ts`:
 
 ### Acceptance criteria
 
-- [ ] Given a silent AudioBuffer, when `computeSpectrogram()` is called, then all magnitude values are near zero (< 0.01)
-- [ ] Given a 440Hz sine wave AudioBuffer, when `computeSpectrogram()` is called, then the magnitude peak is at the frequency bin closest to 440Hz
-- [ ] Given an AudioBuffer of N samples and default options, when `computeSpectrogram()` is called, then `timeBins` equals `ceil(N / hopSize)` and `frequencyBins` equals `fftSize / 2`
-- [ ] Given a zero-length AudioBuffer, when `computeSpectrogram()` is called, then it returns a `SpectrogramData` with `timeBins: 0` and no error
-- [ ] The module imports no DOM, React, or browser-specific modules
+- [x] Given a silent AudioBuffer, when `computeSpectrogram()` is called, then all magnitude values are near zero (< 0.01)
+- [x] Given a 440Hz sine wave AudioBuffer, when `computeSpectrogram()` is called, then the magnitude peak is at the frequency bin closest to 440Hz
+- [x] Given an AudioBuffer of N samples and default options, when `computeSpectrogram()` is called, then `timeBins` equals `ceil(N / hopSize)` and `frequencyBins` equals `fftSize / 2`
+- [x] Given a zero-length AudioBuffer, when `computeSpectrogram()` is called, then it returns a `SpectrogramData` with `timeBins: 0` and no error
+- [x] The module imports no DOM, React, or browser-specific modules
 
 ### User stories addressed
 
@@ -217,7 +217,7 @@ New file `core/spectrogram.ts`:
 **Output**: New `core/spectrogram.ts` exports `computeSpectrogram` and `SpectrogramData`
 **Depends on**: none
 
-- [ ] Create `core/spectrogram.ts`. Export a `SpectrogramData` type: `{ magnitudes: Float32Array[]; timeBins: number; frequencyBins: number; duration: number; sampleRate: number }`. Implement a Hann window function and a radix-2 Cooley-Tukey FFT (pad input to next power of 2 if needed). Export `computeSpectrogram(buffer: AudioBuffer, options?: { fftSize?: number; hopSize?: number }): SpectrogramData` with defaults `fftSize: 1024`, `hopSize: 512`. It reads channel 0 data via `buffer.getChannelData(0)`, slides the FFT window across the signal with `hopSize` step, and for each window: applies the Hann window, computes FFT, takes magnitude of each frequency bin (first half only — `fftSize / 2`), and normalizes to 0-1 range (relative to the global max magnitude across all windows). Returns `SpectrogramData` with `timeBins = ceil(sampleCount / hopSize)` and `frequencyBins = fftSize / 2`. For zero-length buffers, return `{ magnitudes: [], timeBins: 0, frequencyBins: 0, duration: 0, sampleRate: buffer.sampleRate }`. The module must have zero DOM, React, or browser-specific imports.
+- [x] Create `core/spectrogram.ts`. Export a `SpectrogramData` type: `{ magnitudes: Float32Array[]; timeBins: number; frequencyBins: number; duration: number; sampleRate: number }`. Implement a Hann window function and a radix-2 Cooley-Tukey FFT (pad input to next power of 2 if needed). Export `computeSpectrogram(buffer: AudioBuffer, options?: { fftSize?: number; hopSize?: number }): SpectrogramData` with defaults `fftSize: 1024`, `hopSize: 512`. It reads channel 0 data via `buffer.getChannelData(0)`, slides the FFT window across the signal with `hopSize` step, and for each window: applies the Hann window, computes FFT, takes magnitude of each frequency bin (first half only — `fftSize / 2`), and normalizes to 0-1 range (relative to the global max magnitude across all windows). Returns `SpectrogramData` with `timeBins = ceil(sampleCount / hopSize)` and `frequencyBins = fftSize / 2`. For zero-length buffers, return `{ magnitudes: [], timeBins: 0, frequencyBins: 0, duration: 0, sampleRate: buffer.sampleRate }`. The module must have zero DOM, React, or browser-specific imports.
 
 ---
 
@@ -227,7 +227,7 @@ New file `core/spectrogram.ts`:
 **Output**: `core/spectrogram.test.ts` passes
 **Depends on**: 3.1
 
-- [ ] Create `core/spectrogram.test.ts`. Follow the existing test pattern in `core/manifest.test.ts`. Create a helper function `makeAudioBuffer(samples: Float32Array, sampleRate: number)` that returns a mock object satisfying the `AudioBuffer` interface (with `getChannelData()`, `length`, `duration`, `sampleRate`). Test: silence (all zeros) → all magnitudes < 0.01. Test: 440Hz sine wave at 44100Hz sample rate → magnitude peak is at the frequency bin closest to 440Hz (bin index ≈ 440 * fftSize / sampleRate), with other bins significantly lower. Test: output shape — given N samples and default options, `timeBins` equals `Math.ceil(N / 512)` and `frequencyBins` equals 512. Test: zero-length buffer → `timeBins: 0`, no error. Test: passing custom `fftSize: 2048` produces `frequencyBins: 1024`.
+- [x] Create `core/spectrogram.test.ts`. Follow the existing test pattern in `core/manifest.test.ts`. Create a helper function `makeAudioBuffer(samples: Float32Array, sampleRate: number)` that returns a mock object satisfying the `AudioBuffer` interface (with `getChannelData()`, `length`, `duration`, `sampleRate`). Test: silence (all zeros) → all magnitudes < 0.01. Test: 440Hz sine wave at 44100Hz sample rate → magnitude peak is at the frequency bin closest to 440Hz (bin index ≈ 440 * fftSize / sampleRate), with other bins significantly lower. Test: output shape — given N samples and default options, `timeBins` equals `Math.ceil(N / 512)` and `frequencyBins` equals 512. Test: zero-length buffer → `timeBins: 0`, no error. Test: passing custom `fftSize: 2048` produces `frequencyBins: 1024`.
 
 ---
 
@@ -261,12 +261,12 @@ This component is a static renderer with a click handler. Playhead animation tim
 
 ### Acceptance criteria
 
-- [ ] Given valid `SpectrogramData`, when the component mounts, then a colored heatmap is drawn on the canvas with frequency on the y-axis and time on the x-axis
-- [ ] Given `currentTime` of half the `duration`, when the component renders, then the playhead line is at the horizontal midpoint of the canvas
-- [ ] Given the user clicks at 75% of the canvas width on a 12-second clip, when `onSeek` fires, then it is called with a value of approximately 9.0
-- [ ] Given the container resizes, when the component re-renders, then the canvas redraws at the new dimensions without distortion
-- [ ] Given `SpectrogramData` with zero time bins, when the component renders, then it shows an empty/gray canvas without error
-- [ ] The heatmap color gradient uses the app's theme colors (primary for loud, background for silent)
+- [x] Given valid `SpectrogramData`, when the component mounts, then a colored heatmap is drawn on the canvas with frequency on the y-axis and time on the x-axis
+- [x] Given `currentTime` of half the `duration`, when the component renders, then the playhead line is at the horizontal midpoint of the canvas
+- [x] Given the user clicks at 75% of the canvas width on a 12-second clip, when `onSeek` fires, then it is called with a value of approximately 9.0
+- [x] Given the container resizes, when the component re-renders, then the canvas redraws at the new dimensions without distortion
+- [x] Given `SpectrogramData` with zero time bins, when the component renders, then it shows an empty/gray canvas without error
+- [x] The heatmap color gradient uses the app's theme colors (primary for loud, background for silent)
 
 ### User stories addressed
 
@@ -281,7 +281,7 @@ This component is a static renderer with a click handler. Playhead animation tim
 **Output**: Component renders heatmap with theme colors, playhead line, click-to-seek
 **Depends on**: 3.1
 
-- [ ] Create `components/shared/Spectrogram.tsx`. Props: `data: SpectrogramData`, `currentTime: number`, `duration: number`, `isPlaying: boolean`, `onSeek: (time: number) => void`. Render a `<canvas>` element, full width of its container, ~80px tall. On mount and when `data` changes, draw the full spectrogram heatmap using the 2D canvas context: iterate over `data.magnitudes` (time bins on x-axis, frequency bins on y-axis with low frequencies at bottom), mapping each magnitude value (0-1) to a color gradient from `--color-bg` (#FAF8F5) for silence to `--color-primary` (#8B6F47) for loud. Read theme colors from CSS custom properties via `getComputedStyle`. Draw a vertical playhead line at position `(currentTime / duration) * canvasWidth` using `--color-secondary` (#5B8A72) or white for contrast. Only draw the playhead when `currentTime > 0`. On click, compute `seekTime = (event.offsetX / canvas.clientWidth) * duration` and call `onSeek(seekTime)`. Handle canvas resize via `ResizeObserver` — update `canvas.width`/`canvas.height` to match CSS dimensions (for sharp rendering on HiDPI) and redraw. For zero-bin data, render a flat gray canvas.
+- [x] Create `components/shared/Spectrogram.tsx`. Props: `data: SpectrogramData`, `currentTime: number`, `duration: number`, `isPlaying: boolean`, `onSeek: (time: number) => void`. Render a `<canvas>` element, full width of its container, ~80px tall. On mount and when `data` changes, draw the full spectrogram heatmap using the 2D canvas context: iterate over `data.magnitudes` (time bins on x-axis, frequency bins on y-axis with low frequencies at bottom), mapping each magnitude value (0-1) to a color gradient from `--color-bg` (#FAF8F5) for silence to `--color-primary` (#8B6F47) for loud. Read theme colors from CSS custom properties via `getComputedStyle`. Draw a vertical playhead line at position `(currentTime / duration) * canvasWidth` using `--color-secondary` (#5B8A72) or white for contrast. Only draw the playhead when `currentTime > 0`. On click, compute `seekTime = (event.offsetX / canvas.clientWidth) * duration` and call `onSeek(seekTime)`. Handle canvas resize via `ResizeObserver` — update `canvas.width`/`canvas.height` to match CSS dimensions (for sharp rendering on HiDPI) and redraw. For zero-bin data, render a flat gray canvas.
 
 ---
 
