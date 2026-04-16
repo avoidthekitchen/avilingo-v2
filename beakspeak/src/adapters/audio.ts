@@ -1,24 +1,38 @@
 export type AudioState = 'idle' | 'loading' | 'playing' | 'error'
 
 export interface AudioPlayer {
-  play(url: string): Promise<void>
+  play(url: string, offset?: number): Promise<void>
   stop(): void
+  seek(time: number): void
   isPlaying(): boolean
   getState(): AudioState
+  getActiveUrl(): string | null
+  getProgress(): { currentTime: number; duration: number }
   onStateChange(callback: (state: AudioState) => void): () => void
+  onProgress(cb: (currentTime: number, duration: number) => void): () => void
   prefetch(url: string): void
+  getBuffer(url: string): AudioBuffer | null
 }
 
 export class WebAudioPlayer implements AudioPlayer {
   private context: AudioContext | null = null
+  private gainNode: GainNode | null = null
   private source: AudioBufferSourceNode | null = null
   private cache = new Map<string, AudioBuffer>()
   private state: AudioState = 'idle'
+  private activeUrl: string | null = null
+  private activeBuffer: AudioBuffer | null = null
+  private playbackStartTime = 0
+  private playbackOffset = 0
   private listeners: Array<(state: AudioState) => void> = []
+  private progressListeners: Array<(currentTime: number, duration: number) => void> = []
+  private rafId: number | null = null
 
   private getContext(): AudioContext {
     if (!this.context) {
       this.context = new AudioContext()
+      this.gainNode = this.context.createGain()
+      this.gainNode.connect(this.context.destination)
     }
     return this.context
   }
@@ -26,6 +40,32 @@ export class WebAudioPlayer implements AudioPlayer {
   private setState(state: AudioState) {
     this.state = state
     this.listeners.forEach(cb => cb(state))
+    if (state === 'playing') {
+      this.startProgressLoop()
+    } else {
+      this.stopProgressLoop()
+    }
+  }
+
+  private startProgressLoop() {
+    if (this.rafId !== null) return
+    const tick = () => {
+      if (this.progressListeners.length > 0) {
+        const { currentTime, duration } = this.getProgress()
+        this.progressListeners.forEach(cb => cb(currentTime, duration))
+      }
+      if (this.state === 'playing') {
+        this.rafId = requestAnimationFrame(tick)
+      }
+    }
+    this.rafId = requestAnimationFrame(tick)
+  }
+
+  private stopProgressLoop() {
+    if (this.rafId !== null) {
+      cancelAnimationFrame(this.rafId)
+      this.rafId = null
+    }
   }
 
   onStateChange(callback: (state: AudioState) => void): () => void {
@@ -43,11 +83,23 @@ export class WebAudioPlayer implements AudioPlayer {
     return this.state === 'playing'
   }
 
+  getActiveUrl(): string | null {
+    return this.activeUrl
+  }
+
   stop() {
     if (this.source) {
+      // Fade out over ~100ms to avoid click/pop artifacts
+      if (this.gainNode && this.context) {
+        const now = this.context.currentTime
+        this.gainNode.gain.setValueAtTime(this.gainNode.gain.value, now)
+        this.gainNode.gain.linearRampToValueAtTime(0, now + 0.1)
+      }
       try { this.source.stop() } catch { /* already stopped */ }
       this.source = null
     }
+    this.activeUrl = null
+    this.activeBuffer = null
     this.setState('idle')
   }
 
@@ -64,7 +116,34 @@ export class WebAudioPlayer implements AudioPlayer {
     }
   }
 
-  async play(url: string): Promise<void> {
+  getProgress(): { currentTime: number; duration: number } {
+    if (this.state !== 'playing' || !this.activeBuffer || !this.context) {
+      return { currentTime: 0, duration: 0 }
+    }
+    const elapsed = this.context.currentTime - this.playbackStartTime
+    return {
+      currentTime: this.playbackOffset + elapsed,
+      duration: this.activeBuffer.duration,
+    }
+  }
+
+  seek(time: number): void {
+    if (this.state !== 'playing' || !this.activeUrl) return
+    this.play(this.activeUrl, time)
+  }
+
+  onProgress(cb: (currentTime: number, duration: number) => void): () => void {
+    this.progressListeners.push(cb)
+    return () => {
+      this.progressListeners = this.progressListeners.filter(l => l !== cb)
+    }
+  }
+
+  getBuffer(url: string): AudioBuffer | null {
+    return this.cache.get(url) ?? null
+  }
+
+  async play(url: string, offset?: number): Promise<void> {
     this.stop()
     this.setState('loading')
 
@@ -85,14 +164,23 @@ export class WebAudioPlayer implements AudioPlayer {
         this.cache.set(url, buffer)
       }
 
+      // Reset gain to full volume before starting new clip
+      this.gainNode!.gain.setValueAtTime(1, ctx.currentTime)
+
       this.source = ctx.createBufferSource()
       this.source.buffer = buffer
-      this.source.connect(ctx.destination)
+      this.source.connect(this.gainNode!)
       this.source.onended = () => {
         this.source = null
+        this.activeUrl = null
+        this.activeBuffer = null
         this.setState('idle')
       }
-      this.source.start()
+      this.source.start(0, offset ?? 0)
+      this.playbackStartTime = ctx.currentTime
+      this.playbackOffset = offset ?? 0
+      this.activeBuffer = buffer
+      this.activeUrl = url
       this.setState('playing')
     } catch {
       this.setState('error')
