@@ -193,7 +193,7 @@ def filter_background_species(recordings: list[dict]) -> list[dict]:
 
 
 def score_recording(rec: dict) -> float:
-    """Score: quality + location + length + remarks + bird-seen - playback. Higher = better."""
+    """Score: quality + location + length + remarks + animal-seen + stage + method - playback. Higher = better."""
     score = {"A": 50, "B": 30, "C": 10, "D": -10, "E": -30}.get(rec.get("q", ""), 0)
 
     loc = f"{rec.get('loc', '')} {rec.get('cnt', '')}".lower()
@@ -221,27 +221,39 @@ def score_recording(rec: dict) -> float:
     if rec.get("rmk"):
         score += 5
 
-    if rec.get("bird-seen", "").lower() == "yes":
+    if rec.get("animal-seen", "").lower() == "yes":
         score += 3
 
     if rec.get("playback-used", "").lower() == "yes":
         score -= 5
 
+    stage = rec.get("stage", "").lower()
+    if stage == "adult":
+        score += 3
+    elif stage in ("juvenile", "nestling"):
+        score -= 5
+
+    method = rec.get("method", "").lower()
+    if method == "field recording":
+        score += 3
+    elif method in ("in the hand", "in net", "studio recording"):
+        score -= 5
+
     return score
 
 
-def query_xc(scientific_name: str, max_pages: int = 8) -> list[dict]:
+def query_xc(scientific_name: str, max_pages: int = 2) -> list[dict]:
     """Query Xeno-canto API for recordings of a species."""
     all_recs = []
     parts = scientific_name.split(None, 1)
     genus = parts[0] if parts else scientific_name
     species = parts[1] if len(parts) > 1 else ""
     for page in range(1, max_pages + 1):
-        query = f'gen:{genus} sp:{species} cnt:"United States"'
+        query = f'gen:{genus} sp:{species} cnt:"United States" q:">C"'
         try:
             resp = SESSION.get(
                 "https://xeno-canto.org/api/3/recordings",
-                params={"query": query, "page": page, "key": XC_API_KEY},
+                params={"query": query, "page": page, "per_page": 500, "key": XC_API_KEY},
                 timeout=20,
             )
             resp.raise_for_status()
