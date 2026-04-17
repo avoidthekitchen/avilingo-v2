@@ -250,8 +250,9 @@ def query_xc(scientific_name: str, max_pages: int = 2) -> list[dict]:
     species = parts[1] if len(parts) > 1 else ""
     for page in range(1, max_pages + 1):
         # area:america broadens the pool beyond US; quality dominates scoring,
-        # so location acts only as a small tiebreaker (WA +0.4, PNW +0.2, CA +0.05)
-        query = f'gen:{genus} sp:{species} area:america q:">C"'
+        # so location acts only as a small tiebreaker (WA +0.4, PNW +0.2, CA +0.05).
+        # q:">D" keeps A/B/C so the client-side A/B-then-A/B/C fallback can still kick in.
+        query = f'gen:{genus} sp:{species} area:america q:">D"'
         try:
             resp = SESSION.get(
                 "https://xeno-canto.org/api/3/recordings",
