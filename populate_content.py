@@ -249,7 +249,8 @@ def query_xc(scientific_name: str, max_pages: int = 2) -> list[dict]:
     genus = parts[0] if parts else scientific_name
     species = parts[1] if len(parts) > 1 else ""
     for page in range(1, max_pages + 1):
-        # area:america instead of cnt:"United States" so BC recordings can score via location bonus
+        # area:america broadens the pool beyond US; quality dominates scoring,
+        # so location acts only as a small tiebreaker (WA +0.4, PNW +0.2, CA +0.05)
         query = f'gen:{genus} sp:{species} area:america q:">C"'
         try:
             resp = SESSION.get(
@@ -269,11 +270,22 @@ def query_xc(scientific_name: str, max_pages: int = 2) -> list[dict]:
     return all_recs
 
 
-def select_xc_clips(recordings: list[dict], clip_type: str, n: int, commercial_ok: bool = True) -> list[dict]:
-    """Filter by vocalization type, score, return top N with commercial_ok flag."""
-    typed = [r for r in recordings
-             if clip_type in r.get("type", "").lower()
-             and r.get("type", "").lower() != "subsong"]
+def select_xc_clips(recordings: list[dict], clip_type: str, n: int,
+                    commercial_ok: bool = True, exclude_ids: set | None = None) -> list[dict]:
+    """Filter by vocalization type, score, return top N with commercial_ok flag.
+
+    Tokenizes `type` on comma so 'song' substring match doesn't leak from 'subsong',
+    and so compound types like 'begging call, subsong' are excluded entirely.
+    """
+    exclude_ids = exclude_ids or set()
+    def _matches(r):
+        if r.get("id", "") in exclude_ids:
+            return False
+        tokens = [t.strip() for t in r.get("type", "").lower().split(",")]
+        if "subsong" in tokens:
+            return False
+        return any(clip_type in t for t in tokens)
+    typed = [r for r in recordings if _matches(r)]
     ranked = sorted(typed, key=score_recording, reverse=True)
     return [
         {
@@ -317,7 +329,9 @@ def select_clips_two_pass(recordings: list[dict], species_name: str) -> dict:
     # Pass 1: commercial only
     commercial = [r for r in quality if is_commercial_license(r.get("lic", ""))]
     songs = select_xc_clips(commercial, "song", 3, commercial_ok=True)
-    calls = select_xc_clips(commercial, "call", 2, commercial_ok=True)
+    # Exclude song picks from call selection so compound types ('call, song') don't duplicate
+    song_ids = {s["xc_id"] for s in songs}
+    calls = select_xc_clips(commercial, "call", 2, commercial_ok=True, exclude_ids=song_ids)
 
     nc_fallback = False
     nc_clip_count = 0
@@ -342,7 +356,7 @@ def select_clips_two_pass(recordings: list[dict], species_name: str) -> dict:
             print(f"  ⚠ {species_name}: only {len([s for s in songs if s['commercial_ok']])} commercial song(s) found, relaxing to NC licenses")
 
         if need_more_calls:
-            existing_ids = {c["xc_id"] for c in calls}
+            existing_ids = {c["xc_id"] for c in calls} | {s["xc_id"] for s in songs}
             nc_calls = select_xc_clips(all_cc, "call", 2, commercial_ok=False)
             nc_calls = [c for c in nc_calls if c["xc_id"] not in existing_ids]
             needed = 2 - len(calls)
@@ -518,7 +532,7 @@ def main():
     print(f"  Species: {len(species)}")
     print(f"  Photo source: Wikipedia infobox (CC-BY-SA)")
     print(f"  Audio source: Xeno-canto (prefer commercial CC; fallback NC)")
-    print(f"  Region bias: Washington > PNW > US")
+    print(f"  Region tiebreaker: Washington > PNW > California (small bonus only)")
     print("=" * 60)
 
     species_results = []

@@ -42,19 +42,21 @@ function buildHeatmapImage(
   width: number,
   height: number,
 ): ImageData {
-  const imageData = new ImageData(width, height)
-  const pixels = imageData.data
-
+  // ImageData constructor throws IndexSizeError on 0 dimensions, so guard first
   if (data.timeBins === 0 || width === 0 || height === 0) {
-    // Fill with background color
+    const fallback = new ImageData(Math.max(1, width), Math.max(1, height))
+    const pixels = fallback.data
     for (let i = 0; i < pixels.length; i += 4) {
       pixels[i] = BG_COLOR[0]
       pixels[i + 1] = BG_COLOR[1]
       pixels[i + 2] = BG_COLOR[2]
       pixels[i + 3] = 255
     }
-    return imageData
+    return fallback
   }
+
+  const imageData = new ImageData(width, height)
+  const pixels = imageData.data
 
   for (let py = 0; py < height; py++) {
     // Map pixel row to frequency bin (low frequencies at bottom)
@@ -143,7 +145,9 @@ export default function Spectrogram({ data, currentTime, duration, isPlaying: _i
     if (canvas) drawFrame(canvas)
   }, [currentTime, duration, data])
 
-  // Handle resize — invalidate cache and redraw
+  // Handle resize — invalidate cache and redraw.
+  // Deps intentionally [data] only: progress ticks must not re-register the observer
+  // (its initial-callback would null the heatmap cache every animation frame).
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -153,7 +157,7 @@ export default function Spectrogram({ data, currentTime, duration, isPlaying: _i
     })
     observer.observe(canvas)
     return () => observer.disconnect()
-  }, [data, currentTime, duration])
+  }, [data])
 
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
