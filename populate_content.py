@@ -270,7 +270,9 @@ def query_xc(scientific_name: str, max_pages: int = 2) -> list[dict]:
 
 def select_xc_clips(recordings: list[dict], clip_type: str, n: int, commercial_ok: bool = True) -> list[dict]:
     """Filter by vocalization type, score, return top N with commercial_ok flag."""
-    typed = [r for r in recordings if clip_type in r.get("type", "").lower()]
+    typed = [r for r in recordings
+             if clip_type in r.get("type", "").lower()
+             and r.get("type", "").lower() != "subsong"]
     ranked = sorted(typed, key=score_recording, reverse=True)
     return [
         {
