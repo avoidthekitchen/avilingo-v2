@@ -249,7 +249,8 @@ def query_xc(scientific_name: str, max_pages: int = 2) -> list[dict]:
     genus = parts[0] if parts else scientific_name
     species = parts[1] if len(parts) > 1 else ""
     for page in range(1, max_pages + 1):
-        query = f'gen:{genus} sp:{species} cnt:"United States" q:">C"'
+        # area:america instead of cnt:"United States" so BC recordings can score via location bonus
+        query = f'gen:{genus} sp:{species} area:america q:">C"'
         try:
             resp = SESSION.get(
                 "https://xeno-canto.org/api/3/recordings",
