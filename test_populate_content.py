@@ -75,36 +75,36 @@ class TestScoreRecording:
     5-15s→+3, 15-30s→+1, 30-60s→-1, 60s+→-3."""
 
     def test_10_second_clip_gets_plus_3(self):
-        rec = _make_rec(length="0:10", quality="C")  # quality C = +1
-        assert score_recording(rec) == 1 + 3  # quality + length
+        rec = _make_rec(length="0:10", quality="C")  # quality C = +10
+        assert score_recording(rec) == 10 + 3  # quality + length
 
     def test_5_second_boundary_gets_plus_3(self):
         rec = _make_rec(length="0:05", quality="C")
-        assert score_recording(rec) == 1 + 3
+        assert score_recording(rec) == 10 + 3
 
     def test_15_second_boundary_gets_plus_3(self):
         rec = _make_rec(length="0:15", quality="C")
-        assert score_recording(rec) == 1 + 3
+        assert score_recording(rec) == 10 + 3
 
     def test_20_second_clip_gets_plus_1(self):
         rec = _make_rec(length="0:20", quality="C")
-        assert score_recording(rec) == 1 + 1
+        assert score_recording(rec) == 10 + 1
 
     def test_30_second_boundary_gets_plus_1(self):
         rec = _make_rec(length="0:30", quality="C")
-        assert score_recording(rec) == 1 + 1
+        assert score_recording(rec) == 10 + 1
 
     def test_45_second_clip_gets_minus_1(self):
         rec = _make_rec(length="0:45", quality="C")
-        assert score_recording(rec) == 1 + (-1)
+        assert score_recording(rec) == 10 + (-1)
 
     def test_90_second_clip_gets_minus_3(self):
         rec = _make_rec(length="1:30", quality="C")
-        assert score_recording(rec) == 1 + (-3)
+        assert score_recording(rec) == 10 + (-3)
 
     def test_4_second_clip_gets_no_length_bonus(self):
         rec = _make_rec(length="0:04", quality="C")
-        assert score_recording(rec) == 1  # no length bonus
+        assert score_recording(rec) == 10  # no length bonus
 
 
 class TestBackgroundSpeciesFilter:
