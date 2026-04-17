@@ -329,7 +329,7 @@ The spectrogram should be visible at all times (not collapsed when idle). When i
 - [x] Given audio is stopped, when the user clicks a position on the spectrogram, then audio starts playing from that position
 - [x] Given the user taps "Play Call" while viewing the song spectrogram, then the spectrogram updates to show the call clip's frequency data
 - [x] Given the user swipes to the next BirdCard, then audio stops and the new card displays its own spectrogram
-- [ ] Given a mobile viewport (~375px wide), the spectrogram is tall enough (~80px) to visually distinguish frequency banding and to tap seek positions accurately
+- [x] Given a mobile viewport (~375px wide), the spectrogram is tall enough (~80px) to visually distinguish frequency banding and to tap seek positions accurately
 
 ### User stories addressed
 
@@ -358,7 +358,7 @@ The spectrogram should be visible at all times (not collapsed when idle). When i
 **Output**: HITL approval of sizing, contrast, and tap accuracy
 **Depends on**: 5.1
 
-- [ ] Run the dev server (`cd beakspeak && npm run dev`) and open on a real mobile device or browser device emulator at ~375px width. Verify: spectrogram is ~80px tall and visually shows frequency banding for bird songs. Verify: theme colors render correctly (brown gradient on cream background). Verify: tapping a position on the spectrogram accurately seeks to that time (tap target is not too small). Verify: playhead animates smoothly during playback. Verify: switching between "Play Song" and "Play Call" updates the spectrogram. If adjustments are needed, iterate on height, colors, or padding before approving.
+- [x] Run the dev server (`cd beakspeak && npm run dev`) and open on a real mobile device or browser device emulator at ~375px width. Verify: spectrogram is ~80px tall and visually shows frequency banding for bird songs. Verify: theme colors render correctly (brown gradient on cream background). Verify: tapping a position on the spectrogram accurately seeks to that time (tap target is not too small). Verify: playhead animates smoothly during playback. Verify: switching between "Play Song" and "Play Call" updates the spectrogram. If adjustments are needed, iterate on height, colors, or padding before approving.
 
 ---
 
@@ -538,11 +538,11 @@ Steps:
 
 ### Acceptance criteria
 
-- [ ] Given the updated pipeline has run, when the summary report is reviewed, then it shows how many clips are commercially licensed vs NC fallback
-- [ ] Given the new audio files are deployed, when a user plays clips in the app, then the audio plays correctly and the clips sound cleaner than before
-- [ ] Given the manifest is inspected, when `commercial_ok` fields are checked, then every audio clip has the field set
-- [ ] Given a spot-check of 5+ species, when the selected XC IDs are looked up on xeno-canto.org, then none have background species listed in the `also` field
-- [ ] The updated manifest and audio files are committed to the repository
+- [x] Given the updated pipeline has run, when the summary report is reviewed, then it shows how many clips are commercially licensed vs NC fallback
+- [x] Given the new audio files are deployed, when a user plays clips in the app, then the audio plays correctly and the clips sound cleaner than before
+- [x] Given the manifest is inspected, when `commercial_ok` fields are checked, then every audio clip has the field set
+- [x] Given a spot-check of 5+ species, when the selected XC IDs are looked up on xeno-canto.org, then none have background species listed in the `also` field
+- [x] The updated manifest and audio files are committed to the repository
 
 ### User stories addressed
 
@@ -559,7 +559,7 @@ Steps:
 **Output**: New manifest and audio files generated with summary report
 **Depends on**: 6.3, 7.1
 
-- [ ] Delete existing audio files under `beakspeak/public/content/audio/` to force re-selection (keep `beakspeak/public/content/photos/` intact). Run `uv run python3 populate_content.py` to re-score and re-select clips with the new license tiering, background species filter, and length scoring. Save the summary report output. Then run `uv run python3 download_media.py` to download and normalize the newly-selected clips with smart trimming. Verify the pipeline completes without errors and the new `manifest.json` has `commercial_ok` fields on every clip.
+- [x] Delete existing audio files under `beakspeak/public/content/audio/` to force re-selection (keep `beakspeak/public/content/photos/` intact). Run `uv run python3 populate_content.py` to re-score and re-select clips with the new license tiering, background species filter, and length scoring. Save the summary report output. Then run `uv run python3 download_media.py` to download and normalize the newly-selected clips with smart trimming. Verify the pipeline completes without errors and the new `manifest.json` has `commercial_ok` fields on every clip.
 
 ---
 
@@ -569,4 +569,4 @@ Steps:
 **Output**: HITL approval, commit updated manifest and audio files
 **Depends on**: 8.1
 
-- [ ] Review the summary report: check license breakdown (commercial vs NC per species), species with fewer clips than target. Spot-check at least 5 species on xeno-canto.org by looking up the selected XC IDs and verifying the `also` field is empty. Listen to at least 10 output clips across different species — they should be short, start with the bird's vocalization, and not contain obvious background birds. Compare average clip lengths against the previous manifest to confirm they trend shorter. Run `cd beakspeak && npm run dev` and verify the app loads and plays the new clips correctly. Once satisfied, commit the updated manifest and audio files.
+- [x] Review the summary report: check license breakdown (commercial vs NC per species), species with fewer clips than target. Spot-check at least 5 species on xeno-canto.org by looking up the selected XC IDs and verifying the `also` field is empty. Listen to at least 10 output clips across different species — they should be short, start with the bird's vocalization, and not contain obvious background birds. Compare average clip lengths against the previous manifest to confirm they trend shorter. Run `cd beakspeak && npm run dev` and verify the app loads and plays the new clips correctly. Once satisfied, commit the updated manifest and audio files.
