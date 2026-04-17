@@ -95,9 +95,11 @@ export class WebAudioPlayer implements AudioPlayer {
         this.gainNode.gain.setValueAtTime(this.gainNode.gain.value, now)
         this.gainNode.gain.linearRampToValueAtTime(0, now + 0.1)
       }
+      this.source.onended = null // Prevent double-fire from source.stop()
       try { this.source.stop() } catch { /* already stopped */ }
       this.source = null
     }
+    // Null activeUrl BEFORE idle so explicit stop doesn't advance clips
     this.activeUrl = null
     this.activeBuffer = null
     this.setState('idle')
@@ -129,7 +131,31 @@ export class WebAudioPlayer implements AudioPlayer {
 
   seek(time: number): void {
     if (this.state !== 'playing' || !this.activeUrl) return
-    this.play(this.activeUrl, time)
+    const buffer = this.cache.get(this.activeUrl)
+    if (!buffer || !this.context || !this.gainNode) return
+
+    // Silently swap the source node — no state transitions, no button flicker
+    if (this.source) {
+      this.source.onended = null
+      try { this.source.stop() } catch { /* already stopped */ }
+    }
+
+    this.gainNode.gain.cancelScheduledValues(this.context.currentTime)
+    this.gainNode.gain.setValueAtTime(1, this.context.currentTime)
+
+    this.source = this.context.createBufferSource()
+    this.source.buffer = buffer
+    this.source.connect(this.gainNode)
+    this.source.onended = () => {
+      this.source = null
+      // Fire idle BEFORE nulling so listeners can see which clip ended
+      this.setState('idle')
+      this.activeUrl = null
+      this.activeBuffer = null
+    }
+    this.source.start(0, time)
+    this.playbackStartTime = this.context.currentTime
+    this.playbackOffset = time
   }
 
   onProgress(cb: (currentTime: number, duration: number) => void): () => void {
@@ -164,7 +190,9 @@ export class WebAudioPlayer implements AudioPlayer {
         this.cache.set(url, buffer)
       }
 
-      // Reset gain to full volume before starting new clip
+      // Reset gain to full volume before starting new clip.
+      // cancelScheduledValues clears any pending fade-out ramp from a prior stop().
+      this.gainNode!.gain.cancelScheduledValues(ctx.currentTime)
       this.gainNode!.gain.setValueAtTime(1, ctx.currentTime)
 
       this.source = ctx.createBufferSource()
@@ -172,9 +200,10 @@ export class WebAudioPlayer implements AudioPlayer {
       this.source.connect(this.gainNode!)
       this.source.onended = () => {
         this.source = null
+        // Fire idle BEFORE nulling so listeners can see which clip ended naturally
+        this.setState('idle')
         this.activeUrl = null
         this.activeBuffer = null
-        this.setState('idle')
       }
       this.source.start(0, offset ?? 0)
       this.playbackStartTime = ctx.currentTime

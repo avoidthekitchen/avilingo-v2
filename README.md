@@ -11,6 +11,7 @@ A Duolingo-style web app for learning Seattle-area bird songs and calls. Flash-c
 ### Content (Sprint 0)
 - 15 Seattle-area species across 5 lessons, curated by learnability
 - Each species: 3 songs + 2 calls from Xeno-canto, normalized to OGG Opus 96kbps
+- Clip selection scoring: quality grade (A=+50 … E=−30) dominates; bonuses for remarks (+5), confirmed sighting (+3), PNW location (+0.4); penalty for playback-induced recordings (−5)
 - Mnemonics, habitat tags, Wikipedia photos, and 5 confuser pairs per species
 - `tier1_seattle_birds_populated.json` → `beakspeak/public/content/manifest.json`
 

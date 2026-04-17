@@ -20,6 +20,7 @@ function makeMockGainNode(): GainNode {
     value: 1,
     setValueAtTime: vi.fn().mockReturnThis(),
     linearRampToValueAtTime: vi.fn().mockReturnThis(),
+    cancelScheduledValues: vi.fn().mockReturnThis(),
   }
   return { gain, connect: vi.fn(), disconnect: vi.fn() } as unknown as GainNode
 }

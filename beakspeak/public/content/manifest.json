@@ -45,71 +45,76 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "550087",
-            "xc_url": "https://xeno-canto.org/550087",
-            "audio_url": "/content/audio/amro/550087.ogg",
+            "xc_id": "954703",
+            "xc_url": "https://xeno-canto.org/954703",
+            "audio_url": "/content/audio/amro/954703.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:08",
-            "recordist": "Bruce Lagerquist",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Thornton Creek Ravine, Seattle, King County, Washington",
+            "length": "1:49",
+            "recordist": "Anonymous",
+            "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+            "location": "Highlands (near  Highland Falls), Orange County, New York",
             "country": "United States",
-            "score": 11.5
+            "score": 52,
+            "commercial_ok": true
           },
           {
-            "xc_id": "666135",
-            "xc_url": "https://xeno-canto.org/666135",
-            "audio_url": "/content/audio/amro/666135.ogg",
-            "type": "dawn song",
-            "quality": "A",
-            "length": "0:45",
-            "recordist": "Steve Hampton",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Port Townsend, Jefferson County, Washington",
-            "country": "United States",
-            "score": 10.5
-          },
-          {
-            "xc_id": "319833",
-            "xc_url": "https://xeno-canto.org/319833",
-            "audio_url": "/content/audio/amro/319833.ogg",
+            "xc_id": "128490",
+            "xc_url": "https://xeno-canto.org/128490",
+            "audio_url": "/content/audio/amro/128490.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:39",
-            "recordist": "John Leszczynski",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Washington, District of Columbia, District of Columbia",
+            "length": "7:21",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "Dordt College Prairie, Sioux, Iowa",
             "country": "United States",
-            "score": 10.5
+            "score": 52,
+            "commercial_ok": true
+          },
+          {
+            "xc_id": "757266",
+            "xc_url": "https://xeno-canto.org/757266",
+            "audio_url": "/content/audio/amro/757266.ogg",
+            "type": "song",
+            "quality": "B",
+            "length": "1:02",
+            "recordist": "Robert Benson",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "South East Arizona in the mountains near Strawberry Rim",
+            "country": "United States",
+            "score": 32,
+            "commercial_ok": true
           }
         ],
         "calls": [
           {
-            "xc_id": "550893",
-            "xc_url": "https://xeno-canto.org/550893",
-            "audio_url": "/content/audio/amro/550893.ogg",
+            "xc_id": "254484",
+            "xc_url": "https://xeno-canto.org/254484",
+            "audio_url": "/content/audio/amro/254484.ogg",
             "type": "call",
             "quality": "A",
-            "length": "0:10",
-            "recordist": "Bruce Lagerquist",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Thornton Creek Ravine, Seattle, King County, Washington",
+            "length": "0:34",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "Blue Bell Campground, Custer State Park, South Dakota",
             "country": "United States",
-            "score": 11.5
+            "score": 54,
+            "commercial_ok": true
           },
           {
-            "xc_id": "550889",
-            "xc_url": "https://xeno-canto.org/550889",
-            "audio_url": "/content/audio/amro/550889.ogg",
-            "type": "alarm call",
+            "xc_id": "254483",
+            "xc_url": "https://xeno-canto.org/254483",
+            "audio_url": "/content/audio/amro/254483.ogg",
+            "type": "call",
             "quality": "A",
-            "length": "0:14",
-            "recordist": "Bruce Lagerquist",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Thornton Creek Ravine, Seattle, King County, Washington",
+            "length": "0:39",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "Blue Bell Campground, Custer State Park, South Dakota",
             "country": "United States",
-            "score": 11.5
+            "score": 54,
+            "commercial_ok": true
           }
         ]
       },
@@ -163,32 +168,6 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "481136",
-            "xc_url": "https://xeno-canto.org/481136",
-            "audio_url": "/content/audio/amcr/481136.ogg",
-            "type": "call, song",
-            "quality": "A",
-            "length": "0:26",
-            "recordist": "Meena Haribal",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Pinnacles National Park, San Benito County, California",
-            "country": "United States",
-            "score": 8.0
-          },
-          {
-            "xc_id": "420594",
-            "xc_url": "https://xeno-canto.org/420594",
-            "audio_url": "/content/audio/amcr/420594.ogg",
-            "type": "song",
-            "quality": "B",
-            "length": "0:39",
-            "recordist": "Meena Haribal",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Brinnon, Jefferson County, Washington",
-            "country": "United States",
-            "score": 8
-          },
-          {
             "xc_id": "114556",
             "xc_url": "https://xeno-canto.org/114556",
             "audio_url": "/content/audio/amcr/114556.ogg",
@@ -199,35 +178,66 @@
             "license": "https://creativecommons.org/licenses/by-nc-sa/3.0/",
             "location": "Moraine Park, Rocky Mountain National Park, Larimer, Colorado",
             "country": "United States",
-            "score": 7.5
+            "score": 56,
+            "commercial_ok": false
+          },
+          {
+            "xc_id": "807484",
+            "xc_url": "https://xeno-canto.org/807484",
+            "audio_url": "/content/audio/amcr/807484.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:48",
+            "recordist": "Barry Edmonston",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Cape Cod (near  Barnstable), Barnstable County, Massachusetts",
+            "country": "United States",
+            "score": 54,
+            "commercial_ok": false
+          },
+          {
+            "xc_id": "481136",
+            "xc_url": "https://xeno-canto.org/481136",
+            "audio_url": "/content/audio/amcr/481136.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "0:26",
+            "recordist": "Meena Haribal",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Pinnacles National Park, San Benito County, California",
+            "country": "United States",
+            "score": 56.0,
+            "commercial_ok": false
           }
         ],
         "calls": [
           {
-            "xc_id": "550085",
-            "xc_url": "https://xeno-canto.org/550085",
-            "audio_url": "/content/audio/amcr/550085.ogg",
+            "xc_id": "756861",
+            "xc_url": "https://xeno-canto.org/756861",
+            "audio_url": "/content/audio/amcr/756861.ogg",
             "type": "call",
             "quality": "A",
-            "length": "0:17",
-            "recordist": "Bruce Lagerquist",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Thornton Creek Ravine, Seattle, King County, Washington",
+            "length": "2:13",
+            "recordist": "Robert Benson",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "Iola, Grimes County, Texas",
             "country": "United States",
-            "score": 11.5
+            "score": 52,
+            "commercial_ok": true
           },
           {
-            "xc_id": "289011",
-            "xc_url": "https://xeno-canto.org/289011",
-            "audio_url": "/content/audio/amcr/289011.ogg",
+            "xc_id": "155441",
+            "xc_url": "https://xeno-canto.org/155441",
+            "audio_url": "/content/audio/amcr/155441.ogg",
             "type": "call",
             "quality": "A",
-            "length": "0:15",
-            "recordist": "David Vander Pluym",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Marymoor Park, King County, Washington",
+            "length": "3:49",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "Powderhorn Park, Minneapolis, Hennepin, Minnesota",
             "country": "United States",
-            "score": 11.5
+            "score": 52,
+            "commercial_ok": true
           }
         ]
       },
@@ -283,58 +293,62 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "663787",
-            "xc_url": "https://xeno-canto.org/663787",
-            "audio_url": "/content/audio/sosp/663787.ogg",
+            "xc_id": "78059",
+            "xc_url": "https://xeno-canto.org/78059",
+            "audio_url": "/content/audio/sosp/78059.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:26",
-            "recordist": "Whitney Neufeld-Kaiser",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Yost Park (near  Edmonds), Snohomish County, Washington",
+            "length": "0:38",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "Bear Head Lake State Park, St. Louis, Minnesota",
             "country": "United States",
-            "score": 11.5
+            "score": 54,
+            "commercial_ok": true
           },
           {
-            "xc_id": "473434",
-            "xc_url": "https://xeno-canto.org/473434",
-            "audio_url": "/content/audio/sosp/473434.ogg",
+            "xc_id": "142619",
+            "xc_url": "https://xeno-canto.org/142619",
+            "audio_url": "/content/audio/sosp/142619.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:21",
-            "recordist": "bowtyler",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Olympia, Thurston County, Washington",
+            "length": "2:25",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "Union Bay Campground, Porcupine Mountains SP, Ontonagon, Michigan",
             "country": "United States",
-            "score": 11.5
+            "score": 52,
+            "commercial_ok": true
           },
           {
-            "xc_id": "473424",
-            "xc_url": "https://xeno-canto.org/473424",
-            "audio_url": "/content/audio/sosp/473424.ogg",
+            "xc_id": "1005250",
+            "xc_url": "https://xeno-canto.org/1005250",
+            "audio_url": "/content/audio/sosp/1005250.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:29",
-            "recordist": "bowtyler",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Olympia, Thurston County, Washington",
+            "length": "0:40",
+            "recordist": "Ryan Douglas",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "Damascus, Montgomery County, Maryland",
             "country": "United States",
-            "score": 11.5
+            "score": 49,
+            "commercial_ok": true
           }
         ],
         "calls": [
           {
-            "xc_id": "972394",
-            "xc_url": "https://xeno-canto.org/972394",
-            "audio_url": "/content/audio/sosp/972394.ogg",
+            "xc_id": "80524",
+            "xc_url": "https://xeno-canto.org/80524",
+            "audio_url": "/content/audio/sosp/80524.ogg",
             "type": "call",
-            "quality": "A",
+            "quality": "B",
             "length": "0:17",
-            "recordist": "Whitney Neufeld-Kaiser",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Seattle, King County, Washington",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "Powderhorn Park, Minneapolis, Hennepin, Minnesota",
             "country": "United States",
-            "score": 11.5
+            "score": 36,
+            "commercial_ok": true
           },
           {
             "xc_id": "644849",
@@ -347,7 +361,8 @@
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
             "location": "Denmark Township (near  Hastings), Washington County, Minnesota",
             "country": "United States",
-            "score": 11.5
+            "score": 58.4,
+            "commercial_ok": false
           }
         ]
       },
@@ -395,71 +410,76 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "766386",
-            "xc_url": "https://xeno-canto.org/766386",
-            "audio_url": "/content/audio/deju/766386.ogg",
+            "xc_id": "254480",
+            "xc_url": "https://xeno-canto.org/254480",
+            "audio_url": "/content/audio/deju/254480.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:22",
-            "recordist": "Bruce Lagerquist",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Dawson Canyon, Kittitas County, Washington",
+            "length": "0:05",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "Blue Bell Campground, Custer State Park, South Dakota",
             "country": "United States",
-            "score": 11.5
+            "score": 58,
+            "commercial_ok": true
           },
           {
-            "xc_id": "178940",
-            "xc_url": "https://xeno-canto.org/178940",
-            "audio_url": "/content/audio/deju/178940.ogg",
+            "xc_id": "254478",
+            "xc_url": "https://xeno-canto.org/254478",
+            "audio_url": "/content/audio/deju/254478.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:29",
-            "recordist": "Eric Cannizzaro",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Olympic National Forest (near  Montesano), Mason County, Washington",
+            "length": "2:58",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "Blue Bell Campground, Custer State Park, South Dakota",
             "country": "United States",
-            "score": 11
+            "score": 52,
+            "commercial_ok": true
           },
           {
-            "xc_id": "1083920",
-            "xc_url": "https://xeno-canto.org/1083920",
-            "audio_url": "/content/audio/deju/1083920.ogg",
-            "type": "call, song",
+            "xc_id": "254477",
+            "xc_url": "https://xeno-canto.org/254477",
+            "audio_url": "/content/audio/deju/254477.ogg",
+            "type": "song",
             "quality": "A",
-            "length": "0:48",
-            "recordist": "Greg Irving",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Dungeness Recreation Area, Clallam County, Washington",
+            "length": "3:25",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "Blue Bell Campground, Custer State Park, South Dakota",
             "country": "United States",
-            "score": 10
+            "score": 52,
+            "commercial_ok": true
           }
         ],
         "calls": [
           {
-            "xc_id": "1024572",
-            "xc_url": "https://xeno-canto.org/1024572",
-            "audio_url": "/content/audio/deju/1024572.ogg",
+            "xc_id": "104512",
+            "xc_url": "https://xeno-canto.org/104512",
+            "audio_url": "/content/audio/deju/104512.ogg",
             "type": "call",
             "quality": "A",
-            "length": "0:19",
-            "recordist": "Greg Irving",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Deer Park Campground, Olympic National Park, Washington",
+            "length": "0:04",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "Blue Bell Campground, Custer State Park, South Dakota",
             "country": "United States",
-            "score": 11.5
+            "score": 55,
+            "commercial_ok": true
           },
           {
-            "xc_id": "477131",
-            "xc_url": "https://xeno-canto.org/477131",
-            "audio_url": "/content/audio/deju/477131.ogg",
-            "type": "call",
-            "quality": "A",
-            "length": "0:14",
-            "recordist": "Bates Estabrooks",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Bremerton, Kitsap County, Washington",
+            "xc_id": "363228",
+            "xc_url": "https://xeno-canto.org/363228",
+            "audio_url": "/content/audio/deju/363228.ogg",
+            "type": "call, song",
+            "quality": "B",
+            "length": "1:38",
+            "recordist": "Matthias Sirch",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "Vermont (near  Saint George), Chittenden County, Vermont",
             "country": "United States",
-            "score": 11.5
+            "score": 32,
+            "commercial_ok": true
           }
         ]
       },
@@ -497,71 +517,76 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "549584",
-            "xc_url": "https://xeno-canto.org/549584",
-            "audio_url": "/content/audio/bcch/549584.ogg",
+            "xc_id": "70185",
+            "xc_url": "https://xeno-canto.org/70185",
+            "audio_url": "/content/audio/bcch/70185.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:43",
-            "recordist": "Bruce Lagerquist",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Thornton Creek Ravine, Seattle, King County, Washington",
+            "length": "0:31",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "Powderhorn Park, Minneapolis, Hennepin, Minnesota",
             "country": "United States",
-            "score": 10.5
+            "score": 54,
+            "commercial_ok": true
           },
           {
-            "xc_id": "624457",
-            "xc_url": "https://xeno-canto.org/624457",
-            "audio_url": "/content/audio/bcch/624457.ogg",
-            "type": "aberrant, song",
+            "xc_id": "866009",
+            "xc_url": "https://xeno-canto.org/866009",
+            "audio_url": "/content/audio/bcch/866009.ogg",
+            "type": "song",
             "quality": "A",
-            "length": "0:25",
-            "recordist": "Thomas Magarian",
+            "length": "0:06",
+            "recordist": "Don Profota",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "2310 North Wygant Street, North Portland, Multnomah County, Oregon",
+            "location": "South Bozeman, Gallatin County, Montana",
             "country": "United States",
-            "score": 9.5
+            "score": 58,
+            "commercial_ok": false
           },
           {
-            "xc_id": "624456",
-            "xc_url": "https://xeno-canto.org/624456",
-            "audio_url": "/content/audio/bcch/624456.ogg",
-            "type": "aberrant, song",
+            "xc_id": "717519",
+            "xc_url": "https://xeno-canto.org/717519",
+            "audio_url": "/content/audio/bcch/717519.ogg",
+            "type": "song",
             "quality": "A",
-            "length": "0:20",
-            "recordist": "Thomas Magarian",
+            "length": "0:23",
+            "recordist": "Bobby Wilcox",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "2310 North Wygant Street, North Portland, Multnomah County, Oregon",
+            "location": "Tama (near  Burlington), Des Moines, Iowa",
             "country": "United States",
-            "score": 9.5
+            "score": 56,
+            "commercial_ok": false
           }
         ],
         "calls": [
           {
-            "xc_id": "582380",
-            "xc_url": "https://xeno-canto.org/582380",
-            "audio_url": "/content/audio/bcch/582380.ogg",
+            "xc_id": "77884",
+            "xc_url": "https://xeno-canto.org/77884",
+            "audio_url": "/content/audio/bcch/77884.ogg",
             "type": "call",
-            "quality": "A",
-            "length": "0:18",
-            "recordist": "James Link",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Quilcene, Jefferson County, Washington",
+            "quality": "B",
+            "length": "0:11",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "Bear Head Lake State Park, St. Louis, Minnesota",
             "country": "United States",
-            "score": 11.5
+            "score": 38,
+            "commercial_ok": true
           },
           {
-            "xc_id": "473414",
-            "xc_url": "https://xeno-canto.org/473414",
-            "audio_url": "/content/audio/bcch/473414.ogg",
+            "xc_id": "569276",
+            "xc_url": "https://xeno-canto.org/569276",
+            "audio_url": "/content/audio/bcch/569276.ogg",
             "type": "call",
-            "quality": "A",
-            "length": "0:46",
-            "recordist": "bowtyler",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Olympia, Thurston County, Washington",
+            "quality": "B",
+            "length": "0:38",
+            "recordist": "Eric B",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "Turkey Hill (near  Arlington), Middlesex County, Massachusetts",
             "country": "United States",
-            "score": 10.5
+            "score": 34,
+            "commercial_ok": true
           }
         ]
       },
@@ -615,71 +640,76 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "948903",
-            "xc_url": "https://xeno-canto.org/948903",
-            "audio_url": "/content/audio/spto/948903.ogg",
+            "xc_id": "717736",
+            "xc_url": "https://xeno-canto.org/717736",
+            "audio_url": "/content/audio/spto/717736.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:19",
-            "recordist": "Whitney Neufeld-Kaiser",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Twisp, Okanogan County, Washington",
+            "length": "0:23",
+            "recordist": "Diana Doyle",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "Manning Camp, Saguaro National Park, Rincon Mtns, Arizona",
             "country": "United States",
-            "score": 11.5
+            "score": 56,
+            "commercial_ok": true
           },
           {
-            "xc_id": "647613",
-            "xc_url": "https://xeno-canto.org/647613",
-            "audio_url": "/content/audio/spto/647613.ogg",
+            "xc_id": "254464",
+            "xc_url": "https://xeno-canto.org/254464",
+            "audio_url": "/content/audio/spto/254464.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:26",
-            "recordist": "Whitney Neufeld-Kaiser",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Stanwood, Snohomish County, Washington",
+            "length": "0:47",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "Prairie Trail, Custer State Park, South Dakota",
             "country": "United States",
-            "score": 11.5
+            "score": 54,
+            "commercial_ok": true
           },
           {
-            "xc_id": "547332",
-            "xc_url": "https://xeno-canto.org/547332",
-            "audio_url": "/content/audio/spto/547332.ogg",
+            "xc_id": "254549",
+            "xc_url": "https://xeno-canto.org/254549",
+            "audio_url": "/content/audio/spto/254549.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:20",
-            "recordist": "Bruce Lagerquist",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Maple Leaf, Seattle, King County, Washington",
+            "length": "1:33",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "Oak Draw Rd, Custer State Park, South Dakota",
             "country": "United States",
-            "score": 11.5
+            "score": 52,
+            "commercial_ok": true
           }
         ],
         "calls": [
           {
-            "xc_id": "582159",
-            "xc_url": "https://xeno-canto.org/582159",
-            "audio_url": "/content/audio/spto/582159.ogg",
+            "xc_id": "109662",
+            "xc_url": "https://xeno-canto.org/109662",
+            "audio_url": "/content/audio/spto/109662.ogg",
             "type": "call",
-            "quality": "A",
-            "length": "0:29",
-            "recordist": "James Link",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Port Hadlock-Irondale, Jefferson County, Washington",
+            "quality": "B",
+            "length": "0:06",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "McClellan Ranch Preserve, Santa Clara, California",
             "country": "United States",
-            "score": 11.5
+            "score": 38.0,
+            "commercial_ok": true
           },
           {
-            "xc_id": "473453",
-            "xc_url": "https://xeno-canto.org/473453",
-            "audio_url": "/content/audio/spto/473453.ogg",
+            "xc_id": "109660",
+            "xc_url": "https://xeno-canto.org/109660",
+            "audio_url": "/content/audio/spto/109660.ogg",
             "type": "call",
-            "quality": "A",
-            "length": "0:29",
-            "recordist": "bowtyler",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Mission Creek Nature Park (near  Olympia), Thurston County, Washington",
+            "quality": "B",
+            "length": "1:12",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "McClellan Ranch Preserve, Santa Clara, California",
             "country": "United States",
-            "score": 11.5
+            "score": 32.0,
+            "commercial_ok": true
           }
         ]
       },
@@ -727,71 +757,76 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "638608",
-            "xc_url": "https://xeno-canto.org/638608",
-            "audio_url": "/content/audio/hofi/638608.ogg",
-            "type": "call, song",
-            "quality": "A",
-            "length": "0:37",
-            "recordist": "Bruce Lagerquist",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Cassimer Bar, Okanogan County, Washington",
-            "country": "United States",
-            "score": 10.5
-          },
-          {
-            "xc_id": "468779",
-            "xc_url": "https://xeno-canto.org/468779",
-            "audio_url": "/content/audio/hofi/468779.ogg",
+            "xc_id": "622745",
+            "xc_url": "https://xeno-canto.org/622745",
+            "audio_url": "/content/audio/hofi/622745.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:45",
-            "recordist": "Bruce Lagerquist",
+            "length": "0:12",
+            "recordist": "Ted Floyd",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Deadman Creek, Garfield County, Washington",
+            "location": "Lafayette, Boulder County, Colorado",
             "country": "United States",
-            "score": 10.5
+            "score": 58,
+            "commercial_ok": false
           },
           {
-            "xc_id": "584861",
-            "xc_url": "https://xeno-canto.org/584861",
-            "audio_url": "/content/audio/hofi/584861.ogg",
-            "type": "song",
+            "xc_id": "679337",
+            "xc_url": "https://xeno-canto.org/679337",
+            "audio_url": "/content/audio/hofi/679337.ogg",
+            "type": "flight call, flight song",
             "quality": "A",
-            "length": "0:29",
-            "recordist": "Thomas Magarian",
+            "length": "0:20",
+            "recordist": "Paul Marvin",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Columbia Childrens Arboretum, Portland, Multnomah County, Oregon",
+            "location": "Bird and Butterfly Garden, Tijuana River Valley Regional Park, San Diego Co, California",
             "country": "United States",
-            "score": 9
+            "score": 56.0,
+            "commercial_ok": false
+          },
+          {
+            "xc_id": "550903",
+            "xc_url": "https://xeno-canto.org/550903",
+            "audio_url": "/content/audio/hofi/550903.ogg",
+            "type": "begging call, song",
+            "quality": "A",
+            "length": "0:30",
+            "recordist": "Paul Marvin",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Proctor Valley Rd, San Diego County, California",
+            "country": "United States",
+            "score": 56.0,
+            "commercial_ok": false
           }
         ],
         "calls": [
           {
-            "xc_id": "638608",
-            "xc_url": "https://xeno-canto.org/638608",
-            "audio_url": "/content/audio/hofi/638608.ogg",
-            "type": "call, song",
+            "xc_id": "483967",
+            "xc_url": "https://xeno-canto.org/483967",
+            "audio_url": "/content/audio/hofi/483967.ogg",
+            "type": "flight call",
             "quality": "A",
-            "length": "0:37",
-            "recordist": "Bruce Lagerquist",
+            "length": "0:14",
+            "recordist": "Paul Marvin",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Cassimer Bar, Okanogan County, Washington",
+            "location": "Monument Rd and nearby trails, Tijuana River Valley, San Diego, California",
             "country": "United States",
-            "score": 10.5
+            "score": 58.0,
+            "commercial_ok": false
           },
           {
-            "xc_id": "1056012",
-            "xc_url": "https://xeno-canto.org/1056012",
-            "audio_url": "/content/audio/hofi/1056012.ogg",
-            "type": "call",
-            "quality": "B",
-            "length": "0:11",
-            "recordist": "Denis Dujardin",
+            "xc_id": "679337",
+            "xc_url": "https://xeno-canto.org/679337",
+            "audio_url": "/content/audio/hofi/679337.ogg",
+            "type": "flight call, flight song",
+            "quality": "A",
+            "length": "0:20",
+            "recordist": "Paul Marvin",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Tualatin River NWR, Washington County, Oregon",
+            "location": "Bird and Butterfly Garden, Tijuana River Valley Regional Park, San Diego Co, California",
             "country": "United States",
-            "score": 9
+            "score": 56.0,
+            "commercial_ok": false
           }
         ]
       },
@@ -838,6 +873,34 @@
       "audio_clips": {
         "songs": [
           {
+            "xc_id": "645833",
+            "xc_url": "https://xeno-canto.org/645833",
+            "audio_url": "/content/audio/nofl/645833.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:13",
+            "recordist": "Ted Floyd",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Lafayette, Boulder County, Colorado",
+            "country": "United States",
+            "score": 58,
+            "commercial_ok": false
+          },
+          {
+            "xc_id": "410727",
+            "xc_url": "https://xeno-canto.org/410727",
+            "audio_url": "/content/audio/nofl/410727.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:11",
+            "recordist": "Ted Floyd",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Boulder, Boulder County, Colorado",
+            "country": "United States",
+            "score": 58,
+            "commercial_ok": false
+          },
+          {
             "xc_id": "613548",
             "xc_url": "https://xeno-canto.org/613548",
             "audio_url": "/content/audio/nofl/613548.ogg",
@@ -848,61 +911,38 @@
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
             "location": "Icicle River near Leavenworth, Washington",
             "country": "United States",
-            "score": 11.5
-          },
-          {
-            "xc_id": "604689",
-            "xc_url": "https://xeno-canto.org/604689",
-            "audio_url": "/content/audio/nofl/604689.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:26",
-            "recordist": "Bruce Lagerquist",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Maple Leaf, Seattle, King County, Washington",
-            "country": "United States",
-            "score": 11.5
-          },
-          {
-            "xc_id": "1007124",
-            "xc_url": "https://xeno-canto.org/1007124",
-            "audio_url": "/content/audio/nofl/1007124.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:26",
-            "recordist": "Ed Pandolfino",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Dean's Crick, Sierra County, California",
-            "country": "United States",
-            "score": 7.5
+            "score": 56.4,
+            "commercial_ok": false
           }
         ],
         "calls": [
           {
-            "xc_id": "613548",
-            "xc_url": "https://xeno-canto.org/613548",
-            "audio_url": "/content/audio/nofl/613548.ogg",
-            "type": "begging call, song",
-            "quality": "A",
-            "length": "0:30",
-            "recordist": "Peter Ward and Ken Hall",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Icicle River near Leavenworth, Washington",
+            "xc_id": "104537",
+            "xc_url": "https://xeno-canto.org/104537",
+            "audio_url": "/content/audio/nofl/104537.ogg",
+            "type": "call",
+            "quality": "B",
+            "length": "0:26",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "Blue Bell Campground, Custer State Park, South Dakota",
             "country": "United States",
-            "score": 11.5
+            "score": 36,
+            "commercial_ok": true
           },
           {
-            "xc_id": "550950",
-            "xc_url": "https://xeno-canto.org/550950",
-            "audio_url": "/content/audio/nofl/550950.ogg",
-            "type": "call",
-            "quality": "A",
-            "length": "0:06",
-            "recordist": "Bruce Lagerquist",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Thornton Creek Ravine, Seattle, King County, Washington",
+            "xc_id": "254591",
+            "xc_url": "https://xeno-canto.org/254591",
+            "audio_url": "/content/audio/nofl/254591.ogg",
+            "type": "call, drumming",
+            "quality": "B",
+            "length": "1:49",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "Four Mile Draw Rd, Custer State Park, South Dakota",
             "country": "United States",
-            "score": 11.5
+            "score": 32,
+            "commercial_ok": true
           }
         ]
       },
@@ -956,71 +996,76 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "456270",
-            "xc_url": "https://xeno-canto.org/456270",
-            "audio_url": "/content/audio/stja/456270.ogg",
-            "type": "call, song",
+            "xc_id": "603263",
+            "xc_url": "https://xeno-canto.org/603263",
+            "audio_url": "/content/audio/stja/603263.ogg",
+            "type": "song",
             "quality": "A",
-            "length": "0:56",
-            "recordist": "Alan Knue",
+            "length": "0:24",
+            "recordist": "Thomas Magarian",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Ballinger Park, Mountlake Terrace, Snohomish County, Washington",
+            "location": "Camp Polk Meadow Preserve, Sisters, Deschutes County, Oregon",
             "country": "United States",
-            "score": 10.5
+            "score": 51.2,
+            "commercial_ok": false
           },
           {
-            "xc_id": "456269",
-            "xc_url": "https://xeno-canto.org/456269",
-            "audio_url": "/content/audio/stja/456269.ogg",
-            "type": "call, song",
-            "quality": "A",
-            "length": "0:36",
-            "recordist": "Alan Knue",
+            "xc_id": "406987",
+            "xc_url": "https://xeno-canto.org/406987",
+            "audio_url": "/content/audio/stja/406987.ogg",
+            "type": "song",
+            "quality": "B",
+            "length": "0:24",
+            "recordist": "Kristie Nelson",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Ballinger Park, Mountlake Terrace, Snohomish County, Washington",
+            "location": "Dechambeau Creek, NW Mono Basin, Mono County, California",
             "country": "United States",
-            "score": 10.5
+            "score": 36.0,
+            "commercial_ok": false
           },
           {
-            "xc_id": "456271",
-            "xc_url": "https://xeno-canto.org/456271",
-            "audio_url": "/content/audio/stja/456271.ogg",
-            "type": "call, song",
-            "quality": "A",
-            "length": "1:12",
-            "recordist": "Alan Knue",
+            "xc_id": "465645",
+            "xc_url": "https://xeno-canto.org/465645",
+            "audio_url": "/content/audio/stja/465645.ogg",
+            "type": "call, song, whisper type creak song",
+            "quality": "B",
+            "length": "0:39",
+            "recordist": "Gwen Baluss",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Ballinger Park, Mountlake Terrace, Snohomish County, Washington",
+            "location": "Mendenhall Valley, Juneau, Alaska",
             "country": "United States",
-            "score": 9.5
+            "score": 34,
+            "commercial_ok": false
           }
         ],
         "calls": [
           {
-            "xc_id": "703911",
-            "xc_url": "https://xeno-canto.org/703911",
-            "audio_url": "/content/audio/stja/703911.ogg",
-            "type": "call",
+            "xc_id": "644895",
+            "xc_url": "https://xeno-canto.org/644895",
+            "audio_url": "/content/audio/stja/644895.ogg",
+            "type": "begging call",
             "quality": "A",
-            "length": "0:11",
-            "recordist": "Steve Hampton",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Port Townsend, Jefferson County, Washington",
+            "length": "0:12",
+            "recordist": "Diana Doyle",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "Big Bear, San Bernardino County, California",
             "country": "United States",
-            "score": 11.5
+            "score": 58.0,
+            "commercial_ok": true
           },
           {
-            "xc_id": "670954",
-            "xc_url": "https://xeno-canto.org/670954",
-            "audio_url": "/content/audio/stja/670954.ogg",
+            "xc_id": "109654",
+            "xc_url": "https://xeno-canto.org/109654",
+            "audio_url": "/content/audio/stja/109654.ogg",
             "type": "call",
             "quality": "A",
-            "length": "0:14",
-            "recordist": "Phoebe Barnes",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Quarry Ridge Farm (private), Clark County, Washington",
+            "length": "0:05",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "McClellan Ranch Preserve, Santa Clara, California",
             "country": "United States",
-            "score": 11.5
+            "score": 58.0,
+            "commercial_ok": true
           }
         ]
       },
@@ -1068,71 +1113,76 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "490934",
-            "xc_url": "https://xeno-canto.org/490934",
-            "audio_url": "/content/audio/bewr/490934.ogg",
+            "xc_id": "109668",
+            "xc_url": "https://xeno-canto.org/109668",
+            "audio_url": "/content/audio/bewr/109668.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:21",
-            "recordist": "Steve Hampton",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Vashon, King County, Washington",
+            "length": "0:32",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "McClellan Ranch Preserve, Santa Clara, California",
             "country": "United States",
-            "score": 11
+            "score": 54.0,
+            "commercial_ok": true
           },
           {
-            "xc_id": "784043",
-            "xc_url": "https://xeno-canto.org/784043",
-            "audio_url": "/content/audio/bewr/784043.ogg",
+            "xc_id": "580516",
+            "xc_url": "https://xeno-canto.org/580516",
+            "audio_url": "/content/audio/bewr/580516.ogg",
             "type": "song",
-            "quality": "A",
-            "length": "0:46",
-            "recordist": "Whitney Neufeld-Kaiser",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Wedgwood, Seattle, King County, Washington",
+            "quality": "B",
+            "length": "0:05",
+            "recordist": "J. R.",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "San Francisco Peninsula (near  San Mateo), San Mateo County, California",
             "country": "United States",
-            "score": 10.5
+            "score": 38.0,
+            "commercial_ok": true
           },
           {
-            "xc_id": "557838",
-            "xc_url": "https://xeno-canto.org/557838",
-            "audio_url": "/content/audio/bewr/557838.ogg",
+            "xc_id": "123370",
+            "xc_url": "https://xeno-canto.org/123370",
+            "audio_url": "/content/audio/bewr/123370.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:33",
-            "recordist": "Whitney Neufeld-Kaiser",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Arlington, Snohomish County, Washington",
+            "length": "0:09",
+            "recordist": "Chris Harrison",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/3.0/",
+            "location": "South Llano River State Park, Junction, Kimble, Texas",
             "country": "United States",
-            "score": 10.5
+            "score": 58,
+            "commercial_ok": false
           }
         ],
         "calls": [
           {
-            "xc_id": "584936",
-            "xc_url": "https://xeno-canto.org/584936",
-            "audio_url": "/content/audio/bewr/584936.ogg",
-            "type": "call",
-            "quality": "A",
-            "length": "0:49",
-            "recordist": "James Link",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Quilcene, Jefferson County, Washington",
+            "xc_id": "109632",
+            "xc_url": "https://xeno-canto.org/109632",
+            "audio_url": "/content/audio/bewr/109632.ogg",
+            "type": "alarm call",
+            "quality": "B",
+            "length": "0:10",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "McClellan Ranch Preserve, Santa Clara, California",
             "country": "United States",
-            "score": 10.5
+            "score": 38.0,
+            "commercial_ok": true
           },
           {
-            "xc_id": "624555",
-            "xc_url": "https://xeno-canto.org/624555",
-            "audio_url": "/content/audio/bewr/624555.ogg",
+            "xc_id": "109856",
+            "xc_url": "https://xeno-canto.org/109856",
+            "audio_url": "/content/audio/bewr/109856.ogg",
             "type": "call",
-            "quality": "A",
-            "length": "0:24",
-            "recordist": "Thomas Magarian",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Smith Bybee Wetlands, North Portland, Multnomah County, Oregon",
+            "quality": "B",
+            "length": "0:18",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "Picchetti Ranch Open Space Preserve, Santa Clara, California",
             "country": "United States",
-            "score": 9
+            "score": 31.1,
+            "commercial_ok": true
           }
         ]
       },
@@ -1186,71 +1236,76 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "549602",
-            "xc_url": "https://xeno-canto.org/549602",
-            "audio_url": "/content/audio/anhu/549602.ogg",
+            "xc_id": "157666",
+            "xc_url": "https://xeno-canto.org/157666",
+            "audio_url": "/content/audio/anhu/157666.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:12",
-            "recordist": "Bruce Lagerquist",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Thornton Creek Ravine, Seattle, King County, Washington",
+            "length": "1:46",
+            "recordist": "Bushman",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "Salem, Polk, Oregon",
             "country": "United States",
-            "score": 11.5
+            "score": 52.2,
+            "commercial_ok": true
           },
           {
-            "xc_id": "473411",
-            "xc_url": "https://xeno-canto.org/473411",
-            "audio_url": "/content/audio/anhu/473411.ogg",
-            "type": "flight call, song, display sound",
-            "quality": "A",
-            "length": "0:20",
-            "recordist": "bowtyler",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Olympia, Thurston County, Washington",
+            "xc_id": "109651",
+            "xc_url": "https://xeno-canto.org/109651",
+            "audio_url": "/content/audio/anhu/109651.ogg",
+            "type": "song",
+            "quality": "B",
+            "length": "0:15",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "McClellan Ranch Preserve, Santa Clara, California",
             "country": "United States",
-            "score": 11.5
+            "score": 38.0,
+            "commercial_ok": true
           },
           {
-            "xc_id": "958844",
-            "xc_url": "https://xeno-canto.org/958844",
-            "audio_url": "/content/audio/anhu/958844.ogg",
+            "xc_id": "132248",
+            "xc_url": "https://xeno-canto.org/132248",
+            "audio_url": "/content/audio/anhu/132248.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:26",
-            "recordist": "Ayala Berger",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Arboretum Garden (near  Seattle), King County, Washington",
+            "length": "0:23",
+            "recordist": "Richard E. Webster",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/3.0/",
+            "location": "Portal, Arizona",
             "country": "United States",
-            "score": 11
+            "score": 56,
+            "commercial_ok": false
           }
         ],
         "calls": [
           {
-            "xc_id": "473411",
-            "xc_url": "https://xeno-canto.org/473411",
-            "audio_url": "/content/audio/anhu/473411.ogg",
-            "type": "flight call, song, display sound",
-            "quality": "A",
-            "length": "0:20",
-            "recordist": "bowtyler",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Olympia, Thurston County, Washington",
+            "xc_id": "156822",
+            "xc_url": "https://xeno-canto.org/156822",
+            "audio_url": "/content/audio/anhu/156822.ogg",
+            "type": "call",
+            "quality": "B",
+            "length": "1:00",
+            "recordist": "Bushman",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "Salem, Polk, Oregon",
             "country": "United States",
-            "score": 11.5
+            "score": 34.2,
+            "commercial_ok": true
           },
           {
-            "xc_id": "1080235",
-            "xc_url": "https://xeno-canto.org/1080235",
-            "audio_url": "/content/audio/anhu/1080235.ogg",
-            "type": "call, Dive-sound",
-            "quality": "A",
-            "length": "0:23",
-            "recordist": "Greg Irving",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Dungeness Recreation Area, Clallam County, Washington",
+            "xc_id": "153035",
+            "xc_url": "https://xeno-canto.org/153035",
+            "audio_url": "/content/audio/anhu/153035.ogg",
+            "type": "call",
+            "quality": "B",
+            "length": "0:40",
+            "recordist": "Bushman",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "Salem, Polk, Oregon",
             "country": "United States",
-            "score": 11
+            "score": 34.2,
+            "commercial_ok": true
           }
         ]
       },
@@ -1307,61 +1362,66 @@
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
             "location": "Center Road at Milepost 7.36 (across from Olympic Music Fest (near  Quilcene), Jefferson County, Washington",
             "country": "United States",
-            "score": 11.5
+            "score": 56.4,
+            "commercial_ok": false
           },
           {
-            "xc_id": "1023857",
-            "xc_url": "https://xeno-canto.org/1023857",
-            "audio_url": "/content/audio/cbch/1023857.ogg",
-            "type": "song",
+            "xc_id": "1025556",
+            "xc_url": "https://xeno-canto.org/1025556",
+            "audio_url": "/content/audio/cbch/1025556.ogg",
+            "type": "call, song",
             "quality": "A",
-            "length": "0:30",
+            "length": "2:47",
             "recordist": "Greg Irving",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Dungeness Trails, Sequim, Clallam County, Washington",
+            "location": "Palo Alto Rd - FS28 Loop, Sequim, Clallam County, Washington",
             "country": "United States",
-            "score": 11
+            "score": 52.4,
+            "commercial_ok": false
           },
           {
-            "xc_id": "420593",
-            "xc_url": "https://xeno-canto.org/420593",
-            "audio_url": "/content/audio/cbch/420593.ogg",
-            "type": "song",
+            "xc_id": "697104",
+            "xc_url": "https://xeno-canto.org/697104",
+            "audio_url": "/content/audio/cbch/697104.ogg",
+            "type": "call, song",
             "quality": "A",
-            "length": "0:14",
-            "recordist": "Meena Haribal",
+            "length": "2:01",
+            "recordist": "Greg Irving",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Brinnon, Jefferson County, Washington",
+            "location": "Wolf Creek Trail, Olympic National Park, Washington",
             "country": "United States",
-            "score": 11
+            "score": 47.4,
+            "commercial_ok": false
           }
         ],
         "calls": [
           {
-            "xc_id": "582163",
-            "xc_url": "https://xeno-canto.org/582163",
-            "audio_url": "/content/audio/cbch/582163.ogg",
-            "type": "call, song",
-            "quality": "A",
-            "length": "0:27",
-            "recordist": "James Link",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Center Road at Milepost 7.36 (across from Olympic Music Fest (near  Quilcene), Jefferson County, Washington",
+            "xc_id": "109655",
+            "xc_url": "https://xeno-canto.org/109655",
+            "audio_url": "/content/audio/cbch/109655.ogg",
+            "type": "call",
+            "quality": "B",
+            "length": "0:55",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "McClellan Ranch Preserve, Santa Clara, California",
             "country": "United States",
-            "score": 11.5
+            "score": 34.0,
+            "commercial_ok": true
           },
           {
-            "xc_id": "540321",
-            "xc_url": "https://xeno-canto.org/540321",
-            "audio_url": "/content/audio/cbch/540321.ogg",
-            "type": "alarm call",
+            "xc_id": "363150",
+            "xc_url": "https://xeno-canto.org/363150",
+            "audio_url": "/content/audio/cbch/363150.ogg",
+            "type": "call",
             "quality": "A",
-            "length": "0:27",
-            "recordist": "Whitney Neufeld-Kaiser",
+            "length": "0:10",
+            "recordist": "Paul Marvin",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Wedgwood, Seattle, King County, Washington",
+            "location": "Patrick Point State Park, Humboldt County, California",
             "country": "United States",
-            "score": 11.5
+            "score": 58.0,
+            "commercial_ok": false
           }
         ]
       },
@@ -1399,19 +1459,6 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "417736",
-            "xc_url": "https://xeno-canto.org/417736",
-            "audio_url": "/content/audio/bush/417736.ogg",
-            "type": "call, song",
-            "quality": "A",
-            "length": "0:19",
-            "recordist": "Paula Caycedo &amp; Mitch Covington",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Grand Canyon Village, Coconino County, Arizona",
-            "country": "United States",
-            "score": 7.5
-          },
-          {
             "xc_id": "215759",
             "xc_url": "https://xeno-canto.org/215759",
             "audio_url": "/content/audio/bush/215759.ogg",
@@ -1422,7 +1469,8 @@
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
             "location": "Lafayette, Boulder, Colorado",
             "country": "United States",
-            "score": 7.5
+            "score": 58,
+            "commercial_ok": false
           },
           {
             "xc_id": "215758",
@@ -1435,35 +1483,52 @@
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
             "location": "Lafayette, Boulder, Colorado",
             "country": "United States",
-            "score": 7.5
+            "score": 58,
+            "commercial_ok": false
+          },
+          {
+            "xc_id": "215757",
+            "xc_url": "https://xeno-canto.org/215757",
+            "audio_url": "/content/audio/bush/215757.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:07",
+            "recordist": "Ted Floyd",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Lafayette, Boulder, Colorado",
+            "country": "United States",
+            "score": 58,
+            "commercial_ok": false
           }
         ],
         "calls": [
           {
-            "xc_id": "1024967",
-            "xc_url": "https://xeno-canto.org/1024967",
-            "audio_url": "/content/audio/bush/1024967.ogg",
+            "xc_id": "149398",
+            "xc_url": "https://xeno-canto.org/149398",
+            "audio_url": "/content/audio/bush/149398.ogg",
             "type": "call",
             "quality": "A",
-            "length": "0:47",
-            "recordist": "Greg Irving",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Dungeness Trails, Sequim, Clallam County, Washington",
+            "length": "0:15",
+            "recordist": "Paul Marvin",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/3.0/",
+            "location": "Otay Lakes, San Diego Co., California",
             "country": "United States",
-            "score": 10.5
+            "score": 58.0,
+            "commercial_ok": false
           },
           {
-            "xc_id": "1012283",
-            "xc_url": "https://xeno-canto.org/1012283",
-            "audio_url": "/content/audio/bush/1012283.ogg",
-            "type": "call",
-            "quality": "B",
-            "length": "0:22",
-            "recordist": "Greg Irving",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "ODT Access - Runnion & Sawmill, Sequim, Clallam County, Washington",
+            "xc_id": "149395",
+            "xc_url": "https://xeno-canto.org/149395",
+            "audio_url": "/content/audio/bush/149395.ogg",
+            "type": "alarm call",
+            "quality": "A",
+            "length": "0:05",
+            "recordist": "Paul Marvin",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/3.0/",
+            "location": "Otay Lakes, San Diego Co., California",
             "country": "United States",
-            "score": 9
+            "score": 58.0,
+            "commercial_ok": false
           }
         ]
       },
@@ -1510,6 +1575,20 @@
       "audio_clips": {
         "songs": [
           {
+            "xc_id": "345344",
+            "xc_url": "https://xeno-canto.org/345344",
+            "audio_url": "/content/audio/gcsp/345344.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:11",
+            "recordist": "Michael Lester",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Carmel Valley, Monterey, California",
+            "country": "United States",
+            "score": 58.0,
+            "commercial_ok": false
+          },
+          {
             "xc_id": "506204",
             "xc_url": "https://xeno-canto.org/506204",
             "audio_url": "/content/audio/gcsp/506204.ogg",
@@ -1520,7 +1599,8 @@
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
             "location": "Yakima, Yakima County, Washington",
             "country": "United States",
-            "score": 11.5
+            "score": 56.4,
+            "commercial_ok": false
           },
           {
             "xc_id": "440249",
@@ -1533,20 +1613,8 @@
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
             "location": "Chehalis, Lewis County, Washington",
             "country": "United States",
-            "score": 11.5
-          },
-          {
-            "xc_id": "680976",
-            "xc_url": "https://xeno-canto.org/680976",
-            "audio_url": "/content/audio/gcsp/680976.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:48",
-            "recordist": "Steve Hampton",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Port Townsend, Jefferson County, Washington",
-            "country": "United States",
-            "score": 10
+            "score": 56.4,
+            "commercial_ok": false
           }
         ],
         "calls": [
@@ -1561,7 +1629,8 @@
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
             "location": "Chehalis, Lewis County, Washington",
             "country": "United States",
-            "score": 11.5
+            "score": 56.4,
+            "commercial_ok": false
           },
           {
             "xc_id": "697248",
@@ -1574,7 +1643,8 @@
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
             "location": "Wolf Creek Trail, Olympic National Park, Washington",
             "country": "United States",
-            "score": 10.5
+            "score": 54.4,
+            "commercial_ok": false
           }
         ]
       },
@@ -1612,46 +1682,63 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "1065863",
-            "xc_url": "https://xeno-canto.org/1065863",
-            "audio_url": "/content/audio/eust/1065863.ogg",
-            "type": "call, imitation, song",
+            "xc_id": "609706",
+            "xc_url": "https://xeno-canto.org/609706",
+            "audio_url": "/content/audio/eust/609706.ogg",
+            "type": "call, song",
             "quality": "A",
-            "length": "4:10",
-            "recordist": "Greg Irving",
+            "length": "2:23",
+            "recordist": "Matt Wistrand",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "3 Crabs Road, Clallam County, Washington",
+            "location": "Elsen's Hill, DuPage County, Illinois",
             "country": "United States",
-            "score": 8.5
+            "score": 47,
+            "commercial_ok": false
           },
           {
-            "xc_id": "584859",
-            "xc_url": "https://xeno-canto.org/584859",
-            "audio_url": "/content/audio/eust/584859.ogg",
+            "xc_id": "976265",
+            "xc_url": "https://xeno-canto.org/976265",
+            "audio_url": "/content/audio/eust/976265.ogg",
             "type": "song",
             "quality": "B",
-            "length": "0:19",
-            "recordist": "Thomas Magarian",
+            "length": "0:13",
+            "recordist": "Scott McConnell",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Kelley Point Park, North Portland, Multnomah County, Oregon",
+            "location": "Cape May County, New Jersey",
             "country": "United States",
-            "score": 7
+            "score": 38,
+            "commercial_ok": false
           },
           {
-            "xc_id": "697243",
-            "xc_url": "https://xeno-canto.org/697243",
-            "audio_url": "/content/audio/eust/697243.ogg",
-            "type": "song",
+            "xc_id": "883298",
+            "xc_url": "https://xeno-canto.org/883298",
+            "audio_url": "/content/audio/eust/883298.ogg",
+            "type": "imitation, song",
             "quality": "B",
-            "length": "2:16",
-            "recordist": "Greg Irving",
+            "length": "0:36",
+            "recordist": "Bobby Wilcox",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Port Angeles, Clallam, Washington",
+            "location": "DeWitt (near  East Syracuse), Onondaga County, New York",
             "country": "United States",
-            "score": 6
+            "score": 34,
+            "commercial_ok": false
           }
         ],
         "calls": [
+          {
+            "xc_id": "609706",
+            "xc_url": "https://xeno-canto.org/609706",
+            "audio_url": "/content/audio/eust/609706.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "2:23",
+            "recordist": "Matt Wistrand",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Elsen's Hill, DuPage County, Illinois",
+            "country": "United States",
+            "score": 47,
+            "commercial_ok": false
+          },
           {
             "xc_id": "240287",
             "xc_url": "https://xeno-canto.org/240287",
@@ -1663,20 +1750,8 @@
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
             "location": "Washington, District of Columbia, District of Columbia",
             "country": "United States",
-            "score": 9.5
-          },
-          {
-            "xc_id": "445787",
-            "xc_url": "https://xeno-canto.org/445787",
-            "audio_url": "/content/audio/eust/445787.ogg",
-            "type": "call",
-            "quality": "B",
-            "length": "0:15",
-            "recordist": "Thomas ARMAND",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Washington, Prince George's County, District of Columbia",
-            "country": "United States",
-            "score": 9
+            "score": 38.4,
+            "commercial_ok": false
           }
         ]
       },

@@ -11,6 +11,7 @@ Usage: uv run python3 download_media.py
 
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -26,14 +27,6 @@ OUTPUT_DIR = Path("beakspeak/public/content")
 AUDIO_DIR = OUTPUT_DIR / "audio"
 PHOTO_DIR = OUTPUT_DIR / "photos"
 MANIFEST_OUT = OUTPUT_DIR / "manifest.json"
-
-FFMPEG_AUDIO_ARGS = [
-    "-af", "loudnorm=I=-16:TP=-1.5:LRA=11",
-    "-t", "20",
-    "-c:a", "libopus",
-    "-b:a", "96k",
-    "-y",
-]
 
 PHOTO_MAX_WIDTH = 800
 
@@ -108,12 +101,93 @@ def download_file(url: str, dest: Path, description: str = "") -> bool:
     return False
 
 
-def normalize_audio(input_path: Path, output_path: Path) -> bool:
-    """Normalize audio with ffmpeg: loudnorm, trim ≤20s, OGG Opus 96kbps."""
-    output_path.parent.mkdir(parents=True, exist_ok=True)
+def detect_best_segment(input_path: Path) -> tuple[float, float] | None:
+    """Run ffmpeg silencedetect to find the best active audio segment.
+
+    Returns (start, duration) for the first non-silent segment ≥ 5s,
+    with 0.5s padding before onset and capped at 20s.
+    Returns None if detection fails or no suitable segment is found.
+    """
     cmd = [
         "ffmpeg", "-i", str(input_path),
-        *FFMPEG_AUDIO_ARGS,
+        "-af", "silencedetect=noise=-30dB:d=0.5",
+        "-f", "null", "-",
+    ]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        return None
+
+    # Parse silence_start / silence_end from stderr
+    silence_starts = []
+    silence_ends = []
+    for line in result.stderr.splitlines():
+        m = re.search(r"silence_start:\s*([\d.]+)", line)
+        if m:
+            silence_starts.append(float(m.group(1)))
+        m = re.search(r"silence_end:\s*([\d.]+)", line)
+        if m:
+            silence_ends.append(float(m.group(1)))
+
+    if not silence_starts and not silence_ends:
+        # No silence detected — entire clip is active, fallback
+        return None
+
+    # Get total duration from ffmpeg output
+    duration_match = re.search(r"Duration:\s*(\d+):(\d+):(\d+)\.(\d+)", result.stderr)
+    if duration_match:
+        h, m_val, s, cs = duration_match.groups()
+        total_duration = int(h) * 3600 + int(m_val) * 60 + int(s) + int(cs) / 100
+    else:
+        total_duration = 0.0
+
+    # Build list of non-silent segments
+    # Non-silent regions are gaps between silence regions
+    segments: list[tuple[float, float]] = []
+
+    # Region before first silence
+    if silence_starts and silence_starts[0] > 0:
+        segments.append((0.0, silence_starts[0]))
+
+    # Regions between silence_end[i] and silence_start[i+1]
+    for i, end in enumerate(silence_ends):
+        next_start = silence_starts[i + 1] if i + 1 < len(silence_starts) else total_duration
+        if next_start > end:
+            segments.append((end, next_start))
+
+    # Find first segment ≥ 5s
+    for seg_start, seg_end in segments:
+        seg_length = seg_end - seg_start
+        if seg_length >= 5.0:
+            # Apply 0.5s padding before onset, clamped to 0
+            start = max(0.0, seg_start - 0.5)
+            duration = min(seg_length + 0.5, 20.0)
+            return (start, duration)
+
+    return None
+
+
+def normalize_audio(input_path: Path, output_path: Path) -> bool:
+    """Normalize audio with ffmpeg: smart trim, loudnorm, OGG Opus 96kbps."""
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Try smart trimming first
+    segment = detect_best_segment(input_path)
+
+    if segment is not None:
+        start, duration = segment
+        trim_args = ["-ss", str(start), "-t", str(duration)]
+        print(f"  Smart trim: {start:.1f}s-{start + duration:.1f}s")
+    else:
+        trim_args = ["-t", "20"]
+        print(f"  Default trim: 0-20s")
+
+    cmd = [
+        "ffmpeg", "-i", str(input_path),
+        "-af", "loudnorm=I=-16:TP=-1.5:LRA=11",
+        *trim_args,
+        "-c:a", "libopus",
+        "-b:a", "96k",
+        "-y",
         str(output_path),
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)

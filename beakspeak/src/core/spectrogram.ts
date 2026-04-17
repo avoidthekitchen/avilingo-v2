@@ -51,10 +51,14 @@ export function computeSpectrogram(
     magnitudes.push(mags)
   }
 
+  // Normalize to 0-1 with power scaling to compress dynamic range.
+  // Linear normalization makes most bins invisible because audio energy
+  // is concentrated in narrow frequency/time regions. The power curve
+  // (exponent < 1) boosts low-magnitude bins so they produce visible color.
   if (globalMax > 0) {
     for (let t = 0; t < magnitudes.length; t++) {
       for (let i = 0; i < frequencyBins; i++) {
-        magnitudes[t][i] /= globalMax
+        magnitudes[t][i] = Math.pow(magnitudes[t][i] / globalMax, 0.3)
       }
     }
   }

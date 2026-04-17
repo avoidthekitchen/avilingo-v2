@@ -63,7 +63,7 @@ export default function AudioButton({ clips, label, speciesId, variant = 'primar
       <button
         onClick={handlePlay}
         disabled={displayState === 'loading'}
-        className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium transition-all ${
+        className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all ${
           isPrimary
             ? 'bg-primary text-white hover:bg-primary/90'
             : 'bg-border text-text hover:bg-border/80'
