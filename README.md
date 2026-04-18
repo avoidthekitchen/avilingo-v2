@@ -64,7 +64,7 @@ This downloads ~25–40 MB of audio and photos into `beakspeak/public/content/` 
 
 ```bash
 cd beakspeak
-npx vitest run        # 36 unit tests across core modules
+npx vitest run        # 71 unit tests across core modules
 ```
 
 Tests cover: manifest loading, lesson gating/progression, FSRS rating logic, quiz session building.
