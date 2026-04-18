@@ -58,7 +58,7 @@ export default function LearnTab() {
                 completed
                   ? 'bg-success/10 border-success/30'
                   : available
-                  ? 'bg-card border-border hover:border-primary cursor-pointer'
+                  ? 'bg-card border-border hover:border-primary active:border-primary active:scale-[0.98] active:bg-primary/5 cursor-pointer'
                   : 'bg-border/30 border-border/50 opacity-60'
               }`}
             >
@@ -67,9 +67,11 @@ export default function LearnTab() {
                   {completed && '✓ '}
                   Lesson {lesson.lesson}: {lesson.title}
                 </h3>
-                {!available && !completed && (
+                {!available && !completed ? (
                   <span className="text-xs text-text-muted">🔒</span>
-                )}
+                ) : available && !completed ? (
+                  <span className="text-text-muted">›</span>
+                ) : null}
               </div>
               <div className="flex gap-2">
                 {species.map(s => (
