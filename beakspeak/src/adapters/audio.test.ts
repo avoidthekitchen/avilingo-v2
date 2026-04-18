@@ -112,6 +112,25 @@ describe('WebAudioPlayer', () => {
       expect(player.getActiveUrl()).toBe('https://example.com/call.ogg')
       expect(player.getState()).toBe('playing')
     })
+
+    it('tracks the requested URL while a clip is loading', async () => {
+      let resolveFetch: ((value: Response | PromiseLike<Response>) => void) | null = null
+      vi.stubGlobal('fetch', vi.fn(() => new Promise(resolve => {
+        resolveFetch = resolve as (value: Response | PromiseLike<Response>) => void
+      })))
+
+      const player = new WebAudioPlayer()
+      const playPromise = player.play('https://example.com/song.ogg')
+
+      expect(player.getState()).toBe('loading')
+      expect(player.getActiveUrl()).toBe('https://example.com/song.ogg')
+
+      resolveFetch?.({
+        ok: true,
+        arrayBuffer: () => Promise.resolve(new ArrayBuffer(8)),
+      } as Response)
+      await playPromise
+    })
   })
 
   describe('state transitions', () => {
@@ -148,6 +167,32 @@ describe('WebAudioPlayer', () => {
 
       expect(player.getActiveUrl()).toBeNull()
       expect(player.getState()).toBe('idle')
+    })
+
+    it('does not restart playback after stop() cancels an in-flight play()', async () => {
+      let resolveFetch: ((value: Response | PromiseLike<Response>) => void) | null = null
+      vi.stubGlobal('fetch', vi.fn(() => new Promise(resolve => {
+        resolveFetch = resolve as (value: Response | PromiseLike<Response>) => void
+      })))
+
+      const player = new WebAudioPlayer()
+      const states: string[] = []
+      player.onStateChange(s => states.push(s))
+
+      const playPromise = player.play('https://example.com/song.ogg')
+      expect(player.getState()).toBe('loading')
+
+      player.stop()
+      resolveFetch?.({
+        ok: true,
+        arrayBuffer: () => Promise.resolve(new ArrayBuffer(8)),
+      } as Response)
+      await playPromise
+
+      expect(player.getState()).toBe('idle')
+      expect(player.getActiveUrl()).toBeNull()
+      expect(mockSources).toHaveLength(0)
+      expect(states).toEqual(['idle', 'loading', 'idle'])
     })
   })
 

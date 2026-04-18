@@ -17,7 +17,7 @@ function makeMockAudioPlayer(overrides: Partial<AudioPlayer> = {}): AudioPlayer 
     getProgress: vi.fn(() => ({ currentTime: 0, duration: 0 })),
     onStateChange: vi.fn(() => () => {}),
     onProgress: vi.fn(() => () => {}),
-    prefetch: vi.fn(),
+    prefetch: vi.fn(async () => null),
     getBuffer: vi.fn(() => null),
     ...overrides,
   }

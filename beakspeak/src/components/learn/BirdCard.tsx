@@ -21,7 +21,7 @@ export default function BirdCard({ species }: Props) {
   const [activeClipType, setActiveClipType] = useState<'songs' | 'calls'>('songs')
   const [activeClipIndex, setActiveClipIndex] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
-  const [spectrogramData, setSpectrogramData] = useState<SpectrogramData>(EMPTY_SPECTROGRAM)
+  const [, setSpectrogramRevision] = useState(0)
 
   const activeClips = species.audio_clips[activeClipType]
   const activeClip = activeClips[activeClipIndex] ?? activeClips[0]
@@ -30,67 +30,56 @@ export default function BirdCard({ species }: Props) {
   const activeUrl = audioPlayer.getActiveUrl()
   const isPlaying = activeUrl != null && activeUrl === activeClipUrl
 
-  const duration = spectrogramData.duration
-
   // Keep a ref so the onStateChange callback always sees the latest activeClipUrl
   const activeClipUrlRef = useRef(activeClipUrl)
-  activeClipUrlRef.current = activeClipUrl
+  useEffect(() => {
+    activeClipUrlRef.current = activeClipUrl
+  }, [activeClipUrl])
 
   // Cache of pre-computed spectrogram data keyed by clip URL
   const spectrogramCache = useRef(new Map<string, SpectrogramData>())
 
-  // Compute (or retrieve cached) spectrogram for a URL and set it as active
-  function setSpectrogramForUrl(url: string | null) {
-    if (!url) { setSpectrogramData(EMPTY_SPECTROGRAM); return }
+  const cacheSpectrogramForUrl = useCallback((url: string | null, buffer?: AudioBuffer | null) => {
+    if (!url) return null
     const cached = spectrogramCache.current.get(url)
-    if (cached) { setSpectrogramData(cached); return }
-    const buffer = audioPlayer.getBuffer(url)
-    if (buffer) {
-      const data = computeSpectrogram(buffer)
-      spectrogramCache.current.set(url, data)
-      setSpectrogramData(data)
-    } else {
-      setSpectrogramData(EMPTY_SPECTROGRAM)
-    }
-  }
+    if (cached) return cached
 
-  // Prefetch ALL clips on mount and pre-compute spectrograms as buffers arrive
+    const resolvedBuffer = buffer ?? audioPlayer.getBuffer(url)
+    if (!resolvedBuffer) return null
+
+    const data = computeSpectrogram(resolvedBuffer)
+    spectrogramCache.current.set(url, data)
+    return data
+  }, [audioPlayer])
+
+  const spectrogramData = activeClipUrl == null
+    ? EMPTY_SPECTROGRAM
+    : cacheSpectrogramForUrl(activeClipUrl) ?? EMPTY_SPECTROGRAM
+  const duration = spectrogramData.duration
+
+  // Prefetch ALL clips on mount and pre-compute spectrograms as buffers settle
   useEffect(() => {
     const allUrls = [
       ...species.audio_clips.songs.map(c => c.audio_url),
       ...species.audio_clips.calls.map(c => c.audio_url),
     ]
 
-    // Kick off prefetch for every clip
+    let cancelled = false
+
     for (const url of allUrls) {
-      audioPlayer.prefetch(url)
+      void audioPlayer.prefetch(url).then(buffer => {
+        if (cancelled) return
+        const data = cacheSpectrogramForUrl(url, buffer)
+        if (!data) return
+
+        if (url === activeClipUrlRef.current) {
+          setSpectrogramRevision(prev => prev + 1)
+        }
+      })
     }
 
-    // Poll until all buffers are cached (or component unmounts)
-    let cancelled = false
-    const pending = new Set(allUrls)
-    const id = setInterval(() => {
-      if (cancelled) return
-      for (const url of pending) {
-        const buffer = audioPlayer.getBuffer(url)
-        if (buffer) {
-          spectrogramCache.current.set(url, computeSpectrogram(buffer))
-          pending.delete(url)
-          // Update display if this is the currently active clip
-          if (url === activeClipUrlRef.current) {
-            setSpectrogramData(spectrogramCache.current.get(url)!)
-          }
-        }
-      }
-      if (pending.size === 0) clearInterval(id)
-    }, 150)
-    return () => { cancelled = true; clearInterval(id) }
-  }, [audioPlayer, species])
-
-  // When the active clip changes, show its cached spectrogram immediately
-  useEffect(() => {
-    setSpectrogramForUrl(activeClipUrl)
-  }, [activeClipUrl])
+    return () => { cancelled = true }
+  }, [audioPlayer, cacheSpectrogramForUrl, species])
 
   // Track active clip type/index based on what the player is playing
   useEffect(() => {
@@ -105,18 +94,22 @@ export default function BirdCard({ species }: Props) {
       if (songIdx >= 0) {
         setActiveClipType('songs')
         setActiveClipIndex(songIdx)
-        setSpectrogramForUrl(url)
+        if (cacheSpectrogramForUrl(url) && url === activeClipUrlRef.current) {
+          setSpectrogramRevision(prev => prev + 1)
+        }
         return
       }
       const callIdx = species.audio_clips.calls.findIndex(c => c.audio_url === url)
       if (callIdx >= 0) {
         setActiveClipType('calls')
         setActiveClipIndex(callIdx)
-        setSpectrogramForUrl(url)
+        if (cacheSpectrogramForUrl(url) && url === activeClipUrlRef.current) {
+          setSpectrogramRevision(prev => prev + 1)
+        }
       }
     })
     return unsub
-  }, [audioPlayer, species])
+  }, [audioPlayer, cacheSpectrogramForUrl, species])
 
   // Drive playhead via progress subscription
   useEffect(() => {

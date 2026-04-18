@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from 'react'
+import { useRef, useEffect, useCallback, useLayoutEffect } from 'react'
 import type { SpectrogramData } from '../../core/spectrogram'
 
 interface Props {
@@ -82,13 +82,20 @@ function buildHeatmapImage(
   return imageData
 }
 
-export default function Spectrogram({ data, currentTime, duration, isPlaying: _isPlaying, onSeek }: Props) {
+export default function Spectrogram({ data, currentTime, duration, onSeek }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const heatmapRef = useRef<ImageData | null>(null)
   const dimsRef = useRef({ width: 0, height: 0 })
+  const currentTimeRef = useRef(currentTime)
+  const durationRef = useRef(duration)
+
+  useLayoutEffect(() => {
+    currentTimeRef.current = currentTime
+    durationRef.current = duration
+  }, [currentTime, duration])
 
   // Rebuild the cached heatmap when data or canvas size changes
-  function ensureHeatmap(canvas: HTMLCanvasElement) {
+  const ensureHeatmap = useCallback((canvas: HTMLCanvasElement) => {
     const dpr = window.devicePixelRatio || 1
     const cssWidth = canvas.clientWidth
     const cssHeight = canvas.clientHeight
@@ -107,10 +114,10 @@ export default function Spectrogram({ data, currentTime, duration, isPlaying: _i
     canvas.height = pxHeight
     dimsRef.current = { width: pxWidth, height: pxHeight }
     heatmapRef.current = buildHeatmapImage(data, pxWidth, pxHeight)
-  }
+  }, [data])
 
   // Fast per-frame draw: blit cached heatmap + draw playhead line
-  function drawFrame(canvas: HTMLCanvasElement) {
+  const drawFrame = useCallback((canvas: HTMLCanvasElement) => {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
@@ -121,8 +128,8 @@ export default function Spectrogram({ data, currentTime, duration, isPlaying: _i
     }
 
     // Draw playhead
-    if (currentTime > 0 && duration > 0) {
-      const playheadX = (currentTime / duration) * canvas.width
+    if (currentTimeRef.current > 0 && durationRef.current > 0) {
+      const playheadX = (currentTimeRef.current / durationRef.current) * canvas.width
       ctx.strokeStyle = PLAYHEAD_COLOR
       ctx.lineWidth = 2 * (window.devicePixelRatio || 1)
       ctx.beginPath()
@@ -130,20 +137,20 @@ export default function Spectrogram({ data, currentTime, duration, isPlaying: _i
       ctx.lineTo(playheadX, canvas.height)
       ctx.stroke()
     }
-  }
+  }, [ensureHeatmap])
 
   // Invalidate cached heatmap when data changes
   useEffect(() => {
     heatmapRef.current = null
     const canvas = canvasRef.current
     if (canvas) drawFrame(canvas)
-  }, [data])
+  }, [data, drawFrame])
 
   // Redraw playhead on progress updates (fast — just blit + line)
   useEffect(() => {
     const canvas = canvasRef.current
     if (canvas) drawFrame(canvas)
-  }, [currentTime, duration, data])
+  }, [currentTime, duration, data, drawFrame])
 
   // Handle resize — invalidate cache and redraw.
   // Deps intentionally [data] only: progress ticks must not re-register the observer
@@ -157,7 +164,7 @@ export default function Spectrogram({ data, currentTime, duration, isPlaying: _i
     })
     observer.observe(canvas)
     return () => observer.disconnect()
-  }, [data])
+  }, [data, drawFrame])
 
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
