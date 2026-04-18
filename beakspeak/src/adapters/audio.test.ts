@@ -48,11 +48,21 @@ function setupFetchMock() {
 let mockSources: ReturnType<typeof makeMockSource>[]
 let mockGainNode: ReturnType<typeof makeMockGainNode>
 let mockBuffer: AudioBuffer
+let mockAudioEl: {
+  play: ReturnType<typeof vi.fn>
+  setAttribute: ReturnType<typeof vi.fn>
+  srcObject: unknown
+  style: { display: string }
+}
 
 function setupAudioContextMock() {
   mockSources = []
   mockGainNode = makeMockGainNode()
   mockBuffer = makeMockBuffer()
+
+  const mockStreamDest = {
+    stream: { id: 'mock-stream' },
+  }
 
   const mockContext = {
     state: 'running',
@@ -65,8 +75,22 @@ function setupAudioContextMock() {
       return src
     }),
     createGain: vi.fn(() => mockGainNode),
+    createMediaStreamDestination: vi.fn(() => mockStreamDest),
     decodeAudioData: vi.fn().mockResolvedValue(mockBuffer),
   }
+
+  mockAudioEl = {
+    play: vi.fn().mockResolvedValue(undefined),
+    setAttribute: vi.fn(),
+    srcObject: null,
+    style: { display: '' },
+  }
+  const origCreateElement = document.createElement.bind(document)
+  vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+    if (tag === 'audio') return mockAudioEl as unknown as HTMLElement
+    return origCreateElement(tag)
+  })
+  vi.spyOn(document.body, 'appendChild').mockImplementation(((node: Node) => node) as typeof document.body.appendChild)
 
   vi.stubGlobal('AudioContext', class MockAudioContext {
     state = mockContext.state
@@ -75,6 +99,7 @@ function setupAudioContextMock() {
     resume = mockContext.resume
     createBufferSource = mockContext.createBufferSource
     createGain = mockContext.createGain
+    createMediaStreamDestination = mockContext.createMediaStreamDestination
     decodeAudioData = mockContext.decodeAudioData
   })
 }
@@ -332,6 +357,17 @@ describe('WebAudioPlayer', () => {
         rafCallbacks[rafCallbacks.length - 1](performance.now())
       }
       expect(progressCalls.length).toBe(countAfterFirst)
+    })
+  })
+
+  describe('iOS media-channel routing', () => {
+    // Regression: play() on the HTMLAudioElement must fire synchronously inside
+    // the user gesture, before any await. Otherwise iOS routes through the ringer
+    // channel and audio is silenced when the device is on silent mode.
+    it('activates the audio element synchronously before any await', () => {
+      const player = new WebAudioPlayer()
+      void player.play('https://example.com/song.ogg')
+      expect(mockAudioEl.play).toHaveBeenCalled()
     })
   })
 })

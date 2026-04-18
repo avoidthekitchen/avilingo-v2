@@ -29,13 +29,22 @@ export class WebAudioPlayer implements AudioPlayer {
   private rafId: number | null = null
   private playRequestId = 0
   private pendingLoads = new Map<string, Promise<AudioBuffer | null>>()
-  private iosUnlocked = false
+  private outputElement: HTMLAudioElement | null = null
+  private streamDest: MediaStreamAudioDestinationNode | null = null
 
   private getContext(): AudioContext {
     if (!this.context) {
       this.context = new AudioContext()
       this.gainNode = this.context.createGain()
-      this.gainNode.connect(this.context.destination)
+      this.streamDest = this.context.createMediaStreamDestination()
+      this.gainNode.connect(this.streamDest)
+      // Route through HTMLAudioElement so iOS uses the media channel (ignores silent switch).
+      // Element must be in the DOM on some iOS versions for play() to activate the channel.
+      this.outputElement = document.createElement('audio')
+      this.outputElement.setAttribute('playsinline', '') // defensive for iOS WKWebView / PWA contexts
+      this.outputElement.style.display = 'none'
+      this.outputElement.srcObject = this.streamDest.stream
+      document.body.appendChild(this.outputElement)
     }
     return this.context
   }
@@ -104,16 +113,11 @@ export class WebAudioPlayer implements AudioPlayer {
     this.source = null
   }
 
-  // iOS routes Web Audio through the media channel (not ringer), bypassing silent mode,
-  // but only after a silent buffer is played synchronously within a user gesture.
-  private unlockIos(ctx: AudioContext) {
-    if (this.iosUnlocked) return
-    const buf = ctx.createBuffer(1, 1, 22050)
-    const src = ctx.createBufferSource()
-    src.buffer = buf
-    src.connect(ctx.destination)
-    src.start(0)
-    this.iosUnlocked = true
+  // Activate the HTMLAudioElement output so iOS routes through the media channel.
+  // play() must run synchronously within the user gesture — repeat calls on an already
+  // playing element are no-ops, so it's safe to call on every play().
+  private activateOutput() {
+    this.outputElement?.play().catch(() => {})
   }
 
   private isCurrentRequest(requestId: number, url: string) {
@@ -222,8 +226,8 @@ export class WebAudioPlayer implements AudioPlayer {
       const ctx = this.getContext()
 
       // Must run synchronously within the user gesture, before any await,
-      // so iOS routes Web Audio through the media channel.
-      this.unlockIos(ctx)
+      // so the HTMLAudioElement activates in the media channel.
+      this.activateOutput()
 
       // Resume if suspended (mobile browsers)
       if (ctx.state === 'suspended') {
