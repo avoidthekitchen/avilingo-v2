@@ -33,6 +33,7 @@ export interface AudioClip {
   location: string;
   country: string;
   score: number;
+  commercial_ok?: boolean;
 }
 
 export interface Photo {

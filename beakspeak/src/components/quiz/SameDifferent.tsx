@@ -43,7 +43,7 @@ export default function SameDifferent({ item, onAnswer }: Props) {
     }
 
     playSequence()
-    return () => { cancelled = true }
+    return () => { cancelled = true; audioPlayer.stop() }
   }, [item, audioPlayer])
 
   const handleAnswer = useCallback((answeredSame: boolean) => {

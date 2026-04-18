@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useAppStore } from '../../store/appStore'
+import { useAudioStateForUrl } from '../../hooks/useAudioStateForUrl'
 import type { QuizItem } from '../../core/types'
 
 interface Props {
@@ -12,12 +13,18 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [showingResult, setShowingResult] = useState(false)
   const startTime = useRef(Date.now())
+  const playState = useAudioStateForUrl(audioPlayer, item.clip.audio_url)
 
   // Auto-play clip on mount
   useEffect(() => {
     startTime.current = Date.now()
     audioPlayer.play(item.clip.audio_url).catch(() => {})
   }, [item, audioPlayer])
+
+  // Stop audio when the quiz question unmounts (quit/complete/navigate)
+  useEffect(() => {
+    return () => { audioPlayer.stop() }
+  }, [audioPlayer])
 
   const handleSelect = useCallback((speciesId: string) => {
     if (showingResult) return
@@ -46,10 +53,21 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
     <div className="p-4 flex flex-col h-full">
       <div className="text-center mb-4">
         <button
-          onClick={() => audioPlayer.play(item.clip.audio_url)}
-          className="px-6 py-3 bg-primary text-white rounded-full font-medium"
+          onClick={() => {
+            if (playState === 'playing') audioPlayer.stop()
+            else audioPlayer.play(item.clip.audio_url).catch(() => {})
+          }}
+          disabled={playState === 'loading'}
+          className={`inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-full font-medium transition-all ${
+            playState === 'loading' ? 'opacity-60' : ''
+          }`}
         >
-          ▶ Play Sound
+          {playState === 'loading' && (
+            <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+          )}
+          {playState === 'playing' && <span>⏹</span>}
+          {playState !== 'loading' && playState !== 'playing' && <span>▶</span>}
+          Play Sound
         </button>
       </div>
 

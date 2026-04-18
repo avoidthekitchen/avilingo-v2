@@ -323,13 +323,13 @@ The spectrogram should be visible at all times (not collapsed when idle). When i
 
 ### Acceptance criteria
 
-- [ ] Given a BirdCard with song clips, when no audio is playing, then the spectrogram shows the first song clip's full heatmap with no playhead
-- [ ] Given audio is playing, when the spectrogram renders, then a playhead line animates from left to right in sync with the audio progress
-- [ ] Given audio is playing, when the user clicks a position on the spectrogram, then audio seeks to that time position and continues playing
-- [ ] Given audio is stopped, when the user clicks a position on the spectrogram, then audio starts playing from that position
-- [ ] Given the user taps "Play Call" while viewing the song spectrogram, then the spectrogram updates to show the call clip's frequency data
-- [ ] Given the user swipes to the next BirdCard, then audio stops and the new card displays its own spectrogram
-- [ ] Given a mobile viewport (~375px wide), the spectrogram is tall enough (~80px) to visually distinguish frequency banding and to tap seek positions accurately
+- [x] Given a BirdCard with song clips, when no audio is playing, then the spectrogram shows the first song clip's full heatmap with no playhead
+- [x] Given audio is playing, when the spectrogram renders, then a playhead line animates from left to right in sync with the audio progress
+- [x] Given audio is playing, when the user clicks a position on the spectrogram, then audio seeks to that time position and continues playing
+- [x] Given audio is stopped, when the user clicks a position on the spectrogram, then audio starts playing from that position
+- [x] Given the user taps "Play Call" while viewing the song spectrogram, then the spectrogram updates to show the call clip's frequency data
+- [x] Given the user swipes to the next BirdCard, then audio stops and the new card displays its own spectrogram
+- [x] Given a mobile viewport (~375px wide), the spectrogram is tall enough (~80px) to visually distinguish frequency banding and to tap seek positions accurately
 
 ### User stories addressed
 
@@ -348,7 +348,7 @@ The spectrogram should be visible at all times (not collapsed when idle). When i
 **Output**: BirdCard shows animated, seekable spectrogram for the active clip
 **Depends on**: 2.2, 4.1
 
-- [ ] Modify `components/learn/BirdCard.tsx`. Add local state to track which clip set is active (`'songs' | 'calls'`) and the clip index, defaulting to `('songs', 0)`. Import `computeSpectrogram` from `core/spectrogram` and `Spectrogram` from `components/shared/Spectrogram`. Get `audioPlayer` from the Zustand store. Use `useMemo` to compute `SpectrogramData` from the active clip's `AudioBuffer` via `audioPlayer.getBuffer(clip.audio_url)` and `computeSpectrogram()` — if the buffer isn't loaded yet, pass empty data. Subscribe to `audioPlayer.onStateChange()` in a `useEffect` to detect when the active URL changes (via `getActiveUrl()`), and update the active clip type/index to match. Subscribe to `audioPlayer.onProgress()` in a `useEffect` to drive `currentTime` state for the playhead. Derive `isPlaying` from whether `getActiveUrl()` matches the active clip's URL. Wire `onSeek`: if audio is currently playing, call `audioPlayer.seek(time)`; if stopped, call `audioPlayer.play(activeClipUrl, time)`. Place the `<Spectrogram>` component in the JSX between the audio buttons `<div>` and the mnemonic `<p>`, giving it full card width and the spectrogram data, currentTime, duration, isPlaying, and onSeek props.
+- [x] Modify `components/learn/BirdCard.tsx`. Add local state to track which clip set is active (`'songs' | 'calls'`) and the clip index, defaulting to `('songs', 0)`. Import `computeSpectrogram` from `core/spectrogram` and `Spectrogram` from `components/shared/Spectrogram`. Get `audioPlayer` from the Zustand store. Use `useMemo` to compute `SpectrogramData` from the active clip's `AudioBuffer` via `audioPlayer.getBuffer(clip.audio_url)` and `computeSpectrogram()` — if the buffer isn't loaded yet, pass empty data. Subscribe to `audioPlayer.onStateChange()` in a `useEffect` to detect when the active URL changes (via `getActiveUrl()`), and update the active clip type/index to match. Subscribe to `audioPlayer.onProgress()` in a `useEffect` to drive `currentTime` state for the playhead. Derive `isPlaying` from whether `getActiveUrl()` matches the active clip's URL. Wire `onSeek`: if audio is currently playing, call `audioPlayer.seek(time)`; if stopped, call `audioPlayer.play(activeClipUrl, time)`. Place the `<Spectrogram>` component in the JSX between the audio buttons `<div>` and the mnemonic `<p>`, giving it full card width and the spectrogram data, currentTime, duration, isPlaying, and onSeek props.
 
 ---
 
@@ -358,7 +358,7 @@ The spectrogram should be visible at all times (not collapsed when idle). When i
 **Output**: HITL approval of sizing, contrast, and tap accuracy
 **Depends on**: 5.1
 
-- [ ] Run the dev server (`cd beakspeak && npm run dev`) and open on a real mobile device or browser device emulator at ~375px width. Verify: spectrogram is ~80px tall and visually shows frequency banding for bird songs. Verify: theme colors render correctly (brown gradient on cream background). Verify: tapping a position on the spectrogram accurately seeks to that time (tap target is not too small). Verify: playhead animates smoothly during playback. Verify: switching between "Play Song" and "Play Call" updates the spectrogram. If adjustments are needed, iterate on height, colors, or padding before approving.
+- [x] Run the dev server (`cd beakspeak && npm run dev`) and open on a real mobile device or browser device emulator at ~375px width. Verify: spectrogram is ~80px tall and visually shows frequency banding for bird songs. Verify: theme colors render correctly (brown gradient on cream background). Verify: tapping a position on the spectrogram accurately seeks to that time (tap target is not too small). Verify: playhead animates smoothly during playback. Verify: switching between "Play Song" and "Play Call" updates the spectrogram. If adjustments are needed, iterate on height, colors, or padding before approving.
 
 ---
 
@@ -406,12 +406,12 @@ Update the manifest header `license_filter` field to describe the tiered approac
 
 ### Acceptance criteria
 
-- [ ] Given a species with sufficient commercial-licensed A/B recordings, when the pipeline runs, then all selected clips have `"commercial_ok": true`
-- [ ] Given a species with insufficient commercial-licensed recordings, when the pipeline runs, then it falls back to NC licenses, logs a warning naming the species, and flags those clips with `"commercial_ok": false`
-- [ ] Given a recording with a non-empty `also` field, when filtering runs, then that recording is excluded from selection
-- [ ] Given a 10-second recording and a 45-second recording of equal quality and region, when scoring runs, then the 10-second recording scores higher
-- [ ] Given the pipeline completes, when the summary report prints, then it lists all species with NC fallbacks and total commercial vs NC counts
-- [ ] Given the pipeline completes, when the output JSON is inspected, then every audio clip has a `"commercial_ok"` boolean field
+- [x] Given a species with sufficient commercial-licensed A/B recordings, when the pipeline runs, then all selected clips have `"commercial_ok": true`
+- [x] Given a species with insufficient commercial-licensed recordings, when the pipeline runs, then it falls back to NC licenses, logs a warning naming the species, and flags those clips with `"commercial_ok": false`
+- [x] Given a recording with a non-empty `also` field, when filtering runs, then that recording is excluded from selection
+- [x] Given a 10-second recording and a 45-second recording of equal quality and region, when scoring runs, then the 10-second recording scores higher
+- [x] Given the pipeline completes, when the summary report prints, then it lists all species with NC fallbacks and total commercial vs NC counts
+- [x] Given the pipeline completes, when the output JSON is inspected, then every audio clip has a `"commercial_ok"` boolean field
 
 ### User stories addressed
 
@@ -430,7 +430,7 @@ Update the manifest header `license_filter` field to describe the tiered approac
 **Output**: Pipeline prefers commercial licenses, falls back with warning, flags each clip
 **Depends on**: none
 
-- [ ] Modify `populate_content.py`. Replace `is_license_ok(lic_url)` with two functions: `is_commercial_license(lic_url)` accepts only CC-BY, CC-BY-SA, and CC0 (checks for `creativecommons.org/licenses/by` without `-nc` present, and `publicdomain/zero`); `is_any_cc_license(lic_url)` accepts the same set as the old function (CC-BY, CC-BY-SA, CC-BY-NC, CC-BY-NC-SA, CC0 — no `-nd`). In `process_species()`, restructure the clip selection: first filter recordings to commercial licenses only, then apply quality and scoring to select clips. If fewer than 3 songs or 2 calls are found, print a warning to stdout naming the species and shortfall (e.g., `"  ⚠ AMRO: only 1 commercial song found, relaxing to NC licenses"`), relax to `is_any_cc_license`, and re-select. Add `"commercial_ok": True/False` to each clip dict based on which license pass selected it. Update the manifest header `license_filter` to read `"Prefer CC-BY, CC-BY-SA, CC0 (commercial OK); fallback to CC-BY-NC, CC-BY-NC-SA if needed"`. Also add `commercial_ok?: boolean` to the `AudioClip` interface in `core/types.ts` for TypeScript completeness.
+- [x] Modify `populate_content.py`. Replace `is_license_ok(lic_url)` with two functions: `is_commercial_license(lic_url)` accepts only CC-BY, CC-BY-SA, and CC0 (checks for `creativecommons.org/licenses/by` without `-nc` present, and `publicdomain/zero`); `is_any_cc_license(lic_url)` accepts the same set as the old function (CC-BY, CC-BY-SA, CC-BY-NC, CC-BY-NC-SA, CC0 — no `-nd`). In `process_species()`, restructure the clip selection: first filter recordings to commercial licenses only, then apply quality and scoring to select clips. If fewer than 3 songs or 2 calls are found, print a warning to stdout naming the species and shortfall (e.g., `"  ⚠ AMRO: only 1 commercial song found, relaxing to NC licenses"`), relax to `is_any_cc_license`, and re-select. Add `"commercial_ok": True/False` to each clip dict based on which license pass selected it. Update the manifest header `license_filter` to read `"Prefer CC-BY, CC-BY-SA, CC0 (commercial OK); fallback to CC-BY-NC, CC-BY-NC-SA if needed"`. Also add `commercial_ok?: boolean` to the `AudioClip` interface in `core/types.ts` for TypeScript completeness.
 
 ---
 
@@ -440,7 +440,7 @@ Update the manifest header `license_filter` field to describe the tiered approac
 **Output**: Recordings with background species excluded, shorter clips strongly preferred
 **Depends on**: none
 
-- [ ] Modify `populate_content.py`. The Xeno-canto API returns an `also` field (a string listing background species, e.g., `"Steller's Jay, Dark-eyed Junco"` or empty string `""`). This field is already present in the API response but not currently extracted. After license filtering and before scoring, add a hard-filter step: exclude any recording where `rec.get("also", "").strip()` is non-empty. Log the count of excluded recordings (e.g., `"  [Xeno-canto] Excluded N recordings with background species"`). Update `score_recording()` length brackets: 5-15s → +3 (was +2 for 5-30s), 15-30s → +1, 30-60s → -1 (was +1), 60s+ → -3 (was -1 for >120s). Parse the length string the same way as current code (`"M:SS"` format).
+- [x] Modify `populate_content.py`. The Xeno-canto API returns an `also` field (a string listing background species, e.g., `"Steller's Jay, Dark-eyed Junco"` or empty string `""`). This field is already present in the API response but not currently extracted. After license filtering and before scoring, add a hard-filter step: exclude any recording where `rec.get("also", "").strip()` is non-empty. Log the count of excluded recordings (e.g., `"  [Xeno-canto] Excluded N recordings with background species"`). Update `score_recording()` length brackets: 5-15s → +3 (was +2 for 5-30s), 15-30s → +1, 30-60s → -1 (was +1), 60s+ → -3 (was -1 for >120s). Parse the length string the same way as current code (`"M:SS"` format).
 
 ---
 
@@ -450,7 +450,7 @@ Update the manifest header `license_filter` field to describe the tiered approac
 **Output**: Summary report prints to stdout after pipeline completes
 **Depends on**: 6.1, 6.2
 
-- [ ] Modify `populate_content.py`. After the main loop that processes all species, collect and print a formatted summary report to stdout. Track these during processing (accumulate in lists/counters): species that fell back to NC licenses (species name + count of NC clips), species with fewer clips than target (species name + actual song/call counts vs 3/2 target), total commercial clips, total NC clips, total clips overall. Print the report with clear section headers, e.g., `"═══ PIPELINE SUMMARY ═══"`, a table or list of NC fallback species, a table of under-target species, and a totals line like `"Commercial: 58/75 clips (77%), NC fallback: 17/75 clips (23%)"`.
+- [x] Modify `populate_content.py`. After the main loop that processes all species, collect and print a formatted summary report to stdout. Track these during processing (accumulate in lists/counters): species that fell back to NC licenses (species name + count of NC clips), species with fewer clips than target (species name + actual song/call counts vs 3/2 target), total commercial clips, total NC clips, total clips overall. Print the report with clear section headers, e.g., `"═══ PIPELINE SUMMARY ═══"`, a table or list of NC fallback species, a table of under-target species, and a totals line like `"Commercial: 58/75 clips (77%), NC fallback: 17/75 clips (23%)"`.
 
 ---
 
@@ -484,11 +484,11 @@ Currently, `normalize_audio()` trims blindly to the first 20 seconds via `-t 20`
 
 ### Acceptance criteria
 
-- [ ] Given a raw audio file with 3 seconds of silence followed by a vocalization, when smart trimming runs, then the output starts at approximately the vocalization onset (not at 0:00)
-- [ ] Given a raw audio file with no silent gaps, when smart trimming runs, then the output is the first 20 seconds (fallback behavior)
-- [ ] Given a raw audio file where `silencedetect` fails, when smart trimming runs, then the output is the first 20 seconds (fallback behavior) and a warning is logged
-- [ ] Given a raw audio file with a 7-second vocalization starting at second 10, when smart trimming runs, then the output contains the full vocalization
-- [ ] Output audio files are still normalized (loudnorm), encoded as OGG Opus 96kbps, and ≤20 seconds
+- [x] Given a raw audio file with 3 seconds of silence followed by a vocalization, when smart trimming runs, then the output starts at approximately the vocalization onset (not at 0:00)
+- [x] Given a raw audio file with no silent gaps, when smart trimming runs, then the output is the first 20 seconds (fallback behavior)
+- [x] Given a raw audio file where `silencedetect` fails, when smart trimming runs, then the output is the first 20 seconds (fallback behavior) and a warning is logged
+- [x] Given a raw audio file with a 7-second vocalization starting at second 10, when smart trimming runs, then the output contains the full vocalization
+- [x] Output audio files are still normalized (loudnorm), encoded as OGG Opus 96kbps, and ≤20 seconds
 
 ### User stories addressed
 
@@ -502,7 +502,7 @@ Currently, `normalize_audio()` trims blindly to the first 20 seconds via `-t 20`
 **Output**: Clips start at best active segment; fallback to first 20s on failure
 **Depends on**: none
 
-- [ ] Modify `download_media.py`. Add a new function `detect_best_segment(input_path: Path) -> tuple[float, float] | None` that runs ffmpeg with `-af silencedetect=noise=-30dB:d=0.5` on the input file and parses stderr for `silence_start` and `silence_end` timestamps. From those, compute non-silent segments (gaps between silence regions, plus the region before first silence and after last silence). Select the first non-silent segment that is at least 5 seconds long. Return `(start, duration)` where `start` is ~0.5s before the segment onset (clamped to 0) and `duration` is min(segment length + 0.5s padding, 20s). Return `None` if silencedetect fails (non-zero exit), finds no silence boundaries, or no segment meets the 5s minimum. Modify `normalize_audio()`: before running the loudnorm/encode pipeline, call `detect_best_segment()` on the input file. If it returns a segment, replace the existing `-t 20` with `-ss {start} -t {duration}` in the ffmpeg args. If it returns `None`, keep the existing `-t 20` behavior. Log which trimming mode was used (e.g., `"  Smart trim: 3.2s-18.2s"` or `"  Default trim: 0-20s"`).
+- [x] Modify `download_media.py`. Add a new function `detect_best_segment(input_path: Path) -> tuple[float, float] | None` that runs ffmpeg with `-af silencedetect=noise=-30dB:d=0.5` on the input file and parses stderr for `silence_start` and `silence_end` timestamps. From those, compute non-silent segments (gaps between silence regions, plus the region before first silence and after last silence). Select the first non-silent segment that is at least 5 seconds long. Return `(start, duration)` where `start` is ~0.5s before the segment onset (clamped to 0) and `duration` is min(segment length + 0.5s padding, 20s). Return `None` if silencedetect fails (non-zero exit), finds no silence boundaries, or no segment meets the 5s minimum. Modify `normalize_audio()`: before running the loudnorm/encode pipeline, call `detect_best_segment()` on the input file. If it returns a segment, replace the existing `-t 20` with `-ss {start} -t {duration}` in the ffmpeg args. If it returns `None`, keep the existing `-t 20` behavior. Log which trimming mode was used (e.g., `"  Smart trim: 3.2s-18.2s"` or `"  Default trim: 0-20s"`).
 
 ---
 
@@ -538,11 +538,11 @@ Steps:
 
 ### Acceptance criteria
 
-- [ ] Given the updated pipeline has run, when the summary report is reviewed, then it shows how many clips are commercially licensed vs NC fallback
-- [ ] Given the new audio files are deployed, when a user plays clips in the app, then the audio plays correctly and the clips sound cleaner than before
-- [ ] Given the manifest is inspected, when `commercial_ok` fields are checked, then every audio clip has the field set
-- [ ] Given a spot-check of 5+ species, when the selected XC IDs are looked up on xeno-canto.org, then none have background species listed in the `also` field
-- [ ] The updated manifest and audio files are committed to the repository
+- [x] Given the updated pipeline has run, when the summary report is reviewed, then it shows how many clips are commercially licensed vs NC fallback
+- [x] Given the new audio files are deployed, when a user plays clips in the app, then the audio plays correctly and the clips sound cleaner than before
+- [x] Given the manifest is inspected, when `commercial_ok` fields are checked, then every audio clip has the field set
+- [x] Given a spot-check of 5+ species, when the selected XC IDs are looked up on xeno-canto.org, then none have background species listed in the `also` field
+- [x] The updated manifest and audio files are committed to the repository
 
 ### User stories addressed
 
@@ -559,7 +559,7 @@ Steps:
 **Output**: New manifest and audio files generated with summary report
 **Depends on**: 6.3, 7.1
 
-- [ ] Delete existing audio files under `beakspeak/public/content/audio/` to force re-selection (keep `beakspeak/public/content/photos/` intact). Run `uv run python3 populate_content.py` to re-score and re-select clips with the new license tiering, background species filter, and length scoring. Save the summary report output. Then run `uv run python3 download_media.py` to download and normalize the newly-selected clips with smart trimming. Verify the pipeline completes without errors and the new `manifest.json` has `commercial_ok` fields on every clip.
+- [x] Delete existing audio files under `beakspeak/public/content/audio/` to force re-selection (keep `beakspeak/public/content/photos/` intact). Run `uv run python3 populate_content.py` to re-score and re-select clips with the new license tiering, background species filter, and length scoring. Save the summary report output. Then run `uv run python3 download_media.py` to download and normalize the newly-selected clips with smart trimming. Verify the pipeline completes without errors and the new `manifest.json` has `commercial_ok` fields on every clip.
 
 ---
 
@@ -569,4 +569,4 @@ Steps:
 **Output**: HITL approval, commit updated manifest and audio files
 **Depends on**: 8.1
 
-- [ ] Review the summary report: check license breakdown (commercial vs NC per species), species with fewer clips than target. Spot-check at least 5 species on xeno-canto.org by looking up the selected XC IDs and verifying the `also` field is empty. Listen to at least 10 output clips across different species — they should be short, start with the bird's vocalization, and not contain obvious background birds. Compare average clip lengths against the previous manifest to confirm they trend shorter. Run `cd beakspeak && npm run dev` and verify the app loads and plays the new clips correctly. Once satisfied, commit the updated manifest and audio files.
+- [x] Review the summary report: check license breakdown (commercial vs NC per species), species with fewer clips than target. Spot-check at least 5 species on xeno-canto.org by looking up the selected XC IDs and verifying the `also` field is empty. Listen to at least 10 output clips across different species — they should be short, start with the bird's vocalization, and not contain obvious background birds. Compare average clip lengths against the previous manifest to confirm they trend shorter. Run `cd beakspeak && npm run dev` and verify the app loads and plays the new clips correctly. Once satisfied, commit the updated manifest and audio files.

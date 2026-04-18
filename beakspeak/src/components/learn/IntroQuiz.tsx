@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useAppStore } from '../../store/appStore'
+import { useAudioStateForUrl } from '../../hooks/useAudioStateForUrl'
 import type { IntroQuizItem } from '../../core/types'
 
 interface Props {
@@ -15,6 +16,7 @@ export default function IntroQuiz({ items, onComplete }: Props) {
   const [showingResult, setShowingResult] = useState(false)
 
   const current = items[currentIndex]
+  const playState = useAudioStateForUrl(audioPlayer, current?.clip.audio_url ?? '')
 
   // Auto-play clip when question appears
   useEffect(() => {
@@ -22,6 +24,11 @@ export default function IntroQuiz({ items, onComplete }: Props) {
       audioPlayer.play(current.clip.audio_url).catch(() => {})
     }
   }, [currentIndex, current, audioPlayer, showingResult])
+
+  // Stop audio when leaving the quiz
+  useEffect(() => {
+    return () => { audioPlayer.stop() }
+  }, [audioPlayer])
 
   const handleSelect = useCallback((speciesId: string) => {
     if (showingResult || !current) return
@@ -58,10 +65,21 @@ export default function IntroQuiz({ items, onComplete }: Props) {
           Question {currentIndex + 1} of {items.length}
         </p>
         <button
-          onClick={() => audioPlayer.play(current.clip.audio_url)}
-          className="px-6 py-3 bg-primary text-white rounded-full font-medium"
+          onClick={() => {
+            if (playState === 'playing') audioPlayer.stop()
+            else audioPlayer.play(current.clip.audio_url).catch(() => {})
+          }}
+          disabled={playState === 'loading'}
+          className={`inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-full font-medium transition-all ${
+            playState === 'loading' ? 'opacity-60' : ''
+          }`}
         >
-          ▶ Play Sound
+          {playState === 'loading' && (
+            <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+          )}
+          {playState === 'playing' && <span>⏹</span>}
+          {playState !== 'loading' && playState !== 'playing' && <span>▶</span>}
+          Play Sound
         </button>
       </div>
 
