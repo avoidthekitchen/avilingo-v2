@@ -29,6 +29,7 @@ export class WebAudioPlayer implements AudioPlayer {
   private rafId: number | null = null
   private playRequestId = 0
   private pendingLoads = new Map<string, Promise<AudioBuffer | null>>()
+  private iosUnlocked = false
 
   private getContext(): AudioContext {
     if (!this.context) {
@@ -101,6 +102,18 @@ export class WebAudioPlayer implements AudioPlayer {
     this.source.onended = null // Prevent double-fire from source.stop()
     try { this.source.stop() } catch { /* already stopped */ }
     this.source = null
+  }
+
+  // iOS routes Web Audio through the media channel (not ringer), bypassing silent mode,
+  // but only after a silent buffer is played synchronously within a user gesture.
+  private unlockIos(ctx: AudioContext) {
+    if (this.iosUnlocked) return
+    const buf = ctx.createBuffer(1, 1, 22050)
+    const src = ctx.createBufferSource()
+    src.buffer = buf
+    src.connect(ctx.destination)
+    src.start(0)
+    this.iosUnlocked = true
   }
 
   private isCurrentRequest(requestId: number, url: string) {
@@ -207,6 +220,10 @@ export class WebAudioPlayer implements AudioPlayer {
 
     try {
       const ctx = this.getContext()
+
+      // Must run synchronously within the user gesture, before any await,
+      // so iOS routes Web Audio through the media channel.
+      this.unlockIos(ctx)
 
       // Resume if suspended (mobile browsers)
       if (ctx.state === 'suspended') {
