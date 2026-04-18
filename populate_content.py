@@ -187,7 +187,8 @@ def is_any_cc_license(lic_url: str) -> bool:
 def filter_background_species(recordings: list[dict]) -> list[dict]:
     """Exclude recordings where the `also` field lists background species."""
     def _also_empty(r):
-        also = r.get("also", "")
+        # XC sometimes returns "also": null, so coalesce to "" before string ops
+        also = r.get("also") or ""
         return not also if isinstance(also, list) else not also.strip()
     return [r for r in recordings if _also_empty(r)]
 
@@ -283,7 +284,7 @@ def select_xc_clips(recordings: list[dict], clip_type: str, n: int,
         if r.get("id", "") in exclude_ids:
             return False
         tokens = [t.strip() for t in r.get("type", "").lower().split(",")]
-        if "subsong" in tokens:
+        if any("subsong" in t for t in tokens):
             return False
         return any(clip_type in t for t in tokens)
     typed = [r for r in recordings if _matches(r)]
@@ -353,7 +354,6 @@ def select_clips_two_pass(recordings: list[dict], species_name: str) -> dict:
             for s in nc_songs[:needed]:
                 s["commercial_ok"] = False
                 songs.append(s)
-            shortfall = "songs" if len(songs) < 3 else ""
             print(f"  ⚠ {species_name}: only {len([s for s in songs if s['commercial_ok']])} commercial song(s) found, relaxing to NC licenses")
 
         if need_more_calls:

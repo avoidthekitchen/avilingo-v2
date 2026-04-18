@@ -122,6 +122,9 @@ export default function BirdCard({ species }: Props) {
     }
   }, [audioPlayer])
 
+  // Stop playback when the card unmounts (e.g. ← Back button bypasses swipe handlers)
+  useEffect(() => () => { audioPlayer.stop() }, [audioPlayer])
+
   const handleSeek = useCallback((time: number) => {
     const url = activeClipUrlRef.current
     if (!url) return

@@ -18,7 +18,6 @@ export default function LearnSession({ lesson, onComplete }: Props) {
   const manifest = useAppStore(s => s.manifest)
   const getIntroducedSpecies = useAppStore(s => s.getIntroducedSpecies)
   const introduceSpecies = useAppStore(s => s.introduceSpecies)
-  const audioPlayer = useAppStore(s => s.audioPlayer)
 
   const introducedSpecies = getIntroducedSpecies()
   const hasReviewPhase = introducedSpecies.length >= 3
@@ -32,7 +31,6 @@ export default function LearnSession({ lesson, onComplete }: Props) {
   const lessonSpecies = getSpeciesByIds(manifest, lesson.species)
 
   const handleSwipeRight = useCallback(() => {
-    audioPlayer.stop()
     if (cardIndex < lessonSpecies.length - 1) {
       setSwipeDirection('right')
       setCardIndex(prev => prev + 1)
@@ -40,15 +38,14 @@ export default function LearnSession({ lesson, onComplete }: Props) {
       // All cards seen, move to quiz
       setPhase('quiz')
     }
-  }, [cardIndex, lessonSpecies.length, audioPlayer])
+  }, [cardIndex, lessonSpecies.length])
 
   const handleSwipeLeft = useCallback(() => {
     if (cardIndex > 0) {
-      audioPlayer.stop()
       setSwipeDirection('left')
       setCardIndex(prev => prev - 1)
     }
-  }, [cardIndex, audioPlayer])
+  }, [cardIndex])
 
   const handleQuizComplete = useCallback(async () => {
     await introduceSpecies(lesson.species)
