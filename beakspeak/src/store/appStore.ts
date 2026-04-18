@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import type { Manifest, Species, UserProgress, Tab, Lesson } from '../core/types'
 import { loadManifest } from '../core/manifest'
 import { isLessonComplete } from '../core/lesson'
+import { isDue } from '../core/fsrs'
 import { WebAudioPlayer, type AudioPlayer } from '../adapters/audio'
 import { DexieStorage, type StorageAdapter } from '../adapters/storage'
 
@@ -59,10 +60,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   getDueForReview: () => {
     const { allProgress } = get()
-    const now = Date.now()
-    return Array.from(allProgress.values()).filter(
-      p => p.introduced && p.nextReview && p.nextReview <= now
-    )
+    return Array.from(allProgress.values()).filter(isDue)
   },
 
   hasRelearning: () => {
