@@ -125,17 +125,26 @@ export default function LearnSession({ lesson, onComplete }: Props) {
           </AnimatePresence>
         </div>
 
-        {/* Swipe hints */}
-        <div className="px-4 pb-4 flex justify-between text-xs text-text-muted">
+        {/* Navigation */}
+        <div className="px-4 pb-4 flex justify-between items-center">
           {cardIndex > 0 ? (
-            <button onClick={handleSwipeLeft} className="flex items-center gap-1">
-              ← Previous
+            <button
+              onClick={handleSwipeLeft}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-border text-sm text-text-muted hover:bg-border/50 transition-colors"
+            >
+              <span className="text-xs">‹</span> Previous
             </button>
           ) : (
             <span />
           )}
-          <button onClick={handleSwipeRight} className="flex items-center gap-1">
-            {cardIndex < lessonSpecies.length - 1 ? 'Next →' : 'Start Quiz →'}
+          {cardIndex === 0 && lessonSpecies.length > 1 && (
+            <p className="text-xs text-text-muted/60 italic">Swipe or tap to navigate</p>
+          )}
+          <button
+            onClick={handleSwipeRight}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors"
+          >
+            {cardIndex < lessonSpecies.length - 1 ? 'Next' : 'Start Quiz'} <span className="text-xs">›</span>
           </button>
         </div>
       </div>

@@ -2,7 +2,6 @@ import { useState, useCallback, useEffect } from 'react'
 import { useAppStore } from '../../store/appStore'
 import type { AudioClip } from '../../core/types'
 import type { AudioState } from '../../adapters/audio'
-import AttributionInfo from './AttributionInfo'
 
 interface Props {
   clips: AudioClip[]
@@ -59,29 +58,26 @@ export default function AudioButton({ clips, label, speciesId, variant = 'primar
   const isPrimary = variant === 'primary'
 
   return (
-    <div className="flex items-center gap-2">
-      <button
-        onClick={handlePlay}
-        disabled={displayState === 'loading'}
-        className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all ${
-          isPrimary
-            ? 'bg-primary text-white hover:bg-primary/90'
-            : 'bg-border text-text hover:bg-border/80'
-        } ${displayState === 'loading' ? 'opacity-60' : ''}`}
-      >
-        {displayState === 'loading' && (
-          <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-        )}
-        {displayState === 'playing' && <span>⏹</span>}
-        {displayState !== 'loading' && displayState !== 'playing' && <span>▶</span>}
-        {label}
-        {clips.length > 1 && (
-          <span className="text-xs opacity-70">
-            {clipIndex + 1}/{clips.length}
-          </span>
-        )}
-      </button>
-      <AttributionInfo clip={currentClip} />
-    </div>
+    <button
+      onClick={handlePlay}
+      disabled={displayState === 'loading'}
+      className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all ${
+        isPrimary
+          ? 'bg-primary text-white hover:bg-primary/90'
+          : 'bg-border text-text hover:bg-border/80'
+      } ${displayState === 'loading' ? 'opacity-60' : ''}`}
+    >
+      {displayState === 'loading' && (
+        <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+      )}
+      {displayState === 'playing' && <span>⏹</span>}
+      {displayState !== 'loading' && displayState !== 'playing' && <span>▶</span>}
+      {label}
+      {clips.length > 1 && (
+        <span className="text-xs opacity-70">
+          {clipIndex + 1}/{clips.length}
+        </span>
+      )}
+    </button>
   )
 }

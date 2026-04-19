@@ -183,7 +183,7 @@ export default function Spectrogram({ data, currentTime, duration, onSeek }: Pro
       ref={canvasRef}
       onClick={handleClick}
       className="w-full cursor-pointer rounded"
-      style={{ height: 80 }}
+      style={{ height: 60 }}
     />
   )
 }

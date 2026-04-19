@@ -137,16 +137,17 @@ export default function BirdCard({ species }: Props) {
 
   return (
     <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-sm h-full flex flex-col">
-      {/* Photo section - top 60% */}
-      <div className="relative" style={{ minHeight: '55%' }}>
+      {/* Photo section */}
+      <div className="relative" style={{ minHeight: '45%' }}>
         <img
           src={species.photo.url}
           alt={species.common_name}
           className="w-full h-full object-cover"
-          style={{ maxHeight: '350px', minHeight: '250px' }}
+          style={{ maxHeight: '280px', minHeight: '200px' }}
         />
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
           <h2 className="text-white text-xl font-bold">{species.common_name}</h2>
+          <p className="text-white/80 text-sm italic">{species.scientific_name}</p>
         </div>
         <div className="absolute top-2 right-2">
           <AttributionInfo photo={species.photo} />
@@ -155,7 +156,6 @@ export default function BirdCard({ species }: Props) {
 
       {/* Info section */}
       <div className="p-4 flex flex-col gap-3 flex-1">
-        <p className="text-sm text-text-muted italic">{species.scientific_name}</p>
 
         {/* Audio buttons */}
         <div className="flex flex-wrap gap-2">
