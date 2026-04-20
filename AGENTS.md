@@ -30,10 +30,15 @@ beakspeak/           ← React SPA (all code here)
     components/      ← React UI
   public/content/    ← Static audio/photo assets + manifest.json
 
+admin/               ← Local-only audio curation tool (not deployed)
+  server.py          ← Python stdlib HTTP server (run: python3 admin/server.py)
+  index.html         ← Single-file admin UI (vanilla JS, no build step)
+
 site/                ← Landing page for unformedideas.com
 scripts/             ← Build/deploy scripts
-download_media.py    ← Content pipeline: fetches audio + photos
-populate_content.py  ← Content pipeline: populates species data from APIs
+download_media.py    ← Content pipeline: downloads audio + photos, builds manifest
+populate_content.py  ← Content pipeline: queries Xeno-canto + Wikipedia, selects candidates
+tier1_seattle_birds_populated.json  ← Candidate pool with per-clip selected flags (checked in)
 wrangler.toml        ← Cloudflare Workers config
 rpi/                 ← Timestamped research and plan documents
   plans/             ← Sprint plans and implementation specs
@@ -145,10 +150,17 @@ Deployed as a Worker with no script — pure static asset serving. Requests to s
 
 Two Python scripts fetch and process media from external APIs. Not part of the app runtime.
 
-- `populate_content.py` — queries Xeno-canto API and Wikipedia for species data
-- `download_media.py` — downloads audio/photos, normalizes with ffmpeg, outputs to `beakspeak/public/content/`
+- `populate_content.py` — queries Xeno-canto API and Wikipedia; fetches up to 5 songs + 5 calls per species; marks top 3 songs + top 2 calls as `selected: true` by default; stores rich metadata (sex, stage, method, remarks); preserves manual `selected` flags from prior runs
+- `download_media.py` — downloads all candidates, normalizes with ffmpeg (loudnorm, smart trim ≤20s, OGG Opus 96kbps), outputs to `beakspeak/public/content/`; only `selected: true` clips are written to `manifest.json`
 - Managed with `uv` (see `pyproject.toml`): https://docs.astral.sh/uv
 - Requires: Python 3.12+, ffmpeg, `requests`, `Pillow`
+- `XC_API_KEY` env var required for `populate_content.py`
+
+### Audio Admin (local only, not deployed)
+
+- `admin/server.py` — Python stdlib HTTP server; run with `python3 admin/server.py` from repo root; serves on `http://localhost:8765`
+- `admin/index.html` — single-file vanilla JS UI; shows per-clip spectrogram, metadata, and "In app" toggle; saves immediately to `tier1_seattle_birds_populated.json`
+- No extra dependencies beyond Python stdlib
 
 ## Build & Deploy
 

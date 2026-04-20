@@ -273,13 +273,23 @@ def query_xc(scientific_name: str, max_pages: int = 2) -> list[dict]:
 
 
 def select_xc_clips(recordings: list[dict], clip_type: str, n: int,
-                    commercial_ok: bool = True, exclude_ids: set | None = None) -> list[dict]:
+                    commercial_ok: bool = True, exclude_ids: set | None = None,
+                    n_selected: int | None = None,
+                    prefer_pure: bool = False) -> list[dict]:
     """Filter by vocalization type, score, return top N with commercial_ok flag.
 
     Tokenizes `type` on comma so 'song' substring match doesn't leak from 'subsong',
     and so compound types like 'begging call, subsong' are excluded entirely.
+
+    n_selected: how many of the top N to mark selected=True (rest get False).
+                Defaults to all N if not specified.
+    prefer_pure: when True, single-type recordings rank above compound types at equal
+                 score — keeps the call pool from being consumed by 'call, song' entries.
     """
     exclude_ids = exclude_ids or set()
+    if n_selected is None:
+        n_selected = n
+
     def _matches(r):
         if r.get("id", "") in exclude_ids:
             return False
@@ -288,7 +298,12 @@ def select_xc_clips(recordings: list[dict], clip_type: str, n: int,
             return False
         return any(clip_type in t for t in tokens)
     typed = [r for r in recordings if _matches(r)]
-    ranked = sorted(typed, key=score_recording, reverse=True)
+
+    def _sort_key(r):
+        is_compound = len([t for t in r.get("type", "").split(",") if t.strip()]) > 1
+        return (score_recording(r), not is_compound if prefer_pure else 0)
+
+    ranked = sorted(typed, key=_sort_key, reverse=True)
     return [
         {
             "xc_id": r.get("id", ""),
@@ -303,8 +318,15 @@ def select_xc_clips(recordings: list[dict], clip_type: str, n: int,
             "country": r.get("cnt", ""),
             "score": round(score_recording(r), 1),
             "commercial_ok": commercial_ok,
+            "selected": i < n_selected,
+            "sex": r.get("sex", ""),
+            "stage": r.get("stage", ""),
+            "method": r.get("method", ""),
+            "remarks": r.get("rmk", ""),
+            "animal_seen": r.get("animal-seen", ""),
+            "playback_used": r.get("playback-used", ""),
         }
-        for r in ranked[:n]
+        for i, r in enumerate(ranked[:n])
     ]
 
 
@@ -325,22 +347,23 @@ def select_clips_two_pass(recordings: list[dict], species_name: str) -> dict:
 
     # Quality filter
     quality = [r for r in clean if r.get("q") in ("A", "B")]
-    if len(quality) < 3:
+    if len(quality) < 5:
         quality = [r for r in clean if r.get("q") in ("A", "B", "C")]
 
-    # Pass 1: commercial only
+    # Pass 1: commercial only — fetch pool of 5+5; top 3 songs / top 2 calls are selected by default
     commercial = [r for r in quality if is_commercial_license(r.get("lic", ""))]
-    songs = select_xc_clips(commercial, "song", 3, commercial_ok=True)
-    # Exclude song picks from call selection so compound types ('call, song') don't duplicate
-    song_ids = {s["xc_id"] for s in songs}
-    calls = select_xc_clips(commercial, "call", 2, commercial_ok=True, exclude_ids=song_ids)
+    songs = select_xc_clips(commercial, "song", 5, commercial_ok=True, n_selected=3, prefer_pure=True)
+    # Only exclude selected songs from calls — unselected backup songs aren't in the app
+    # so they can safely appear as calls too, keeping the call pool full.
+    selected_song_ids = {s["xc_id"] for s in songs if s["selected"]}
+    calls = select_xc_clips(commercial, "call", 5, commercial_ok=True, exclude_ids=selected_song_ids, n_selected=2)
 
     nc_fallback = False
     nc_clip_count = 0
 
-    # Pass 2: relax to all CC if needed
-    need_more_songs = len(songs) < 3
-    need_more_calls = len(calls) < 2
+    # Pass 2: relax to all CC if needed (targeting 5 songs / 5 calls total)
+    need_more_songs = len(songs) < 5
+    need_more_calls = len(calls) < 5
     if need_more_songs or need_more_calls:
         nc_fallback = True
         all_cc = [r for r in quality if is_any_cc_license(r.get("lic", ""))]
@@ -348,21 +371,26 @@ def select_clips_two_pass(recordings: list[dict], species_name: str) -> dict:
         if need_more_songs:
             # Get existing commercial song IDs to avoid duplicates
             existing_ids = {s["xc_id"] for s in songs}
-            nc_songs = select_xc_clips(all_cc, "song", 3, commercial_ok=False)
+            nc_songs = select_xc_clips(all_cc, "song", 5, commercial_ok=False, n_selected=3, prefer_pure=True)
             nc_songs = [s for s in nc_songs if s["xc_id"] not in existing_ids]
-            needed = 3 - len(songs)
-            for s in nc_songs[:needed]:
+            needed = 5 - len(songs)
+            # Only mark NC songs as selected if they fill the top-3 slots
+            base_song_count = len(songs)
+            for j, s in enumerate(nc_songs[:needed]):
                 s["commercial_ok"] = False
+                s["selected"] = (base_song_count + j) < 3
                 songs.append(s)
             print(f"  ⚠ {species_name}: only {len([s for s in songs if s['commercial_ok']])} commercial song(s) found, relaxing to NC licenses")
 
         if need_more_calls:
-            existing_ids = {c["xc_id"] for c in calls} | {s["xc_id"] for s in songs}
-            nc_calls = select_xc_clips(all_cc, "call", 2, commercial_ok=False)
+            existing_ids = {c["xc_id"] for c in calls} | selected_song_ids
+            nc_calls = select_xc_clips(all_cc, "call", 5, commercial_ok=False, n_selected=2)
             nc_calls = [c for c in nc_calls if c["xc_id"] not in existing_ids]
-            needed = 2 - len(calls)
-            for c in nc_calls[:needed]:
+            needed = 5 - len(calls)
+            base_call_count = len(calls)
+            for j, c in enumerate(nc_calls[:needed]):
                 c["commercial_ok"] = False
+                c["selected"] = (base_call_count + j) < 2
                 calls.append(c)
             print(f"  ⚠ {species_name}: only {len([c for c in calls if c['commercial_ok']])} commercial call(s) found, relaxing to NC licenses")
 
@@ -371,7 +399,7 @@ def select_clips_two_pass(recordings: list[dict], species_name: str) -> dict:
     # Fallback: use top recordings regardless of type if no songs at all
     if not songs:
         all_cc = [r for r in quality if is_any_cc_license(r.get("lic", ""))]
-        fallback = sorted(all_cc, key=score_recording, reverse=True)[:3]
+        fallback = sorted(all_cc, key=score_recording, reverse=True)[:5]
         songs = [
             {
                 "xc_id": r.get("id", ""),
@@ -386,8 +414,15 @@ def select_clips_two_pass(recordings: list[dict], species_name: str) -> dict:
                 "country": r.get("cnt", ""),
                 "score": round(score_recording(r), 1),
                 "commercial_ok": is_commercial_license(r.get("lic", "")),
+                "selected": i < 3,
+                "sex": r.get("sex", ""),
+                "stage": r.get("stage", ""),
+                "method": r.get("method", ""),
+                "remarks": r.get("rmk", ""),
+                "animal_seen": r.get("animal-seen", ""),
+                "playback_used": r.get("playback-used", ""),
             }
-            for r in fallback
+            for i, r in enumerate(fallback)
         ]
         if songs:
             print(f"  [Xeno-canto] ⚠ No typed songs — used top {len(songs)} untyped")
@@ -526,6 +561,22 @@ def main():
     with open(manifest_path) as f:
         manifest = json.load(f)
 
+    # Preserve any manually-set selected flags from a prior run
+    out_path = manifest_path.parent / "tier1_seattle_birds_populated.json"
+    prior_selections: dict[str, bool] = {}
+    if out_path.exists():
+        try:
+            with open(out_path) as f:
+                prior = json.load(f)
+            for sp in prior.get("species", []):
+                clips = sp.get("audio_clips", {})
+                for clip in clips.get("songs", []) + clips.get("calls", []):
+                    xc_id = clip.get("xc_id", "")
+                    if xc_id and "selected" in clip:
+                        prior_selections[xc_id] = clip["selected"]
+        except Exception:
+            pass
+
     species = manifest["species"]
     print("=" * 60)
     print("  BeakSpeak — Content Population")
@@ -543,6 +594,12 @@ def main():
         if result:
             songs = result["songs"]
             calls = result["calls"]
+            # Restore any prior manual selections by xc_id
+            if prior_selections:
+                for clip in songs + calls:
+                    xc_id = clip.get("xc_id", "")
+                    if xc_id in prior_selections:
+                        clip["selected"] = prior_selections[xc_id]
             all_clips = songs + calls
             commercial_clips = sum(1 for c in all_clips if c.get("commercial_ok"))
             nc_clips = sum(1 for c in all_clips if not c.get("commercial_ok"))
@@ -570,7 +627,6 @@ def main():
                    if not s.get("audio_clips", {}).get("songs")
                    and not s.get("audio_clips", {}).get("calls"))
 
-    out_path = manifest_path.parent / "tier1_seattle_birds_populated.json"
     with open(out_path, "w") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)
 

@@ -221,7 +221,7 @@ def process_species(species: dict, manifest_species: dict) -> dict:
     name = species["common_name"]
     print(f"\n[{sid}] {name}")
 
-    # Process audio clips (songs + calls)
+    # Process audio clips (songs + calls) — download ALL candidates for admin preview
     for clip_type in ("songs", "calls"):
         clips = species["audio_clips"][clip_type]
         for i, clip in enumerate(clips):
@@ -247,6 +247,15 @@ def process_species(species: dict, manifest_species: dict) -> dict:
                 else:
                     print(f"  WARNING: ffmpeg failed for XC{xc_id}, skipping")
             tmp_path.unlink(missing_ok=True)
+
+    # Filter manifest clips to selected-only; strip the selected field (app doesn't need it)
+    for clip_type in ("songs", "calls"):
+        kept = []
+        for clip in manifest_species["audio_clips"][clip_type]:
+            if clip.get("selected", True):
+                clip_copy = {k: v for k, v in clip.items() if k != "selected"}
+                kept.append(clip_copy)
+        manifest_species["audio_clips"][clip_type] = kept
 
     # Process Wikipedia audio
     wp_audio = species.get("wikipedia_audio", [])

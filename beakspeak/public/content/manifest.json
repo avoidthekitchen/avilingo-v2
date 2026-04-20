@@ -56,7 +56,13 @@
             "location": "Goulds, Newfoundland and Labrador",
             "country": "Canada",
             "score": 58,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "male",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "128490",
@@ -70,21 +76,33 @@
             "location": "Dordt College Prairie, Sioux, Iowa",
             "country": "United States",
             "score": 58,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Singing before dawn from a maple tree at the edge of a parking lot.\r\n\r\nRecorded with Olympus LS-10S and Sennheiser ME66.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
-            "xc_id": "954703",
-            "xc_url": "https://xeno-canto.org/954703",
-            "audio_url": "/content/audio/amro/954703.ogg",
+            "xc_id": "713003",
+            "xc_url": "https://xeno-canto.org/713003",
+            "audio_url": "/content/audio/amro/713003.ogg",
             "type": "song",
             "quality": "A",
-            "length": "1:49",
-            "recordist": "Anonymous",
-            "license": "https://creativecommons.org/publicdomain/zero/1.0/",
-            "location": "Highlands (near  Highland Falls), Orange County, New York",
-            "country": "United States",
-            "score": 50,
-            "commercial_ok": true
+            "length": "0:08",
+            "recordist": "Manuel Grosselet",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Iztapalapa (near  Ciudad de M\u00e9xico), Ciudad de M\u00e9xico",
+            "country": "Mexico",
+            "score": 64,
+            "commercial_ok": false,
+            "sex": "male",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "wildtronics mono amplified \r\nTascam Dr05",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ],
         "calls": [
@@ -100,7 +118,13 @@
             "location": "Blue Bell Campground, Custer State Park, South Dakota",
             "country": "United States",
             "score": 57,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Calling from a stand of young ponderosa pines at dusk.\r\n\r\nFiltered lightly below 1kHz.",
+            "animal_seen": "no",
+            "playback_used": "no"
           },
           {
             "xc_id": "254483",
@@ -114,7 +138,13 @@
             "location": "Blue Bell Campground, Custer State Park, South Dakota",
             "country": "United States",
             "score": 57,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Calling from a stand of young ponderosa pines at dusk.\r\n\r\nFiltered lightly below 1kHz.",
+            "animal_seen": "no",
+            "playback_used": "no"
           }
         ]
       },
@@ -179,35 +209,13 @@
             "location": "Moraine Park, Rocky Mountain National Park, Larimer, Colorado",
             "country": "United States",
             "score": 62,
-            "commercial_ok": false
-          },
-          {
-            "xc_id": "420584",
-            "xc_url": "https://xeno-canto.org/420584",
-            "audio_url": "/content/audio/amcr/420584.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:31",
-            "recordist": "Meena Haribal",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Stikine Region (near  Skagway), Skagway, Alaska",
-            "country": "United States",
-            "score": 60,
-            "commercial_ok": false
-          },
-          {
-            "xc_id": "807484",
-            "xc_url": "https://xeno-canto.org/807484",
-            "audio_url": "/content/audio/amcr/807484.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:48",
-            "recordist": "Barry Edmonston",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Cape Cod (near  Barnstable), Barnstable County, Massachusetts",
-            "country": "United States",
-            "score": 63,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Solo bird giving soft whisper song from top of tree; same individual as XC114554.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ],
         "calls": [
@@ -223,7 +231,13 @@
             "location": "Iola, Grimes County, Texas",
             "country": "United States",
             "score": 61,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "uncertain",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "Navasota River bottoms in hardword forest.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "682428",
@@ -237,7 +251,13 @@
             "location": "Big Fish Island, Nova Scotia",
             "country": "Canada",
             "score": 61,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "uncertain",
+            "stage": "uncertain",
+            "method": "field recording",
+            "remarks": "Bird recorded with an autonomous recording device in a coastal habitat",
+            "animal_seen": "no",
+            "playback_used": "no"
           }
         ]
       },
@@ -304,7 +324,13 @@
             "location": "Damascus, Montgomery County, Maryland",
             "country": "United States",
             "score": 58,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "uncertain",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "570789",
@@ -318,7 +344,13 @@
             "location": "Goulds, Newfoundland and Labrador",
             "country": "Canada",
             "score": 58,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "142619",
@@ -332,7 +364,13 @@
             "location": "Union Bay Campground, Porcupine Mountains SP, Ontonagon, Michigan",
             "country": "United States",
             "score": 58,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "First song type from a bird on territory near our campsite.\r\n\r\nRecorded with Olympus LS-10S and homemade parabolic reflector.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ],
         "calls": [
@@ -348,7 +386,13 @@
             "location": "Saanich (near  Victoria), Capital, British Columbia",
             "country": "Canada",
             "score": 67.2,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "uncertain",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "Contact calls from single individual calling from dense bushes.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "585148",
@@ -362,7 +406,13 @@
             "location": "Otay Lakes, San Diego Co., California",
             "country": "United States",
             "score": 67.0,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "it flew in calling and continued to call after landing",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ]
       },
@@ -421,7 +471,13 @@
             "location": "Terra Nova (Village), Newfoundland and Labrador",
             "country": "Canada",
             "score": 62,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "254480",
@@ -435,7 +491,13 @@
             "location": "Blue Bell Campground, Custer State Park, South Dakota",
             "country": "United States",
             "score": 61,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "High, thin song from a bird below the campground in a ravine. Different individual than XC254477 and XC254478. Before this, the bird was singing a 'fuller' sounding song.\r\n\r\nFiltered lightly below 1kHz.",
+            "animal_seen": "no",
+            "playback_used": "no"
           },
           {
             "xc_id": "254477",
@@ -449,7 +511,13 @@
             "location": "Blue Bell Campground, Custer State Park, South Dakota",
             "country": "United States",
             "score": 58,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Song from a bird 15ft up in a ponderosa pine at the edge of the campground.\r\n\r\nFiltered lightly below 1kHz.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ],
         "calls": [
@@ -465,7 +533,13 @@
             "location": "Blue Bell Campground, Custer State Park, South Dakota",
             "country": "United States",
             "score": 58,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "calls from a pair of juncos chasing eachother through the campground",
+            "animal_seen": "unknown",
+            "playback_used": "unknown"
           },
           {
             "xc_id": "363228",
@@ -479,7 +553,13 @@
             "location": "Vermont (near  Saint George), Chittenden County, Vermont",
             "country": "United States",
             "score": 38,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "All sounds are Junco, no other species present. Flock of ~40 convening below feeder, constant chatter and songs  (0:43, 0:53, 1:05, 1:19) from multiple individuals.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ]
       },
@@ -528,7 +608,13 @@
             "location": "Powderhorn Park, Minneapolis, Hennepin, Minnesota",
             "country": "United States",
             "score": 60,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Calling from directly above me in a pine tree in an urban park.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "866009",
@@ -542,21 +628,33 @@
             "location": "South Bozeman, Gallatin County, Montana",
             "country": "United States",
             "score": 67,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "uncertain",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "Unusual for singing Chickadees at this location at this time of year. Weather unseasonably warm, 50\u00b0 F. ",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
-            "xc_id": "935615",
-            "xc_url": "https://xeno-canto.org/935615",
-            "audio_url": "/content/audio/bcch/935615.ogg",
-            "type": "call, song",
+            "xc_id": "717519",
+            "xc_url": "https://xeno-canto.org/717519",
+            "audio_url": "/content/audio/bcch/717519.ogg",
+            "type": "song",
             "quality": "A",
-            "length": "0:37",
-            "recordist": "Doug Hynes",
-            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
-            "location": "Whitbourne, Newfoundland and Labrador",
-            "country": "Canada",
-            "score": 58,
-            "commercial_ok": true
+            "length": "0:23",
+            "recordist": "Bobby Wilcox",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Tama (near  Burlington), Des Moines, Iowa",
+            "country": "United States",
+            "score": 65,
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "About 8m away in deciduous forest.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ],
         "calls": [
@@ -572,7 +670,13 @@
             "location": "Bear Head Lake State Park, St. Louis, Minnesota",
             "country": "United States",
             "score": 44,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Gargle call from a bird foraging in alder saplings around campsite.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "569276",
@@ -586,7 +690,33 @@
             "location": "Turkey Hill (near  Arlington), Middlesex County, Massachusetts",
             "country": "United States",
             "score": 43,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "Initially heard calling from trees ~30 feet away.  Two chickadees flew closer and landed on a fence about 8 feet in front of me.  They were mostly silent on the fence, then one went into a rhododendron several feet to my left and continued calling from inside the bush.  Recorded with an iPhone SE.  Several other birds overlap in the sample.  Chickadee calls at 00:00, 00:28, 00:32.",
+            "animal_seen": "yes",
+            "playback_used": "no"
+          },
+          {
+            "xc_id": "121068",
+            "xc_url": "https://xeno-canto.org/121068",
+            "audio_url": "/content/audio/bcch/121068.ogg",
+            "type": "call",
+            "quality": "B",
+            "length": "0:51",
+            "recordist": "Jonathon Jongsma",
+            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "location": "Minnesota Valley NWR, Bass Ponds, Hennepin, Minnesota",
+            "country": "United States",
+            "score": 40,
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Two individuals flitting about in the tree above my head.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ]
       },
@@ -651,21 +781,13 @@
             "location": "Prairie Trail, Custer State Park, South Dakota",
             "country": "United States",
             "score": 60,
-            "commercial_ok": true
-          },
-          {
-            "xc_id": "717736",
-            "xc_url": "https://xeno-canto.org/717736",
-            "audio_url": "/content/audio/spto/717736.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:23",
-            "recordist": "Diana Doyle",
-            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
-            "location": "Manning Camp, Saguaro National Park, Rincon Mtns, Arizona",
-            "country": "United States",
-            "score": 59,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Songs from a bird perched at the top of a dead tree along the trail.\r\n\r\nFiltered lightly below 1kHz.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "254549",
@@ -679,7 +801,33 @@
             "location": "Oak Draw Rd, Custer State Park, South Dakota",
             "country": "United States",
             "score": 55,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Songs from an unseen bird in riparian scrub in the middle of shortgrass prairie.",
+            "animal_seen": "no",
+            "playback_used": "no"
+          },
+          {
+            "xc_id": "575461",
+            "xc_url": "https://xeno-canto.org/575461",
+            "audio_url": "/content/audio/spto/575461.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:14",
+            "recordist": "Sue Riffe",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Saguaro NP - east, Pima Cty, Arizona",
+            "country": "United States",
+            "score": 67,
+            "commercial_ok": false,
+            "sex": "male",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "natural vocalization",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ],
         "calls": [
@@ -695,21 +843,33 @@
             "location": "McClellan Ranch Preserve, Santa Clara, California",
             "country": "United States",
             "score": 38.0,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Natural calls from within dried grass and forbs in an open field.  Distance from microphone: 5m.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
-            "xc_id": "109662",
-            "xc_url": "https://xeno-canto.org/109662",
-            "audio_url": "/content/audio/spto/109662.ogg",
+            "xc_id": "389884",
+            "xc_url": "https://xeno-canto.org/389884",
+            "audio_url": "/content/audio/spto/389884.ogg",
             "type": "call",
             "quality": "B",
-            "length": "0:06",
-            "recordist": "Jonathon Jongsma",
-            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
-            "location": "McClellan Ranch Preserve, Santa Clara, California",
-            "country": "United States",
-            "score": 44.0,
-            "commercial_ok": true
+            "length": "0:28",
+            "recordist": "Leonardo Guzman Hernandez",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "Arteaga, Coahuila de Zaragoza",
+            "country": "Mexico",
+            "score": 37,
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ]
       },
@@ -768,21 +928,13 @@
             "location": "Lafayette, Boulder County, Colorado",
             "country": "United States",
             "score": 67,
-            "commercial_ok": false
-          },
-          {
-            "xc_id": "657975",
-            "xc_url": "https://xeno-canto.org/657975",
-            "audio_url": "/content/audio/hofi/657975.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:08",
-            "recordist": "Manuel Grosselet",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "San Lorenzo Cacaotepec, San Lorenzo Cacaotepec, Oaxaca",
-            "country": "Mexico",
-            "score": 64,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "male",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "A House Finch belting out a tune from a tall cottonwood. The bird did a long warmup of varied calls before it started singing. Sunny and cold when I made this recording.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "539750",
@@ -796,24 +948,36 @@
             "location": "MEX, Oax, oaxaca Jardin Botanico",
             "country": "Mexico",
             "score": 64,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "male",
+            "stage": "uncertain",
+            "method": "field recording",
+            "remarks": "wildtronics mono amplified Tascam DR05\r\nAudacity, normalized -10db aufilter\r\na single bird singing on top on Santo Domingo.",
+            "animal_seen": "yes",
+            "playback_used": "no"
+          },
+          {
+            "xc_id": "875451",
+            "xc_url": "https://xeno-canto.org/875451",
+            "audio_url": "/content/audio/hofi/875451.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:56",
+            "recordist": "Matthew L. Brady",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Apple Valley, San Bernardino County, California",
+            "country": "United States",
+            "score": 63.0,
+            "commercial_ok": false,
+            "sex": "male",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "Recorded at relatively close range (<10 m) with my iPhone using the Merlin app.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ],
         "calls": [
-          {
-            "xc_id": "822624",
-            "xc_url": "https://xeno-canto.org/822624",
-            "audio_url": "/content/audio/hofi/822624.ogg",
-            "type": "call",
-            "quality": "A",
-            "length": "0:09",
-            "recordist": "Nikhil Patwardhan",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Dr. R. J. Allan Hogg Rotary Park (near  White Rock), Metro Vancouver, British Columbia",
-            "country": "Canada",
-            "score": 67.2,
-            "commercial_ok": false
-          },
           {
             "xc_id": "573017",
             "xc_url": "https://xeno-canto.org/573017",
@@ -826,7 +990,13 @@
             "location": "Topolobampo, Ahome, Sinaloa",
             "country": "Mexico",
             "score": 67,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "uncertain",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "wildtronics mono amplifed tascam dr05\r\nhigh power line in BG",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ]
       },
@@ -884,7 +1054,13 @@
             "location": "Lafayette, Boulder County, Colorado",
             "country": "United States",
             "score": 67,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "uncertain",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "A Northern Flicker singing from a cottonwood near the Walmart SuperCenter. Didn't put my binocs up to get a subspecies ID. When the bird flushed, it was lower-case red-shafted.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "604689",
@@ -898,7 +1074,13 @@
             "location": "Maple Leaf, Seattle, King County, Washington",
             "country": "United States",
             "score": 65.4,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "uncertain",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "Bird perched on top of a chimney, recorded from indoors through chimney",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "410727",
@@ -912,7 +1094,13 @@
             "location": "Boulder, Boulder County, Colorado",
             "country": "United States",
             "score": 64,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "male",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "This is a hybrid flicker (luteus x cafer).  Here is a photo of the bird: https://macaulaylibrary.org/asset/94184121",
+            "animal_seen": "yes",
+            "playback_used": "unknown"
           }
         ],
         "calls": [
@@ -928,21 +1116,53 @@
             "location": "Blue Bell Campground, Custer State Park, South Dakota",
             "country": "United States",
             "score": 42,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Various natural calls, including 'rattle' call and 'flick-a' call.  The first part of the cut was given while in flight, and the last part was given after landing some distance away from me.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
-            "xc_id": "389891",
-            "xc_url": "https://xeno-canto.org/389891",
-            "audio_url": "/content/audio/nofl/389891.ogg",
-            "type": "call",
+            "xc_id": "254591",
+            "xc_url": "https://xeno-canto.org/254591",
+            "audio_url": "/content/audio/nofl/254591.ogg",
+            "type": "call, drumming",
             "quality": "B",
-            "length": "0:26",
-            "recordist": "Leonardo Guzman Hernandez",
+            "length": "1:49",
+            "recordist": "Jonathon Jongsma",
             "license": "https://creativecommons.org/licenses/by-sa/4.0/",
-            "location": "Arteaga, Coahuila de Zaragoza",
-            "country": "Mexico",
-            "score": 39,
-            "commercial_ok": true
+            "location": "Four Mile Draw Rd, Custer State Park, South Dakota",
+            "country": "United States",
+            "score": 38,
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "A bird drumming and calling from a trunk of dead ponderosa pine on a grassy hill next to a gravel road. Overcast, with light rain which can be heard hitting the microphone.\r\n\r\nThis area appears to have suffered a fire in recent years since all the trees in this area were dead trunks. As a result, this area held a large number of woodpeckers, including hairy, lewis's, red-headed, and northern flicker.",
+            "animal_seen": "yes",
+            "playback_used": "no"
+          },
+          {
+            "xc_id": "1069251",
+            "xc_url": "https://xeno-canto.org/1069251",
+            "audio_url": "/content/audio/nofl/1069251.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:12",
+            "recordist": "Don Profota",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "South Bozeman, Gallatin County, Montana",
+            "country": "United States",
+            "score": 67,
+            "commercial_ok": false,
+            "sex": "male",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "Noise filter.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ]
       },
@@ -1007,52 +1227,16 @@
             "location": "Kelowna, British Columbia",
             "country": "Canada",
             "score": 65.2,
-            "commercial_ok": false
-          },
-          {
-            "xc_id": "603263",
-            "xc_url": "https://xeno-canto.org/603263",
-            "audio_url": "/content/audio/stja/603263.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:24",
-            "recordist": "Thomas Magarian",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Camp Polk Meadow Preserve, Sisters, Deschutes County, Oregon",
-            "country": "United States",
-            "score": 60.2,
-            "commercial_ok": false
-          },
-          {
-            "xc_id": "1089829",
-            "xc_url": "https://xeno-canto.org/1089829",
-            "audio_url": "/content/audio/stja/1089829.ogg",
-            "type": "call, song",
-            "quality": "A",
-            "length": "0:56",
-            "recordist": "GABRIEL LEITE",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Huehuetenango, Chiantla, Huehuetenango Department",
-            "country": "Guatemala",
-            "score": 58,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "uncertain",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "Single bird in bushes, very quiet vocalizations recorded at ~1 ft away.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ],
         "calls": [
-          {
-            "xc_id": "644895",
-            "xc_url": "https://xeno-canto.org/644895",
-            "audio_url": "/content/audio/stja/644895.ogg",
-            "type": "begging call",
-            "quality": "A",
-            "length": "0:12",
-            "recordist": "Diana Doyle",
-            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
-            "location": "Big Bear, San Bernardino County, California",
-            "country": "United States",
-            "score": 64.0,
-            "commercial_ok": true
-          },
           {
             "xc_id": "109654",
             "xc_url": "https://xeno-canto.org/109654",
@@ -1065,7 +1249,13 @@
             "location": "McClellan Ranch Preserve, Santa Clara, California",
             "country": "United States",
             "score": 64.0,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Foraging in undergrowth along the edge of a creek.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ]
       },
@@ -1124,21 +1314,13 @@
             "location": "McClellan Ranch Preserve, Santa Clara, California",
             "country": "United States",
             "score": 60.0,
-            "commercial_ok": true
-          },
-          {
-            "xc_id": "580516",
-            "xc_url": "https://xeno-canto.org/580516",
-            "audio_url": "/content/audio/bewr/580516.ogg",
-            "type": "song",
-            "quality": "B",
-            "length": "0:05",
-            "recordist": "J. R.",
-            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
-            "location": "San Francisco Peninsula (near  San Mateo), San Mateo County, California",
-            "country": "United States",
-            "score": 41.0,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Natural song from bird within a large *Quercus agrifolia* tree.\r\n\r\nFiltered for traffic noise.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "800769",
@@ -1152,7 +1334,33 @@
             "location": "Santa Cruz River Park,Tucson, Pima County, Arizona",
             "country": "United States",
             "score": 65,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "male",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "Dominant road noise required some aggressive processing. HP filtered 24dB/octave below 3KHz, and only normalized to -6dB peak. ",
+            "animal_seen": "yes",
+            "playback_used": "no"
+          },
+          {
+            "xc_id": "123370",
+            "xc_url": "https://xeno-canto.org/123370",
+            "audio_url": "/content/audio/bewr/123370.ogg",
+            "type": "song",
+            "quality": "A",
+            "length": "0:09",
+            "recordist": "Chris Harrison",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/3.0/",
+            "location": "South Llano River State Park, Junction, Kimble, Texas",
+            "country": "United States",
+            "score": 64,
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "high pass filtering below 500Hz to remove background noise.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ],
         "calls": [
@@ -1168,7 +1376,13 @@
             "location": "McClellan Ranch Preserve, Santa Clara, California",
             "country": "United States",
             "score": 44.0,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Agitated calls in response to pishing",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "109856",
@@ -1182,7 +1396,13 @@
             "location": "Picchetti Ranch Open Space Preserve, Santa Clara, California",
             "country": "United States",
             "score": 37.0,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ]
       },
@@ -1247,7 +1467,13 @@
             "location": "Salem, Polk, Oregon",
             "country": "United States",
             "score": 58.2,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "male",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "The same hummingbird male as on XC156822 successfully survived several sub-freezing cold nights and started his display song again after timeout he took for the cold weather. The only difference - previously he used high dead branch of Sequoia while currently he moved to the bush much closer to my heated  feeder.\r\nHigh pass filter was used to remove street noise below 1.8kHz",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "109651",
@@ -1261,7 +1487,13 @@
             "location": "McClellan Ranch Preserve, Santa Clara, California",
             "country": "United States",
             "score": 44.0,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Display flight above a *Quercus agrifolia* in an open field.  The loud squeak at the beginning of the cut is the mechanical sound produced by the tail feathers at the bottom of the dive.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "860679",
@@ -1275,7 +1507,13 @@
             "location": "Sabino Canyon National Recreation Area, Pima County, Arizona",
             "country": "United States",
             "score": 63,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "male",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "Trimmed and normalized.\r\n\r\nVocalizing from top of a mesquite bush. \r\n\r\nDull, cloudy day. Song seemed quiet, but the recording was made nearly underneath the bird.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ],
         "calls": [
@@ -1291,21 +1529,53 @@
             "location": "Salem, Polk, Oregon",
             "country": "United States",
             "score": 40.2,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "male",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Anna's Hummingbird male perching on the bush between two houses.\r\nUsed equipment - Tascam DR-100, built-in unidirectional microphone. Record level normalized, high pass filter (2kHz) used to get rid of background street noise.\r\nVideo available on Youtube <http://www.youtube.com/watch?v=q85uU5EyRZg>\r\nPhotos available on Flickr <http://www.flickr.com/photos/bushman_k/11229411255/>",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
-            "xc_id": "153035",
-            "xc_url": "https://xeno-canto.org/153035",
-            "audio_url": "/content/audio/anhu/153035.ogg",
+            "xc_id": "701552",
+            "xc_url": "https://xeno-canto.org/701552",
+            "audio_url": "/content/audio/anhu/701552.ogg",
             "type": "call",
-            "quality": "B",
-            "length": "0:40",
-            "recordist": "Bushman",
-            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
-            "location": "Salem, Polk, Oregon",
+            "quality": "A",
+            "length": "0:27",
+            "recordist": "Barry Edmonston",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Swan Lake, Victoria, Vancouver Island, BC",
+            "country": "Canada",
+            "score": 65,
+            "commercial_ok": false,
+            "sex": "male",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "Two sets of calls from single male perched at top of small tree on southern side Swan Lake sanctuary.  About a dozen male Anna's hummingbirds seen and only two females spotted in an hour and half later afternoon birding.",
+            "animal_seen": "yes",
+            "playback_used": "no"
+          },
+          {
+            "xc_id": "697495",
+            "xc_url": "https://xeno-canto.org/697495",
+            "audio_url": "/content/audio/anhu/697495.ogg",
+            "type": "flight call",
+            "quality": "A",
+            "length": "0:05",
+            "recordist": "Paul Marvin",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Monument Rd and nearby trails, Tijuana River Valley, San Diego, California",
             "country": "United States",
-            "score": 40.2,
-            "commercial_ok": true
+            "score": 64.0,
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "one called when pair interacted",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ]
       },
@@ -1363,7 +1633,13 @@
             "location": "Center Road at Milepost 7.36 (across from Olympic Music Fest (near  Quilcene), Jefferson County, Washington",
             "country": "United States",
             "score": 62.4,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "uncertain",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "habitat mixed deciduous and coniferous forest. Birds in canopy of big leaf maple",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "702313",
@@ -1377,7 +1653,13 @@
             "location": "Swan Lake, Victoria, Vancouver Island, BC",
             "country": "Canada",
             "score": 60,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "uncertain",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Vocalizations from single individual moving through tall bushes on southern side of Swan Lake.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "1025556",
@@ -1391,7 +1673,13 @@
             "location": "Palo Alto Rd - FS28 Loop, Sequim, Clallam County, Washington",
             "country": "United States",
             "score": 58.4,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "About a dozen individuals in a mixed-species feeding flock",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ],
         "calls": [
@@ -1407,7 +1695,13 @@
             "location": "McClellan Ranch Preserve, Santa Clara, California",
             "country": "United States",
             "score": 40.0,
-            "commercial_ok": true
+            "commercial_ok": true,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Natural calls from a foraging flock of 10-15 birds in trees hanging over the creek.\r\n\r\nFiltered for low frequency flowing water sounds.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "363150",
@@ -1421,7 +1715,13 @@
             "location": "Patrick Point State Park, Humboldt County, California",
             "country": "United States",
             "score": 64.0,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "briefly at close range",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ]
       },
@@ -1470,7 +1770,13 @@
             "location": "Lafayette, Boulder, Colorado",
             "country": "United States",
             "score": 64,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Counter-singing American Bushtits on South Fork Drive, Lafayette, Boulder County, Colorado. One bird is fairly close, the other rather distant. These are the same birds as in XC215757 and XC215758.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "215758",
@@ -1484,7 +1790,13 @@
             "location": "Lafayette, Boulder, Colorado",
             "country": "United States",
             "score": 64,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Counter-singing American Bushtits on South Fork Drive, Lafayette, Boulder County, Colorado. One bird is fairly close, the other rather distant. These are the same birds as in XC215757 and XC215759.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "215757",
@@ -1498,24 +1810,16 @@
             "location": "Lafayette, Boulder, Colorado",
             "country": "United States",
             "score": 64,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Counter-singing American Bushtits on South Fork Drive, Lafayette, Boulder County, Colorado. One bird is fairly close, the other rather distant. These are the same birds as in XC215758 and XC215759.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ],
         "calls": [
-          {
-            "xc_id": "757507",
-            "xc_url": "https://xeno-canto.org/757507",
-            "audio_url": "/content/audio/bush/757507.ogg",
-            "type": "call",
-            "quality": "A",
-            "length": "0:23",
-            "recordist": "Paul Marvin",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Bird and Butterfly Garden, Tijuana River Valley Regional Park, San Diego Co, California",
-            "country": "United States",
-            "score": 65.0,
-            "commercial_ok": false
-          },
           {
             "xc_id": "683414",
             "xc_url": "https://xeno-canto.org/683414",
@@ -1528,7 +1832,53 @@
             "location": "Nepantla de Sor Juana In\u00e9s de la Cruz, Tepetlixpa, State of Mexico",
             "country": "Mexico",
             "score": 65,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "uncertain",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "Mic MA1LEN-23 on ZOOM H4N Pro",
+            "animal_seen": "yes",
+            "playback_used": "no"
+          },
+          {
+            "xc_id": "149398",
+            "xc_url": "https://xeno-canto.org/149398",
+            "audio_url": "/content/audio/bush/149398.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:15",
+            "recordist": "Paul Marvin",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/3.0/",
+            "location": "Otay Lakes, San Diego Co., California",
+            "country": "United States",
+            "score": 64.0,
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "from several in flock",
+            "animal_seen": "yes",
+            "playback_used": "no"
+          },
+          {
+            "xc_id": "807119",
+            "xc_url": "https://xeno-canto.org/807119",
+            "audio_url": "/content/audio/bush/807119.ogg",
+            "type": "call",
+            "quality": "A",
+            "length": "0:27",
+            "recordist": "Paul Marvin",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Corral Canyon Trail, Campo, San Diego County, California",
+            "country": "United States",
+            "score": 62.0,
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "pair, mostly one called, included warning trill when hawk flew over",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ]
       },
@@ -1586,7 +1936,13 @@
             "location": "Vancouver Island (near  Victoria), Capital, British Columbia",
             "country": "Canada",
             "score": 64.2,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "uncertain",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "Two brief calls from single individual hidden in nearby bush.",
+            "animal_seen": "no",
+            "playback_used": "no"
           },
           {
             "xc_id": "345344",
@@ -1600,21 +1956,13 @@
             "location": "Carmel Valley, Monterey, California",
             "country": "United States",
             "score": 64.0,
-            "commercial_ok": false
-          },
-          {
-            "xc_id": "687702",
-            "xc_url": "https://xeno-canto.org/687702",
-            "audio_url": "/content/audio/gcsp/687702.ogg",
-            "type": "call, song",
-            "quality": "A",
-            "length": "0:42",
-            "recordist": "Barry Edmonston",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Swan Lake, Victoria, Vancouver Island, BC",
-            "country": "Canada",
-            "score": 63,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "High pass filter (3000Hz, 6dB Roll off); amplified (25dB).",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ],
         "calls": [
@@ -1630,7 +1978,33 @@
             "location": "Chehalis, Lewis County, Washington",
             "country": "United States",
             "score": 62.4,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "Immature 1st winter bird singing and calling about 2 meters away from me, below eye level. Slight HPF used. Weather: cool, foggy. Habitat: brushy fenceline along recently plowed field. ",
+            "animal_seen": "yes",
+            "playback_used": "no"
+          },
+          {
+            "xc_id": "347901",
+            "xc_url": "https://xeno-canto.org/347901",
+            "audio_url": "/content/audio/gcsp/347901.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "0:13",
+            "recordist": "Jim Holmes",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "American River Parkway (East of Watt), Sacramento, Sacramento County, California",
+            "country": "United States",
+            "score": 59.0,
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "",
+            "method": "field recording",
+            "remarks": "",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ]
       },
@@ -1679,7 +2053,13 @@
             "location": "Toronto, Toronto Division, Ontario",
             "country": "Canada",
             "score": 63,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "Homemade parabolic using EM172s. A small flock in bushes.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
             "xc_id": "609706",
@@ -1693,24 +2073,56 @@
             "location": "Elsen's Hill, DuPage County, Illinois",
             "country": "United States",
             "score": 56,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "uncertain",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "",
+            "animal_seen": "yes",
+            "playback_used": "no"
           },
           {
-            "xc_id": "976265",
-            "xc_url": "https://xeno-canto.org/976265",
-            "audio_url": "/content/audio/eust/976265.ogg",
+            "xc_id": "593357",
+            "xc_url": "https://xeno-canto.org/593357",
+            "audio_url": "/content/audio/eust/593357.ogg",
             "type": "song",
             "quality": "B",
-            "length": "0:13",
-            "recordist": "Scott McConnell",
+            "length": "0:11",
+            "recordist": "Risto Milner",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Cape May County, New Jersey",
-            "country": "United States",
-            "score": 47,
-            "commercial_ok": false
+            "location": "Thompson-Nicola J (near  Kamloops), Thompson-Nicola, British Columbia",
+            "country": "Canada",
+            "score": 44.2,
+            "commercial_ok": false,
+            "sex": "uncertain",
+            "stage": "uncertain",
+            "method": "field recording",
+            "remarks": "Starlings recorded in Vancouver B.C.",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ],
         "calls": [
+          {
+            "xc_id": "636461",
+            "xc_url": "https://xeno-canto.org/636461",
+            "audio_url": "/content/audio/eust/636461.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "0:59",
+            "recordist": "Thomas Ryder Payne",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Toronto, Toronto Division, Ontario",
+            "country": "Canada",
+            "score": 63,
+            "commercial_ok": false,
+            "sex": "",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "Homemade parabolic using EM172s. A small flock in bushes.",
+            "animal_seen": "yes",
+            "playback_used": "no"
+          },
           {
             "xc_id": "614156",
             "xc_url": "https://xeno-canto.org/614156",
@@ -1723,7 +2135,33 @@
             "location": "Cariboo H (near  Mahood Falls), Cariboo, British Columbia",
             "country": "Canada",
             "score": 61.2,
-            "commercial_ok": false
+            "commercial_ok": false,
+            "sex": "uncertain",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "/Users/peterward/Desktop/Sony ECM19B mic, 18 in parabola with Marantz cassette deck.pdf\r\n\r\nCall sequence, followed by mimicry of Red-winged Blackbird, and of Red-tailed Hawk.",
+            "animal_seen": "yes",
+            "playback_used": "no"
+          },
+          {
+            "xc_id": "609706",
+            "xc_url": "https://xeno-canto.org/609706",
+            "audio_url": "/content/audio/eust/609706.ogg",
+            "type": "call, song",
+            "quality": "A",
+            "length": "2:23",
+            "recordist": "Matt Wistrand",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Elsen's Hill, DuPage County, Illinois",
+            "country": "United States",
+            "score": 56,
+            "commercial_ok": false,
+            "sex": "uncertain",
+            "stage": "adult",
+            "method": "field recording",
+            "remarks": "",
+            "animal_seen": "yes",
+            "playback_used": "no"
           }
         ]
       },

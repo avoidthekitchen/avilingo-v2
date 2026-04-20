@@ -10,10 +10,11 @@ A Duolingo-style web app for learning Seattle-area bird songs and calls. Flash-c
 
 ### Content (Sprint 0)
 - 15 Seattle-area species across 5 lessons, curated by learnability
-- Each species: 3 songs + 2 calls from Xeno-canto, normalized to OGG Opus 96kbps
-- Clip selection scoring: quality grade (A=+50 … E=−30) dominates; bonuses for remarks (+5), confirmed sighting / adult stage / field recording (+3 each), PNW location (+0.4); penalties for playback-induced (−5), juvenile/nestling stage (−5), captive recording methods (−5)
+- Each species: up to 5 songs + 5 calls fetched from Xeno-canto as candidates; top 3 songs + top 2 calls selected by default and included in the app
+- Clip selection scoring: quality grade (A=+50 … E=−30) dominates; bonuses for remarks (+5), confirmed sighting / adult stage / field recording (+3 each), PNW location (+0.4); penalties for playback-induced (−5), juvenile/nestling stage (−5), captive recording methods (−5); pure-typed songs ranked above compound types (e.g. "call, song") to preserve call pool
 - Mnemonics, habitat tags, Wikipedia photos, and 5 confuser pairs per species
 - `tier1_seattle_birds_populated.json` → `beakspeak/public/content/manifest.json`
+- Manual curation via local Audio Admin tool (see below)
 
 ### Learn mode (Sprint 1)
 - Swipeable bird cards (framer-motion) with edge-to-edge photo, song/call playback, mnemonic
@@ -49,16 +50,42 @@ npm run dev
 
 The app is a single-page app with no backend — all data is served as static files from `beakspeak/public/content/`.
 
-## Re-generating media
+## Audio Admin
 
-If you need to re-download or update the audio/photos:
+A local-only tool for manually reviewing and curating which Xeno-canto clips are included in the app.
+
+```bash
+# Run from repo root (no extra dependencies — Python stdlib only)
+python3 admin/server.py
+# → http://localhost:8765
+```
+
+**What it shows per clip:** spectrogram (pre-rendered), play/pause, quality grade, type (song / call / alarm call / etc.), sex, stage, recording method, location, recordist, score, license, remarks, and a link to the Xeno-canto page.
+
+**Species header:** mnemonic and any Wikipedia audio clips for reference.
+
+**Workflow:**
+1. Run `uv run populate_content.py` to fetch 5+5 candidates per species (top 3 songs + top 2 calls are selected by default)
+2. Run `uv run download_media.py` to download all candidates locally
+3. Open the admin and review — the sidebar shows `selected/total` per species; toggle "In app" on any clip to include or exclude it
+4. Selections save immediately to `tier1_seattle_birds_populated.json`
+5. Run `uv run download_media.py` again to regenerate `manifest.json` with your selections
+
+## Re-generating media
 
 ```bash
 # Requires: Python 3, ffmpeg, uv (or pip install requests Pillow)
-uv run python3 download_media.py
+# Also requires XC_API_KEY env var for populate_content.py
+
+# Full pipeline (re-query Xeno-canto + Wikipedia, re-download everything)
+uv run populate_content.py   # → tier1_seattle_birds_populated.json
+uv run download_media.py     # → beakspeak/public/content/ + manifest.json
+
+# Manifest-only rebuild (after changing selections in the admin)
+uv run download_media.py
 ```
 
-This downloads ~25–40 MB of audio and photos into `beakspeak/public/content/` and regenerates `manifest.json` with local paths. Audio and photos are gitignored; the manifest is checked in.
+Audio and photos are gitignored; `manifest.json` and `tier1_seattle_birds_populated.json` are checked in.
 
 ## Running tests
 
