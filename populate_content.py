@@ -197,6 +197,10 @@ def score_recording(rec: dict) -> float:
     """Score: quality + location + length + remarks + animal-seen + stage + method - playback. Higher = better."""
     score = {"A": 50, "B": 30, "C": 10, "D": -10, "E": -30}.get(rec.get("q", ""), 0)
 
+    preferred_recordists = {"Jonathon Jongsma", "Manuel Grosselet"}
+    if rec.get("rec", "") in preferred_recordists:
+        score += 10
+
     loc = f"{rec.get('loc', '')} {rec.get('cnt', '')}".lower()
     if "washington" in loc:
         score += 0.4
@@ -350,20 +354,20 @@ def select_clips_two_pass(recordings: list[dict], species_name: str) -> dict:
     if len(quality) < 5:
         quality = [r for r in clean if r.get("q") in ("A", "B", "C")]
 
-    # Pass 1: commercial only — fetch pool of 5+5; top 3 songs / top 2 calls are selected by default
+    # Pass 1: commercial only — fetch pool of 6+6; top 3 songs / top 2 calls are selected by default
     commercial = [r for r in quality if is_commercial_license(r.get("lic", ""))]
-    songs = select_xc_clips(commercial, "song", 5, commercial_ok=True, n_selected=3, prefer_pure=True)
+    songs = select_xc_clips(commercial, "song", 6, commercial_ok=True, n_selected=3, prefer_pure=True)
     # Only exclude selected songs from calls — unselected backup songs aren't in the app
     # so they can safely appear as calls too, keeping the call pool full.
     selected_song_ids = {s["xc_id"] for s in songs if s["selected"]}
-    calls = select_xc_clips(commercial, "call", 5, commercial_ok=True, exclude_ids=selected_song_ids, n_selected=2)
+    calls = select_xc_clips(commercial, "call", 6, commercial_ok=True, exclude_ids=selected_song_ids, n_selected=2)
 
     nc_fallback = False
     nc_clip_count = 0
 
-    # Pass 2: relax to all CC if needed (targeting 5 songs / 5 calls total)
-    need_more_songs = len(songs) < 5
-    need_more_calls = len(calls) < 5
+    # Pass 2: relax to all CC if needed (targeting 6 songs / 6 calls total)
+    need_more_songs = len(songs) < 6
+    need_more_calls = len(calls) < 6
     if need_more_songs or need_more_calls:
         nc_fallback = True
         all_cc = [r for r in quality if is_any_cc_license(r.get("lic", ""))]
@@ -371,9 +375,9 @@ def select_clips_two_pass(recordings: list[dict], species_name: str) -> dict:
         if need_more_songs:
             # Get existing commercial song IDs to avoid duplicates
             existing_ids = {s["xc_id"] for s in songs}
-            nc_songs = select_xc_clips(all_cc, "song", 5, commercial_ok=False, n_selected=3, prefer_pure=True)
+            nc_songs = select_xc_clips(all_cc, "song", 6, commercial_ok=False, n_selected=3, prefer_pure=True)
             nc_songs = [s for s in nc_songs if s["xc_id"] not in existing_ids]
-            needed = 5 - len(songs)
+            needed = 6 - len(songs)
             # Only mark NC songs as selected if they fill the top-3 slots
             base_song_count = len(songs)
             for j, s in enumerate(nc_songs[:needed]):
@@ -384,9 +388,9 @@ def select_clips_two_pass(recordings: list[dict], species_name: str) -> dict:
 
         if need_more_calls:
             existing_ids = {c["xc_id"] for c in calls} | selected_song_ids
-            nc_calls = select_xc_clips(all_cc, "call", 5, commercial_ok=False, n_selected=2)
+            nc_calls = select_xc_clips(all_cc, "call", 6, commercial_ok=False, n_selected=2)
             nc_calls = [c for c in nc_calls if c["xc_id"] not in existing_ids]
-            needed = 5 - len(calls)
+            needed = 6 - len(calls)
             base_call_count = len(calls)
             for j, c in enumerate(nc_calls[:needed]):
                 c["commercial_ok"] = False
@@ -399,7 +403,7 @@ def select_clips_two_pass(recordings: list[dict], species_name: str) -> dict:
     # Fallback: use top recordings regardless of type if no songs at all
     if not songs:
         all_cc = [r for r in quality if is_any_cc_license(r.get("lic", ""))]
-        fallback = sorted(all_cc, key=score_recording, reverse=True)[:5]
+        fallback = sorted(all_cc, key=score_recording, reverse=True)[:6]
         songs = [
             {
                 "xc_id": r.get("id", ""),
