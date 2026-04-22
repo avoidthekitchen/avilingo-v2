@@ -23,13 +23,12 @@ export default function AudioButton({ clips, label, speciesId, variant = 'primar
     return idx >= 0 ? (idx + 1) % clips.length : 0
   })
 
-  const clipUrls = clips.map(c => c.audio_url)
-
   // Subscribe to player state and derive display state from activeUrl
   useEffect(() => {
+    const clipUrlSet = new Set(clips.map(clip => clip.audio_url))
     const unsub = audioPlayer.onStateChange((state: AudioState) => {
       const activeUrl = audioPlayer.getActiveUrl()
-      if (activeUrl && clipUrls.includes(activeUrl)) {
+      if (activeUrl && clipUrlSet.has(activeUrl)) {
         setDisplayState(state)
         if (state === 'idle') {
           setClipIndex(prev => (prev + 1) % clips.length)
@@ -39,21 +38,22 @@ export default function AudioButton({ clips, label, speciesId, variant = 'primar
       }
     })
     return unsub
-  }, [audioPlayer, clipUrls.join(','), clips.length])
+  }, [audioPlayer, clips])
 
   const currentClip = clips[clipIndex]
-  if (!currentClip) return null
 
   const handlePlay = useCallback(async () => {
+    if (!currentClip) return
     if (displayState === 'playing') {
       audioPlayer.stop()
       return
     }
 
-    const clip = clips[clipIndex]
-    setLastPlayedClip(speciesId, clip.xc_id)
-    await audioPlayer.play(clip.audio_url)
-  }, [audioPlayer, clips, clipIndex, speciesId, setLastPlayedClip, displayState])
+    setLastPlayedClip(speciesId, currentClip.xc_id)
+    await audioPlayer.play(currentClip.audio_url)
+  }, [audioPlayer, currentClip, speciesId, setLastPlayedClip, displayState])
+
+  if (!currentClip) return null
 
   const isPrimary = variant === 'primary'
 

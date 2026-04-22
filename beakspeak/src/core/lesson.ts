@@ -46,11 +46,27 @@ function pickRandom<T>(array: T[], count: number): T[] {
   return shuffle(array).slice(0, count)
 }
 
+function buildThreeChoices(
+  target: Species,
+  preferredDistractors: Species[],
+  fallbackDistractors: Species[],
+): Species[] {
+  const seen = new Set<string>([target.id])
+  const distractors: Species[] = []
+
+  for (const candidate of [...preferredDistractors, ...fallbackDistractors]) {
+    if (seen.has(candidate.id)) continue
+    seen.add(candidate.id)
+    distractors.push(candidate)
+    if (distractors.length === 2) break
+  }
+
+  return shuffle([target, ...distractors])
+}
+
 export function buildIntroQuiz(
-  lesson: Lesson,
   lessonSpecies: Species[],
   previouslyIntroduced: Species[],
-  _allSpecies: Species[],
 ): IntroQuizItem[] {
   // Generate 3-5 questions testing the lesson species
   const targetCount = Math.min(5, Math.max(3, lessonSpecies.length + 2))
@@ -63,13 +79,16 @@ export function buildIntroQuiz(
   targets = shuffle(targets)
 
   return targets.map(target => {
-    // Build 3-choice: target + 2 distractors
-    const distractorPool = [
-      ...lessonSpecies.filter(s => s.id !== target.id),
+    // Keep at least two current-lesson birds in the options when possible.
+    const lessonDistractors = pickRandom(
+      lessonSpecies.filter(s => s.id !== target.id),
+      1,
+    )
+    const remainingDistractorPool = shuffle([
+      ...lessonSpecies.filter(s => s.id !== target.id && !lessonDistractors.some(d => d.id === s.id)),
       ...previouslyIntroduced.filter(s => s.id !== target.id),
-    ]
-    const distractors = pickRandom(distractorPool, 2)
-    const choices = shuffle([target, ...distractors])
+    ])
+    const choices = buildThreeChoices(target, lessonDistractors, remainingDistractorPool)
 
     // Pick a random song clip for the question
     const allClips = [...target.audio_clips.songs, ...target.audio_clips.calls]
@@ -88,9 +107,8 @@ export function buildReviewQuiz(
   const targets = pickRandom(introducedSpecies, count)
 
   return targets.map(target => {
-    const distractorPool = introducedSpecies.filter(s => s.id !== target.id)
-    const distractors = pickRandom(distractorPool, 2)
-    const choices = shuffle([target, ...distractors])
+    const distractorPool = shuffle(introducedSpecies.filter(s => s.id !== target.id))
+    const choices = buildThreeChoices(target, distractorPool, [])
 
     const allClips = [...target.audio_clips.songs, ...target.audio_clips.calls]
     const clip = allClips[Math.floor(Math.random() * allClips.length)] ?? target.audio_clips.songs[0]

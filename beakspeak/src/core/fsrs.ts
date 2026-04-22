@@ -1,4 +1,4 @@
-import { createEmptyCard, fsrs, generatorParameters, Rating, type Card } from 'ts-fsrs'
+import { createEmptyCard, fsrs, generatorParameters, Rating, type Card, type Grade } from 'ts-fsrs'
 import type { UserProgress, ExerciseType } from './types'
 
 const params = generatorParameters({
@@ -55,7 +55,7 @@ export function createNewProgress(speciesId: string): UserProgress {
   }
 }
 
-export function scheduleReview(progress: UserProgress, rating: Rating): UserProgress {
+export function scheduleReview(progress: UserProgress, rating: Grade): UserProgress {
   const card = progressToCard(progress)
   const now = new Date()
   const result = scheduler.repeat(card, now)
@@ -86,7 +86,7 @@ export function ratingFromOutcome(
   correct: boolean,
   responseTimeMs: number,
   exerciseType: ExerciseType,
-): Rating {
+): Grade {
   if (!correct) return Rating.Again
 
   const { fast, slow } = THRESHOLDS[exerciseType]

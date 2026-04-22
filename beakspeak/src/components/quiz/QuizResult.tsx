@@ -38,9 +38,9 @@ export default function QuizResult({ answers, onDone }: Props) {
             Needs More Practice
           </h3>
           <div className="space-y-2">
-            {needsPractice.map(a => (
+            {needsPractice.map((a, index) => (
               <div
-                key={a.species.id}
+                key={`${a.species.id}-${index}`}
                 className="flex items-center gap-3 p-3 bg-error/5 border border-error/20 rounded-xl"
               >
                 <img

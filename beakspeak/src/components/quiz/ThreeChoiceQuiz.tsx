@@ -12,7 +12,7 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
   const audioPlayer = useAppStore(s => s.audioPlayer)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [showingResult, setShowingResult] = useState(false)
-  const startTime = useRef(Date.now())
+  const startTime = useRef(0)
   const playState = useAudioStateForUrl(audioPlayer, item.clip.audio_url)
 
   // Auto-play clip on mount

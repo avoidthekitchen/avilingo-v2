@@ -10,8 +10,18 @@ function shuffle<T>(array: T[]): T[] {
   return result
 }
 
-function pickRandom<T>(array: T[], count: number): T[] {
-  return shuffle(array).slice(0, count)
+function buildThreeChoices(target: Species, distractors: Species[]): Species[] {
+  const seen = new Set<string>([target.id])
+  const uniqueDistractors: Species[] = []
+
+  for (const distractor of distractors) {
+    if (seen.has(distractor.id)) continue
+    seen.add(distractor.id)
+    uniqueDistractors.push(distractor)
+    if (uniqueDistractors.length === 2) break
+  }
+
+  return shuffle([target, ...uniqueDistractors])
 }
 
 export function selectExerciseType(progress: UserProgress): ExerciseType {
@@ -45,10 +55,12 @@ export function selectDistractors(
   const distractors: Species[] = []
   for (const s of shuffle(confuserPool)) {
     if (distractors.length >= distractorCount) break
+    if (distractors.some(d => d.id === s.id)) continue
     distractors.push(s)
   }
   for (const s of shuffle(otherPool)) {
     if (distractors.length >= distractorCount) break
+    if (distractors.some(d => d.id === s.id)) continue
     distractors.push(s)
   }
 
@@ -177,7 +189,7 @@ export function buildQuizSession(
         targetSpecies: species,
         exerciseType: 'three_choice',
         clip,
-        choices: shuffle([species, ...distractors]),
+        choices: buildThreeChoices(species, distractors),
       })
     } else {
       items.push(buildSameDifferentItem(species, introduced, confuserPairs, lastPlayedClipId))
@@ -196,7 +208,7 @@ export function buildQuizSession(
         targetSpecies: species,
         exerciseType: 'three_choice',
         clip,
-        choices: shuffle([species, ...distractors]),
+        choices: buildThreeChoices(species, distractors),
       })
     }
   }

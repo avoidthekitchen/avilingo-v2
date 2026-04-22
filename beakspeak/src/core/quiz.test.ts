@@ -104,4 +104,25 @@ describe('buildQuizSession', () => {
     expect(session.length).toBeGreaterThanOrEqual(8)
     expect(session.length).toBeLessThanOrEqual(10)
   })
+
+  it('never returns duplicate choices in three-choice items', () => {
+    const speciesIds = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+    const allSpecies = speciesIds.map(makeSpecies)
+    const progress = new Map(speciesIds.map(id => [id, makeProgress(id)]))
+    const manifest = {
+      version: '0.1.0', tier: 1, region: 'Test', target_species_count: 8,
+      curation_date: '2026-01-01', data_sources: {},
+      species: allSpecies,
+      confuser_pairs: [],
+      lesson_plan: { description: 'test', lessons: [] },
+    } as Manifest
+
+    const session = buildQuizSession(progress, manifest, new Map())
+
+    session
+      .filter(item => item.exerciseType === 'three_choice' && item.choices)
+      .forEach(item => {
+        expect(new Set(item.choices!.map(choice => choice.id)).size).toBe(item.choices!.length)
+      })
+  })
 })

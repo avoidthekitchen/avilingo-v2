@@ -3,7 +3,7 @@ import { computeSpectrogram } from './spectrogram'
 
 function makeAudioBuffer(samples: Float32Array, sampleRate: number) {
   return {
-    getChannelData: (_channel: number) => samples,
+    getChannelData: () => samples,
     length: samples.length,
     duration: samples.length / sampleRate,
     sampleRate,

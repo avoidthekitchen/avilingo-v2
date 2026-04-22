@@ -107,7 +107,7 @@ describe('buildIntroQuiz', () => {
   const lessonSpecies = ['a', 'b', 'c'].map(makeSpecies)
 
   it('generates quiz items for the lesson species', () => {
-    const items = buildIntroQuiz(lessons[0], lessonSpecies, [], lessonSpecies)
+    const items = buildIntroQuiz(lessonSpecies, [])
     expect(items.length).toBeGreaterThanOrEqual(3)
     expect(items.length).toBeLessThanOrEqual(5)
     items.forEach(item => {
@@ -118,7 +118,7 @@ describe('buildIntroQuiz', () => {
 
   it('uses previously introduced species as distractors when available', () => {
     const previouslyIntroduced = ['x', 'y', 'z'].map(makeSpecies)
-    const items = buildIntroQuiz(lessons[0], lessonSpecies, previouslyIntroduced, [...lessonSpecies, ...previouslyIntroduced])
+    const items = buildIntroQuiz(lessonSpecies, previouslyIntroduced)
     items.forEach(item => {
       // Correct answer must be in choices
       expect(item.choices.map(c => c.id)).toContain(item.targetSpecies.id)
@@ -127,6 +127,28 @@ describe('buildIntroQuiz', () => {
       item.choices.forEach(c => {
         expect(allIds).toContain(c.id)
       })
+    })
+  })
+
+  it('keeps at least two current-lesson birds in each set of choices', () => {
+    const previouslyIntroduced = ['x', 'y', 'z', 'w'].map(makeSpecies)
+    const items = buildIntroQuiz(lessonSpecies, previouslyIntroduced)
+
+    items.forEach(item => {
+      const lessonChoiceCount = item.choices.filter(choice =>
+        lessonSpecies.some(species => species.id === choice.id),
+      ).length
+
+      expect(lessonChoiceCount).toBeGreaterThanOrEqual(2)
+    })
+  })
+
+  it('never returns duplicate choices', () => {
+    const previouslyIntroduced = ['x', 'y', 'z', 'w'].map(makeSpecies)
+    const items = buildIntroQuiz(lessonSpecies, previouslyIntroduced)
+
+    items.forEach(item => {
+      expect(new Set(item.choices.map(choice => choice.id)).size).toBe(item.choices.length)
     })
   })
 })
@@ -141,5 +163,14 @@ describe('buildReviewQuiz', () => {
     const items = buildReviewQuiz(introduced)
     expect(items.length).toBeGreaterThanOrEqual(2)
     expect(items.length).toBeLessThanOrEqual(3)
+  })
+
+  it('never returns duplicate choices', () => {
+    const introduced = ['a', 'b', 'c', 'd', 'e'].map(makeSpecies)
+    const items = buildReviewQuiz(introduced)
+
+    items.forEach(item => {
+      expect(new Set(item.choices.map(choice => choice.id)).size).toBe(item.choices.length)
+    })
   })
 })

@@ -87,14 +87,115 @@ uv run download_media.py
 
 Audio and photos are gitignored; `manifest.json` and `tier1_seattle_birds_populated.json` are checked in.
 
-## Running tests
+## Testing
+
+BeakSpeak has four practical validation layers:
+
+- **Type checking** with `tsc`
+- **Linting** with `eslint`
+- **Unit tests** with `vitest`
+- **Mobile end-to-end tests** with Playwright
+
+GitHub Actions runs the same checks in automation, but `test:ci` is mainly a CI mirror and is not the default local workflow.
+
+### Install test tooling
 
 ```bash
 cd beakspeak
-npx vitest run        # 71 unit tests across core modules
+npm install
+npx playwright install chromium
 ```
 
-Tests cover: manifest loading, lesson gating/progression, FSRS rating logic, quiz session building.
+### Type checking
+
+```bash
+cd beakspeak
+npm run typecheck
+```
+
+### Linting
+
+```bash
+cd beakspeak
+npm run lint
+```
+
+### Unit tests
+
+```bash
+cd beakspeak
+npm run test:unit
+```
+
+`npm run test:unit` is the same Vitest suite as `npx vitest run`.
+
+Current unit coverage includes manifest loading, lesson gating/progression, FSRS scheduling, quiz session building, audio adapter behavior, and component-level interactions.
+
+### Mobile end-to-end test
+
+```bash
+cd beakspeak
+npm run test:e2e
+```
+
+Run this after the flow is implemented and you want browser-level confirmation that the mobile path still works.
+
+The Playwright suite runs at a mobile viewport and currently covers:
+
+- resetting progress to a clean state
+- completing Lesson 1
+- finishing the intro quiz
+- verifying progress persistence
+- starting the review flow
+
+Reusable E2E helpers live in `beakspeak/e2e/fixtures.ts` so future browser tests can compose app flows cleanly.
+
+### Manual testing
+
+If you want to sanity-check the app yourself, the usual sequence is:
+
+```bash
+cd beakspeak
+npm run dev
+```
+
+Then verify the main mobile flows in the browser:
+
+- open the Learn tab
+- complete Lesson 1
+- finish the intro quiz
+- check that progress persists after a reload
+- open the Progress tab and start a review session
+
+### Full local CI-equivalent run
+
+```bash
+cd beakspeak
+npm run test:ci
+```
+
+This runs:
+
+- `npm run typecheck`
+- `npm run lint`
+- `npm run test:unit`
+- `npm run test:e2e`
+
+Use this only when you explicitly want the full local mirror of CI.
+
+### Continuous integration
+
+GitHub Actions workflow: `.github/workflows/beakspeak-ci.yml`
+
+CI currently performs:
+
+- dependency install
+- Playwright Chromium install
+- typecheck
+- lint
+- Vitest
+- mobile Playwright E2E
+- Playwright report artifact upload when present
 
 ## Deploying
 
