@@ -68,7 +68,7 @@ python3 admin/server.py
 **Workflow:**
 1. Run `uv run populate_content.py` to fetch 6+6 candidates per species (top 3 songs + top 2 calls are selected by default)
 2. Run `uv run download_media.py` to download all candidates locally and build `manifest.json`
-3. Optionally generate `*.BirdNET.results.csv` sidecars for the local `.ogg` clips with the external `birdnet-analyzer` CLI
+3. Optionally generate `*.BirdNET.results.csv` sidecars for the local `.ogg` clips with the external `birdnet-analyze` CLI in the BirdNET repo's own environment
 4. Run `uv run download_media.py` again to apply BirdNET-assisted re-trimming when those CSVs exist
 5. Open the admin and review — the sidebar shows `selected/total` per species; toggle "In app" on any clip to include or exclude it
 6. Selections save immediately to `tier1_seattle_birds_populated.json`
@@ -90,6 +90,26 @@ uv run download_media.py
 
 # Manifest/media rebuild (after changing selections in the admin or refreshing BirdNET CSVs)
 uv run download_media.py
+```
+
+### Keeping BirdNET separate
+
+To avoid installing BirdNET's TensorFlow stack into `avilingo-v2`, keep BirdNET in its own `uv` environment and point this repo at that executable:
+
+```bash
+cd /Users/mistercheese/Code/BirdNET-Analyzer
+uv sync
+
+export BIRDNET_VENV=/Users/mistercheese/Code/BirdNET-Analyzer/.venv
+# or export BIRDNET_ANALYZE_BIN=/absolute/path/to/birdnet-analyze
+```
+
+From Python, use [`birdnet_runner.py`](./birdnet_runner.py):
+
+```python
+from birdnet_runner import run_birdnet_analyze
+
+run_birdnet_analyze(["--help"])
 ```
 
 Audio and photos are gitignored; `manifest.json` and `tier1_seattle_birds_populated.json` are checked in.
