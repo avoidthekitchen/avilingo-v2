@@ -175,3 +175,19 @@ cd beakspeak && npx vitest run
 bash scripts/build-site.sh
 npx --prefix beakspeak wrangler deploy
 ```
+
+## Testing Guidance For Agents
+
+Use the lightest test layer that gives confidence for the change, and escalate only when the change reaches a full user-facing flow.
+
+- For most code changes in `beakspeak/src/`, run:
+  - `cd beakspeak && npm run typecheck`
+  - `cd beakspeak && npm run lint`
+  - relevant unit tests via `cd beakspeak && npm run test:unit`
+- Prefer targeted unit tests while iterating when you know the affected area. Run the full unit suite before finishing if the change touches shared logic, state management, quiz building, lesson flow, or reused components.
+- Run mobile E2E with `cd beakspeak && npm run test:e2e` only after a user-facing flow is complete enough to exercise end-to-end. Do not run E2E after every small edit.
+- Run E2E earlier than end-of-feature if the task is specifically about browser behavior, interaction bugs, responsive/mobile layout, persistence, navigation, or fixing a previously observed runtime issue.
+- Do not run `cd beakspeak && npm run test:ci` by default. That command is a convenience mirror of CI, but the full CI stack is intended to run in GitHub Actions. Run it locally only if the user explicitly asks for it or if you are debugging CI-specific behavior.
+- For docs-only, content-only, or clearly isolated non-runtime changes, it is acceptable to skip some layers if they are irrelevant. State explicitly what you did and did not run.
+- When adding or modifying Playwright tests, make sure the changed spec passes locally before finishing.
+- Treat browser console errors surfaced by the E2E fixture as real regressions unless there is a documented reason to ignore them.

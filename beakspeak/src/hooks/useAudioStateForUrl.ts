@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useCallback, useSyncExternalStore } from 'react'
 import type { AudioPlayer, AudioState } from '../adapters/audio'
 
 /**
@@ -6,17 +6,14 @@ import type { AudioPlayer, AudioState } from '../adapters/audio'
  * Returns 'idle' whenever a different clip is active.
  */
 export function useAudioStateForUrl(audioPlayer: AudioPlayer, url: string): AudioState {
-  const [state, setState] = useState<AudioState>(() =>
-    audioPlayer.getActiveUrl() === url ? audioPlayer.getState() : 'idle',
+  const getSnapshot = useCallback(
+    (): AudioState => (audioPlayer.getActiveUrl() === url ? audioPlayer.getState() : 'idle'),
+    [audioPlayer, url],
   )
-  useEffect(() => {
-    // Re-sync on url change — useState initializer only runs once on mount
-    setState(audioPlayer.getActiveUrl() === url ? audioPlayer.getState() : 'idle')
-    const unsub = audioPlayer.onStateChange((s) => {
-      const activeUrl = audioPlayer.getActiveUrl()
-      setState(activeUrl === url ? s : 'idle')
-    })
-    return unsub
-  }, [audioPlayer, url])
-  return state
+  const subscribe = useCallback(
+    (onStoreChange: () => void) => audioPlayer.onStateChange(() => onStoreChange()),
+    [audioPlayer],
+  )
+
+  return useSyncExternalStore(subscribe, getSnapshot, getSnapshot)
 }

@@ -21,11 +21,25 @@ export default function BirdCard({ species }: Props) {
   const [activeClipType, setActiveClipType] = useState<'songs' | 'calls'>('songs')
   const [activeClipIndex, setActiveClipIndex] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
-  const [, setSpectrogramRevision] = useState(0)
 
   const activeClips = species.audio_clips[activeClipType]
   const activeClip = activeClips[activeClipIndex] ?? activeClips[0]
   const activeClipUrl = activeClip?.audio_url ?? null
+
+  const [spectrogramCache, setSpectrogramCache] = useState(() => {
+    const initialCache = new Map<string, SpectrogramData>()
+    if (!activeClipUrl) return initialCache
+
+    const buffer = audioPlayer.getBuffer(activeClipUrl)
+    if (!buffer) return initialCache
+
+    initialCache.set(activeClipUrl, computeSpectrogram(buffer))
+    return initialCache
+  })
+  const spectrogramCacheRef = useRef(spectrogramCache)
+  useEffect(() => {
+    spectrogramCacheRef.current = spectrogramCache
+  }, [spectrogramCache])
 
   const activeUrl = audioPlayer.getActiveUrl()
   const isPlaying = activeUrl != null && activeUrl === activeClipUrl
@@ -36,25 +50,25 @@ export default function BirdCard({ species }: Props) {
     activeClipUrlRef.current = activeClipUrl
   }, [activeClipUrl])
 
-  // Cache of pre-computed spectrogram data keyed by clip URL
-  const spectrogramCache = useRef(new Map<string, SpectrogramData>())
-
   const cacheSpectrogramForUrl = useCallback((url: string | null, buffer?: AudioBuffer | null) => {
-    if (!url) return null
-    const cached = spectrogramCache.current.get(url)
-    if (cached) return cached
+    if (!url) return
+    if (spectrogramCacheRef.current.has(url)) return
 
-    const resolvedBuffer = buffer ?? audioPlayer.getBuffer(url)
-    if (!resolvedBuffer) return null
+    const resolvedBuffer = buffer === undefined ? audioPlayer.getBuffer(url) : buffer
+    if (!resolvedBuffer) return
 
-    const data = computeSpectrogram(resolvedBuffer)
-    spectrogramCache.current.set(url, data)
-    return data
+    setSpectrogramCache(prev => {
+      if (prev.has(url)) return prev
+
+      const next = new Map(prev)
+      next.set(url, computeSpectrogram(resolvedBuffer))
+      return next
+    })
   }, [audioPlayer])
 
   const spectrogramData = activeClipUrl == null
     ? EMPTY_SPECTROGRAM
-    : cacheSpectrogramForUrl(activeClipUrl) ?? EMPTY_SPECTROGRAM
+    : spectrogramCache.get(activeClipUrl) ?? EMPTY_SPECTROGRAM
   const duration = spectrogramData.duration
 
   // Prefetch ALL clips on mount and pre-compute spectrograms as buffers settle
@@ -69,12 +83,7 @@ export default function BirdCard({ species }: Props) {
     for (const url of allUrls) {
       void audioPlayer.prefetch(url).then(buffer => {
         if (cancelled) return
-        const data = cacheSpectrogramForUrl(url, buffer)
-        if (!data) return
-
-        if (url === activeClipUrlRef.current) {
-          setSpectrogramRevision(prev => prev + 1)
-        }
+        cacheSpectrogramForUrl(url, buffer)
       })
     }
 
@@ -94,18 +103,14 @@ export default function BirdCard({ species }: Props) {
       if (songIdx >= 0) {
         setActiveClipType('songs')
         setActiveClipIndex(songIdx)
-        if (cacheSpectrogramForUrl(url) && url === activeClipUrlRef.current) {
-          setSpectrogramRevision(prev => prev + 1)
-        }
+        cacheSpectrogramForUrl(url)
         return
       }
       const callIdx = species.audio_clips.calls.findIndex(c => c.audio_url === url)
       if (callIdx >= 0) {
         setActiveClipType('calls')
         setActiveClipIndex(callIdx)
-        if (cacheSpectrogramForUrl(url) && url === activeClipUrlRef.current) {
-          setSpectrogramRevision(prev => prev + 1)
-        }
+        cacheSpectrogramForUrl(url)
       }
     })
     return unsub
@@ -116,10 +121,7 @@ export default function BirdCard({ species }: Props) {
     const unsub = audioPlayer.onProgress((time) => {
       setCurrentTime(time)
     })
-    return () => {
-      unsub()
-      setCurrentTime(0)
-    }
+    return unsub
   }, [audioPlayer])
 
   // Stop playback when the card unmounts (e.g. ← Back button bypasses swipe handlers)

@@ -139,9 +139,9 @@ describe('WebAudioPlayer', () => {
     })
 
     it('tracks the requested URL while a clip is loading', async () => {
-      let resolveFetch: ((value: Response | PromiseLike<Response>) => void) | null = null
+      let resolveFetch!: (value: Response | PromiseLike<Response>) => void
       vi.stubGlobal('fetch', vi.fn(() => new Promise(resolve => {
-        resolveFetch = resolve as (value: Response | PromiseLike<Response>) => void
+        resolveFetch = resolve as typeof resolveFetch
       })))
 
       const player = new WebAudioPlayer()
@@ -150,7 +150,7 @@ describe('WebAudioPlayer', () => {
       expect(player.getState()).toBe('loading')
       expect(player.getActiveUrl()).toBe('https://example.com/song.ogg')
 
-      resolveFetch?.({
+      resolveFetch({
         ok: true,
         arrayBuffer: () => Promise.resolve(new ArrayBuffer(8)),
       } as Response)
@@ -195,9 +195,9 @@ describe('WebAudioPlayer', () => {
     })
 
     it('does not restart playback after stop() cancels an in-flight play()', async () => {
-      let resolveFetch: ((value: Response | PromiseLike<Response>) => void) | null = null
+      let resolveFetch!: (value: Response | PromiseLike<Response>) => void
       vi.stubGlobal('fetch', vi.fn(() => new Promise(resolve => {
-        resolveFetch = resolve as (value: Response | PromiseLike<Response>) => void
+        resolveFetch = resolve as typeof resolveFetch
       })))
 
       const player = new WebAudioPlayer()
@@ -208,7 +208,7 @@ describe('WebAudioPlayer', () => {
       expect(player.getState()).toBe('loading')
 
       player.stop()
-      resolveFetch?.({
+      resolveFetch({
         ok: true,
         arrayBuffer: () => Promise.resolve(new ArrayBuffer(8)),
       } as Response)

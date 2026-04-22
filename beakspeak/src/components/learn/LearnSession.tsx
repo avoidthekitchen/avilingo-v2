@@ -25,10 +25,7 @@ export default function LearnSession({ lesson, onComplete }: Props) {
   const [phase, setPhase] = useState<Phase>(hasReviewPhase ? 'review' : 'cards')
   const [cardIndex, setCardIndex] = useState(0)
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null)
-
-  if (!manifest) return null
-
-  const lessonSpecies = getSpeciesByIds(manifest, lesson.species)
+  const lessonSpecies = manifest ? getSpeciesByIds(manifest, lesson.species) : []
 
   const handleSwipeRight = useCallback(() => {
     if (cardIndex < lessonSpecies.length - 1) {
@@ -55,6 +52,8 @@ export default function LearnSession({ lesson, onComplete }: Props) {
   const handleReviewComplete = useCallback(() => {
     setPhase('cards')
   }, [])
+
+  if (!manifest) return null
 
   // Phase: forward testing review
   if (phase === 'review') {
@@ -153,7 +152,7 @@ export default function LearnSession({ lesson, onComplete }: Props) {
 
   // Phase: intro quiz
   if (phase === 'quiz') {
-    const quizItems = buildIntroQuiz(lesson, lessonSpecies, introducedSpecies, manifest.species)
+    const quizItems = buildIntroQuiz(lessonSpecies, introducedSpecies)
     return (
       <div className="flex flex-col h-full">
         <div className="p-4 bg-primary/10 text-center">

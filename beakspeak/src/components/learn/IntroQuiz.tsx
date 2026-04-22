@@ -30,6 +30,16 @@ export default function IntroQuiz({ items, onComplete }: Props) {
     return () => { audioPlayer.stop() }
   }, [audioPlayer])
 
+  const advance = useCallback(() => {
+    if (currentIndex + 1 >= items.length) {
+      onComplete([...results])
+      return
+    }
+    setCurrentIndex(prev => prev + 1)
+    setSelectedId(null)
+    setShowingResult(false)
+  }, [currentIndex, items.length, onComplete, results])
+
   const handleSelect = useCallback((speciesId: string) => {
     if (showingResult || !current) return
 
@@ -42,17 +52,7 @@ export default function IntroQuiz({ items, onComplete }: Props) {
       // Auto-advance after 1.5s for correct answers
       setTimeout(() => advance(), 1500)
     }
-  }, [showingResult, current])
-
-  const advance = useCallback(() => {
-    if (currentIndex + 1 >= items.length) {
-      onComplete([...results])
-      return
-    }
-    setCurrentIndex(prev => prev + 1)
-    setSelectedId(null)
-    setShowingResult(false)
-  }, [currentIndex, items.length, onComplete, results])
+  }, [advance, showingResult, current])
 
   const feedbackRef = useRef<HTMLDivElement>(null)
   const isCorrect = !current || selectedId === current.targetSpecies.id
