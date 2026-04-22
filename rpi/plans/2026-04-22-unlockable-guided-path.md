@@ -190,6 +190,71 @@ The default learning experience is intentionally guided: lessons unlock sequenti
 - **Only one durable bypass side effect:** Unlocking ahead can mark skipped lessons learned immediately. Practice and redo are both side-effect-free.
 - **Consistent session semantics:** `Back` exits lesson study; `Quit` exits quiz sessions; warm-up exists only for normal lesson launches.
 
+## Module Design
+
+### LearnTab
+
+- **Name:** `LearnTab`
+- **Responsibility:** Own lesson-list interaction and route each lesson click into normal, unlock, or redo study flow.
+- **Interface:** Reads manifest/progress-derived lesson state from the store; computes lesson availability/completion; launches `LearnSession` with `{ lesson, mode }`; opens and dismisses `UnlockDialog`; applies skipped-lesson auto-completion on unlock confirmation while preserving existing progress.
+- **Tested:** Yes
+
+### UnlockDialog
+
+- **Name:** `UnlockDialog`
+- **Responsibility:** Present the locked-lesson guardrail explanation and the exact consequences of bypassing it, then collect an explicit confirm or cancel decision.
+- **Interface:** Accepts structured lock reason plus precomputed consequence copy inputs from the learn UI layer; renders reason-specific title/body/CTA; exposes confirm and dismiss callbacks; does not mutate state directly.
+- **Tested:** Yes
+
+### Unlock Consequence Copy Helper
+
+- **Name:** `unlock consequence copy helper`
+- **Responsibility:** Convert skipped-lesson context into user-facing modal copy without leaking UI formatting rules into core lesson logic.
+- **Interface:** Accepts skipped lessons/species counts and returns consequence text fragments for the dialog, including exact lesson lists for small skips and range summaries for larger skips.
+- **Tested:** Yes
+
+### LearnSession
+
+- **Name:** `LearnSession`
+- **Responsibility:** Run a lesson session from start to finish in `normal`, `unlock`, or `redo` mode.
+- **Interface:** Accepts `lesson`, `mode`, and `onComplete`; decides whether to show warm-up, cards, intro quiz, and completion state; introduces selected lesson species only in `normal` and `unlock`; keeps redo side-effect-free apart from local session state.
+- **Tested:** Yes
+
+### IntroQuiz
+
+- **Name:** `IntroQuiz`
+- **Responsibility:** Render the lesson quiz experience and optionally own the lesson-flow back navigation chrome.
+- **Interface:** Accepts quiz items, `onComplete`, and optional `onBack`; when `onBack` is present it renders a top-left `Back` action that exits the lesson session rather than skipping quiz progress.
+- **Tested:** Yes
+
+### QuizTab
+
+- **Name:** `QuizTab`
+- **Responsibility:** Decide whether the user should see review, practice, learning, or relearning empty-state actions when opening the quiz tab.
+- **Interface:** Reads introduced species, due reviews, relearning state, lesson availability context, and completion context from the store; launches `QuizSession` with `review` or `practice` mode; routes to Learn when that is the truthful primary action.
+- **Tested:** Yes
+
+### QuizSession
+
+- **Name:** `QuizSession`
+- **Responsibility:** Run a review or practice quiz session while applying the correct side-effect model for the selected mode.
+- **Interface:** Accepts `mode` and `onComplete`; builds quiz items using existing quiz construction; in `review` mode schedules progress updates and confusion logging; in `practice` mode suppresses persistent writes and adds in-session schedule-neutral labeling.
+- **Tested:** Yes
+
+### QuizResult
+
+- **Name:** `QuizResult`
+- **Responsibility:** Summarize quiz outcomes with copy that matches the session mode.
+- **Interface:** Accepts session answers, mode, and done callback; renders existing success/failure result states plus explicit schedule-neutral disclaimer text in practice mode.
+- **Tested:** Yes
+
+### core/lesson lock-reason helper
+
+- **Name:** `lock reason helper`
+- **Responsibility:** Centralize lesson-lock domain logic and expose structured reason data to richer callers.
+- **Interface:** Accepts lesson number, completed lesson numbers, and all progress; returns a structured reason that distinguishes prerequisite lock vs relearning lock, with relearning taking precedence; `isLessonAvailable()` delegates to this helper.
+- **Tested:** Yes
+
 ## Files Changed
 
 | File | Change |
@@ -214,6 +279,79 @@ The default learning experience is intentionally guided: lessons unlock sequenti
 | `beakspeak/src/core/quiz.ts` | Practice reuses normal quiz construction |
 | `beakspeak/src/store/appStore.ts` | No new persistent “manual unlock” or session-mode state is needed |
 | `beakspeak/src/core/types.ts` | Session modes stay local to UI components |
+
+## Testing Plan
+
+### LearnTab
+
+- Add component tests for clicking an available incomplete lesson, a locked lesson, and a completed lesson.
+- Verify locked lessons no longer use disabled button behavior and instead open `UnlockDialog`.
+- Verify completed lessons launch redo mode even when relearning exists.
+- Verify unlock confirmation auto-completes only skipped intervening lessons and preserves existing progress on already-introduced species.
+
+### UnlockDialog
+
+- Add component tests for prerequisite-only, relearning-only, and combined lock reasons.
+- Verify title, CTA label, dismissal controls, and consequence copy all match the resolved reason.
+- Verify outside-dismiss and `Never mind` both close the modal without mutating progress.
+
+### Unlock Consequence Copy Helper
+
+- Add pure tests for exact lesson list formatting when skipping up to 3 lessons.
+- Add pure tests for range summary formatting when skipping more than 3 lessons.
+- Add pure tests for the zero-auto-complete case where the lesson opens but nothing is marked learned yet.
+
+### LearnSession
+
+- Add component tests for `normal`, `unlock`, and `redo` mode phase progression.
+- Verify warm-up appears only in `normal` mode and is skipped in `unlock` and `redo`.
+- Verify `introduceSpecies()` is called on completion for `normal` and `unlock`, but not for `redo`.
+- Verify redo completion copy and primary button label are schedule-neutral and lesson-specific.
+
+### IntroQuiz
+
+- Add component tests for the optional `onBack` prop.
+- Verify the header `Back` action renders only when `onBack` is provided.
+- Verify `Back` exits the lesson flow rather than advancing or bypassing the quiz.
+
+### QuizTab
+
+- Add component tests for all empty-state branches:
+  - due birds available
+  - no birds introduced
+  - no birds due but guided path available
+  - no birds due and relearning blocks learning
+  - no birds due and all lessons complete
+  - fewer than 3 introduced birds
+- Verify `Practice Anyway` is never shown when due birds exist.
+- Verify CTA hierarchy remains `Learn More Birds` primary and `Practice Anyway` secondary when both are valid.
+
+### QuizSession
+
+- Add component tests for `review` and `practice` mode.
+- Verify `practice` mode reuses the existing quiz mix but performs no persistent writes.
+- Verify `review` mode still calls scheduling and confusion logging exactly as before.
+- Verify practice-mode header labeling is present and the exit label remains `Quit`.
+
+### QuizResult
+
+- Add component tests for practice-mode result copy.
+- Verify the practice result explicitly states that the schedule was not changed.
+- Verify the existing incorrect-answer heading `Needs More Practice` remains unchanged across modes.
+
+### core/lesson lock-reason helper
+
+- Add unit tests for prerequisite-only lock, relearning-only lock, and combined conditions.
+- Verify relearning takes precedence over prerequisites.
+- Verify lesson 1 remains available when no relearning birds exist.
+- Verify `isLessonAvailable()` still returns the correct boolean when delegating to the structured helper.
+
+### Regression Scope
+
+- Run `cd beakspeak && npm run typecheck`.
+- Run `cd beakspeak && npm run lint`.
+- Run targeted unit/component tests while iterating, then the relevant unit suite before finishing.
+- Do not run E2E by default for this plan unless the implementation introduces browser-only regressions that unit/component tests cannot cover cleanly.
 
 ## Order of Implementation
 
