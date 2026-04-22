@@ -392,6 +392,88 @@
   }
   .remarks-row span { color: var(--text); }
 
+  .birdnet-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 12px;
+    background: rgba(79, 142, 247, 0.08);
+    border: 1px solid rgba(79, 142, 247, 0.18);
+    border-radius: 6px;
+  }
+  .birdnet-heading {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+  }
+  .birdnet-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+  }
+  .birdnet-status {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .birdnet-status-ok {
+    background: rgba(52, 211, 153, 0.14);
+    color: var(--green);
+  }
+  .birdnet-status-miss {
+    background: rgba(248, 113, 113, 0.14);
+    color: var(--red);
+  }
+  .birdnet-status-neutral {
+    background: var(--surface2);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+  }
+  .birdnet-summary {
+    color: var(--text);
+  }
+  .birdnet-label {
+    color: var(--text-dim);
+    font-size: 11px;
+    min-width: 86px;
+  }
+  .birdnet-species-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .birdnet-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--text);
+  }
+  .birdnet-chip-target {
+    border-color: rgba(52, 211, 153, 0.35);
+    background: rgba(52, 211, 153, 0.10);
+  }
+  .birdnet-chip-other {
+    border-color: rgba(248, 113, 113, 0.20);
+  }
+  .birdnet-loading .birdnet-summary,
+  .birdnet-empty .birdnet-summary {
+    color: var(--text-dim);
+  }
+
   /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -426,6 +508,7 @@ const audioState = {}; // xcId -> { audio, playing }
 const wikiAudioState = {}; // wid -> { audio, playing }
 // Per-clip spectrogram cache
 const spectrograms = {}; // xcId -> ImageData or 'loading'
+const birdNetSummaries = {}; // `${speciesId}:${xcId}` -> summary
 
 // ────────────────────────────────────────────────
 // Boot
@@ -645,6 +728,13 @@ function buildClipCard(sp, clip) {
   const remarksHtml = clip.remarks
     ? `<div class="remarks-row">💬 <span>${escHtml(clip.remarks)}</span></div>` : '';
 
+  const birdNetHtml = `
+    <div class="birdnet-panel birdnet-loading" data-birdnet="${xcId}">
+      <div class="birdnet-heading">BirdNET</div>
+      <div class="birdnet-summary">Loading detections…</div>
+    </div>
+  `;
+
   // Animal seen
   const animalSeen = (clip.animal_seen || '').toLowerCase() === 'yes'
     ? `<span class="meta-item">👁 seen</span><span class="meta-sep">·</span>` : '';
@@ -678,6 +768,7 @@ function buildClipCard(sp, clip) {
     </div>
 
     ${remarksHtml}
+    ${birdNetHtml}
 
     <div class="clip-links">
       <a href="${clip.xc_url}" target="_blank" rel="noopener">xeno-canto XC${xcId} ↗</a>
@@ -700,6 +791,7 @@ function buildClipCard(sp, clip) {
 
   // Pre-render spectrogram without requiring play
   renderSpectrogram(xcId, audioSrc, card);
+  renderBirdNetSummary(sp, clip, card);
 
   return card;
 }
@@ -986,7 +1078,183 @@ function shortLicense(url) {
 }
 
 function escHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function birdNetKey(sp, clip) {
+  return `${sp.id}:${String(clip.xc_id)}`;
+}
+
+function birdNetCsvUrl(sp, clip) {
+  return `/audio/${sp.id}/${String(clip.xc_id)}.BirdNET.results.csv`;
+}
+
+function parseBirdNetCsv(text) {
+  const lines = text.trim().split(/\r?\n/).filter(Boolean);
+  if (lines.length < 2) return [];
+
+  return lines.slice(1).map(line => {
+    const parts = line.split(',');
+    if (parts.length < 6) return null;
+    return {
+      start: Number.parseFloat(parts[0]),
+      end: Number.parseFloat(parts[1]),
+      scientificName: parts[2],
+      commonName: parts[3],
+      confidence: Number.parseFloat(parts[4]),
+      file: parts.slice(5).join(','),
+    };
+  }).filter(row => row && Number.isFinite(row.start) && Number.isFinite(row.end) && Number.isFinite(row.confidence));
+}
+
+function mergeRanges(rows) {
+  const ranges = rows
+    .map(row => [row.start, row.end])
+    .sort((a, b) => a[0] - b[0]);
+
+  const merged = [];
+  for (const [start, end] of ranges) {
+    const last = merged[merged.length - 1];
+    if (!last || start > last[1] + 0.25) {
+      merged.push([start, end]);
+    } else {
+      last[1] = Math.max(last[1], end);
+    }
+  }
+  return merged;
+}
+
+function formatRanges(ranges) {
+  if (!ranges.length) return 'none';
+  return ranges.map(([start, end]) => `${start.toFixed(1)}-${end.toFixed(1)}s`).join(', ');
+}
+
+function summarizeBirdNet(sp, rows) {
+  const isTargetRow = row =>
+    row.commonName === sp.common_name || row.scientificName === sp.scientific_name;
+
+  const targetRows = rows.filter(isTargetRow);
+  const speciesMap = new Map();
+
+  for (const row of rows) {
+    const key = `${row.commonName}||${row.scientificName}`;
+    const existing = speciesMap.get(key) || {
+      commonName: row.commonName,
+      scientificName: row.scientificName,
+      maxConfidence: 0,
+      rows: [],
+      isTarget: false,
+    };
+    existing.maxConfidence = Math.max(existing.maxConfidence, row.confidence);
+    existing.rows.push(row);
+    existing.isTarget = existing.isTarget || isTargetRow(row);
+    speciesMap.set(key, existing);
+  }
+
+  const species = [...speciesMap.values()].map(entry => ({
+    ...entry,
+    ranges: mergeRanges(entry.rows),
+  })).sort((a, b) => b.maxConfidence - a.maxConfidence || a.commonName.localeCompare(b.commonName));
+
+  const target = species.find(entry => entry.isTarget) || null;
+  const others = species.filter(entry => !entry.isTarget);
+
+  return {
+    targetDetected: targetRows.length > 0,
+    target,
+    others,
+  };
+}
+
+function renderBirdNetPanel(panel, summary) {
+  if (summary.state === 'missing') {
+    panel.className = 'birdnet-panel birdnet-empty';
+    panel.innerHTML = `
+      <div class="birdnet-heading">BirdNET</div>
+      <div class="birdnet-row">
+        <span class="birdnet-status birdnet-status-neutral">No CSV</span>
+        <span class="birdnet-summary">No BirdNET results found for this clip.</span>
+      </div>
+    `;
+    return;
+  }
+
+  if (summary.state === 'empty') {
+    panel.className = 'birdnet-panel birdnet-empty';
+    panel.innerHTML = `
+      <div class="birdnet-heading">BirdNET</div>
+      <div class="birdnet-row">
+        <span class="birdnet-status birdnet-status-neutral">No detections</span>
+        <span class="birdnet-summary">CSV loaded, but it contained no detections.</span>
+      </div>
+    `;
+    return;
+  }
+
+  const targetHtml = summary.targetDetected && summary.target
+    ? `
+      <div class="birdnet-row">
+        <span class="birdnet-status birdnet-status-ok">Target detected</span>
+        <span class="birdnet-summary">
+          ${escHtml(summary.target.commonName)} max ${summary.target.maxConfidence.toFixed(2)} at ${escHtml(formatRanges(summary.target.ranges))}
+        </span>
+      </div>
+    `
+    : `
+      <div class="birdnet-row">
+        <span class="birdnet-status birdnet-status-miss">Target missing</span>
+        <span class="birdnet-summary">BirdNET did not detect the target species in this clip.</span>
+      </div>
+    `;
+
+  const otherSpeciesHtml = summary.others.length
+    ? summary.others.map(species => `
+        <span class="birdnet-chip birdnet-chip-other">
+          ${escHtml(species.commonName)} ${species.maxConfidence.toFixed(2)}
+        </span>
+      `).join('')
+    : '<span class="birdnet-chip">No non-target detections</span>';
+
+  panel.className = 'birdnet-panel';
+  panel.innerHTML = `
+    <div class="birdnet-heading">BirdNET</div>
+    ${targetHtml}
+    <div class="birdnet-row">
+      <span class="birdnet-label">Other species</span>
+      <div class="birdnet-species-list">${otherSpeciesHtml}</div>
+    </div>
+  `;
+}
+
+async function renderBirdNetSummary(sp, clip, card) {
+  const panel = card.querySelector(`[data-birdnet="${String(clip.xc_id)}"]`);
+  if (!panel) return;
+
+  const key = birdNetKey(sp, clip);
+  if (birdNetSummaries[key]) {
+    renderBirdNetPanel(panel, birdNetSummaries[key]);
+    return;
+  }
+
+  try {
+    const res = await fetch(birdNetCsvUrl(sp, clip));
+    if (res.status === 404) {
+      birdNetSummaries[key] = { state: 'missing' };
+      renderBirdNetPanel(panel, birdNetSummaries[key]);
+      return;
+    }
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const rows = parseBirdNetCsv(await res.text());
+    birdNetSummaries[key] = rows.length
+      ? { state: 'ready', ...summarizeBirdNet(sp, rows) }
+      : { state: 'empty' };
+    renderBirdNetPanel(panel, birdNetSummaries[key]);
+  } catch (e) {
+    console.error('BirdNET load error for XC' + clip.xc_id + ':', e);
+    birdNetSummaries[key] = { state: 'missing' };
+    renderBirdNetPanel(panel, birdNetSummaries[key]);
+  }
 }
 
 // ────────────────────────────────────────────────

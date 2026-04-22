@@ -6,9 +6,11 @@ normalizes audio with ffmpeg (loudnorm, trim ≤20s, OGG Opus 96kbps),
 resizes photos to 800px wide, and generates a manifest.json with local paths.
 
 Prerequisites: Python 3, requests, Pillow, ffmpeg installed locally.
-Usage: uv run python3 download_media.py
+Usage: uv run python3 download_media.py [--manifest-only]
 """
 
+import argparse
+import csv
 import json
 import os
 import re
@@ -36,6 +38,11 @@ HEADERS = {
 
 RETRY_COUNT = 3
 RETRY_DELAY = 2
+BIRDNET_MIN_CONFIDENCE = 0.15
+BIRDNET_MIN_DURATION = 5.0
+BIRDNET_PADDING = 0.75
+BIRDNET_CLUSTER_GAP = 0.5
+BIRDNET_TRIM_EPSILON = 0.25
 
 
 def get_wikimedia_download_url(commons_url: str) -> str | None:
@@ -166,6 +173,186 @@ def detect_best_segment(input_path: Path) -> tuple[float, float] | None:
     return None
 
 
+def get_audio_duration(path: Path) -> float | None:
+    """Return clip duration in seconds via ffprobe."""
+    cmd = [
+        "ffprobe", "-v", "error",
+        "-show_entries", "format=duration",
+        "-of", "csv=p=0",
+        str(path),
+    ]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        return None
+    try:
+        return float(result.stdout.strip())
+    except ValueError:
+        return None
+
+
+def read_birdnet_rows(csv_path: Path) -> list[dict]:
+    """Load BirdNET detections with parsed numeric fields."""
+    rows = []
+    try:
+        with csv_path.open(newline="") as f:
+            for row in csv.DictReader(f):
+                try:
+                    rows.append({
+                        "start": float(row.get("Start (s)", "0") or 0),
+                        "end": float(row.get("End (s)", "0") or 0),
+                        "scientific_name": row.get("Scientific name", "") or "",
+                        "common_name": row.get("Common name", "") or "",
+                        "confidence": float(row.get("Confidence", "0") or 0),
+                        "file": row.get("File", "") or "",
+                    })
+                except ValueError:
+                    continue
+    except FileNotFoundError:
+        return []
+    return rows
+
+
+def select_birdnet_segment(
+    rows: list[dict],
+    target_common_name: str,
+    target_scientific_name: str,
+    clip_duration: float,
+) -> tuple[float, float] | None:
+    """Pick the strongest contiguous target-species window from BirdNET results."""
+    target_rows = [
+        row for row in rows
+        if row["confidence"] >= BIRDNET_MIN_CONFIDENCE
+        and (
+            row["common_name"] == target_common_name
+            or row["scientific_name"] == target_scientific_name
+        )
+    ]
+    if not target_rows:
+        return None
+
+    target_rows.sort(key=lambda row: (row["start"], row["end"]))
+    clusters: list[list[dict]] = []
+    current_cluster: list[dict] = []
+
+    for row in target_rows:
+        if not current_cluster:
+            current_cluster = [row]
+            continue
+        prev_end = current_cluster[-1]["end"]
+        if row["start"] - prev_end <= BIRDNET_CLUSTER_GAP:
+            current_cluster.append(row)
+        else:
+            clusters.append(current_cluster)
+            current_cluster = [row]
+    if current_cluster:
+        clusters.append(current_cluster)
+
+    best_cluster = max(
+        clusters,
+        key=lambda cluster: (
+            sum(row["confidence"] for row in cluster),
+            -(cluster[-1]["end"] - cluster[0]["start"]),
+            -cluster[0]["start"],
+        ),
+    )
+
+    cluster_start = best_cluster[0]["start"]
+    cluster_end = best_cluster[-1]["end"]
+    trim_start = max(0.0, cluster_start - BIRDNET_PADDING)
+    trim_end = min(clip_duration, cluster_end + BIRDNET_PADDING)
+
+    if trim_end - trim_start < BIRDNET_MIN_DURATION:
+        deficit = BIRDNET_MIN_DURATION - (trim_end - trim_start)
+        extend_before = min(trim_start, deficit / 2)
+        extend_after = min(clip_duration - trim_end, deficit - extend_before)
+        trim_start -= extend_before
+        trim_end += extend_after
+        if trim_end - trim_start < BIRDNET_MIN_DURATION:
+            trim_start = max(0.0, trim_end - BIRDNET_MIN_DURATION)
+            trim_end = min(clip_duration, trim_start + BIRDNET_MIN_DURATION)
+
+    trim_duration = max(0.0, trim_end - trim_start)
+    if trim_start <= BIRDNET_TRIM_EPSILON and clip_duration - trim_end <= BIRDNET_TRIM_EPSILON:
+        return None
+    if trim_duration <= 0:
+        return None
+    return (trim_start, trim_duration)
+
+
+def rewrite_birdnet_csv(csv_path: Path, rows: list[dict], audio_path: Path, trim_start: float, trim_duration: float) -> None:
+    """Rewrite BirdNET rows into the trimmed clip timebase."""
+    trim_end = trim_start + trim_duration
+    kept_rows = []
+    for row in rows:
+        overlap_start = max(trim_start, row["start"])
+        overlap_end = min(trim_end, row["end"])
+        if overlap_end <= overlap_start:
+            continue
+        kept_rows.append({
+            "Start (s)": f"{max(0.0, overlap_start - trim_start):.4f}".rstrip("0").rstrip("."),
+            "End (s)": f"{min(trim_duration, overlap_end - trim_start):.4f}".rstrip("0").rstrip("."),
+            "Scientific name": row["scientific_name"],
+            "Common name": row["common_name"],
+            "Confidence": f"{row['confidence']:.4f}",
+            "File": str(audio_path.resolve()),
+        })
+
+    with csv_path.open("w", newline="") as f:
+        writer = csv.DictWriter(
+            f,
+            fieldnames=["Start (s)", "End (s)", "Scientific name", "Common name", "Confidence", "File"],
+        )
+        writer.writeheader()
+        writer.writerows(kept_rows)
+
+
+def refine_audio_with_birdnet(audio_path: Path, species: dict, clip: dict) -> bool:
+    """Tighten an existing local clip using adjacent BirdNET detections when available."""
+    csv_path = audio_path.with_suffix(".BirdNET.results.csv")
+    if not audio_path.exists() or not csv_path.exists():
+        return False
+
+    rows = read_birdnet_rows(csv_path)
+    if not rows:
+        return False
+
+    clip_duration = get_audio_duration(audio_path)
+    if clip_duration is None or clip_duration <= 0:
+        return False
+
+    segment = select_birdnet_segment(
+        rows,
+        species.get("common_name", ""),
+        species.get("scientific_name", ""),
+        clip_duration,
+    )
+    if segment is None:
+        return False
+
+    trim_start, trim_duration = segment
+    with tempfile.NamedTemporaryFile(suffix=".ogg", delete=False) as tmp:
+        tmp_path = Path(tmp.name)
+
+    cmd = [
+        "ffmpeg", "-i", str(audio_path),
+        "-ss", str(trim_start), "-t", str(trim_duration),
+        "-c:a", "libopus",
+        "-b:a", "96k",
+        "-y",
+        str(tmp_path),
+    ]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"  BirdNET trim failed for {audio_path.name}: {result.stderr[-200:]}")
+        tmp_path.unlink(missing_ok=True)
+        return False
+
+    tmp_path.replace(audio_path)
+    rewrite_birdnet_csv(csv_path, rows, audio_path, trim_start, trim_duration)
+    print(f"  BirdNET trim: {trim_start:.1f}s-{trim_start + trim_duration:.1f}s")
+    return True
+
+
 def normalize_audio(input_path: Path, output_path: Path) -> bool:
     """Normalize audio with ffmpeg: smart trim, loudnorm, OGG Opus 96kbps."""
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -215,7 +402,7 @@ def resize_photo(input_path: Path, output_path: Path) -> bool:
         return False
 
 
-def process_species(species: dict, manifest_species: dict) -> dict:
+def process_species(species: dict, manifest_species: dict, manifest_only: bool = False) -> dict:
     """Download and process all media for one species. Returns updated manifest entry."""
     sid = species["id"]
     name = species["common_name"]
@@ -234,6 +421,12 @@ def process_species(species: dict, manifest_species: dict) -> dict:
             if local_path.exists():
                 print(f"  Skip (exists): {clip_type} XC{xc_id}")
                 manifest_species["audio_clips"][clip_type][i]["audio_url"] = local_url
+                if not manifest_only:
+                    refine_audio_with_birdnet(local_path, species, clip)
+                continue
+
+            if manifest_only:
+                print(f"  WARNING: missing local {clip_type} XC{xc_id}; leaving source URL in manifest candidate data")
                 continue
 
             print(f"  Downloading {clip_type} XC{xc_id}...")
@@ -244,6 +437,7 @@ def process_species(species: dict, manifest_species: dict) -> dict:
                 print(f"  Normalizing XC{xc_id}...")
                 if normalize_audio(tmp_path, local_path):
                     manifest_species["audio_clips"][clip_type][i]["audio_url"] = local_url
+                    refine_audio_with_birdnet(local_path, species, clip)
                 else:
                     print(f"  WARNING: ffmpeg failed for XC{xc_id}, skipping")
             tmp_path.unlink(missing_ok=True)
@@ -269,6 +463,10 @@ def process_species(species: dict, manifest_species: dict) -> dict:
             print(f"  Skip (exists): wp_{i}")
             if "wikipedia_audio" in manifest_species and i < len(manifest_species["wikipedia_audio"]):
                 manifest_species["wikipedia_audio"][i]["url"] = local_url
+            continue
+
+        if manifest_only:
+            print(f"  WARNING: missing local wp_{i}; leaving source URL in manifest candidate data")
             continue
 
         # Resolve via Wikimedia API to avoid 403
@@ -297,6 +495,10 @@ def process_species(species: dict, manifest_species: dict) -> dict:
         print(f"  Skip (exists): photo")
         manifest_species["photo"]["url"] = local_photo_url
     else:
+        if manifest_only:
+            print(f"  WARNING: missing local photo for {sid}; leaving source URL in manifest candidate data")
+            return manifest_species
+
         # Resolve via Wikimedia API to get a proper downloadable URL
         resolved_url = get_wikimedia_download_url(photo_url)
         if not resolved_url:
@@ -316,7 +518,18 @@ def process_species(species: dict, manifest_species: dict) -> dict:
     return manifest_species
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--manifest-only",
+        action="store_true",
+        help="Rebuild manifest.json from current selections and existing local media only; do not download or re-trim assets.",
+    )
+    return parser.parse_args()
+
+
 def main():
+    args = parse_args()
     if not Path(INPUT_FILE).exists():
         print(f"Error: {INPUT_FILE} not found. Run populate_content.py first.")
         sys.exit(1)
@@ -338,13 +551,19 @@ def main():
     for i, species in enumerate(data["species"]):
         print(f"\n{'='*50}")
         print(f"Processing {i+1}/{total}")
-        manifest["species"][i] = process_species(species, manifest["species"][i])
+        manifest["species"][i] = process_species(
+            species,
+            manifest["species"][i],
+            manifest_only=args.manifest_only,
+        )
 
     # Write local manifest
     with open(MANIFEST_OUT, "w") as f:
         json.dump(manifest, f, indent=2)
     print(f"\n{'='*50}")
     print(f"Manifest written to {MANIFEST_OUT}")
+    if args.manifest_only:
+        print("Mode: manifest-only (no downloads, no normalization, no BirdNET refinement)")
 
     # Summary
     audio_count = len(list(AUDIO_DIR.rglob("*.ogg")))

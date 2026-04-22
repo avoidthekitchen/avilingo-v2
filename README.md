@@ -10,8 +10,9 @@ A Duolingo-style web app for learning Seattle-area bird songs and calls. Flash-c
 
 ### Content (Sprint 0)
 - 15 Seattle-area species across 5 lessons, curated by learnability
-- Each species: up to 5 songs + 5 calls fetched from Xeno-canto as candidates; top 3 songs + top 2 calls selected by default and included in the app
+- Each species: up to 6 songs + 6 calls fetched from Xeno-canto as candidates; top 3 songs + top 2 calls selected by default and included in the app
 - Clip selection scoring: quality grade (A=+50 … E=−30) dominates; bonuses for remarks (+5), confirmed sighting / adult stage / field recording (+3 each), PNW location (+0.4); penalties for playback-induced (−5), juvenile/nestling stage (−5), captive recording methods (−5); pure-typed songs ranked above compound types (e.g. "call, song") to preserve call pool
+- Audio processing: `download_media.py` first applies ffmpeg loudness normalization plus silence-based smart trim (fallback: first 20s), then can further tighten existing local `.ogg` clips using adjacent `*.BirdNET.results.csv` sidecars produced by the external `birdnet-analyzer` CLI; only the trimmed local audio is shipped in `manifest.json`
 - Mnemonics, habitat tags, Wikipedia photos, and 5 confuser pairs per species
 - `tier1_seattle_birds_populated.json` → `beakspeak/public/content/manifest.json`
 - Manual curation via local Audio Admin tool (see below)
@@ -60,16 +61,18 @@ python3 admin/server.py
 # → http://localhost:8765
 ```
 
-**What it shows per clip:** spectrogram (pre-rendered), play/pause, quality grade, type (song / call / alarm call / etc.), sex, stage, recording method, location, recordist, score, license, remarks, and a link to the Xeno-canto page.
+**What it shows per clip:** spectrogram (pre-rendered), play/pause, quality grade, type (song / call / alarm call / etc.), sex, stage, recording method, location, recordist, score, license, remarks, BirdNET target/non-target detections from `*.BirdNET.results.csv`, and a link to the Xeno-canto page.
 
 **Species header:** mnemonic and any Wikipedia audio clips for reference.
 
 **Workflow:**
-1. Run `uv run populate_content.py` to fetch 5+5 candidates per species (top 3 songs + top 2 calls are selected by default)
-2. Run `uv run download_media.py` to download all candidates locally
-3. Open the admin and review — the sidebar shows `selected/total` per species; toggle "In app" on any clip to include or exclude it
-4. Selections save immediately to `tier1_seattle_birds_populated.json`
-5. Run `uv run download_media.py` again to regenerate `manifest.json` with your selections
+1. Run `uv run populate_content.py` to fetch 6+6 candidates per species (top 3 songs + top 2 calls are selected by default)
+2. Run `uv run download_media.py` to download all candidates locally and build `manifest.json`
+3. Optionally generate `*.BirdNET.results.csv` sidecars for the local `.ogg` clips with the external `birdnet-analyzer` CLI
+4. Run `uv run download_media.py` again to apply BirdNET-assisted re-trimming when those CSVs exist
+5. Open the admin and review — the sidebar shows `selected/total` per species; toggle "In app" on any clip to include or exclude it
+6. Selections save immediately to `tier1_seattle_birds_populated.json`
+7. Run `uv run download_media.py` again to regenerate `manifest.json` with your selections and any updated BirdNET trim windows
 
 ## Re-generating media
 
@@ -81,7 +84,11 @@ python3 admin/server.py
 uv run populate_content.py   # → tier1_seattle_birds_populated.json
 uv run download_media.py     # → beakspeak/public/content/ + manifest.json
 
-# Manifest-only rebuild (after changing selections in the admin)
+# Optional: run external BirdNET analysis on the local .ogg files, then re-apply trims
+# birdnet-analyzer ...       # → *.BirdNET.results.csv sidecars next to local .ogg clips
+uv run download_media.py
+
+# Manifest/media rebuild (after changing selections in the admin or refreshing BirdNET CSVs)
 uv run download_media.py
 ```
 

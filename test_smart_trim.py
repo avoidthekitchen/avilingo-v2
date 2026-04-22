@@ -10,7 +10,12 @@ from pathlib import Path
 
 import pytest
 
-from download_media import detect_best_segment, normalize_audio
+from download_media import (
+    detect_best_segment,
+    normalize_audio,
+    rewrite_birdnet_csv,
+    select_birdnet_segment,
+)
 
 
 def make_test_audio(segments: list[tuple[str, float]], path: Path) -> None:
@@ -186,3 +191,45 @@ class TestNormalizeAudioSmartTrim:
         dur = get_audio_duration(output_file)
         # Should be capped at ~20s (fallback behavior)
         assert 19.0 <= dur <= 21.0
+
+
+class TestBirdNetTrimSelection:
+    def test_selects_strongest_target_cluster(self):
+        rows = [
+            {"start": 0.0, "end": 3.0, "common_name": "Target Bird", "scientific_name": "Targetus birdus", "confidence": 0.22, "file": ""},
+            {"start": 3.0, "end": 6.0, "common_name": "Other Bird", "scientific_name": "Otherus birdus", "confidence": 0.91, "file": ""},
+            {"start": 9.0, "end": 12.0, "common_name": "Target Bird", "scientific_name": "Targetus birdus", "confidence": 0.95, "file": ""},
+            {"start": 12.0, "end": 15.0, "common_name": "Target Bird", "scientific_name": "Targetus birdus", "confidence": 0.92, "file": ""},
+        ]
+
+        segment = select_birdnet_segment(rows, "Target Bird", "Targetus birdus", 18.0)
+
+        assert segment is not None
+        start, duration = segment
+        assert 8.0 <= start <= 9.5
+        assert duration >= 5.0
+        assert start + duration <= 16.0
+
+    def test_returns_none_when_target_not_found(self):
+        rows = [
+            {"start": 0.0, "end": 3.0, "common_name": "Other Bird", "scientific_name": "Otherus birdus", "confidence": 0.88, "file": ""},
+        ]
+
+        assert select_birdnet_segment(rows, "Target Bird", "Targetus birdus", 10.0) is None
+
+    def test_rewrite_birdnet_csv_rebases_trimmed_rows(self, tmp_path):
+        csv_path = tmp_path / "clip.BirdNET.results.csv"
+        audio_path = tmp_path / "clip.ogg"
+        audio_path.write_bytes(b"fake")
+        rows = [
+            {"start": 0.0, "end": 3.0, "common_name": "Other Bird", "scientific_name": "Otherus birdus", "confidence": 0.33, "file": ""},
+            {"start": 3.0, "end": 6.0, "common_name": "Target Bird", "scientific_name": "Targetus birdus", "confidence": 0.95, "file": ""},
+            {"start": 6.0, "end": 9.0, "common_name": "Target Bird", "scientific_name": "Targetus birdus", "confidence": 0.91, "file": ""},
+        ]
+
+        rewrite_birdnet_csv(csv_path, rows, audio_path, trim_start=2.5, trim_duration=5.5)
+
+        lines = csv_path.read_text().strip().splitlines()
+        assert lines[0] == "Start (s),End (s),Scientific name,Common name,Confidence,File"
+        assert "0.5,3.5,Targetus birdus,Target Bird,0.9500" in lines[2]
+        assert "3.5,5.5,Targetus birdus,Target Bird,0.9100" in lines[3]

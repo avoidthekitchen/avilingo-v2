@@ -150,8 +150,8 @@ Deployed as a Worker with no script — pure static asset serving. Requests to s
 
 Two Python scripts fetch and process media from external APIs. Not part of the app runtime.
 
-- `populate_content.py` — queries Xeno-canto API and Wikipedia; fetches up to 5 songs + 5 calls per species; marks top 3 songs + top 2 calls as `selected: true` by default; stores rich metadata (sex, stage, method, remarks); preserves manual `selected` flags from prior runs
-- `download_media.py` — downloads all candidates, normalizes with ffmpeg (loudnorm, smart trim ≤20s, OGG Opus 96kbps), outputs to `beakspeak/public/content/`; only `selected: true` clips are written to `manifest.json`
+- `populate_content.py` — queries Xeno-canto API and Wikipedia; fetches up to 6 songs + 6 calls per species; marks top 3 songs + top 2 calls as `selected: true` by default; stores rich metadata (sex, stage, method, remarks); preserves manual `selected` flags from prior runs
+- `download_media.py` — downloads all candidates, normalizes with ffmpeg (loudnorm, silence-based smart trim ≤20s, OGG Opus 96kbps), then can further tighten existing local `.ogg` clips using adjacent `*.BirdNET.results.csv` sidecars generated externally with the `birdnet-analyzer` CLI; only `selected: true` clips are written to `manifest.json`
 - Managed with `uv` (see `pyproject.toml`): https://docs.astral.sh/uv
 - Requires: Python 3.12+, ffmpeg, `requests`, `Pillow`
 - `XC_API_KEY` env var required for `populate_content.py`
@@ -159,7 +159,7 @@ Two Python scripts fetch and process media from external APIs. Not part of the a
 ### Audio Admin (local only, not deployed)
 
 - `admin/server.py` — Python stdlib HTTP server; run with `python3 admin/server.py` from repo root; serves on `http://localhost:8765`
-- `admin/index.html` — single-file vanilla JS UI; shows per-clip spectrogram, metadata, and "In app" toggle; saves immediately to `tier1_seattle_birds_populated.json`
+- `admin/index.html` — single-file vanilla JS UI; shows per-clip spectrogram, metadata, BirdNET target/non-target detections from `*.BirdNET.results.csv`, and "In app" toggle; saves immediately to `tier1_seattle_birds_populated.json`
 - No extra dependencies beyond Python stdlib
 
 ## Build & Deploy
