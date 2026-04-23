@@ -81,9 +81,12 @@ export function meetsCurationTarget(species, targetPerRole = 2) {
 export function applyCandidateRole(species, candidateId, xcId, selectedRole) {
   const normalizedRole = normalizeSelectedRole(selectedRole)
   const candidate = ensureUnifiedCandidates(species).find(
-    (item) =>
-      (candidateId && String(item.candidate_id || '') === String(candidateId)) ||
-      String(item.xc_id || '') === String(xcId),
+    (item) => {
+      if (candidateId) {
+        return String(item.candidate_id || '') === String(candidateId)
+      }
+      return String(item.xc_id || '') === String(xcId)
+    },
   )
   if (!candidate) {
     throw new Error(`candidate ${candidateId || xcId} not found for species ${species.id}`)

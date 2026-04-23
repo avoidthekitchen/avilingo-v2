@@ -361,11 +361,23 @@ def build_export_audio_clips(audio_clips: dict | None, export_mode: str = "all")
         for candidate in _selected_candidates_for_role(candidates, role):
             resolved_candidate = candidate
             if export_mode == "commercial" and not candidate.get("commercial_ok"):
+                competing_selected = [
+                    selected
+                    for selected_role in ("song", "call")
+                    for selected in _selected_candidates_for_role(candidates, selected_role)
+                    if selected.get("candidate_id") != candidate.get("candidate_id")
+                ]
                 substitute = _find_best_commercial_substitute(
                     candidates,
                     role,
-                    used_candidate_ids=used_candidate_ids,
-                    used_xc_ids=used_xc_ids,
+                    used_candidate_ids=used_candidate_ids | {
+                        str(item.get("candidate_id", ""))
+                        for item in competing_selected
+                    },
+                    used_xc_ids=used_xc_ids | {
+                        str(item.get("xc_id", ""))
+                        for item in competing_selected
+                    },
                     excluded_candidate_ids={str(candidate.get("candidate_id", ""))},
                 )
                 if substitute is None:

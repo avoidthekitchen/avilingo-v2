@@ -1146,6 +1146,54 @@ class TestExportModes:
         assert export_report["substitutions"] == []
         assert any("no commercial-compatible replacement" in warning.lower() for warning in export_report["warnings"])
 
+    def test_commercial_mode_does_not_steal_other_selected_role_as_substitute(self):
+        normalized = normalize_pool_data({
+            "schema_version": 2,
+            "species": [
+                {
+                    "id": "warbler",
+                    "audio_clips": {
+                        "schema_version": 2,
+                        "candidates": [
+                            {
+                                "candidate_id": "xc:901:song:0",
+                                "xc_id": "901",
+                                "source_role": "song",
+                                "selected_role": "song",
+                                "type": "song",
+                                "xc_type": "song",
+                                "license": CC_BY_NC,
+                                "commercial_ok": False,
+                                "score": 88.0,
+                            },
+                            {
+                                "candidate_id": "xc:902:call:0",
+                                "xc_id": "902",
+                                "source_role": "call",
+                                "selected_role": "call",
+                                "type": "call, song",
+                                "xc_type": "call, song",
+                                "xc_types": ["call", "song"],
+                                "license": CC_BY,
+                                "commercial_ok": True,
+                                "score": 60.0,
+                            },
+                        ],
+                    },
+                }
+            ],
+        })
+
+        export_report = build_export_audio_clips(
+            normalized["species"][0]["audio_clips"],
+            export_mode="commercial",
+        )
+
+        assert export_report["audio_clips"]["songs"] == []
+        assert [clip["xc_id"] for clip in export_report["audio_clips"]["calls"]] == ["902"]
+        assert export_report["substitutions"] == []
+        assert any("no commercial-compatible replacement" in warning.lower() for warning in export_report["warnings"])
+
     def test_validator_reports_sparse_roles_and_substitution_opportunities(self):
         normalized = normalize_pool_data({
             "schema_version": 2,

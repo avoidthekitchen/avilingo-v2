@@ -68,3 +68,30 @@ test('applyCandidateRole updates assignment and supports removal to none', () =>
   applyCandidateRole(species, 'xc:20:call:0', '20', 'none')
   assert.deepEqual(getSpeciesRoleCounts(species), { song: 1, call: 1, assigned: 2, total: 3 })
 })
+
+test('applyCandidateRole only falls back to xc_id when candidateId is absent', () => {
+  const species = {
+    id: 'sp2',
+    audio_clips: {
+      candidates: [
+        {
+          candidate_id: 'xc:44:song:0',
+          xc_id: '44',
+          source_role: 'song',
+          selected_role: 'song',
+        },
+        {
+          candidate_id: 'xc:44:call:0',
+          xc_id: '44',
+          source_role: 'call',
+          selected_role: 'call',
+        },
+      ],
+    },
+  }
+
+  applyCandidateRole(species, 'xc:44:call:0', '44', 'none')
+
+  assert.equal(species.audio_clips.candidates[0].selected_role, 'song')
+  assert.equal(species.audio_clips.candidates[1].selected_role, 'none')
+})
