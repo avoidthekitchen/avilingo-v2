@@ -8,10 +8,11 @@ interface QuizAnswer {
 
 interface Props {
   answers: QuizAnswer[]
+  mode: 'review' | 'practice'
   onDone: () => void
 }
 
-export default function QuizResult({ answers, onDone }: Props) {
+export default function QuizResult({ answers, mode, onDone }: Props) {
   const correctCount = answers.filter(a => a.correct).length
   const total = answers.length
   const needsPractice = answers.filter(a => !a.correct)
@@ -30,6 +31,11 @@ export default function QuizResult({ answers, onDone }: Props) {
         <p className="text-text-muted">
           {percentage}% correct
         </p>
+        {mode === 'practice' && (
+          <p className="text-sm text-text-muted mt-2">
+            This practice session didn&apos;t change your review schedule.
+          </p>
+        )}
       </div>
 
       {needsPractice.length > 0 && (
