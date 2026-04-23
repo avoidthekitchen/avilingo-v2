@@ -13,11 +13,52 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 REPO_ROOT = Path(__file__).parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from populate_content import load_pool_file, save_pool_file
+
 POOL_FILE = REPO_ROOT / "tier1_seattle_birds_populated.json"
 AUDIO_DIR = REPO_ROOT / "beakspeak/public/content/audio"
 PHOTO_DIR = REPO_ROOT / "beakspeak/public/content/photos"
 ADMIN_DIR = Path(__file__).parent
 PORT = 8765
+VALID_SELECTED_ROLES = {"none", "song", "call"}
+
+
+def persist_candidate_role_assignment(
+    *,
+    pool_file: str | Path,
+    species_id: str,
+    candidate_id: str,
+    xc_id: str,
+    selected_role: str,
+) -> dict:
+    """Persist one curator-assigned candidate role into the unified pool file."""
+    if selected_role not in VALID_SELECTED_ROLES:
+        raise ValueError(f"selected_role must be one of {sorted(VALID_SELECTED_ROLES)}")
+
+    data = load_pool_file(pool_file)
+
+    updated_candidate = None
+    for sp in data.get("species", []):
+        if sp["id"] != species_id:
+            continue
+        for candidate in sp.get("audio_clips", {}).get("candidates", []):
+            matches_candidate_id = candidate_id and str(candidate.get("candidate_id", "")) == candidate_id
+            matches_legacy_xc_id = not candidate_id and str(candidate.get("xc_id", "")) == xc_id
+            if matches_candidate_id or matches_legacy_xc_id:
+                candidate["selected_role"] = selected_role
+                updated_candidate = candidate
+                break
+        break
+
+    if updated_candidate is None:
+        target = candidate_id or xc_id
+        raise LookupError(f"clip {target} not found in species {species_id}")
+
+    save_pool_file(pool_file, data)
+    return updated_candidate
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -62,12 +103,17 @@ class Handler(BaseHTTPRequestHandler):
         if path in ("", "/", "/index.html"):
             self.send_file(ADMIN_DIR / "index.html")
 
+        elif path == "/review-state.mjs":
+            self.send_file(ADMIN_DIR / "review-state.mjs")
+
+        elif path == "/clip-evidence.mjs":
+            self.send_file(ADMIN_DIR / "clip-evidence.mjs")
+
         elif path == "/api/pool":
             if not POOL_FILE.exists():
                 self.send_json({"error": "tier1_seattle_birds_populated.json not found. Run populate_content.py first."}, 404)
                 return
-            with open(POOL_FILE) as f:
-                data = json.load(f)
+            data = load_pool_file(POOL_FILE)
             self.send_json(data)
 
         elif path.startswith("/audio/"):
@@ -89,39 +135,34 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
 
-        if path == "/api/toggle":
+        if path == "/api/assign-role":
             length = int(self.headers.get("Content-Length", 0))
             body = json.loads(self.rfile.read(length))
             species_id = body.get("species_id")
+            candidate_id = str(body.get("candidate_id", ""))
             xc_id = str(body.get("xc_id", ""))
-            selected = bool(body.get("selected"))
+            selected_role = str(body.get("selected_role", "none"))
 
             if not POOL_FILE.exists():
                 self.send_json({"error": "pool file not found"}, 404)
                 return
 
-            with open(POOL_FILE) as f:
-                data = json.load(f)
-
-            updated = False
-            for sp in data.get("species", []):
-                if sp["id"] != species_id:
-                    continue
-                clips = sp.get("audio_clips", {})
-                for clip in clips.get("songs", []) + clips.get("calls", []):
-                    if str(clip.get("xc_id", "")) == xc_id:
-                        clip["selected"] = selected
-                        updated = True
-                break
-
-            if not updated:
-                self.send_json({"error": f"clip {xc_id} not found in species {species_id}"}, 404)
+            try:
+                updated_candidate = persist_candidate_role_assignment(
+                    pool_file=POOL_FILE,
+                    species_id=species_id,
+                    candidate_id=candidate_id,
+                    xc_id=xc_id,
+                    selected_role=selected_role,
+                )
+            except ValueError as exc:
+                self.send_json({"error": str(exc)}, 400)
+                return
+            except LookupError as exc:
+                self.send_json({"error": str(exc)}, 404)
                 return
 
-            with open(POOL_FILE, "w") as f:
-                json.dump(data, f, indent=2, ensure_ascii=False)
-
-            self.send_json({"ok": True})
+            self.send_json({"ok": True, "selected_role": updated_candidate["selected_role"]})
 
         else:
             self.send_error(404)

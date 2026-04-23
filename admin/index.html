@@ -123,9 +123,27 @@
 
   #species-header {
     margin-bottom: 16px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
   }
   #species-header h2 { font-size: 18px; font-weight: 600; }
   #species-header .sci { color: var(--text-dim); font-style: italic; font-size: 12px; margin-top: 2px; }
+  .species-counts {
+    display: inline-flex;
+    gap: 12px;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 10px;
+    background: var(--surface);
+    font-size: 11px;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .species-counts strong { color: var(--text); }
 
   .species-reference {
     background: var(--surface);
@@ -215,6 +233,16 @@
     transition: border-color 0.15s;
   }
   .clip-card.selected-card { border-color: var(--accent-dim); }
+  .clip-card[data-selected-role="song"] {
+    border-color: #27573e;
+    box-shadow: 0 0 0 1px rgba(39, 87, 62, 0.45);
+    background: linear-gradient(180deg, rgba(24, 52, 37, 0.55), var(--surface));
+  }
+  .clip-card[data-selected-role="call"] {
+    border-color: #29406f;
+    box-shadow: 0 0 0 1px rgba(41, 64, 111, 0.45);
+    background: linear-gradient(180deg, rgba(27, 40, 68, 0.55), var(--surface));
+  }
   .clip-card.playing { border-color: var(--accent); }
 
   /* Top row: play + spectrogram + toggle */
@@ -291,52 +319,53 @@
     text-align: right;
   }
 
-  /* Toggle switch */
-  .toggle-wrap {
+  /* Role selector */
+  .role-wrap {
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3px;
+    gap: 6px;
   }
-  .toggle-label {
+  .role-label {
     font-size: 10px;
     color: var(--text-dim);
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
-  .toggle {
-    position: relative;
-    width: 36px;
-    height: 20px;
-  }
-  .toggle input { opacity: 0; width: 0; height: 0; }
-  .toggle-slider {
-    position: absolute;
-    inset: 0;
+  .role-select {
+    width: 82px;
     background: var(--surface2);
     border: 1px solid var(--border);
-    border-radius: 20px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    color: var(--text);
+    padding: 5px 8px;
+    font-size: 12px;
   }
-  .toggle-slider::before {
-    content: "";
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    left: 2px;
-    top: 2px;
-    background: var(--text-dim);
-    border-radius: 50%;
-    transition: transform 0.2s, background 0.2s;
+  .role-select.role-none {
+    background: var(--surface2);
+    border-color: var(--border);
+    color: var(--text);
   }
-  .toggle input:checked + .toggle-slider {
-    background: var(--accent-dim);
+  .role-select.role-song {
+    background: #183425;
+    border-color: #27573e;
+    color: #bbf7d0;
+    font-weight: 700;
+  }
+  .role-select.role-call {
+    background: #1b2844;
+    border-color: #29406f;
+    color: #bfdbfe;
+    font-weight: 700;
+  }
+  .role-select:focus {
+    outline: none;
     border-color: var(--accent);
-  }
-  .toggle input:checked + .toggle-slider::before {
-    transform: translateX(16px);
-    background: var(--accent);
+    box-shadow: 0 0 0 2px rgba(79, 142, 247, 0.2);
   }
 
   /* Metadata row */
@@ -363,12 +392,71 @@
   .badge-type { background: var(--surface2); color: var(--text-dim); border: 1px solid var(--border); }
   .badge-sex-male { background: #1a2a3a; color: #60a5fa; }
   .badge-sex-female { background: #3a1a2a; color: #f9a8d4; }
-  .badge-nc { background: #3a2a10; color: #fb923c; }
   .badge-warn { background: #3a2a10; color: #fb923c; }
+  .badge-rank { background: #1b2844; color: #93c5fd; }
+  .badge-source { background: #223127; color: #86efac; }
+  .badge-license-commercial {
+    background: #183425;
+    border: 1px solid #27573e;
+    color: var(--green);
+  }
+  .badge-license-nc {
+    background: #3a2a10;
+    border: 1px solid #624518;
+    color: #fdba74;
+  }
+  .badge-analysis-ok {
+    background: #1b2844;
+    border: 1px solid #29406f;
+    color: #93c5fd;
+  }
+  .badge-analysis-degraded {
+    background: #3a1a10;
+    border: 1px solid #6d2d23;
+    color: #fda4af;
+  }
 
   .meta-item { color: var(--text-dim); }
   .meta-item span { color: var(--text); }
   .meta-sep { color: var(--border); }
+
+  .evidence-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .evidence-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .evidence-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .evidence-block-degraded { border-color: #6d2d23; }
+  .evidence-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+  }
+  .evidence-main {
+    font-size: 11px;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .evidence-detail {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
 
   .clip-links {
     display: flex;
@@ -403,7 +491,7 @@
 <div id="topbar">
   <h1>BeakSpeak <span>Audio Admin</span></h1>
   <div id="status-msg">Loading…</div>
-  <div id="global-count"><strong id="sel-count">—</strong> / <span id="total-count">—</span> clips in app</div>
+  <div id="global-count"><strong id="global-song-count">—</strong> songs · <strong id="global-call-count">—</strong> calls assigned</div>
 </div>
 
 <div id="layout">
@@ -414,7 +502,17 @@
   </div>
 </div>
 
-<script>
+<script type="module">
+import {
+  applyCandidateRole,
+  getGlobalRoleCounts,
+  getOrderedSpeciesCandidates,
+  getSpeciesRoleCounts,
+  getSpeciesSidebarBadge,
+  meetsCurationTarget,
+} from './review-state.mjs'
+import { renderClipEvidenceHtml } from './clip-evidence.mjs'
+
 // ────────────────────────────────────────────────
 // State
 // ────────────────────────────────────────────────
@@ -455,31 +553,39 @@ function setStatus(msg) {
 // ────────────────────────────────────────────────
 // Counts
 // ────────────────────────────────────────────────
-function speciesCounts(sp) {
-  const clips = sp.audio_clips || {};
-  const all = [...(clips.songs || []), ...(clips.calls || [])];
-  const selected = all.filter(c => c.selected).length;
-  return { selected, total: all.length };
-}
-
 function updateGlobalCount() {
-  let sel = 0, tot = 0;
-  for (const sp of state.species || []) {
-    const c = speciesCounts(sp);
-    sel += c.selected; tot += c.total;
-  }
-  document.getElementById('sel-count').textContent = sel;
-  document.getElementById('total-count').textContent = tot;
+  const counts = getGlobalRoleCounts(state.species || []);
+  document.getElementById('global-song-count').textContent = counts.song;
+  document.getElementById('global-call-count').textContent = counts.call;
 }
 
 function updateSidebarBadge(speciesId) {
   const sp = state.species.find(s => s.id === speciesId);
   if (!sp) return;
-  const { selected, total } = speciesCounts(sp);
+  const counts = getSpeciesRoleCounts(sp);
   const el = document.querySelector(`.species-item[data-id="${speciesId}"] .species-badge`);
   if (!el) return;
-  el.textContent = selected === total ? '✓' : `${selected}/${total}`;
-  el.className = 'species-badge' + (selected === total ? ' full' : '');
+  el.textContent = getSpeciesSidebarBadge(sp);
+  el.className = 'species-badge' + (meetsCurationTarget(sp) ? ' full' : '');
+  updateSpeciesHeaderCounts(speciesId, counts);
+}
+
+function updateSpeciesHeaderCounts(speciesId, counts = null) {
+  if (activeSpeciesId !== speciesId) return;
+  const nextCounts = counts || getSpeciesRoleCounts(state.species.find(s => s.id === speciesId));
+  const el = document.getElementById('species-role-counts');
+  if (!el || !nextCounts) return;
+  el.innerHTML = `Assigned <strong>${nextCounts.song}</strong> song · <strong>${nextCounts.call}</strong> call`;
+}
+
+function setCardAssignedRole(card, selectedRole) {
+  card.dataset.selectedRole = selectedRole;
+  card.classList.toggle('selected-card', selectedRole !== 'none');
+  const select = card.querySelector('.role-select');
+  if (select) {
+    select.classList.remove('role-none', 'role-song', 'role-call');
+    select.classList.add(`role-${selectedRole}`);
+  }
 }
 
 // ────────────────────────────────────────────────
@@ -489,13 +595,12 @@ function renderSidebar() {
   const sidebar = document.getElementById('sidebar');
   sidebar.innerHTML = '';
   for (const sp of state.species || []) {
-    const { selected, total } = speciesCounts(sp);
     const item = document.createElement('div');
     item.className = 'species-item';
     item.dataset.id = sp.id;
     item.innerHTML = `
       <span class="species-name">${sp.common_name}</span>
-      <span class="species-badge${selected === total ? ' full' : ''}">${selected === total ? '✓' : `${selected}/${total}`}</span>
+      <span class="species-badge${meetsCurationTarget(sp) ? ' full' : ''}">${getSpeciesSidebarBadge(sp)}</span>
     `;
     item.addEventListener('click', () => selectSpecies(sp.id));
     sidebar.appendChild(item);
@@ -517,11 +622,15 @@ function selectSpecies(id) {
 function renderSpeciesView(sp) {
   document.getElementById('main-empty').style.display = 'none';
   const view = document.getElementById('species-view');
+  const counts = getSpeciesRoleCounts(sp);
   view.style.display = 'block';
   view.innerHTML = `
     <div id="species-header">
-      <h2>${sp.common_name}</h2>
-      <div class="sci">${sp.scientific_name}</div>
+      <div>
+        <h2>${sp.common_name}</h2>
+        <div class="sci">${sp.scientific_name}</div>
+      </div>
+      <div class="species-counts" id="species-role-counts">Assigned <strong>${counts.song}</strong> song · <strong>${counts.call}</strong> call</div>
     </div>
   `;
 
@@ -566,33 +675,20 @@ function renderSpeciesView(sp) {
     view.appendChild(ref);
   }
 
-  const clips = sp.audio_clips || {};
-  const songs = clips.songs || [];
-  const calls = clips.calls || [];
+  const candidates = getOrderedSpeciesCandidates(sp);
 
-  if (songs.length) {
+  if (candidates.length) {
     const label = document.createElement('div');
     label.className = 'section-label';
-    label.textContent = `Songs (${songs.length})`;
+    label.textContent = `Mixed ranked candidates (${candidates.length})`;
     view.appendChild(label);
     const grid = document.createElement('div');
     grid.className = 'clip-cards';
-    songs.forEach(clip => grid.appendChild(buildClipCard(sp, clip)));
+    candidates.forEach(clip => grid.appendChild(buildClipCard(sp, clip)));
     view.appendChild(grid);
   }
 
-  if (calls.length) {
-    const label = document.createElement('div');
-    label.className = 'section-label';
-    label.textContent = `Calls (${calls.length})`;
-    view.appendChild(label);
-    const grid = document.createElement('div');
-    grid.className = 'clip-cards';
-    calls.forEach(clip => grid.appendChild(buildClipCard(sp, clip)));
-    view.appendChild(grid);
-  }
-
-  if (!songs.length && !calls.length) {
+  if (!candidates.length) {
     view.innerHTML += `<div style="color:var(--text-dim);margin-top:20px">No audio clips found for this species.</div>`;
   }
 }
@@ -602,15 +698,22 @@ function renderSpeciesView(sp) {
 // ────────────────────────────────────────────────
 function buildClipCard(sp, clip) {
   const xcId = String(clip.xc_id);
+  const candidateId = String(clip.candidate_id || xcId);
   const audioSrc = `/audio/${sp.id}/${xcId}.ogg`;
+  const selectedRole = clip.selected_role || 'none';
+  const isSelected = selectedRole !== 'none';
 
   const card = document.createElement('div');
-  card.className = 'clip-card' + (clip.selected ? ' selected-card' : '');
+  card.className = 'clip-card' + (isSelected ? ' selected-card' : '');
   card.dataset.xcid = xcId;
+  card.dataset.candidateId = candidateId;
+  card.dataset.selectedRole = selectedRole;
 
   // Quality badge
   const q = clip.quality || '?';
   const qBadge = `<span class="badge badge-quality-${q}">${q}</span>`;
+  const rankBadge = clip.rank ? `<span class="badge badge-rank">#${clip.rank}</span>` : '';
+  const sourceBadge = clip.source_role ? `<span class="badge badge-source">src ${clip.source_role}</span>` : '';
 
   // Type badge
   const typeBadge = clip.type ? `<span class="badge badge-type">${clip.type}</span>` : '';
@@ -620,9 +723,6 @@ function buildClipCard(sp, clip) {
   let sexBadge = '';
   if (sex === 'male') sexBadge = `<span class="badge badge-sex-male">♂ male</span>`;
   else if (sex === 'female') sexBadge = `<span class="badge badge-sex-female">♀ female</span>`;
-
-  // License badge (NC warning)
-  const licBadge = clip.commercial_ok === false ? `<span class="badge badge-nc">NC</span>` : '';
 
   // Playback warning
   const pbWarn = (clip.playback_used || '').toLowerCase() === 'yes'
@@ -662,20 +762,23 @@ function buildClipCard(sp, clip) {
         </div>
         <div class="clip-length">${clip.length || ''}</div>
       </div>
-      <div class="toggle-wrap">
-        <div class="toggle-label">In app</div>
-        <label class="toggle">
-          <input type="checkbox" ${clip.selected ? 'checked' : ''} data-xcid="${xcId}" data-sid="${sp.id}">
-          <span class="toggle-slider"></span>
-        </label>
+      <div class="role-wrap">
+        <label class="role-label" for="role-${candidateId}">Role</label>
+        <select class="role-select role-${selectedRole}" id="role-${candidateId}" data-candidate-id="${candidateId}" data-xcid="${xcId}" data-sid="${sp.id}">
+          <option value="none"${selectedRole === 'none' ? ' selected' : ''}>none</option>
+          <option value="song"${selectedRole === 'song' ? ' selected' : ''}>song</option>
+          <option value="call"${selectedRole === 'call' ? ' selected' : ''}>call</option>
+        </select>
       </div>
     </div>
 
     <div class="clip-meta">
-      ${qBadge}${typeBadge}${sexBadge}${licBadge}${pbWarn}
+      ${rankBadge}${sourceBadge}${qBadge}${typeBadge}${sexBadge}${pbWarn}
       <span class="meta-sep">·</span>
       ${animalSeen}${stage}${method}${loc}${rec}${score}
     </div>
+
+    ${renderClipEvidenceHtml(clip)}
 
     ${remarksHtml}
 
@@ -693,9 +796,9 @@ function buildClipCard(sp, clip) {
     seekClip(xcId, e);
   });
 
-  // Toggle
-  card.querySelector('input[type=checkbox]').addEventListener('change', async (e) => {
-    await toggleSelected(sp.id, xcId, e.target.checked, card, clip);
+  // Role assignment
+  card.querySelector('.role-select').addEventListener('change', async (e) => {
+    await assignSelectedRole(sp.id, candidateId, xcId, e.target.value, card);
   });
 
   // Pre-render spectrogram without requiring play
@@ -943,34 +1046,37 @@ function fft(re, im) {
 }
 
 // ────────────────────────────────────────────────
-// Toggle selected
+// Role assignment
 // ────────────────────────────────────────────────
-async function toggleSelected(speciesId, xcId, selected, card, clip) {
+async function assignSelectedRole(speciesId, candidateId, xcId, selectedRole, card) {
+  const select = card.querySelector('.role-select')
+  const previousRole = card.dataset.selectedRole || 'none'
   try {
-    const res = await fetch('/api/toggle', {
+    const res = await fetch('/api/assign-role', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ species_id: speciesId, xc_id: xcId, selected }),
+      body: JSON.stringify({ species_id: speciesId, candidate_id: candidateId, xc_id: xcId, selected_role: selectedRole }),
     });
-    if (!res.ok) throw new Error('Server error');
+    if (!res.ok) {
+      const errorBody = await res.json().catch(() => ({ error: 'Server error' }))
+      throw new Error(errorBody.error || 'Server error')
+    }
 
     // Update in-memory state
     const sp = state.species.find(s => s.id === speciesId);
     if (sp) {
-      const allClips = [...(sp.audio_clips.songs || []), ...(sp.audio_clips.calls || [])];
-      const c = allClips.find(c => String(c.xc_id) === xcId);
-      if (c) c.selected = selected;
+      applyCandidateRole(sp, candidateId, xcId, selectedRole)
     }
 
-    card.classList.toggle('selected-card', selected);
-    updateSidebarBadge(speciesId);
+    setCardAssignedRole(card, selectedRole)
+    const counts = sp ? getSpeciesRoleCounts(sp) : null
+    updateSidebarBadge(speciesId, counts)
     updateGlobalCount();
-    setStatus(selected ? `XC${xcId} marked in app` : `XC${xcId} removed from app`);
+    setStatus(selectedRole === 'none' ? `XC${xcId} cleared` : `XC${xcId} assigned as ${selectedRole}`);
 
   } catch (e) {
     setStatus('Error saving: ' + e.message);
-    // Revert checkbox
-    card.querySelector('input[type=checkbox]').checked = !selected;
+    select.value = previousRole
   }
 }
 

@@ -47,10 +47,10 @@ Reference the PRD sections:
 
 ### Acceptance criteria
 
-- [ ] Given an older populated pool file, when it is loaded by the new code, then it is normalized into the new unified candidate schema without losing clip identity or existing curation choices.
-- [ ] Given a normalized pool file, when it is saved, then it includes unified candidate records with role-assignment and analysis-ready fields.
-- [ ] Given a species with unified candidates, when downstream code reads it, then the data needed for later export to manifest `songs` and `calls` remains available.
-- [ ] Given missing new-schema fields such as BirdNET analysis or segment windows, then loading still succeeds with explicit default status rather than crashing.
+- [x] Given an older populated pool file, when it is loaded by the new code, then it is normalized into the new unified candidate schema without losing clip identity or existing curation choices.
+- [x] Given a normalized pool file, when it is saved, then it includes unified candidate records with role-assignment and analysis-ready fields.
+- [x] Given a species with unified candidates, when downstream code reads it, then the data needed for later export to manifest `songs` and `calls` remains available.
+- [x] Given missing new-schema fields such as BirdNET analysis or segment windows, then loading still succeeds with explicit default status rather than crashing.
 
 ### User stories addressed
 
@@ -60,10 +60,10 @@ Reference the PRD sections:
 
 ### Tasks
 
-- [ ] **MIGRATE**: Define the unified candidate schema and normalization contract in `populate_content.py` and the implementation doc fields it depends on, including schema version, candidate identity, XC metadata, role assignment, licensing, analysis placeholders, and segment fields.
-- [ ] **WRITE**: Add backward-compatible pool normalization and save logic in `populate_content.py` so older `audio_clips.songs` / `audio_clips.calls` data loads into the unified candidate structure without losing prior selections.
-- [ ] **WRITE**: Update `admin/server.py` pool read/write paths to operate on the normalized schema while preserving safe no-op behavior for missing new fields.
-- [ ] **TEST**: Add fixture-driven tests for schema normalization and round-trip persistence, covering old pool input, missing BirdNET fields, and preserved candidate identity.
+- [x] **MIGRATE**: Define the unified candidate schema and normalization contract in `populate_content.py` and the implementation doc fields it depends on, including schema version, candidate identity, XC metadata, role assignment, licensing, analysis placeholders, and segment fields.
+- [x] **WRITE**: Add backward-compatible pool normalization and save logic in `populate_content.py` so older `audio_clips.songs` / `audio_clips.calls` data loads into the unified candidate structure without losing prior selections.
+- [x] **WRITE**: Update `admin/server.py` pool read/write paths to operate on the normalized schema while preserving safe no-op behavior for missing new fields.
+- [x] **TEST**: Add fixture-driven tests for schema normalization and round-trip persistence, covering old pool input, missing BirdNET fields, and preserved candidate identity.
 
 ---
 
@@ -99,10 +99,10 @@ Reference the PRD sections:
 
 ### Acceptance criteria
 
-- [ ] Given BirdNET is configured and working, when candidate analysis runs, then normalized analysis results are stored in the candidate pool.
-- [ ] Given BirdNET is missing or the configured executable is invalid, when candidate analysis runs, then the pipeline continues with explicit fallback status and prominent warnings.
-- [ ] Given BirdNET output changes or is malformed, when parsing fails, then the adapter returns structured failure information instead of crashing the whole run.
-- [ ] Given a pipeline summary is printed, then it clearly distinguishes BirdNET-assisted runs from FFmpeg-only fallback runs.
+- [x] Given BirdNET is configured and working, when candidate analysis runs, then normalized analysis results are stored in the candidate pool.
+- [x] Given BirdNET is missing or the configured executable is invalid, when candidate analysis runs, then the pipeline continues with explicit fallback status and prominent warnings.
+- [x] Given BirdNET output changes or is malformed, when parsing fails, then the adapter returns structured failure information instead of crashing the whole run.
+- [x] Given a pipeline summary is printed, then it clearly distinguishes BirdNET-assisted runs from FFmpeg-only fallback runs.
 
 ### User stories addressed
 
@@ -112,10 +112,10 @@ Reference the PRD sections:
 
 ### Tasks
 
-- [ ] **CONFIG**: Define the BirdNET environment contract in `populate_content.py` and related docs, including executable path discovery and the warning behavior for missing configuration.
-- [ ] **WRITE**: Add a thin BirdNET invocation and result-normalization module or helper used by `populate_content.py`, returning structured analysis status instead of raw CLI output.
-- [ ] **WRITE**: Thread BirdNET availability and failure status through species-level logs and final summary output so fallback runs are unmistakable.
-- [ ] **TEST**: Add parser and fallback tests using fixture BirdNET output plus missing-binary cases to verify structured failure handling.
+- [x] **CONFIG**: Define the BirdNET environment contract in `populate_content.py` and related docs, including executable path discovery and the warning behavior for missing configuration.
+- [x] **WRITE**: Add a thin BirdNET invocation and result-normalization module or helper used by `populate_content.py`, returning structured analysis status instead of raw CLI output.
+- [x] **WRITE**: Thread BirdNET availability and failure status through species-level logs and final summary output so fallback runs are unmistakable.
+- [x] **TEST**: Add parser and fallback tests using fixture BirdNET output plus missing-binary cases to verify structured failure handling.
 
 ---
 
@@ -153,10 +153,10 @@ Reference the PRD sections:
 
 ### Acceptance criteria
 
-- [ ] Given Xeno-canto responses for a species, when population runs, then the output stores a unified ranked candidate pool rather than precommitting candidates into final app roles.
-- [ ] Given a candidate has original XC `type` metadata, when it is stored, then that metadata remains available for later admin review.
-- [ ] Given a candidate includes `also` background-species metadata, when ranking runs, then that signal materially lowers or removes the candidate from the top mixed pool.
-- [ ] Given BirdNET data is unavailable, then ranking still completes with explicit degraded-analysis status rather than empty output or a crash.
+- [x] Given Xeno-canto responses for a species, when population runs, then the output stores a unified ranked candidate pool rather than precommitting candidates into final app roles.
+- [x] Given a candidate has original XC `type` metadata, when it is stored, then that metadata remains available for later admin review.
+- [x] Given a candidate includes `also` background-species metadata, when ranking runs, then that signal materially lowers or removes the candidate from the top mixed pool.
+- [x] Given BirdNET data is unavailable, then ranking still completes with explicit degraded-analysis status rather than empty output or a crash.
 
 ### User stories addressed
 
@@ -166,10 +166,10 @@ Reference the PRD sections:
 
 ### Tasks
 
-- [ ] **WRITE**: Replace the early song/call-first selection in `populate_content.py` with unified candidate gathering that stores mixed candidates plus preserved XC type metadata.
-- [ ] **WRITE**: Implement ranking that combines XC quality, `also` metadata, license status, and BirdNET-backed signals when present, while remaining usable without BirdNET.
-- [ ] **WRITE**: Update summary reporting in `populate_content.py` to describe mixed-pool quality gaps and degraded-analysis cases instead of only song/call counts.
-- [ ] **TEST**: Add scoring and ranking tests with representative fixtures for clean clips, `also` clips, mixed XC types, and missing analysis.
+- [x] **WRITE**: Replace the early song/call-first selection in `populate_content.py` with unified candidate gathering that stores mixed candidates plus preserved XC type metadata.
+- [x] **WRITE**: Implement ranking that combines XC quality, `also` metadata, license status, and BirdNET-backed signals when present, while remaining usable without BirdNET.
+- [x] **WRITE**: Update summary reporting in `populate_content.py` to describe mixed-pool quality gaps and degraded-analysis cases instead of only song/call counts.
+- [x] **TEST**: Add scoring and ranking tests with representative fixtures for clean clips, `also` clips, mixed XC types, and missing analysis.
 
 ---
 
@@ -205,10 +205,10 @@ Reference the PRD sections:
 
 ### Acceptance criteria
 
-- [ ] Given a candidate with strong BirdNET target detections, when segment selection runs, then the stored window centers on the target vocalization and prefers a 6-8 second duration.
-- [ ] Given no suitable short target-centered region exists, when segment selection runs, then it may extend the window up to 12 seconds with a recorded fallback reason.
-- [ ] Given BirdNET analysis is unavailable, when segment selection runs, then FFmpeg-only heuristics produce a stored fallback window rather than leaving segment data blank.
-- [ ] Given candidate windows are stored, then later stages can reuse them without recomputing segment selection logic.
+- [x] Given a candidate with strong BirdNET target detections, when segment selection runs, then the stored window centers on the target vocalization and prefers a 6-8 second duration.
+- [x] Given no suitable short target-centered region exists, when segment selection runs, then it may extend the window up to 12 seconds with a recorded fallback reason.
+- [x] Given BirdNET analysis is unavailable, when segment selection runs, then FFmpeg-only heuristics produce a stored fallback window rather than leaving segment data blank.
+- [x] Given candidate windows are stored, then later stages can reuse them without recomputing segment selection logic.
 
 ### User stories addressed
 
@@ -218,10 +218,10 @@ Reference the PRD sections:
 
 ### Tasks
 
-- [ ] **WRITE**: Add persisted segment fields and fallback-reason handling to the candidate records produced by `populate_content.py`.
-- [ ] **WRITE**: Implement segment selection that prefers BirdNET-backed target-centered 6-8 second windows and falls back to FFmpeg heuristics up to 12 seconds when needed.
-- [ ] **WRITE**: Ensure candidate previews and downstream consumers reuse stored segment windows instead of recomputing selection logic ad hoc.
-- [ ] **TEST**: Add focused tests for ideal target-centered windows, longer fallback windows, and missing-BirdNET segment selection behavior.
+- [x] **WRITE**: Add persisted segment fields and fallback-reason handling to the candidate records produced by `populate_content.py`.
+- [x] **WRITE**: Implement segment selection that prefers BirdNET-backed target-centered 6-8 second windows and falls back to FFmpeg heuristics up to 12 seconds when needed.
+- [x] **WRITE**: Ensure candidate previews and downstream consumers reuse stored segment windows instead of recomputing selection logic ad hoc.
+- [x] **TEST**: Add focused tests for ideal target-centered windows, longer fallback windows, and missing-BirdNET segment selection behavior.
 
 ---
 
@@ -261,10 +261,10 @@ Reference the PRD sections:
 
 ### Acceptance criteria
 
-- [ ] Given a species with unified candidates, when the admin view renders, then it shows one mixed list rather than separate source-defined song and call buckets.
-- [ ] Given the curator changes a candidate role to `song`, `call`, or `none`, when the change is saved, then the role persists in the pool file.
-- [ ] Given assignments exist for a species, when the admin sidebar or species header updates, then counters reflect the assigned song and call totals.
-- [ ] Given a previously assigned candidate is changed to `none`, then the UI and persisted file both reflect the removal of that role.
+- [x] Given a species with unified candidates, when the admin view renders, then it shows one mixed list rather than separate source-defined song and call buckets.
+- [x] Given the curator changes a candidate role to `song`, `call`, or `none`, when the change is saved, then the role persists in the pool file.
+- [x] Given assignments exist for a species, when the admin sidebar or species header updates, then counters reflect the assigned song and call totals.
+- [x] Given a previously assigned candidate is changed to `none`, then the UI and persisted file both reflect the removal of that role.
 
 ### User stories addressed
 
@@ -274,10 +274,10 @@ Reference the PRD sections:
 
 ### Tasks
 
-- [ ] **WRITE**: Refactor `admin/index.html` species rendering from separate Songs / Calls sections into one mixed candidate list ordered by the new ranking data.
-- [ ] **WRITE**: Replace the boolean “In app” toggle flow in `admin/index.html` and `admin/server.py` with explicit role assignment for `none`, `song`, and `call`.
-- [ ] **WRITE**: Add species-level assigned-song and assigned-call counters in the admin sidebar and detail view, updating immediately after role changes.
-- [ ] **TEST**: Add server-side persistence coverage and lightweight UI behavior checks for role assignment, removal, and counter updates.
+- [x] **WRITE**: Refactor `admin/index.html` species rendering from separate Songs / Calls sections into one mixed candidate list ordered by the new ranking data.
+- [x] **WRITE**: Replace the boolean “In app” toggle flow in `admin/index.html` and `admin/server.py` with explicit role assignment for `none`, `song`, and `call`.
+- [x] **WRITE**: Add species-level assigned-song and assigned-call counters in the admin sidebar and detail view, updating immediately after role changes.
+- [x] **TEST**: Add server-side persistence coverage and lightweight UI behavior checks for role assignment, removal, and counter updates.
 
 ---
 
@@ -313,10 +313,10 @@ Reference the PRD sections:
 
 ### Acceptance criteria
 
-- [ ] Given a candidate is commercial-compatible, when it is shown in the admin, then its license status is clearly distinguished from non-commercial candidates.
-- [ ] Given BirdNET target and overlap data exist, when a candidate card renders, then the UI surfaces a concise summary that supports role selection.
-- [ ] Given BirdNET data is missing, when a candidate card renders, then the UI shows an explicit degraded-analysis state rather than implying full analysis was available.
-- [ ] Given the curator reviews several real species, then the evidence presentation is confirmed to be useful rather than too noisy before the slice is considered complete.
+- [x] Given a candidate is commercial-compatible, when it is shown in the admin, then its license status is clearly distinguished from non-commercial candidates.
+- [x] Given BirdNET target and overlap data exist, when a candidate card renders, then the UI surfaces a concise summary that supports role selection.
+- [x] Given BirdNET data is missing, when a candidate card renders, then the UI shows an explicit degraded-analysis state rather than implying full analysis was available.
+- [x] Given the curator reviews several real species, then the evidence presentation is confirmed to be useful rather than too noisy before the slice is considered complete.
 
 ### User stories addressed
 
@@ -326,10 +326,16 @@ Reference the PRD sections:
 
 ### Tasks
 
-- [ ] **WRITE**: Add clear commercial vs non-commercial badges and degraded-analysis markers to candidate cards in `admin/index.html`.
-- [ ] **WRITE**: Add concise BirdNET evidence summaries and ranking-support metadata to the candidate cards, using the stored analysis fields from the unified schema.
-- [ ] **REVIEW**: Review the evidence density on real species in the admin UI and decide whether any BirdNET or ranking details should be simplified, collapsed, or expanded.
-- [ ] **TEST**: Add rendering coverage for license badges, BirdNET summary blocks, and degraded-analysis display states where practical.
+- [x] **WRITE**: Add clear commercial vs non-commercial badges and degraded-analysis markers to candidate cards in `admin/index.html`.
+- [x] **WRITE**: Add concise BirdNET evidence summaries and ranking-support metadata to the candidate cards, using the stored analysis fields from the unified schema.
+- [x] **REVIEW**: Review the evidence density on real species in the admin UI and decide whether any BirdNET or ranking details should be simplified, collapsed, or expanded.
+- [x] **TEST**: Add rendering coverage for license badges, BirdNET summary blocks, and degraded-analysis display states where practical.
+
+### Review notes
+
+- Reviewed American Robin, Steller's Jay, and House Finch in the local admin on `http://localhost:8765` with the checked-in pool data.
+- The degraded-analysis presentation was slightly repetitive in the first pass, so the card copy was tightened to keep the explicit badge while shortening the BirdNET body text.
+- The checked-in pool currently exercises degraded-analysis states only; BirdNET-assisted summary and ranking-support rendering were verified through the automated rendering tests against unified-schema fixtures.
 
 ---
 
@@ -367,10 +373,10 @@ Reference the PRD sections:
 
 ### Acceptance criteria
 
-- [ ] Given curated assignments and `all` mode, when export runs, then the selected clips are preserved regardless of commercial status.
-- [ ] Given a selected role uses an NC clip and a commercial-compatible alternative exists, when export runs in `commercial` mode, then the best commercial-compatible candidate is substituted automatically.
-- [ ] Given a substitution occurs, when export completes, then the operator receives a clear warning describing the tradeoff.
-- [ ] Given no commercial-compatible replacement exists for a selected NC role, when export runs in `commercial` mode, then the output and warnings make that gap explicit rather than silently hiding it.
+- [x] Given curated assignments and `all` mode, when export runs, then the selected clips are preserved regardless of commercial status.
+- [x] Given a selected role uses an NC clip and a commercial-compatible alternative exists, when export runs in `commercial` mode, then the best commercial-compatible candidate is substituted automatically.
+- [x] Given a substitution occurs, when export completes, then the operator receives a clear warning describing the tradeoff.
+- [x] Given no commercial-compatible replacement exists for a selected NC role, when export runs in `commercial` mode, then the output and warnings make that gap explicit rather than silently hiding it.
 
 ### User stories addressed
 
@@ -380,10 +386,10 @@ Reference the PRD sections:
 
 ### Tasks
 
-- [ ] **WRITE**: Add export-mode handling to the pipeline so `all` preserves curator choices and `commercial` resolves role assignments through best available commercial-compatible substitutes.
-- [ ] **WRITE**: Implement role validation and substitution-summary reporting for sparse roles, missing replacements, and quality tradeoff warnings.
-- [ ] **WRITE**: Update any manifest-building helpers so final export resolves from unified candidates and selected roles instead of the old preselected pools.
-- [ ] **TEST**: Add export and validator tests covering preserved NC output, successful commercial substitution, and explicit warnings when no compliant substitute exists.
+- [x] **WRITE**: Add export-mode handling to the pipeline so `all` preserves curator choices and `commercial` resolves role assignments through best available commercial-compatible substitutes.
+- [x] **WRITE**: Implement role validation and substitution-summary reporting for sparse roles, missing replacements, and quality tradeoff warnings.
+- [x] **WRITE**: Update any manifest-building helpers so final export resolves from unified candidates and selected roles instead of the old preselected pools.
+- [x] **TEST**: Add export and validator tests covering preserved NC output, successful commercial substitution, and explicit warnings when no compliant substitute exists.
 
 ---
 
@@ -420,10 +426,10 @@ Reference the PRD sections:
 
 ### Acceptance criteria
 
-- [ ] Given curated assignments with stored segment windows, when media build runs, then generated audio files use those windows instead of re-deriving unrelated segments.
-- [ ] Given final export data, when the manifest is written, then it preserves the runtime contract of `audio_clips.songs` and `audio_clips.calls`.
-- [ ] Given the build runs in different export modes, then the generated audio files and manifest reflect the resolved selection for that mode.
-- [ ] Given BirdNET was unavailable upstream, when media build runs, then stored FFmpeg-only fallback windows are still honored.
+- [x] Given curated assignments with stored segment windows, when media build runs, then generated audio files use those windows instead of re-deriving unrelated segments.
+- [x] Given final export data, when the manifest is written, then it preserves the runtime contract of `audio_clips.songs` and `audio_clips.calls`.
+- [x] Given the build runs in different export modes, then the generated audio files and manifest reflect the resolved selection for that mode.
+- [x] Given BirdNET was unavailable upstream, when media build runs, then stored FFmpeg-only fallback windows are still honored.
 
 ### User stories addressed
 
@@ -433,10 +439,10 @@ Reference the PRD sections:
 
 ### Tasks
 
-- [ ] **WRITE**: Update `download_media.py` to consume curated assignments and stored segment windows from the unified pool rather than re-deriving final selections from old `selected` flags.
-- [ ] **WRITE**: Make the media build honor resolved export-mode choices and emit the runtime `audio_clips.songs` / `audio_clips.calls` manifest shape from curated assignments.
-- [ ] **WRITE**: Preserve FFmpeg-only fallback windows during media build when BirdNET analysis was unavailable upstream.
-- [ ] **TEST**: Add focused coverage for segment-aware media selection and final manifest shape compatibility.
+- [x] **WRITE**: Update `download_media.py` to consume curated assignments and stored segment windows from the unified pool rather than re-deriving final selections from old `selected` flags.
+- [x] **WRITE**: Make the media build honor resolved export-mode choices and emit the runtime `audio_clips.songs` / `audio_clips.calls` manifest shape from curated assignments.
+- [x] **WRITE**: Preserve FFmpeg-only fallback windows during media build when BirdNET analysis was unavailable upstream.
+- [x] **TEST**: Add focused coverage for segment-aware media selection and final manifest shape compatibility.
 
 ---
 

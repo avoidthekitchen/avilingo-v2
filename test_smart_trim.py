@@ -4,13 +4,14 @@ Uses real ffmpeg to generate test audio files and validates that
 detect_best_segment correctly identifies active audio regions.
 """
 
+from copy import deepcopy
 import subprocess
 import tempfile
 from pathlib import Path
 
 import pytest
 
-from download_media import detect_best_segment, normalize_audio
+from download_media import detect_best_segment, normalize_audio, process_species
 
 
 def make_test_audio(segments: list[tuple[str, float]], path: Path) -> None:
@@ -186,3 +187,268 @@ class TestNormalizeAudioSmartTrim:
         dur = get_audio_duration(output_file)
         # Should be capped at ~20s (fallback behavior)
         assert 19.0 <= dur <= 21.0
+
+    def test_uses_persisted_segment_window_without_recomputing_trim(self, tmp_path, monkeypatch):
+        """Stored segment windows should be honored directly by downstream export."""
+        input_file = tmp_path / "input.wav"
+        output_file = tmp_path / "output.ogg"
+        make_test_audio([("silence", 5.0), ("tone", 20.0)], input_file)
+
+        def fail_if_called(_input_path):
+            raise AssertionError("detect_best_segment should not run when a stored segment is provided")
+
+        monkeypatch.setattr("download_media.detect_best_segment", fail_if_called)
+
+        result = normalize_audio(
+            input_file,
+            output_file,
+            segment={
+                "status": "birdnet_target_centered",
+                "start_s": 8.0,
+                "end_s": 15.0,
+                "duration_s": 7.0,
+            },
+        )
+
+        assert result is True
+        dur = get_audio_duration(output_file)
+        assert 6.5 <= dur <= 7.5
+
+
+class TestProcessSpeciesExportSelection:
+    def test_all_mode_downloads_all_candidates_for_admin_preview_and_exports_curated_assignments(self, tmp_path, monkeypatch):
+        species = {
+            "id": "warbler",
+            "common_name": "Wilson's Warbler",
+            "audio_clips": {
+                "schema_version": 2,
+                "candidates": [
+                    {
+                        "candidate_id": "xc:101:song:0",
+                        "xc_id": "101",
+                        "source_role": "song",
+                        "selected_role": "song",
+                        "type": "song",
+                        "audio_url": "https://example.test/101.mp3",
+                        "commercial_ok": True,
+                        "segment": {
+                            "status": "birdnet_target_centered",
+                            "start_s": 3.0,
+                            "end_s": 10.0,
+                            "duration_s": 7.0,
+                            "confidence": 0.92,
+                            "fallback_reason": None,
+                        },
+                    },
+                    {
+                        "candidate_id": "xc:102:song:1",
+                        "xc_id": "102",
+                        "source_role": "song",
+                        "selected_role": "none",
+                        "type": "song",
+                        "audio_url": "https://example.test/102.mp3",
+                        "commercial_ok": True,
+                        "segment": {
+                            "status": "birdnet_target_centered",
+                            "start_s": 11.0,
+                            "end_s": 18.0,
+                            "duration_s": 7.0,
+                            "confidence": 0.88,
+                            "fallback_reason": None,
+                        },
+                    },
+                    {
+                        "candidate_id": "xc:103:call:0",
+                        "xc_id": "103",
+                        "source_role": "call",
+                        "selected_role": "call",
+                        "type": "call",
+                        "audio_url": "https://example.test/103.mp3",
+                        "commercial_ok": True,
+                        "segment": {
+                            "status": "ffmpeg_heuristic",
+                            "start_s": 20.0,
+                            "end_s": 28.0,
+                            "duration_s": 8.0,
+                            "confidence": None,
+                            "fallback_reason": "birdnet_not_configured",
+                        },
+                    },
+                ],
+            },
+            "wikipedia_audio": [],
+            "photo": {"url": "https://example.test/warbler.jpg"},
+        }
+
+        audio_dir = tmp_path / "audio"
+        photo_dir = tmp_path / "photos"
+        photo_dir.mkdir(parents=True, exist_ok=True)
+        (photo_dir / "warbler.jpg").write_bytes(b"photo")
+        monkeypatch.setattr("download_media.AUDIO_DIR", audio_dir)
+        monkeypatch.setattr("download_media.PHOTO_DIR", photo_dir)
+
+        normalized_calls: list[tuple[str, dict | None]] = []
+
+        def fake_download(url, dest, description=""):
+            del description
+            dest.write_bytes(url.encode("utf-8"))
+            return True
+
+        def fake_normalize(input_path, output_path, segment=None):
+            del input_path
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_bytes(b"ogg")
+            normalized_calls.append((output_path.name.removesuffix(".ogg"), deepcopy(segment)))
+            return True
+
+        monkeypatch.setattr("download_media.download_file", fake_download)
+        monkeypatch.setattr("download_media.normalize_audio", fake_normalize)
+
+        manifest_species, export_report = process_species(
+            species,
+            deepcopy(species),
+            export_mode="all",
+        )
+
+        assert [xc_id for xc_id, _segment in normalized_calls] == ["101", "102", "103"]
+        assert normalized_calls[0][1] == {
+            "status": "birdnet_target_centered",
+            "start_s": 3.0,
+            "end_s": 10.0,
+            "duration_s": 7.0,
+            "confidence": 0.92,
+            "fallback_reason": None,
+        }
+        assert normalized_calls[1][1] == {
+            "status": "birdnet_target_centered",
+            "start_s": 11.0,
+            "end_s": 18.0,
+            "duration_s": 7.0,
+            "confidence": 0.88,
+            "fallback_reason": None,
+        }
+        assert normalized_calls[2][1] == {
+            "status": "ffmpeg_heuristic",
+            "start_s": 20.0,
+            "end_s": 28.0,
+            "duration_s": 8.0,
+            "confidence": None,
+            "fallback_reason": "birdnet_not_configured",
+        }
+        assert [clip["xc_id"] for clip in manifest_species["audio_clips"]["songs"]] == ["101"]
+        assert [clip["xc_id"] for clip in manifest_species["audio_clips"]["calls"]] == ["103"]
+        assert manifest_species["audio_clips"]["songs"][0]["audio_url"] == "/content/audio/warbler/101.ogg"
+        assert manifest_species["audio_clips"]["calls"][0]["audio_url"] == "/content/audio/warbler/103.ogg"
+        assert export_report["audio_clips"] == manifest_species["audio_clips"]
+
+    def test_commercial_mode_still_downloads_all_candidates_but_exports_substitute_clip(self, tmp_path, monkeypatch):
+        species = {
+            "id": "warbler",
+            "common_name": "Wilson's Warbler",
+            "audio_clips": {
+                "schema_version": 2,
+                "candidates": [
+                    {
+                        "candidate_id": "xc:201:song:0",
+                        "xc_id": "201",
+                        "source_role": "song",
+                        "selected_role": "song",
+                        "type": "song",
+                        "audio_url": "https://example.test/201.mp3",
+                        "commercial_ok": False,
+                        "score": 90.0,
+                        "segment": {
+                            "status": "birdnet_target_centered",
+                            "start_s": 2.0,
+                            "end_s": 9.0,
+                            "duration_s": 7.0,
+                            "confidence": 0.97,
+                            "fallback_reason": None,
+                        },
+                    },
+                    {
+                        "candidate_id": "xc:202:song:1",
+                        "xc_id": "202",
+                        "source_role": "song",
+                        "selected_role": "none",
+                        "type": "song",
+                        "xc_type": "song",
+                        "audio_url": "https://example.test/202.mp3",
+                        "commercial_ok": True,
+                        "score": 70.0,
+                        "segment": {
+                            "status": "birdnet_extended_context",
+                            "start_s": 12.0,
+                            "end_s": 21.0,
+                            "duration_s": 9.0,
+                            "confidence": 0.73,
+                            "fallback_reason": "target_region_too_short",
+                        },
+                    },
+                    {
+                        "candidate_id": "xc:203:call:0",
+                        "xc_id": "203",
+                        "source_role": "call",
+                        "selected_role": "call",
+                        "type": "call",
+                        "xc_type": "call",
+                        "audio_url": "https://example.test/203.mp3",
+                        "commercial_ok": True,
+                        "score": 65.0,
+                        "segment": {
+                            "status": "ffmpeg_heuristic",
+                            "start_s": 4.0,
+                            "end_s": 12.0,
+                            "duration_s": 8.0,
+                            "confidence": None,
+                            "fallback_reason": "birdnet_not_configured",
+                        },
+                    },
+                ],
+            },
+            "wikipedia_audio": [],
+            "photo": {"url": "https://example.test/warbler.jpg"},
+        }
+
+        audio_dir = tmp_path / "audio"
+        photo_dir = tmp_path / "photos"
+        photo_dir.mkdir(parents=True, exist_ok=True)
+        (photo_dir / "warbler.jpg").write_bytes(b"photo")
+        monkeypatch.setattr("download_media.AUDIO_DIR", audio_dir)
+        monkeypatch.setattr("download_media.PHOTO_DIR", photo_dir)
+
+        normalized_calls: list[tuple[str, dict | None]] = []
+
+        def fake_download(url, dest, description=""):
+            del description
+            dest.write_bytes(url.encode("utf-8"))
+            return True
+
+        def fake_normalize(input_path, output_path, segment=None):
+            del input_path
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_bytes(b"ogg")
+            normalized_calls.append((output_path.name.removesuffix(".ogg"), deepcopy(segment)))
+            return True
+
+        monkeypatch.setattr("download_media.download_file", fake_download)
+        monkeypatch.setattr("download_media.normalize_audio", fake_normalize)
+
+        manifest_species, export_report = process_species(
+            species,
+            deepcopy(species),
+            export_mode="commercial",
+        )
+
+        assert [xc_id for xc_id, _segment in normalized_calls] == ["201", "202", "203"]
+        assert [clip["xc_id"] for clip in manifest_species["audio_clips"]["songs"]] == ["202"]
+        assert [clip["xc_id"] for clip in manifest_species["audio_clips"]["calls"]] == ["203"]
+        assert export_report["substitutions"] == [
+            {
+                "role": "song",
+                "selected_candidate_id": "xc:201:song:0",
+                "selected_xc_id": "201",
+                "substitute_candidate_id": "xc:202:song:1",
+                "substitute_xc_id": "202",
+            }
+        ]
