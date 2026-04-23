@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useAppStore } from '../../store/appStore'
+import AudioButton from '../shared/AudioButton'
 
 export default function Dashboard() {
   const manifest = useAppStore(s => s.manifest)
@@ -65,7 +66,7 @@ export default function Dashboard() {
           return (
             <div
               key={species.id}
-              className="flex items-center gap-3 p-3 bg-card rounded-xl border border-border"
+              className="flex items-start gap-3 p-3 bg-card rounded-xl border border-border"
             >
               <img
                 src={species.photo.url}
@@ -82,8 +83,28 @@ export default function Dashboard() {
                     <> · Next: {new Date(progress.nextReview).toLocaleDateString()}</>
                   )}
                 </p>
+                {(species.audio_clips.songs[0] || species.audio_clips.calls[0]) && (
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {species.audio_clips.songs[0] && (
+                      <AudioButton
+                        clips={[species.audio_clips.songs[0]]}
+                        label="Song"
+                        speciesId={species.id}
+                        variant="primary"
+                      />
+                    )}
+                    {species.audio_clips.calls[0] && (
+                      <AudioButton
+                        clips={[species.audio_clips.calls[0]]}
+                        label="Call"
+                        speciesId={species.id}
+                        variant="secondary"
+                      />
+                    )}
+                  </div>
+                )}
               </div>
-              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${stateColor}`}>
+              <span className={`shrink-0 text-xs px-2 py-0.5 rounded-full font-medium ${stateColor}`}>
                 {stateLabel}
               </span>
             </div>
