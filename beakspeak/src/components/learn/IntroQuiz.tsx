@@ -6,9 +6,10 @@ import type { IntroQuizItem } from '../../core/types'
 interface Props {
   items: IntroQuizItem[]
   onComplete: (results: Array<{ correct: boolean }>) => void
+  onBack?: () => void
 }
 
-export default function IntroQuiz({ items, onComplete }: Props) {
+export default function IntroQuiz({ items, onComplete, onBack }: Props) {
   const audioPlayer = useAppStore(s => s.audioPlayer)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -68,10 +69,24 @@ export default function IntroQuiz({ items, onComplete }: Props) {
   return (
     <div className="flex flex-col h-full overflow-y-auto">
       <div className="p-4 flex flex-col flex-1">
-        <div className="text-center mb-4">
-          <p className="text-xs text-text-muted mb-2">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          {onBack ? (
+            <button
+              onClick={onBack}
+              className="text-sm text-text-muted"
+            >
+              Back
+            </button>
+          ) : (
+            <span />
+          )}
+          <p className="text-xs text-text-muted">
             Question {currentIndex + 1} of {items.length}
           </p>
+          <span />
+        </div>
+
+        <div className="text-center mb-4">
           <button
             onClick={() => {
               if (playState === 'playing') audioPlayer.stop()

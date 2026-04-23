@@ -8,19 +8,21 @@ import BirdCard from './BirdCard'
 import IntroQuiz from './IntroQuiz'
 
 type Phase = 'review' | 'cards' | 'quiz' | 'complete'
+type LearnSessionMode = 'normal' | 'unlock' | 'redo'
 
 interface Props {
   lesson: Lesson
+  mode?: LearnSessionMode
   onComplete: () => void
 }
 
-export default function LearnSession({ lesson, onComplete }: Props) {
+export default function LearnSession({ lesson, mode = 'normal', onComplete }: Props) {
   const manifest = useAppStore(s => s.manifest)
   const getIntroducedSpecies = useAppStore(s => s.getIntroducedSpecies)
   const introduceSpecies = useAppStore(s => s.introduceSpecies)
 
   const introducedSpecies = getIntroducedSpecies()
-  const hasReviewPhase = introducedSpecies.length >= 3
+  const hasReviewPhase = mode === 'normal' && introducedSpecies.length >= 3
 
   const [phase, setPhase] = useState<Phase>(hasReviewPhase ? 'review' : 'cards')
   const [cardIndex, setCardIndex] = useState(0)
@@ -45,9 +47,11 @@ export default function LearnSession({ lesson, onComplete }: Props) {
   }, [cardIndex])
 
   const handleQuizComplete = useCallback(async () => {
-    await introduceSpecies(lesson.species)
+    if (mode !== 'redo') {
+      await introduceSpecies(lesson.species)
+    }
     setPhase('complete')
-  }, [introduceSpecies, lesson.species])
+  }, [introduceSpecies, lesson.species, mode])
 
   const handleReviewComplete = useCallback(() => {
     setPhase('cards')
@@ -68,7 +72,7 @@ export default function LearnSession({ lesson, onComplete }: Props) {
           <p className="text-sm text-secondary font-medium">Quick Review</p>
           <p className="text-xs text-text-muted">Let's warm up with some familiar birds</p>
         </div>
-        <IntroQuiz items={reviewItems} onComplete={handleReviewComplete} />
+        <IntroQuiz items={reviewItems} onComplete={handleReviewComplete} onBack={onComplete} />
       </div>
     )
   }
@@ -159,7 +163,7 @@ export default function LearnSession({ lesson, onComplete }: Props) {
           <p className="text-sm text-primary font-medium">Quick Quiz</p>
           <p className="text-xs text-text-muted">Test what you just learned!</p>
         </div>
-        <IntroQuiz items={quizItems} onComplete={handleQuizComplete} />
+        <IntroQuiz items={quizItems} onComplete={handleQuizComplete} onBack={onComplete} />
       </div>
     )
   }
@@ -168,18 +172,33 @@ export default function LearnSession({ lesson, onComplete }: Props) {
   return (
     <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
       <p className="text-4xl mb-4">🎉</p>
-      <h2 className="text-xl font-semibold text-text mb-2">Lesson Complete!</h2>
-      <p className="text-text-muted mb-2">
-        You've learned {lessonSpecies.map(s => s.common_name).join(', ')}
-      </p>
-      <p className="text-sm text-text-muted mb-6">
-        They'll appear in your review sessions soon.
-      </p>
+      <h2 className="text-xl font-semibold text-text mb-2">
+        {mode === 'redo' ? 'Refresher Complete!' : 'Lesson Complete!'}
+      </h2>
+      {mode === 'redo' ? (
+        <>
+          <p className="text-text-muted mb-2">
+            You revisited {lessonSpecies.map(s => s.common_name).join(', ')}.
+          </p>
+          <p className="text-sm text-text-muted mb-6">
+            This refresher did not change your review schedule.
+          </p>
+        </>
+      ) : (
+        <>
+          <p className="text-text-muted mb-2">
+            You've learned {lessonSpecies.map(s => s.common_name).join(', ')}
+          </p>
+          <p className="text-sm text-text-muted mb-6">
+            They'll appear in your review sessions soon.
+          </p>
+        </>
+      )}
       <button
         onClick={onComplete}
         className="px-6 py-3 bg-primary text-white rounded-full font-medium"
       >
-        Continue
+        {mode === 'redo' ? 'Back to Lessons' : 'Continue'}
       </button>
     </div>
   )

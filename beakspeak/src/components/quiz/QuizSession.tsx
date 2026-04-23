@@ -9,6 +9,7 @@ import QuizResult from './QuizResult'
 import type { Species } from '../../core/types'
 
 interface Props {
+  mode: 'review' | 'practice'
   onComplete: () => void
 }
 
@@ -18,7 +19,7 @@ interface QuizAnswer {
   rating: number
 }
 
-export default function QuizSession({ onComplete }: Props) {
+export default function QuizSession({ mode, onComplete }: Props) {
   const manifest = useAppStore(s => s.manifest)
   const allProgress = useAppStore(s => s.allProgress)
   const lastPlayedClipId = useAppStore(s => s.lastPlayedClipId)
@@ -41,16 +42,14 @@ export default function QuizSession({ onComplete }: Props) {
     const exerciseType = item.exerciseType
     const rating = ratingFromOutcome(correct, responseTimeMs, exerciseType)
 
-    // Update SRS
-    const existingProgress = allProgress.get(item.targetSpecies.id) ?? createNewProgress(item.targetSpecies.id)
-    const updated = scheduleReview({ ...existingProgress, introduced: true }, rating)
-    await updateProgress(item.targetSpecies.id, updated)
+    if (mode === 'review') {
+      const existingProgress = allProgress.get(item.targetSpecies.id) ?? createNewProgress(item.targetSpecies.id)
+      const updated = scheduleReview({ ...existingProgress, introduced: true }, rating)
+      await updateProgress(item.targetSpecies.id, updated)
 
-    // Log confusion if incorrect
-    if (!correct) {
-      // For three_choice, we don't know which species was selected here
-      // but we can log the target as needing practice
-      await logConfusion(item.targetSpecies.id, 'unknown')
+      if (!correct) {
+        await logConfusion(item.targetSpecies.id, 'unknown')
+      }
     }
 
     setAnswers(prev => [...prev, { species: item.targetSpecies, correct, rating }])
@@ -60,7 +59,7 @@ export default function QuizSession({ onComplete }: Props) {
     } else {
       setCurrentIndex(prev => prev + 1)
     }
-  }, [items, currentIndex, allProgress, updateProgress, logConfusion])
+  }, [items, currentIndex, allProgress, updateProgress, logConfusion, mode])
 
   if (!manifest || items.length === 0) {
     return (
@@ -74,7 +73,7 @@ export default function QuizSession({ onComplete }: Props) {
   }
 
   if (showResults) {
-    return <QuizResult answers={answers} onDone={onComplete} />
+    return <QuizResult answers={answers} mode={mode} onDone={onComplete} />
   }
 
   const currentItem = items[currentIndex]
@@ -87,6 +86,12 @@ export default function QuizSession({ onComplete }: Props) {
           {currentIndex + 1} / {items.length}
         </p>
       </div>
+      {mode === 'practice' && (
+        <div className="px-4 pb-4 text-center">
+          <p className="text-sm font-medium text-primary">Practice Session</p>
+          <p className="text-xs text-text-muted">This won&apos;t change your review schedule</p>
+        </div>
+      )}
       <div className="flex-1">
         {currentItem.exerciseType === 'three_choice' ? (
           <ThreeChoiceQuiz

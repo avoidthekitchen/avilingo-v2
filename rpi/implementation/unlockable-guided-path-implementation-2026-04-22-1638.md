@@ -70,7 +70,7 @@ This slice includes the structured lesson-lock reason from the PRD's "Unlock Fut
 
 #### 1.1. Add structured lesson lock reasons in `core/lesson.ts`
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: WRITE  
 **Output**: `beakspeak/src/core/lesson.ts` exposes a structured lock-reason helper and `isLessonAvailable()` delegates to it.  
@@ -80,7 +80,7 @@ Update [lesson.ts](/Users/mistercheese/Code/avilingo-v2/beakspeak/src/core/lesso
 
 #### 1.2. Cover the lock-reason helper with unit tests
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: TEST  
 **Output**: `beakspeak/src/core/lesson.test.ts` covers prerequisite, relearning, and precedence behavior.  
@@ -90,7 +90,7 @@ Extend [lesson.test.ts](/Users/mistercheese/Code/avilingo-v2/beakspeak/src/core/
 
 #### 1.3. Create the unlock dialog and consequence copy helper
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: WRITE  
 **Output**: `UnlockDialog` and a local learn-layer copy helper exist and render reason-specific explanatory copy without mutating progress.  
@@ -100,7 +100,7 @@ Create a new learn UI modal component and its small local consequence-copy helpe
 
 #### 1.4. Wire locked lessons in `LearnTab` to open and dismiss the dialog
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: WRITE  
 **Output**: Tapping a locked lesson in Learn opens `UnlockDialog` and dismissing it leaves progress unchanged.  
@@ -110,7 +110,7 @@ Update [LearnTab.tsx](/Users/mistercheese/Code/avilingo-v2/beakspeak/src/compone
 
 #### 1.5. Add component tests for locked-lesson dialog behavior
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: TEST  
 **Output**: A learn component test file verifies locked lessons open the modal with reason-specific copy and dismiss cleanly.  
@@ -165,7 +165,7 @@ This slice covers the end-to-end behavior described in the PRD's "Unlock Future 
 
 #### 2.1. Add skip-ahead confirmation state changes in `LearnTab`
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: WRITE  
 **Output**: Confirming the unlock dialog immediately introduces skipped intervening lessons while preserving existing progress records.  
@@ -175,7 +175,7 @@ Update [LearnTab.tsx](/Users/mistercheese/Code/avilingo-v2/beakspeak/src/compone
 
 #### 2.2. Convert `LearnSession` to explicit launch modes and implement `unlock`
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: WRITE  
 **Output**: `LearnSession` accepts an explicit `mode` prop and `unlock` mode skips warm-up while otherwise completing like a normal lesson.  
@@ -185,7 +185,7 @@ Refactor [LearnSession.tsx](/Users/mistercheese/Code/avilingo-v2/beakspeak/src/c
 
 #### 2.3. Launch confirmed unlocks into `LearnSession` with one-launch-only semantics
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: WRITE  
 **Output**: `LearnTab` launches confirmed skip-ahead lessons in `unlock` mode and requires confirmation again after exiting.  
@@ -195,7 +195,7 @@ Finish the `LearnTab` integration by replacing the current single `activeLesson`
 
 #### 2.4. Add tests for skip-ahead auto-completion and unlock mode
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: TEST  
 **Output**: Learn tests cover skipped-lesson introduction rules and unlock-mode session behavior.  
@@ -250,7 +250,7 @@ This slice covers the PRD's "Redo a Completed Lesson" feature across `LearnTab`,
 
 #### 3.1. Let completed lessons launch in `redo` mode from `LearnTab`
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: WRITE  
 **Output**: Completed lessons remain visually complete but are clickable and launch redo mode even during relearning.  
@@ -260,7 +260,7 @@ Update [LearnTab.tsx](/Users/mistercheese/Code/avilingo-v2/beakspeak/src/compone
 
 #### 3.2. Add `redo` behavior to `LearnSession`
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: WRITE  
 **Output**: `LearnSession` supports `redo` mode with schedule-neutral completion copy and no `introduceSpecies()` call.  
@@ -270,7 +270,7 @@ Extend [LearnSession.tsx](/Users/mistercheese/Code/avilingo-v2/beakspeak/src/com
 
 #### 3.3. Add lesson-quiz back navigation support to `IntroQuiz`
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: WRITE  
 **Output**: `IntroQuiz` supports an optional `onBack` control that exits lesson study flows.  
@@ -280,7 +280,7 @@ Update [IntroQuiz.tsx](/Users/mistercheese/Code/avilingo-v2/beakspeak/src/compon
 
 #### 3.4. Add component tests for redo and lesson-quiz back behavior
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: TEST  
 **Output**: Learn tests cover completed-lesson redo launches, schedule-neutral completion, and `IntroQuiz` back behavior.  
@@ -336,7 +336,7 @@ This slice covers the PRD's "Practice When Nothing Is Due" feature across `QuizT
 
 #### 4.1. Add practice availability branching in `QuizTab`
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: WRITE  
 **Output**: `QuizTab` shows the correct CTA mix for review, learn, relearning, practice, and all-lessons-complete states.  
@@ -346,7 +346,7 @@ Update [QuizTab.tsx](/Users/mistercheese/Code/avilingo-v2/beakspeak/src/componen
 
 #### 4.2. Add `practice` mode to `QuizSession`
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: WRITE  
 **Output**: `QuizSession` accepts `review` or `practice` mode and suppresses persistent side effects in practice mode.  
@@ -356,7 +356,7 @@ Refactor [QuizSession.tsx](/Users/mistercheese/Code/avilingo-v2/beakspeak/src/co
 
 #### 4.3. Make `QuizResult` mode-aware
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: WRITE  
 **Output**: `QuizResult` renders practice-specific schedule-neutral copy while preserving the existing incorrect-answer list.  
@@ -366,7 +366,7 @@ Update [QuizResult.tsx](/Users/mistercheese/Code/avilingo-v2/beakspeak/src/compo
 
 #### 4.4. Add component tests for practice gating and inert session behavior
 
-- [ ] Task complete
+- [x] Task complete
 
 **Type**: TEST  
 **Output**: Quiz component tests cover empty-state branching, practice-mode labeling, and absence of persistent writes.  

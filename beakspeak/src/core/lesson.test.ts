@@ -1,5 +1,12 @@
 import { describe, it, expect } from 'vitest'
-import { getNextLesson, isLessonAvailable, isLessonComplete, buildIntroQuiz, buildReviewQuiz } from './lesson'
+import {
+  getLessonLockReason,
+  getNextLesson,
+  isLessonAvailable,
+  isLessonComplete,
+  buildIntroQuiz,
+  buildReviewQuiz,
+} from './lesson'
 import type { Lesson, Species, UserProgress } from './types'
 
 function makeLesson(num: number, speciesIds: string[]): Lesson {
@@ -51,6 +58,30 @@ const lessons = [
 ]
 
 describe('isLessonAvailable', () => {
+  it('returns a prerequisite lock reason when the previous lesson is incomplete', () => {
+    expect(getLessonLockReason(2, [], new Map())).toEqual({ type: 'prerequisite' })
+  })
+
+  it('returns a relearning lock reason when any bird is relearning', () => {
+    const progress = new Map([
+      ['x', makeProgress('x', { state: 'relearning', introduced: true })],
+    ])
+
+    expect(getLessonLockReason(2, [1], progress)).toEqual({ type: 'relearning' })
+  })
+
+  it('gives relearning precedence when prerequisite and relearning locks both apply', () => {
+    const progress = new Map([
+      ['x', makeProgress('x', { state: 'relearning', introduced: true })],
+    ])
+
+    expect(getLessonLockReason(3, [1], progress)).toEqual({ type: 'relearning' })
+  })
+
+  it('returns no lock reason for lesson 1 when nothing is relearning', () => {
+    expect(getLessonLockReason(1, [], new Map())).toBeNull()
+  })
+
   it('lesson 1 is always available when no birds are relearning', () => {
     expect(isLessonAvailable(1, [], new Map())).toBe(true)
   })
@@ -65,6 +96,11 @@ describe('isLessonAvailable', () => {
       ['x', makeProgress('x', { state: 'relearning', introduced: true })],
     ])
     expect(isLessonAvailable(2, [1], progress)).toBe(false)
+  })
+
+  it('delegates availability to the structured lock reason helper', () => {
+    expect(isLessonAvailable(3, [1, 2], new Map())).toBe(true)
+    expect(isLessonAvailable(3, [1], new Map())).toBe(false)
   })
 })
 

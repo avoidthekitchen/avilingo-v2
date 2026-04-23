@@ -1,29 +1,54 @@
 import { useState } from 'react'
 import { useAppStore } from '../../store/appStore'
 import { getLessons } from '../../core/manifest'
-import { isLessonAvailable, isLessonComplete } from '../../core/lesson'
+import { getLessonLockReason, isLessonComplete } from '../../core/lesson'
 import { getSpeciesByIds } from '../../core/manifest'
 import LearnSession from './LearnSession'
 import type { Lesson } from '../../core/types'
+import UnlockDialog from './UnlockDialog'
+
+type LearnLaunch = {
+  lesson: Lesson
+  mode: 'normal' | 'unlock' | 'redo'
+}
+
+function getSkippedLessonsForUnlock(
+  lessons: Lesson[],
+  targetLesson: Lesson,
+  completedLessonNums: number[],
+): Lesson[] {
+  const completedLessons = new Set(completedLessonNums)
+
+  return lessons.filter(lesson => lesson.lesson < targetLesson.lesson && !completedLessons.has(lesson.lesson))
+}
 
 export default function LearnTab() {
   const manifest = useAppStore(s => s.manifest)
   const allProgress = useAppStore(s => s.allProgress)
   const getCompletedLessons = useAppStore(s => s.getCompletedLessons)
   const getIntroducedSpecies = useAppStore(s => s.getIntroducedSpecies)
-  const [activeLesson, setActiveLesson] = useState<Lesson | null>(null)
+  const introduceSpecies = useAppStore(s => s.introduceSpecies)
+  const [activeLaunch, setActiveLaunch] = useState<LearnLaunch | null>(null)
+  const [unlockLesson, setUnlockLesson] = useState<Lesson | null>(null)
 
   if (!manifest) return null
 
   const lessons = getLessons(manifest)
   const completedLessons = getCompletedLessons()
   const introducedCount = getIntroducedSpecies().length
+  const unlockReason = unlockLesson
+    ? getLessonLockReason(unlockLesson.lesson, completedLessons, allProgress)
+    : null
+  const skippedLessons = unlockLesson
+    ? getSkippedLessonsForUnlock(lessons, unlockLesson, completedLessons)
+    : []
 
-  if (activeLesson) {
+  if (activeLaunch) {
     return (
       <LearnSession
-        lesson={activeLesson}
-        onComplete={() => setActiveLesson(null)}
+        lesson={activeLaunch.lesson}
+        mode={activeLaunch.mode}
+        onComplete={() => setActiveLaunch(null)}
       />
     )
   }
@@ -45,21 +70,31 @@ export default function LearnTab() {
 
       <div className="space-y-3">
         {lessons.map(lesson => {
-          const available = isLessonAvailable(lesson.lesson, completedLessons, allProgress)
+          const lockReason = getLessonLockReason(lesson.lesson, completedLessons, allProgress)
+          const available = lockReason === null
           const completed = isLessonComplete(lesson, allProgress)
           const species = getSpeciesByIds(manifest, lesson.species)
 
           return (
             <button
               key={lesson.lesson}
-              onClick={() => available && !completed && setActiveLesson(lesson)}
-              disabled={!available || completed}
+              onClick={() => {
+                if (completed) {
+                  setActiveLaunch({ lesson, mode: 'redo' })
+                  return
+                }
+                if (available) {
+                  setActiveLaunch({ lesson, mode: 'normal' })
+                  return
+                }
+                setUnlockLesson(lesson)
+              }}
               className={`w-full text-left p-4 rounded-xl border transition-all ${
                 completed
                   ? 'bg-success/10 border-success/30'
                   : available
                   ? 'bg-card border-border hover:border-primary active:border-primary active:scale-[0.98] active:bg-primary/5 cursor-pointer'
-                  : 'bg-border/30 border-border/50 opacity-60'
+                  : 'bg-border/30 border-border/50 opacity-60 hover:border-primary/40 active:scale-[0.98] cursor-pointer'
               }`}
             >
               <div className="flex items-center justify-between mb-2">
@@ -89,6 +124,20 @@ export default function LearnTab() {
           )
         })}
       </div>
+
+      {unlockLesson && unlockReason && (
+        <UnlockDialog
+          lesson={unlockLesson}
+          lockReason={unlockReason}
+          onConfirm={async () => {
+            await introduceSpecies(skippedLessons.flatMap(lesson => lesson.species))
+            setUnlockLesson(null)
+            setActiveLaunch({ lesson: unlockLesson, mode: 'unlock' })
+          }}
+          onDismiss={() => setUnlockLesson(null)}
+          skippedLessons={skippedLessons}
+        />
+      )}
     </div>
   )
 }

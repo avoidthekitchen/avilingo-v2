@@ -1,18 +1,33 @@
 import type { Lesson, Species, UserProgress, IntroQuizItem } from './types'
 
+export interface LessonLockReason {
+  type: 'prerequisite' | 'relearning'
+}
+
+export function getLessonLockReason(
+  lessonNum: number,
+  completedLessonNums: number[],
+  allProgress: Map<string, UserProgress>,
+): LessonLockReason | null {
+  for (const progress of allProgress.values()) {
+    if (progress.state === 'relearning') return { type: 'relearning' }
+  }
+
+  if (lessonNum === 1) return null
+
+  if (!completedLessonNums.includes(lessonNum - 1)) {
+    return { type: 'prerequisite' }
+  }
+
+  return null
+}
+
 export function isLessonAvailable(
   lessonNum: number,
   completedLessonNums: number[],
   allProgress: Map<string, UserProgress>,
 ): boolean {
-  // Block if any bird is in relearning state
-  for (const progress of allProgress.values()) {
-    if (progress.state === 'relearning') return false
-  }
-  // Lesson 1 is always available
-  if (lessonNum === 1) return true
-  // Otherwise, previous lesson must be complete
-  return completedLessonNums.includes(lessonNum - 1)
+  return getLessonLockReason(lessonNum, completedLessonNums, allProgress) === null
 }
 
 export function isLessonComplete(
