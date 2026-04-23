@@ -135,8 +135,11 @@ export default function LearnTab() {
           onConfirm={async () => {
             dismissedRef.current = false
             setUnlockPending(true)
-            await introduceSpecies(skippedLessons.flatMap(lesson => lesson.species))
-            setUnlockPending(false)
+            try {
+              await introduceSpecies(skippedLessons.flatMap(lesson => lesson.species))
+            } finally {
+              setUnlockPending(false)
+            }
             if (dismissedRef.current) return
             setUnlockLesson(null)
             setActiveLaunch({ lesson: unlockLesson, mode: 'unlock' })
