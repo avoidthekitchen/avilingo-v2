@@ -9,8 +9,8 @@ Prerequisites: Python 3, requests, Pillow, ffmpeg installed locally.
 Usage: uv run python3 download_media.py
 """
 
+import argparse
 import json
-import os
 import re
 import subprocess
 import sys
@@ -21,6 +21,8 @@ from pathlib import Path
 
 import requests
 from PIL import Image
+
+from populate_content import build_export_audio_clips, load_pool_file, normalize_audio_clips
 
 INPUT_FILE = "tier1_seattle_birds_populated.json"
 OUTPUT_DIR = Path("beakspeak/public/content")
@@ -36,6 +38,17 @@ HEADERS = {
 
 RETRY_COUNT = 3
 RETRY_DELAY = 2
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--export-mode",
+        choices=("all", "commercial"),
+        default="all",
+        help="Resolve curated audio assignments for the final manifest using the requested license mode.",
+    )
+    return parser.parse_args()
 
 
 def get_wikimedia_download_url(commons_url: str) -> str | None:
@@ -166,20 +179,24 @@ def detect_best_segment(input_path: Path) -> tuple[float, float] | None:
     return None
 
 
-def normalize_audio(input_path: Path, output_path: Path) -> bool:
-    """Normalize audio with ffmpeg: smart trim, loudnorm, OGG Opus 96kbps."""
+def normalize_audio(input_path: Path, output_path: Path, segment: dict | None = None) -> bool:
+    """Normalize audio with ffmpeg, honoring persisted segment windows when available."""
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Try smart trimming first
-    segment = detect_best_segment(input_path)
-
-    if segment is not None:
-        start, duration = segment
-        trim_args = ["-ss", str(start), "-t", str(duration)]
-        print(f"  Smart trim: {start:.1f}s-{start + duration:.1f}s")
+    stored_start = segment.get("start_s") if isinstance(segment, dict) else None
+    stored_duration = segment.get("duration_s") if isinstance(segment, dict) else None
+    if stored_start is not None and stored_duration is not None:
+        trim_args = ["-ss", str(stored_start), "-t", str(stored_duration)]
+        print(f"  Stored segment: {stored_start:.1f}s-{stored_start + stored_duration:.1f}s")
     else:
-        trim_args = ["-t", "20"]
-        print(f"  Default trim: 0-20s")
+        detected_segment = detect_best_segment(input_path)
+        if detected_segment is not None:
+            start, duration = detected_segment
+            trim_args = ["-ss", str(start), "-t", str(duration)]
+            print(f"  Smart trim: {start:.1f}s-{start + duration:.1f}s")
+        else:
+            trim_args = ["-t", "20"]
+            print(f"  Default trim: 0-20s")
 
     cmd = [
         "ffmpeg", "-i", str(input_path),
@@ -215,47 +232,55 @@ def resize_photo(input_path: Path, output_path: Path) -> bool:
         return False
 
 
-def process_species(species: dict, manifest_species: dict) -> dict:
-    """Download and process all media for one species. Returns updated manifest entry."""
+def process_species(species: dict, manifest_species: dict, export_mode: str) -> tuple[dict, dict]:
+    """Download and process all media for one species."""
     sid = species["id"]
     name = species["common_name"]
     print(f"\n[{sid}] {name}")
 
-    # Process audio clips (songs + calls) — download ALL candidates for admin preview
-    for clip_type in ("songs", "calls"):
-        clips = species["audio_clips"][clip_type]
-        for i, clip in enumerate(clips):
-            xc_id = clip["xc_id"]
-            audio_url = clip["audio_url"]
-            local_filename = f"{xc_id}.ogg"
-            local_path = AUDIO_DIR / sid / local_filename
-            local_url = f"/content/audio/{sid}/{local_filename}"
+    species_audio = normalize_audio_clips(species.get("audio_clips"))
+    species_candidates = {
+        candidate["candidate_id"]: candidate
+        for candidate in species_audio.get("candidates", [])
+    }
 
-            if local_path.exists():
-                print(f"  Skip (exists): {clip_type} XC{xc_id}")
-                manifest_species["audio_clips"][clip_type][i]["audio_url"] = local_url
-                continue
+    # Download all candidates so the admin can preview the full mixed pool locally.
+    for candidate in species_audio.get("candidates", []):
+        xc_id = candidate["xc_id"]
+        audio_url = candidate["audio_url"]
+        local_filename = f"{xc_id}.ogg"
+        local_path = AUDIO_DIR / sid / local_filename
+        local_url = f"/content/audio/{sid}/{local_filename}"
+        species_candidate = species_candidates.get(candidate["candidate_id"])
 
-            print(f"  Downloading {clip_type} XC{xc_id}...")
-            with tempfile.NamedTemporaryFile(suffix=".raw", delete=False) as tmp:
-                tmp_path = Path(tmp.name)
+        if local_path.exists():
+            print(f"  Skip (exists): {candidate['source_role']} XC{xc_id}")
+            if species_candidate is not None:
+                species_candidate["audio_url"] = local_url
+            continue
 
-            if download_file(audio_url, tmp_path, f"XC{xc_id}"):
-                print(f"  Normalizing XC{xc_id}...")
-                if normalize_audio(tmp_path, local_path):
-                    manifest_species["audio_clips"][clip_type][i]["audio_url"] = local_url
-                else:
-                    print(f"  WARNING: ffmpeg failed for XC{xc_id}, skipping")
-            tmp_path.unlink(missing_ok=True)
+        print(f"  Downloading {candidate['source_role']} XC{xc_id}...")
+        with tempfile.NamedTemporaryFile(suffix=".raw", delete=False) as tmp:
+            tmp_path = Path(tmp.name)
 
-    # Filter manifest clips to selected-only; strip the selected field (app doesn't need it)
-    for clip_type in ("songs", "calls"):
-        kept = []
-        for clip in manifest_species["audio_clips"][clip_type]:
-            if clip.get("selected", True):
-                clip_copy = {k: v for k, v in clip.items() if k != "selected"}
-                kept.append(clip_copy)
-        manifest_species["audio_clips"][clip_type] = kept
+        if download_file(audio_url, tmp_path, f"XC{xc_id}"):
+            print(f"  Normalizing XC{xc_id}...")
+            if normalize_audio(tmp_path, local_path, segment=candidate.get("segment")):
+                if species_candidate is not None:
+                    species_candidate["audio_url"] = local_url
+            else:
+                print(f"  WARNING: ffmpeg failed for XC{xc_id}, skipping")
+        tmp_path.unlink(missing_ok=True)
+
+    export_report = build_export_audio_clips(
+        species_audio,
+        export_mode=export_mode,
+    )
+    manifest_species["audio_clips"] = export_report["audio_clips"]
+    for warning in export_report["warnings"]:
+        print(f"  Export warning: {warning}")
+    for error in export_report["errors"]:
+        print(f"  Export error: {error}")
 
     # Process Wikipedia audio
     wp_audio = species.get("wikipedia_audio", [])
@@ -313,16 +338,16 @@ def process_species(species: dict, manifest_species: dict) -> dict:
                     print(f"  WARNING: photo resize failed for {sid}")
             tmp_path.unlink(missing_ok=True)
 
-    return manifest_species
+    return manifest_species, export_report
 
 
 def main():
+    args = parse_args()
     if not Path(INPUT_FILE).exists():
         print(f"Error: {INPUT_FILE} not found. Run populate_content.py first.")
         sys.exit(1)
 
-    with open(INPUT_FILE) as f:
-        data = json.load(f)
+    data = load_pool_file(INPUT_FILE)
 
     manifest = deepcopy(data)
 
@@ -334,11 +359,22 @@ def main():
     AUDIO_DIR.mkdir(parents=True, exist_ok=True)
     PHOTO_DIR.mkdir(parents=True, exist_ok=True)
 
+    print(f"Export mode: {args.export_mode}")
     total = len(data["species"])
+    export_reports = []
     for i, species in enumerate(data["species"]):
         print(f"\n{'='*50}")
         print(f"Processing {i+1}/{total}")
-        manifest["species"][i] = process_species(species, manifest["species"][i])
+        manifest_species, export_report = process_species(
+            species,
+            manifest["species"][i],
+            export_mode=args.export_mode,
+        )
+        manifest["species"][i] = manifest_species
+        export_reports.append({
+            "name": species["common_name"],
+            **export_report,
+        })
 
     # Write local manifest
     with open(MANIFEST_OUT, "w") as f:
@@ -353,6 +389,38 @@ def main():
     print(f"Audio files: {audio_count}")
     print(f"Photo files: {photo_count}")
     print(f"Total size: {total_size_mb:.1f} MB")
+
+    substitutions = [
+        (report["name"], substitution)
+        for report in export_reports
+        for substitution in report.get("substitutions", [])
+    ]
+    warnings = [
+        (report["name"], warning)
+        for report in export_reports
+        for warning in report.get("warnings", [])
+    ]
+    errors = [
+        (report["name"], error)
+        for report in export_reports
+        for error in report.get("errors", [])
+    ]
+
+    if substitutions:
+        print("Commercial substitutions:")
+        for species_name, substitution in substitutions:
+            print(
+                f"  {species_name}: {substitution['role']} XC{substitution['selected_xc_id']} "
+                f"-> XC{substitution['substitute_xc_id']}"
+            )
+    if warnings:
+        print("Export warnings:")
+        for species_name, warning in warnings:
+            print(f"  {species_name}: {warning}")
+    if errors:
+        print("Export errors:")
+        for species_name, error in errors:
+            print(f"  {species_name}: {error}")
 
 
 if __name__ == "__main__":
