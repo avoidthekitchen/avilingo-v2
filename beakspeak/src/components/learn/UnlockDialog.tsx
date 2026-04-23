@@ -62,7 +62,7 @@ export default function UnlockDialog({
         onKeyDown={e => {
           if (e.key === 'Tab') {
             const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
-              'button:not([disabled])',
+              'button',
             )
             if (!focusable?.length) return
             const first = focusable[0]
@@ -86,7 +86,7 @@ export default function UnlockDialog({
 
         <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
           <button
-            className="rounded-full border border-border px-5 py-3 text-sm font-medium text-text"
+            className="rounded-full border border-border px-5 py-3 text-sm font-medium text-text disabled:opacity-50"
             disabled={pending}
             onClick={handleDismiss}
           >
