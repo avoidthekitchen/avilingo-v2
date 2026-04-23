@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import IntroQuiz from './IntroQuiz'
 import type { AudioPlayer, AudioState } from '../../adapters/audio'
 import type { IntroQuizItem, Species } from '../../core/types'
@@ -87,6 +87,10 @@ describe('IntroQuiz back navigation', () => {
     mockAudioPlayer = makeMockAudioPlayer()
   })
 
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   it('renders an optional Back action and calls it', () => {
     const onBack = vi.fn()
 
@@ -101,5 +105,51 @@ describe('IntroQuiz back navigation', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Back' }))
 
     expect(onBack).toHaveBeenCalledTimes(1)
+  })
+
+  it('cancels pending auto-advance when Back is pressed after a correct answer', () => {
+    vi.useFakeTimers()
+
+    const onBack = vi.fn()
+    const onComplete = vi.fn()
+
+    render(
+      <IntroQuiz
+        items={[makeItem()]}
+        onComplete={onComplete}
+        onBack={onBack}
+      />,
+    )
+
+    fireEvent.click(screen.getByText('A').closest('button')!)
+    fireEvent.click(screen.getByRole('button', { name: 'Back' }))
+
+    act(() => {
+      vi.advanceTimersByTime(1500)
+    })
+
+    expect(onBack).toHaveBeenCalledTimes(1)
+    expect(onComplete).not.toHaveBeenCalled()
+  })
+
+  it('clears pending auto-advance on unmount', () => {
+    vi.useFakeTimers()
+
+    const onComplete = vi.fn()
+    const { unmount } = render(
+      <IntroQuiz
+        items={[makeItem()]}
+        onComplete={onComplete}
+      />,
+    )
+
+    fireEvent.click(screen.getByText('A').closest('button')!)
+    unmount()
+
+    act(() => {
+      vi.advanceTimersByTime(1500)
+    })
+
+    expect(onComplete).not.toHaveBeenCalled()
   })
 })

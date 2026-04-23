@@ -15,9 +15,17 @@ export default function IntroQuiz({ items, onComplete, onBack }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [results, setResults] = useState<Array<{ correct: boolean }>>([])
   const [showingResult, setShowingResult] = useState(false)
+  const autoAdvanceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const current = items[currentIndex]
   const playState = useAudioStateForUrl(audioPlayer, current?.clip.audio_url ?? '')
+
+  const clearAutoAdvanceTimeout = useCallback(() => {
+    if (autoAdvanceTimeoutRef.current !== null) {
+      clearTimeout(autoAdvanceTimeoutRef.current)
+      autoAdvanceTimeoutRef.current = null
+    }
+  }, [])
 
   // Auto-play clip when question appears
   useEffect(() => {
@@ -28,8 +36,11 @@ export default function IntroQuiz({ items, onComplete, onBack }: Props) {
 
   // Stop audio when leaving the quiz
   useEffect(() => {
-    return () => { audioPlayer.stop() }
-  }, [audioPlayer])
+    return () => {
+      clearAutoAdvanceTimeout()
+      audioPlayer.stop()
+    }
+  }, [audioPlayer, clearAutoAdvanceTimeout])
 
   const advance = useCallback(() => {
     if (currentIndex + 1 >= items.length) {
@@ -51,9 +62,18 @@ export default function IntroQuiz({ items, onComplete, onBack }: Props) {
 
     if (correct) {
       // Auto-advance after 1.5s for correct answers
-      setTimeout(() => advance(), 1500)
+      clearAutoAdvanceTimeout()
+      autoAdvanceTimeoutRef.current = setTimeout(() => {
+        autoAdvanceTimeoutRef.current = null
+        advance()
+      }, 1500)
     }
-  }, [advance, showingResult, current])
+  }, [advance, clearAutoAdvanceTimeout, showingResult, current])
+
+  const handleBack = useCallback(() => {
+    clearAutoAdvanceTimeout()
+    onBack?.()
+  }, [clearAutoAdvanceTimeout, onBack])
 
   const feedbackRef = useRef<HTMLDivElement>(null)
   const isCorrect = !current || selectedId === current.targetSpecies.id
@@ -72,7 +92,7 @@ export default function IntroQuiz({ items, onComplete, onBack }: Props) {
         <div className="mb-4 flex items-center justify-between gap-3">
           {onBack ? (
             <button
-              onClick={onBack}
+              onClick={handleBack}
               className="text-sm text-text-muted"
             >
               Back
