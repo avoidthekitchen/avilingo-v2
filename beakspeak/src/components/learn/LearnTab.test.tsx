@@ -1,5 +1,5 @@
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import LearnTab from './LearnTab'
 import type { Lesson, Manifest, Species, UserProgress } from '../../core/types'
 
@@ -283,5 +283,41 @@ describe('LearnTab locked lesson dialog', () => {
 
     expect(screen.getByRole('dialog')).toBeInTheDocument()
     expect(screen.queryByTestId('learn-session')).not.toBeInTheDocument()
+  })
+
+  it('disables controls while confirm is in flight and does not launch after resolve', async () => {
+    let resolveIntroduce!: () => void
+    mockState = makeStoreState()
+    ;(mockState.introduceSpecies as ReturnType<typeof vi.fn>).mockImplementationOnce(
+      () => new Promise<void>(resolve => { resolveIntroduce = resolve }),
+    )
+
+    render(<LearnTab />)
+
+    fireEvent.click(screen.getByRole('button', { name: /lesson 2: lesson 2/i }))
+    fireEvent.click(screen.getByRole('button', { name: 'Skip Ahead Anyway' }))
+
+    expect(screen.getByRole('button', { name: 'Unlocking…' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Never mind' })).toBeDisabled()
+
+    // Backdrop click is blocked while pending
+    fireEvent.click(screen.getByTestId('unlock-dialog-backdrop'))
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+
+    // Resolve the pending operation — should launch normally since dismiss was blocked
+    await act(() => { resolveIntroduce() })
+
+    expect(screen.getByTestId('learn-session')).toHaveTextContent('Lesson 2::unlock')
+  })
+
+  it('closes the dialog when Escape is pressed', () => {
+    render(<LearnTab />)
+
+    fireEvent.click(screen.getByRole('button', { name: /lesson 2: lesson 2/i }))
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+
+    fireEvent.keyDown(window, { key: 'Escape' })
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 })

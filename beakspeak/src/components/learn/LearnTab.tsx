@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useAppStore } from '../../store/appStore'
 import { getLessons } from '../../core/manifest'
 import { getLessonLockReason, isLessonComplete } from '../../core/lesson'
@@ -30,6 +30,8 @@ export default function LearnTab() {
   const introduceSpecies = useAppStore(s => s.introduceSpecies)
   const [activeLaunch, setActiveLaunch] = useState<LearnLaunch | null>(null)
   const [unlockLesson, setUnlockLesson] = useState<Lesson | null>(null)
+  const [unlockPending, setUnlockPending] = useState(false)
+  const dismissedRef = useRef(false)
 
   if (!manifest) return null
 
@@ -129,12 +131,23 @@ export default function LearnTab() {
         <UnlockDialog
           lesson={unlockLesson}
           lockReason={unlockReason}
+          pending={unlockPending}
           onConfirm={async () => {
-            await introduceSpecies(skippedLessons.flatMap(lesson => lesson.species))
+            dismissedRef.current = false
+            setUnlockPending(true)
+            try {
+              await introduceSpecies(skippedLessons.flatMap(lesson => lesson.species))
+            } finally {
+              setUnlockPending(false)
+            }
+            if (dismissedRef.current) return
             setUnlockLesson(null)
             setActiveLaunch({ lesson: unlockLesson, mode: 'unlock' })
           }}
-          onDismiss={() => setUnlockLesson(null)}
+          onDismiss={() => {
+            dismissedRef.current = true
+            setUnlockLesson(null)
+          }}
           skippedLessons={skippedLessons}
         />
       )}
