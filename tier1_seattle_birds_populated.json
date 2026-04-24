@@ -468,12 +468,12 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_extended_context",
-              "start_s": 0.0,
-              "end_s": 12.0,
-              "duration_s": 12.0,
-              "confidence": 0.983,
-              "fallback_reason": "target_region_requires_more_context"
+              "status": "manual",
+              "start_s": 0.002,
+              "end_s": 4.6,
+              "duration_s": 4.598,
+              "confidence": null,
+              "fallback_reason": null
             },
             "score": 91.5,
             "ranking_signals": {
@@ -556,11 +556,11 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_target_centered",
+              "status": "manual",
               "start_s": 0.0,
-              "end_s": 7.0,
-              "duration_s": 7.0,
-              "confidence": 0.909,
+              "end_s": 3.1,
+              "duration_s": 3.1,
+              "confidence": null,
               "fallback_reason": null
             },
             "score": 91.27,
@@ -3687,11 +3687,11 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_target_centered",
-              "start_s": 0.0,
-              "end_s": 7.0,
-              "duration_s": 7.0,
-              "confidence": 0.935,
+              "status": "manual",
+              "start_s": 2.5,
+              "end_s": 5.5,
+              "duration_s": 3.0,
+              "confidence": null,
               "fallback_reason": null
             },
             "score": 95.11,
@@ -4011,11 +4011,11 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_target_centered",
-              "start_s": 0.0,
-              "end_s": 6.2,
-              "duration_s": 6.2,
-              "confidence": 0.996,
+              "status": "manual",
+              "start_s": 2.0,
+              "end_s": 5.0,
+              "duration_s": 3.0,
+              "confidence": null,
               "fallback_reason": null
             },
             "score": 92.87,
@@ -6944,11 +6944,11 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_target_centered",
-              "start_s": 0.0,
-              "end_s": 7.0,
-              "duration_s": 7.0,
-              "confidence": 0.97,
+              "status": "manual",
+              "start_s": 2.5,
+              "end_s": 6.0,
+              "duration_s": 3.5,
+              "confidence": null,
               "fallback_reason": null
             },
             "score": 96.09,
@@ -7032,12 +7032,12 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_extended_context",
-              "start_s": 0.0,
-              "end_s": 10.342,
-              "duration_s": 10.342,
-              "confidence": 0.957,
-              "fallback_reason": "target_region_requires_more_context"
+              "status": "manual",
+              "start_s": 4.0,
+              "end_s": 8.0,
+              "duration_s": 4.0,
+              "confidence": null,
+              "fallback_reason": null
             },
             "score": 95.91,
             "ranking_signals": {
@@ -9644,11 +9644,11 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_target_centered",
-              "start_s": 5.98,
-              "end_s": 12.98,
-              "duration_s": 7.0,
-              "confidence": 0.948,
+              "status": "manual",
+              "start_s": 3.0,
+              "end_s": 5.5,
+              "duration_s": 2.5,
+              "confidence": null,
               "fallback_reason": null
             },
             "score": 92.45,
@@ -9711,11 +9711,11 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_target_centered",
-              "start_s": 0.0,
-              "end_s": 5.29,
-              "duration_s": 5.29,
-              "confidence": 0.961,
+              "status": "manual",
+              "start_s": 1.2,
+              "end_s": 3.5,
+              "duration_s": 2.3,
+              "confidence": null,
               "fallback_reason": null
             },
             "score": 91.82,
@@ -14331,11 +14331,11 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_target_centered",
-              "start_s": 0.0,
-              "end_s": 6.137,
-              "duration_s": 6.137,
-              "confidence": 0.987,
+              "status": "manual",
+              "start_s": 3.6,
+              "end_s": 5.0,
+              "duration_s": 1.4,
+              "confidence": null,
               "fallback_reason": null
             },
             "score": 96.61,
@@ -16560,12 +16560,12 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_extended_context",
-              "start_s": 0.0,
-              "end_s": 12.0,
-              "duration_s": 12.0,
-              "confidence": 0.943,
-              "fallback_reason": "target_region_requires_more_context"
+              "status": "manual",
+              "start_s": 2.6,
+              "end_s": 7.0,
+              "duration_s": 4.4,
+              "confidence": null,
+              "fallback_reason": null
             },
             "score": 69.29,
             "ranking_signals": {
@@ -18995,11 +18995,11 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_target_centered",
-              "start_s": 0.0,
-              "end_s": 7.0,
-              "duration_s": 7.0,
-              "confidence": 0.999,
+              "status": "manual",
+              "start_s": 0.7,
+              "end_s": 2.7,
+              "duration_s": 2.0,
+              "confidence": null,
               "fallback_reason": null
             },
             "score": 94.96,
@@ -21957,12 +21957,12 @@
               "failure": null
             },
             "segment": {
-              "status": "ffmpeg_full_clip_fallback",
-              "start_s": 0.0,
-              "end_s": 12.0,
-              "duration_s": 12.0,
+              "status": "manual",
+              "start_s": 5.0,
+              "end_s": 7.3,
+              "duration_s": 2.3,
               "confidence": null,
-              "fallback_reason": "segment_selection_failed:'NoneType' object has no attribute 'get'"
+              "fallback_reason": null
             },
             "score": 19.0,
             "ranking_signals": {
@@ -24675,11 +24675,11 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_target_centered",
+              "status": "manual",
               "start_s": 0.0,
-              "end_s": 5.255,
-              "duration_s": 5.255,
-              "confidence": 0.214,
+              "end_s": 3.7,
+              "duration_s": 3.7,
+              "confidence": null,
               "fallback_reason": null
             },
             "score": 73.41,
@@ -25447,12 +25447,12 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_extended_context",
-              "start_s": 5.25,
-              "end_s": 17.25,
-              "duration_s": 12.0,
-              "confidence": 0.983,
-              "fallback_reason": "target_region_requires_more_context"
+              "status": "manual",
+              "start_s": 2.4,
+              "end_s": 8.0,
+              "duration_s": 5.6,
+              "confidence": null,
+              "fallback_reason": null
             },
             "score": 52.55,
             "ranking_signals": {
@@ -25816,12 +25816,12 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_extended_context",
-              "start_s": 0.0,
-              "end_s": 12.0,
-              "duration_s": 12.0,
-              "confidence": 0.961,
-              "fallback_reason": "target_region_requires_more_context"
+              "status": "manual",
+              "start_s": 1.5,
+              "end_s": 7.5,
+              "duration_s": 6.0,
+              "confidence": null,
+              "fallback_reason": null
             },
             "score": 95.83,
             "ranking_signals": {
@@ -26060,12 +26060,12 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_extended_context",
-              "start_s": 0.0,
-              "end_s": 11.059,
-              "duration_s": 11.059,
-              "confidence": 0.925,
-              "fallback_reason": "target_region_requires_more_context"
+              "status": "manual",
+              "start_s": 5.5,
+              "end_s": 9.1,
+              "duration_s": 3.6,
+              "confidence": null,
+              "fallback_reason": null
             },
             "score": 90.95,
             "ranking_signals": {
@@ -30117,11 +30117,11 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_target_centered",
-              "start_s": 0.0,
-              "end_s": 5.08,
-              "duration_s": 5.08,
-              "confidence": 0.992,
+              "status": "manual",
+              "start_s": 1.6,
+              "end_s": 3.6,
+              "duration_s": 2.0,
+              "confidence": null,
               "fallback_reason": null
             },
             "score": 87.82,
@@ -31704,12 +31704,12 @@
               "failure": null
             },
             "segment": {
-              "status": "ffmpeg_full_clip_fallback",
-              "start_s": 0.0,
-              "end_s": 12.0,
-              "duration_s": 12.0,
+              "status": "manual",
+              "start_s": 2.3,
+              "end_s": 6.3,
+              "duration_s": 4.0,
               "confidence": null,
-              "fallback_reason": "segment_selection_failed:'NoneType' object has no attribute 'get'"
+              "fallback_reason": null
             },
             "score": 47.2,
             "ranking_signals": {
@@ -32402,12 +32402,12 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_extended_context",
-              "start_s": 0.0,
-              "end_s": 10.5,
-              "duration_s": 10.5,
-              "confidence": 0.982,
-              "fallback_reason": "target_region_requires_more_context"
+              "status": "manual",
+              "start_s": 0.8,
+              "end_s": 6.0,
+              "duration_s": 5.2,
+              "confidence": null,
+              "fallback_reason": null
             },
             "score": 94.47,
             "ranking_signals": {
@@ -32606,11 +32606,11 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_target_centered",
-              "start_s": 23.5,
-              "end_s": 30.5,
-              "duration_s": 7.0,
-              "confidence": 0.993,
+              "status": "manual",
+              "start_s": 0.3,
+              "end_s": 5.4,
+              "duration_s": 5.1,
+              "confidence": null,
               "fallback_reason": null
             },
             "score": 92.98,
@@ -36461,11 +36461,11 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_target_centered",
-              "start_s": 0.0,
-              "end_s": 5.689,
-              "duration_s": 5.689,
-              "confidence": 0.958,
+              "status": "manual",
+              "start_s": 1.8,
+              "end_s": 3.8,
+              "duration_s": 2.0,
+              "confidence": null,
               "fallback_reason": null
             },
             "score": 92.79,
@@ -38248,11 +38248,11 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_target_centered",
-              "start_s": 11.5,
-              "end_s": 18.5,
-              "duration_s": 7.0,
-              "confidence": 0.975,
+              "status": "manual",
+              "start_s": 1.7,
+              "end_s": 5.5,
+              "duration_s": 3.8,
+              "confidence": null,
               "fallback_reason": null
             },
             "score": 84.24,
@@ -40399,12 +40399,12 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_extended_context",
-              "start_s": 2.25,
-              "end_s": 14.25,
-              "duration_s": 12.0,
-              "confidence": 1.0,
-              "fallback_reason": "target_region_requires_more_context"
+              "status": "manual",
+              "start_s": 0.4,
+              "end_s": 4.9,
+              "duration_s": 4.5,
+              "confidence": null,
+              "fallback_reason": null
             },
             "score": 84.05,
             "ranking_signals": {
@@ -41696,12 +41696,12 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_extended_context",
-              "start_s": 0.0,
-              "end_s": 12.0,
-              "duration_s": 12.0,
-              "confidence": 1.0,
-              "fallback_reason": "target_region_requires_more_context"
+              "status": "manual",
+              "start_s": 7.0,
+              "end_s": 11.7,
+              "duration_s": 4.7,
+              "confidence": null,
+              "fallback_reason": null
             },
             "score": 73.0,
             "ranking_signals": {
@@ -44776,12 +44776,12 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_extended_context",
-              "start_s": 0.0,
-              "end_s": 12.0,
-              "duration_s": 12.0,
-              "confidence": 1.0,
-              "fallback_reason": "target_region_requires_more_context"
+              "status": "manual",
+              "start_s": 1.7,
+              "end_s": 6.9,
+              "duration_s": 5.2,
+              "confidence": null,
+              "fallback_reason": null
             },
             "score": 94.04,
             "ranking_signals": {
@@ -44945,12 +44945,12 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_extended_context",
-              "start_s": 0.0,
-              "end_s": 11.879,
-              "duration_s": 11.879,
-              "confidence": 0.999,
-              "fallback_reason": "target_region_requires_more_context"
+              "status": "manual",
+              "start_s": 2.8,
+              "end_s": 5.5,
+              "duration_s": 2.7,
+              "confidence": null,
+              "fallback_reason": null
             },
             "score": 93.97,
             "ranking_signals": {
@@ -49348,11 +49348,11 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_target_centered",
-              "start_s": 0.0,
-              "end_s": 7.0,
-              "duration_s": 7.0,
-              "confidence": 0.972,
+              "status": "manual",
+              "start_s": 0.2,
+              "end_s": 2.2,
+              "duration_s": 2.0,
+              "confidence": null,
               "fallback_reason": null
             },
             "score": 85.22,
@@ -49882,12 +49882,12 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_extended_context",
-              "start_s": 0.0,
-              "end_s": 12.0,
-              "duration_s": 12.0,
-              "confidence": 0.999,
-              "fallback_reason": "target_region_requires_more_context"
+              "status": "manual",
+              "start_s": 2.0,
+              "end_s": 4.4,
+              "duration_s": 2.4,
+              "confidence": null,
+              "fallback_reason": null
             },
             "score": 75.38,
             "ranking_signals": {
@@ -53637,11 +53637,11 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_target_centered",
+              "status": "manual",
               "start_s": 0.0,
-              "end_s": 7.0,
-              "duration_s": 7.0,
-              "confidence": 0.986,
+              "end_s": 3.6,
+              "duration_s": 3.6,
+              "confidence": null,
               "fallback_reason": null
             },
             "score": 65.79,
@@ -54811,12 +54811,12 @@
               "failure": null
             },
             "segment": {
-              "status": "birdnet_extended_context",
-              "start_s": 56.25,
-              "end_s": 66.75,
-              "duration_s": 10.5,
-              "confidence": 0.918,
-              "fallback_reason": "target_region_requires_more_context"
+              "status": "manual",
+              "start_s": 1.5,
+              "end_s": 3.8,
+              "duration_s": 2.3,
+              "confidence": null,
+              "fallback_reason": null
             },
             "score": 31.73,
             "ranking_signals": {
