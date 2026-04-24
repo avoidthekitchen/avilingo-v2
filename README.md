@@ -4,6 +4,14 @@ A Duolingo-style web app for learning Seattle-area bird songs and calls. Flash-c
 
 **Live at:** [unformedideas.com/beakspeak](https://unformedideas.com/beakspeak/)
 
+<table>
+  <tr>
+    <td><img src="qa-output/screenshots/flow-4-1-quiz-session.png" alt="Quiz session" width="240" /></td>
+    <td><img src="qa-output/screenshots/flow-3-4-lesson3-started.png" alt="Lesson 3 started" width="240" /></td>
+    <td><img src="qa-output/screenshots/flow-3-1-quiz-results.png" alt="Quiz results" width="240" /></td>
+  </tr>
+</table>
+
 ## What's been built
 
 **Content pipeline** (`populate_content.py`, `download_media.py`) → **React app** (`beakspeak/`)
