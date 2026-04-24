@@ -98,7 +98,7 @@ uv run python3 export_app_audio.py --force-audio --export-mode all
 uv run python3 export_app_audio.py --force-audio --export-mode commercial
 ```
 
-Manual trim metadata is non-destructive. The existing source app audio stays at `beakspeak/public/content/audio/{species}/{xc_id}.ogg`; generated trimmed app audio is written to `beakspeak/public/content/audio/{species}/trimmed/{xc_id}.ogg`. If a trimmed output already exists, `export_app_audio.py` warns and skips regeneration unless `--force-audio` is provided. If source app audio is missing, rerun `uv run python3 download_media.py --export-mode all` to restore it before exporting trims.
+Manual trim metadata is non-destructive. The existing source app audio stays at `beakspeak/public/content/audio/{species}/{xc_id}.ogg`; generated trimmed app audio is written to `beakspeak/public/content/audio/{species}/trimmed/{safe_candidate_id}.ogg`. If a trimmed output already exists, `export_app_audio.py` warns and skips regeneration unless `--force-audio` is provided. If source app audio is missing, rerun `uv run python3 download_media.py --export-mode all` to restore it before exporting trims.
 
 `export_app_audio.py` does not download original Xeno-canto audio and does not rerun BirdNET analysis. Use `populate_content.py` and `download_media.py` for full source refreshes.
 

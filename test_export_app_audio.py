@@ -15,9 +15,10 @@ def _candidate(
     commercial_ok: bool = True,
     segment: dict | None = None,
     score: float = 50.0,
+    candidate_id: str | None = None,
 ) -> dict:
     return {
-        "candidate_id": f"xc:{xc_id}:{source_role}:0",
+        "candidate_id": candidate_id or f"xc:{xc_id}:{source_role}:0",
         "xc_id": xc_id,
         "source_role": source_role,
         "selected_role": selected_role,
@@ -78,7 +79,7 @@ def test_export_app_audio_generates_manual_trim_from_existing_local_app_audio(tm
         runner=runner,
     )
 
-    trimmed = audio_dir / "warbler" / "trimmed" / "101.ogg"
+    trimmed = audio_dir / "warbler" / "trimmed" / "xc-101-song-0.ogg"
     assert trimmed.read_bytes() == b"trimmed audio"
     assert source.read_bytes() == b"source audio"
     assert calls == [[
@@ -105,7 +106,7 @@ def test_export_app_audio_failure_does_not_replace_existing_trimmed_output(tmp_p
     pool_file = tmp_path / "pool.json"
     audio_dir = tmp_path / "audio"
     source = audio_dir / "warbler" / "101.ogg"
-    trimmed = audio_dir / "warbler" / "trimmed" / "101.ogg"
+    trimmed = audio_dir / "warbler" / "trimmed" / "xc-101-song-0.ogg"
     source.parent.mkdir(parents=True)
     trimmed.parent.mkdir(parents=True)
     source.write_bytes(b"source audio")
@@ -158,7 +159,7 @@ def test_export_app_audio_skips_existing_trim_without_force_and_warns(tmp_path: 
     pool_file = tmp_path / "pool.json"
     audio_dir = tmp_path / "audio"
     source = audio_dir / "warbler" / "101.ogg"
-    trimmed = audio_dir / "warbler" / "trimmed" / "101.ogg"
+    trimmed = audio_dir / "warbler" / "trimmed" / "xc-101-song-0.ogg"
     source.parent.mkdir(parents=True)
     trimmed.parent.mkdir(parents=True)
     source.write_bytes(b"source audio")
@@ -252,4 +253,55 @@ def test_export_app_audio_writes_trim_aware_manifest_and_preserves_commercial_su
         runner=runner,
     )
     all_mode_manifest = all_mode_result["manifest"]
-    assert all_mode_manifest["species"][0]["audio_clips"]["songs"][0]["audio_url"] == "/content/audio/warbler/trimmed/101.ogg"
+    assert all_mode_manifest["species"][0]["audio_clips"]["songs"][0]["audio_url"] == "/content/audio/warbler/trimmed/xc-101-song-0.ogg"
+
+
+def test_export_app_audio_keys_trimmed_outputs_by_candidate_identity_when_xc_id_is_shared(tmp_path: Path):
+    pool_file = tmp_path / "pool.json"
+    audio_dir = tmp_path / "audio"
+    source = audio_dir / "warbler" / "201.ogg"
+    source.parent.mkdir(parents=True)
+    source.write_bytes(b"source audio")
+    save_pool_file(
+        pool_file,
+        _pool([
+            _candidate(
+                xc_id="201",
+                source_role="song",
+                selected_role="song",
+                candidate_id="xc:201:song:0",
+                segment={"status": "manual", "start_s": 1.0, "end_s": 3.0, "duration_s": 2.0},
+            ),
+            _candidate(
+                xc_id="201",
+                source_role="call",
+                selected_role="call",
+                candidate_id="xc:201:call:0",
+                segment={"status": "manual", "start_s": 4.0, "end_s": 6.5, "duration_s": 2.5},
+            ),
+        ]),
+    )
+    outputs = []
+
+    def runner(cmd, capture_output, text):
+        del capture_output, text
+        output = Path(cmd[-1])
+        outputs.append(output)
+        output.write_bytes(f"trim {cmd[2]} {cmd[4]}".encode())
+        return subprocess.CompletedProcess(cmd, 0, "", "")
+
+    result = export_app_audio(
+        pool_file=pool_file,
+        audio_dir=audio_dir,
+        manifest_out=tmp_path / "manifest.json",
+        force_audio=True,
+        runner=runner,
+    )
+
+    song_trim = audio_dir / "warbler" / "trimmed" / "xc-201-song-0.ogg"
+    call_trim = audio_dir / "warbler" / "trimmed" / "xc-201-call-0.ogg"
+    assert result["generated"] == [song_trim, call_trim]
+    assert song_trim.read_bytes() == b"trim 1.0 2.0"
+    assert call_trim.read_bytes() == b"trim 4.0 2.5"
+    assert outputs == [song_trim.with_suffix(".tmp.ogg"), call_trim.with_suffix(".tmp.ogg")]
+    assert result["manifest"]["species"][0]["audio_clips"]["songs"][0]["audio_url"] == "/content/audio/warbler/trimmed/xc-201-song-0.ogg"

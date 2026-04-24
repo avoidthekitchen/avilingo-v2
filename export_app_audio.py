@@ -7,6 +7,7 @@ beakspeak/public/content/audio and never downloads original Xeno-canto media.
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 from copy import deepcopy
@@ -35,8 +36,16 @@ def local_source_path(audio_dir: Path, species_id: str, candidate: dict) -> Path
     return audio_dir / species_id / f"{candidate['xc_id']}.ogg"
 
 
+def trimmed_filename(candidate: dict) -> str:
+    candidate_id = str(candidate.get("candidate_id", "") or "")
+    stem = re.sub(r"[^A-Za-z0-9._-]+", "-", candidate_id).strip(".-")
+    if not stem:
+        stem = str(candidate["xc_id"])
+    return f"{stem}.ogg"
+
+
 def trimmed_output_path(audio_dir: Path, species_id: str, candidate: dict) -> Path:
-    return audio_dir / species_id / "trimmed" / f"{candidate['xc_id']}.ogg"
+    return audio_dir / species_id / "trimmed" / trimmed_filename(candidate)
 
 
 def normal_audio_url(species_id: str, candidate: dict) -> str:
@@ -44,7 +53,7 @@ def normal_audio_url(species_id: str, candidate: dict) -> str:
 
 
 def trimmed_audio_url(species_id: str, candidate: dict) -> str:
-    return f"/content/audio/{species_id}/trimmed/{candidate['xc_id']}.ogg"
+    return f"/content/audio/{species_id}/trimmed/{trimmed_filename(candidate)}"
 
 
 def encode_manual_trim(
