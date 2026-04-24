@@ -17,7 +17,7 @@ A Duolingo-style bird song identification trainer. Static SPA deployed to Cloudf
 | Testing | Vitest + Testing Library | 4.1 / 16.3 |
 | Linting | ESLint + typescript-eslint | 9.39 / 8.58 |
 | Deploy | Cloudflare Workers (static assets) | wrangler 4.83 |
-| Content pipeline | Python 3 + requests + Pillow | 3.12+ |
+| Content pipeline | Python 3 + requests + Pillow (+ optional BirdNET Analyzer) | 3.12+ |
 
 ## Architecture
 
@@ -37,8 +37,8 @@ admin/               ← Local-only audio curation tool (not deployed)
 site/                ← Landing page for unformedideas.com
 scripts/             ← Build/deploy scripts
 download_media.py    ← Content pipeline: downloads audio + photos, builds manifest
-populate_content.py  ← Content pipeline: queries Xeno-canto + Wikipedia, selects candidates
-tier1_seattle_birds_populated.json  ← Candidate pool with per-clip selected flags (checked in)
+populate_content.py  ← Content pipeline: queries Xeno-canto + Wikipedia, ranks mixed candidates
+tier1_seattle_birds_populated.json  ← Candidate pool with per-clip role assignments (checked in)
 wrangler.toml        ← Cloudflare Workers config
 rpi/                 ← Timestamped research and plan documents
   plans/             ← Sprint plans and implementation specs
@@ -150,16 +150,17 @@ Deployed as a Worker with no script — pure static asset serving. Requests to s
 
 Two Python scripts fetch and process media from external APIs. Not part of the app runtime.
 
-- `populate_content.py` — queries Xeno-canto API and Wikipedia; fetches up to 5 songs + 5 calls per species; marks top 3 songs + top 2 calls as `selected: true` by default; stores rich metadata (sex, stage, method, remarks); preserves manual `selected` flags from prior runs
-- `download_media.py` — downloads all candidates, normalizes with ffmpeg (loudnorm, smart trim ≤20s, OGG Opus 96kbps), outputs to `beakspeak/public/content/`; only `selected: true` clips are written to `manifest.json`
+- `populate_content.py` — queries Xeno-canto API and Wikipedia; builds unified `audio_clips.candidates` (`schema_version: 2`) with `candidate_id`, `source_role`, and `selected_role` (`none`/`song`/`call`); stores rich metadata plus persisted `analysis` and `segment` fields; preserves manual role assignments from prior runs
+- `download_media.py` — downloads all candidates, normalizes with ffmpeg (loudnorm, persisted-segment trim, OGG Opus 96kbps), outputs to `beakspeak/public/content/`; manifest roles are resolved from `selected_role` with `--export-mode all|commercial`
 - Managed with `uv` (see `pyproject.toml`): https://docs.astral.sh/uv
 - Requires: Python 3.12+, ffmpeg, `requests`, `Pillow`
 - `XC_API_KEY` env var required for `populate_content.py`
+- BirdNET is optional: configure `BIRDNET_COMMAND` or `BIRDNET_HOME` for analysis-assisted ranking; fallback mode remains functional without BirdNET
 
 ### Audio Admin (local only, not deployed)
 
 - `admin/server.py` — Python stdlib HTTP server; run with `python3 admin/server.py` from repo root; serves on `http://localhost:8765`
-- `admin/index.html` — single-file vanilla JS UI; shows per-clip spectrogram, metadata, and "In app" toggle; saves immediately to `tier1_seattle_birds_populated.json`
+- `admin/index.html` — single-file vanilla JS UI; shows mixed ranked candidates with spectrogram/metadata/evidence and a role selector (`none`/`song`/`call`); saves immediately to `tier1_seattle_birds_populated.json`
 - No extra dependencies beyond Python stdlib
 
 ## Build & Deploy

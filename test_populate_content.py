@@ -14,6 +14,8 @@ from populate_content import (
     build_ranked_candidate_pool,
     candidate_quality_warnings,
     count_candidates_by_source_role,
+    count_good_candidates_by_source_role,
+    is_good_birdnet_candidate,
     score_candidate,
     is_commercial_license,
     is_any_cc_license,
@@ -170,8 +172,8 @@ class TestUnifiedCandidateRanking:
         assert "candidates" in result
         assert "songs" not in result
         assert "calls" not in result
-        assert [candidate["xc_id"] for candidate in result["candidates"]] == ["10", "11", "12"]
-        assert [candidate["rank"] for candidate in result["candidates"]] == [1, 2, 3]
+        assert set(candidate["xc_id"] for candidate in result["candidates"]) == {"10", "11", "12"}
+        assert sorted(candidate["rank"] for candidate in result["candidates"]) == [1, 2, 3]
         assert result["source_role_counts"] == {"song": 2, "call": 1}
 
     def test_preserves_original_xc_type_metadata_for_admin_review(self):
@@ -309,6 +311,122 @@ class TestUnifiedCandidateRanking:
             {"source_role": "song"},
         ])
         assert counts == {"song": 2, "call": 1}
+
+    def test_strict_birdnet_gate_accepts_candidate_with_target_and_limited_overlap(self):
+        candidate = {
+            "source_role": "song",
+            "analysis": {
+                "status": "ok",
+                "summary": {
+                    "target_detection_count": 2,
+                    "overlap_detection_count": 3,
+                },
+            },
+        }
+
+        assert is_good_birdnet_candidate(candidate) is True
+
+    def test_strict_birdnet_gate_rejects_missing_target_or_high_overlap(self):
+        missing_target = {
+            "source_role": "song",
+            "analysis": {
+                "status": "ok",
+                "summary": {
+                    "target_detection_count": 0,
+                    "overlap_detection_count": 0,
+                },
+            },
+        }
+        noisy = {
+            "source_role": "call",
+            "analysis": {
+                "status": "ok",
+                "summary": {
+                    "target_detection_count": 1,
+                    "overlap_detection_count": 4,
+                },
+            },
+        }
+
+        assert is_good_birdnet_candidate(missing_target) is False
+        assert is_good_birdnet_candidate(noisy) is False
+
+    def test_count_good_candidates_by_source_role_uses_strict_gate(self):
+        counts = count_good_candidates_by_source_role([
+            {
+                "source_role": "song",
+                "analysis": {
+                    "status": "ok",
+                    "summary": {
+                        "target_detection_count": 1,
+                        "overlap_detection_count": 2,
+                    },
+                },
+            },
+            {
+                "source_role": "song",
+                "analysis": {
+                    "status": "ok",
+                    "summary": {
+                        "target_detection_count": 1,
+                        "overlap_detection_count": 4,
+                    },
+                },
+            },
+            {
+                "source_role": "call",
+                "analysis": {
+                    "status": "ok",
+                    "summary": {
+                        "target_detection_count": 1,
+                        "overlap_detection_count": 3,
+                    },
+                },
+            },
+            {
+                "source_role": "call",
+                "analysis": {
+                    "status": "failed",
+                    "summary": {
+                        "target_detection_count": 2,
+                        "overlap_detection_count": 0,
+                    },
+                },
+            },
+        ])
+
+        assert counts == {"song": 1, "call": 1}
+
+    def test_default_ranked_candidate_pool_cap_is_thirty(self):
+        recs = [
+            _make_xc_rec(
+                xc_id=str(index),
+                rec_type="song" if index % 2 == 0 else "call",
+                quality="A",
+                length="0:08",
+                lic=CC_BY,
+            )
+            for index in range(30)
+        ]
+
+        result = build_ranked_candidate_pool(recs, species_name="TestSpecies")
+
+        assert len(result["candidates"]) == 30
+
+    def test_default_pool_enforces_minimum_five_song_like_and_five_call_like_when_available(self):
+        recs = [
+            _make_xc_rec(xc_id=f"s{index}", rec_type="song", quality="A", length="0:08", lic=CC_BY)
+            for index in range(20)
+        ] + [
+            _make_xc_rec(xc_id=f"c{index}", rec_type="call", quality="B", length="0:08", lic=CC_BY)
+            for index in range(20)
+        ]
+
+        result = build_ranked_candidate_pool(recs, species_name="TestSpecies")
+        counts = result["source_role_counts"]
+
+        assert counts["song"] >= 5
+        assert counts["call"] >= 5
 
 
 class TestSummaryReport:

@@ -34,6 +34,8 @@ test('commercial-compatible candidates render an explicit commercial badge and B
 
   const html = renderClipEvidenceHtml(clip)
   assert.match(html, /Commercial OK/)
+  assert.match(html, /Gate pass/)
+  assert.match(html, /BG 1/)
   assert.match(html, /Target 2 detections · max 0\.91 · 1 overlap/)
   assert.match(html, /Overlap species: House Finch/)
   assert.match(html, /XC base 58/)
@@ -63,6 +65,7 @@ test('non-commercial candidates render a distinct non-commercial badge', () => {
 
   const html = renderClipEvidenceHtml(clip)
   assert.match(html, /Non-commercial/)
+  assert.match(html, /Gate pass/)
 })
 
 test('missing BirdNET data renders an explicit degraded-analysis state', () => {
@@ -89,6 +92,7 @@ test('missing BirdNET data renders an explicit degraded-analysis state', () => {
 
   const html = renderClipEvidenceHtml(clip)
   assert.match(html, /Degraded analysis/)
+  assert.match(html, /Gate fail/)
   assert.match(html, /BirdNET unavailable/)
   assert.match(html, /birdnet not configured/i)
   assert.match(html, /metadata-only fallback/)

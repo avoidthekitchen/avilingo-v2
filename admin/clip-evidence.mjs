@@ -41,6 +41,56 @@ function getTopOverlapSpecies(analysis) {
   return species
 }
 
+function getBackgroundSpeciesList(clip) {
+  const rankingSpecies = clip?.ranking_signals?.background_species
+  if (Array.isArray(rankingSpecies) && rankingSpecies.length) {
+    return rankingSpecies
+      .map((value) => String(value || '').trim())
+      .filter(Boolean)
+  }
+
+  const also = clip?.also
+  if (!also) return []
+  if (Array.isArray(also)) {
+    return also.map((value) => String(value || '').trim()).filter(Boolean)
+  }
+  return String(also)
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean)
+}
+
+function buildStrictGateBadge(clip) {
+  const analysis = clip?.analysis || {}
+  const targetCount = Number(analysis?.summary?.target_detection_count ?? analysis?.target_detections?.length ?? 0)
+  const overlapCount = Number(analysis?.summary?.overlap_detection_count ?? analysis?.overlap_detections?.length ?? 0)
+  const passes = analysis?.status === 'ok' && targetCount > 0 && overlapCount <= 3
+
+  if (passes) {
+    return {
+      className: 'badge-gate-pass',
+      label: 'Gate pass',
+      title: `BirdNET gate passed (target ${targetCount}, overlap ${overlapCount}/3 max)`,
+    }
+  }
+
+  return {
+    className: 'badge-gate-fail',
+    label: 'Gate fail',
+    title: `BirdNET gate failed (needs status=ok, target>0, overlap<=3; got target ${targetCount}, overlap ${overlapCount})`,
+  }
+}
+
+function buildBackgroundSpeciesBadge(clip) {
+  const backgroundSpecies = getBackgroundSpeciesList(clip)
+  if (!backgroundSpecies.length) return null
+  return {
+    className: 'badge-background',
+    label: `BG ${backgroundSpecies.length}`,
+    title: `Background species: ${backgroundSpecies.join(', ')}`,
+  }
+}
+
 function formatSegmentEvidence(segment) {
   const numericDuration = Number(segment?.duration_s)
   const duration = Number.isFinite(numericDuration) ? numericDuration.toFixed(1) : null
@@ -111,9 +161,7 @@ function buildRankingEvidence(clip) {
     parts.push(`XC base ${xcScore}`)
   }
 
-  const backgroundSpecies = Array.isArray(rankingSignals?.background_species)
-    ? rankingSignals.background_species
-    : []
+  const backgroundSpecies = getBackgroundSpeciesList(clip)
   if (backgroundSpecies.length) {
     parts.push(`Background species ${backgroundSpecies.length}`)
   }
@@ -160,6 +208,8 @@ export function buildLicenseBadge(clip) {
 export function renderClipEvidenceHtml(clip) {
   const licenseBadge = buildLicenseBadge(clip)
   const birdnet = buildBirdnetEvidence(clip)
+  const gateBadge = buildStrictGateBadge(clip)
+  const backgroundBadge = buildBackgroundSpeciesBadge(clip)
   const ranking = buildRankingEvidence(clip)
 
   return `
@@ -167,6 +217,12 @@ export function renderClipEvidenceHtml(clip) {
       <div class="evidence-row">
         <span class="badge ${escapeHtml(licenseBadge.className)}" title="${escapeHtml(licenseBadge.title)}">${escapeHtml(licenseBadge.label)}</span>
         <span class="badge ${escapeHtml(birdnet.className)}">${escapeHtml(birdnet.pillLabel)}</span>
+        <span class="badge ${escapeHtml(gateBadge.className)}" title="${escapeHtml(gateBadge.title)}">${escapeHtml(gateBadge.label)}</span>
+        ${
+          backgroundBadge
+            ? `<span class="badge ${escapeHtml(backgroundBadge.className)}" title="${escapeHtml(backgroundBadge.title)}">${escapeHtml(backgroundBadge.label)}</span>`
+            : ''
+        }
       </div>
       <div class="evidence-block${birdnet.className === 'badge-analysis-degraded' ? ' evidence-block-degraded' : ''}">
         <div class="evidence-label">BirdNET</div>
