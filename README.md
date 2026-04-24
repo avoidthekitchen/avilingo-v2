@@ -1,6 +1,6 @@
 # avilingo-v2
 
-A Duolingo-style web app for learning Seattle-area bird songs and calls. Flash-card style introduction, spaced repetition reviews, and discrimination exercises — all in a mobile-first PWA.
+A Duolingo-style web app for learning Seattle-area bird songs and calls. Flash-card style introduction, spaced repetition reviews, and discrimination exercises — all in a mobile-first PWA. This repo also includes an extensive audio pipeline that uses Xeno-Canto metadata and BirdNET-Analyzer data to help curate, select, and trim audio files in an audio admin interface. 
 
 **Live at:** [unformedideas.com/beakspeak](https://unformedideas.com/beakspeak/)
 
