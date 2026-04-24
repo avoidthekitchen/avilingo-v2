@@ -47,7 +47,7 @@
           {
             "xc_id": "171727",
             "xc_url": "https://xeno-canto.org/171727",
-            "audio_url": "/content/audio/amro/171727.ogg",
+            "audio_url": "/content/audio/amro/trimmed/xc-171727-song-146.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
@@ -84,7 +84,7 @@
           {
             "xc_id": "385843",
             "xc_url": "https://xeno-canto.org/385843",
-            "audio_url": "/content/audio/amro/385843.ogg",
+            "audio_url": "/content/audio/amro/trimmed/xc-385843-call-78.ogg",
             "type": "call",
             "xc_type": "call",
             "xc_types": [
@@ -119,7 +119,7 @@
         ]
       },
       "photo": {
-        "url": "/content/photos/amro.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/97/American_robin_%2871307%29.jpg",
         "width": 3444,
         "height": 2584,
         "filename": "American_robin_(71307).jpg",
@@ -129,14 +129,14 @@
       },
       "wikipedia_audio": [
         {
-          "url": "/content/audio/amro/wp_0.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/4/4e/American_Robin.ogg",
           "filename": "File:American Robin.ogg",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
           "commons_page": "https://commons.wikimedia.org/wiki/File%3AAmerican%20Robin.ogg"
         },
         {
-          "url": "/content/audio/amro/wp_1.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/8/8a/Turdus-migratorius-003.ogg",
           "filename": "File:Turdus-migratorius-003.ogg",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
@@ -170,7 +170,7 @@
           {
             "xc_id": "531008",
             "xc_url": "https://xeno-canto.org/531008",
-            "audio_url": "/content/audio/amcr/531008.ogg",
+            "audio_url": "/content/audio/amcr/trimmed/xc-531008-call-74.ogg",
             "type": "call",
             "xc_type": "call",
             "xc_types": [
@@ -207,7 +207,7 @@
           {
             "xc_id": "682428",
             "xc_url": "https://xeno-canto.org/682428",
-            "audio_url": "/content/audio/amcr/682428.ogg",
+            "audio_url": "/content/audio/amcr/trimmed/xc-682428-call-46.ogg",
             "type": "call",
             "xc_type": "call",
             "xc_types": [
@@ -242,7 +242,7 @@
         ]
       },
       "photo": {
-        "url": "/content/photos/amcr.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Corvus-brachyrhynchos-001.jpg",
         "width": 1536,
         "height": 1536,
         "filename": "Corvus-brachyrhynchos-001.jpg",
@@ -252,14 +252,14 @@
       },
       "wikipedia_audio": [
         {
-          "url": "/content/audio/amcr/wp_0.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/4/4c/American_crow_in_spring.ogg",
           "filename": "File:American crow in spring.ogg",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
           "commons_page": "https://commons.wikimedia.org/wiki/File%3AAmerican%20crow%20in%20spring.ogg"
         },
         {
-          "url": "/content/audio/amcr/wp_1.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/9/90/Corvus_brachyrhynchos_-_American_Crow_-_XC115429.ogg",
           "filename": "File:Corvus brachyrhynchos - American Crow - XC115429.ogg",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
@@ -295,7 +295,7 @@
           {
             "xc_id": "803814",
             "xc_url": "https://xeno-canto.org/803814",
-            "audio_url": "/content/audio/sosp/803814.ogg",
+            "audio_url": "/content/audio/sosp/trimmed/xc-803814-song-46.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
@@ -332,7 +332,7 @@
           {
             "xc_id": "829233",
             "xc_url": "https://xeno-canto.org/829233",
-            "audio_url": "/content/audio/sosp/829233.ogg",
+            "audio_url": "/content/audio/sosp/trimmed/xc-829233-call-19.ogg",
             "type": "call",
             "xc_type": "call",
             "xc_types": [
@@ -367,7 +367,7 @@
         ]
       },
       "photo": {
-        "url": "/content/photos/sosp.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/0/00/Song_sparrow_in_Prospect_Park_%2893031%29.jpg",
         "width": 3257,
         "height": 2284,
         "filename": "Song_sparrow_in_Prospect_Park_(93031).jpg",
@@ -377,7 +377,7 @@
       },
       "wikipedia_audio": [
         {
-          "url": "/content/audio/sosp/wp_0.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Melospiza-melodia-001.ogg",
           "filename": "File:Melospiza-melodia-001.ogg",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
@@ -412,7 +412,7 @@
           {
             "xc_id": "569535",
             "xc_url": "https://xeno-canto.org/569535",
-            "audio_url": "/content/audio/deju/569535.ogg",
+            "audio_url": "/content/audio/deju/trimmed/xc-569535-song-41.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
@@ -449,7 +449,7 @@
           {
             "xc_id": "254480",
             "xc_url": "https://xeno-canto.org/254480",
-            "audio_url": "/content/audio/deju/254480.ogg",
+            "audio_url": "/content/audio/deju/trimmed/xc-254480-song-67.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
@@ -484,7 +484,7 @@
         ]
       },
       "photo": {
-        "url": "/content/photos/deju.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/55/Junco_hyemalis_hyemalis_CT1_%28cropped%29.jpg",
         "width": 2536,
         "height": 1692,
         "filename": "Junco_hyemalis_hyemalis_CT1_(cropped).jpg",
@@ -519,7 +519,7 @@
           {
             "xc_id": "866009",
             "xc_url": "https://xeno-canto.org/866009",
-            "audio_url": "/content/audio/bcch/866009.ogg",
+            "audio_url": "/content/audio/bcch/trimmed/xc-866009-song-10.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
@@ -556,7 +556,7 @@
           {
             "xc_id": "636533",
             "xc_url": "https://xeno-canto.org/636533",
-            "audio_url": "/content/audio/bcch/636533.ogg",
+            "audio_url": "/content/audio/bcch/trimmed/xc-636533-song-18.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
@@ -591,7 +591,7 @@
         ]
       },
       "photo": {
-        "url": "/content/photos/bcch.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Poecile-atricapilla-001.jpg",
         "width": 1024,
         "height": 1024,
         "filename": "Poecile-atricapilla-001.jpg",
@@ -601,14 +601,14 @@
       },
       "wikipedia_audio": [
         {
-          "url": "/content/audio/bcch/wp_0.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Poecile-atricapilla-004.ogg",
           "filename": "File:Poecile-atricapilla-004.ogg",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
           "commons_page": "https://commons.wikimedia.org/wiki/File%3APoecile-atricapilla-004.ogg"
         },
         {
-          "url": "/content/audio/bcch/wp_1.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Poecile_atricapillus_-_Black-capped_Chickadee_-_XC70185.ogg",
           "filename": "File:Poecile atricapillus - Black-capped Chickadee - XC70185.ogg",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
@@ -642,7 +642,7 @@
           {
             "xc_id": "575461",
             "xc_url": "https://xeno-canto.org/575461",
-            "audio_url": "/content/audio/spto/575461.ogg",
+            "audio_url": "/content/audio/spto/trimmed/xc-575461-song-114.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
@@ -679,7 +679,7 @@
           {
             "xc_id": "717557",
             "xc_url": "https://xeno-canto.org/717557",
-            "audio_url": "/content/audio/spto/717557.ogg",
+            "audio_url": "/content/audio/spto/trimmed/xc-717557-song-51.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
@@ -714,7 +714,7 @@
         ]
       },
       "photo": {
-        "url": "/content/photos/spto.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/d/d6/Spotted_Towhee_%2832684403303%29.jpg",
         "width": 2273,
         "height": 1818,
         "filename": "Spotted_Towhee_(32684403303).jpg",
@@ -724,7 +724,7 @@
       },
       "wikipedia_audio": [
         {
-          "url": "/content/audio/spto/wp_0.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Pipilo_maculatus_-_Spotted_Towhee_-_XC104528.ogg",
           "filename": "File:Pipilo maculatus - Spotted Towhee - XC104528.ogg",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
@@ -759,7 +759,7 @@
           {
             "xc_id": "875451",
             "xc_url": "https://xeno-canto.org/875451",
-            "audio_url": "/content/audio/hofi/875451.ogg",
+            "audio_url": "/content/audio/hofi/trimmed/xc-875451-song-13.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
@@ -796,7 +796,7 @@
           {
             "xc_id": "573017",
             "xc_url": "https://xeno-canto.org/573017",
-            "audio_url": "/content/audio/hofi/573017.ogg",
+            "audio_url": "/content/audio/hofi/trimmed/xc-573017-call-24.ogg",
             "type": "flight call",
             "xc_type": "flight call",
             "xc_types": [
@@ -831,7 +831,7 @@
         ]
       },
       "photo": {
-        "url": "/content/photos/hofi.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/f/f1/House_finch_%2833688%292.jpg",
         "width": 3975,
         "height": 3122,
         "filename": "House_finch_(33688)2.jpg",
@@ -841,7 +841,7 @@
       },
       "wikipedia_audio": [
         {
-          "url": "/content/audio/hofi/wp_0.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/2/23/Carpodacus_mexicanus_vocalizations_-_pone.0027052.s006.oga",
           "filename": "File:Carpodacus mexicanus vocalizations - pone.0027052.s006.oga",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
@@ -875,7 +875,7 @@
           {
             "xc_id": "645833",
             "xc_url": "https://xeno-canto.org/645833",
-            "audio_url": "/content/audio/nofl/645833.ogg",
+            "audio_url": "/content/audio/nofl/trimmed/xc-645833-song-7.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
@@ -912,7 +912,7 @@
           {
             "xc_id": "613544",
             "xc_url": "https://xeno-canto.org/613544",
-            "audio_url": "/content/audio/nofl/613544.ogg",
+            "audio_url": "/content/audio/nofl/trimmed/xc-613544-call-45.ogg",
             "type": "call, contact call",
             "xc_type": "call, contact call",
             "xc_types": [
@@ -948,7 +948,7 @@
         ]
       },
       "photo": {
-        "url": "/content/photos/nofl.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/6/60/Northern_yellow-shafted_flicker_male_%2833737%29_%28cropped%29.jpg",
         "width": 2441,
         "height": 2442,
         "filename": "Northern_yellow-shafted_flicker_male_(33737)_(cropped).jpg",
@@ -958,14 +958,14 @@
       },
       "wikipedia_audio": [
         {
-          "url": "/content/audio/nofl/wp_0.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/d/dd/Colaptes_auratus.ogg",
           "filename": "File:Colaptes auratus.ogg",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
           "commons_page": "https://commons.wikimedia.org/wiki/File%3AColaptes%20auratus.ogg"
         },
         {
-          "url": "/content/audio/nofl/wp_1.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Northern_Flicker_Yosemite_National_Park.ogg",
           "filename": "File:Northern Flicker Yosemite National Park.ogg",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
@@ -999,7 +999,7 @@
           {
             "xc_id": "603262",
             "xc_url": "https://xeno-canto.org/603262",
-            "audio_url": "/content/audio/stja/603262.ogg",
+            "audio_url": "/content/audio/stja/trimmed/xc-603262-call-53.ogg",
             "type": "call, imitation, mimicry/imitation",
             "xc_type": "call, imitation, mimicry/imitation",
             "xc_types": [
@@ -1038,7 +1038,7 @@
           {
             "xc_id": "109654",
             "xc_url": "https://xeno-canto.org/109654",
-            "audio_url": "/content/audio/stja/109654.ogg",
+            "audio_url": "/content/audio/stja/trimmed/xc-109654-call-121.ogg",
             "type": "call",
             "xc_type": "call",
             "xc_types": [
@@ -1073,7 +1073,7 @@
         ]
       },
       "photo": {
-        "url": "/content/photos/stja.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Steller%27s_Jay_flagstaff_arizona.jpg",
         "width": 1226,
         "height": 1854,
         "filename": "Steller's_Jay_flagstaff_arizona.jpg",
@@ -1083,7 +1083,7 @@
       },
       "wikipedia_audio": [
         {
-          "url": "/content/audio/stja/wp_0.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Cyanocitta_stelleri_-_Steller%27s_Jay_-_XC109654.ogg",
           "filename": "File:Cyanocitta stelleri - Steller's Jay - XC109654.ogg",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
@@ -1118,7 +1118,7 @@
           {
             "xc_id": "800769",
             "xc_url": "https://xeno-canto.org/800769",
-            "audio_url": "/content/audio/bewr/800769.ogg",
+            "audio_url": "/content/audio/bewr/trimmed/xc-800769-song-28.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
@@ -1155,7 +1155,7 @@
           {
             "xc_id": "553922",
             "xc_url": "https://xeno-canto.org/553922",
-            "audio_url": "/content/audio/bewr/553922.ogg",
+            "audio_url": "/content/audio/bewr/trimmed/xc-553922-song-98.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
@@ -1190,7 +1190,7 @@
         ]
       },
       "photo": {
-        "url": "/content/photos/bewr.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/7/71/Bewicks_Wren.jpg",
         "width": 1746,
         "height": 1746,
         "filename": "Bewicks_Wren.jpg",
@@ -1200,14 +1200,14 @@
       },
       "wikipedia_audio": [
         {
-          "url": "/content/audio/bewr/wp_0.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Thryomanes_bewickii_-_Bewick%27s_Wren_-_XC109604.ogg",
           "filename": "File:Thryomanes bewickii - Bewick's Wren - XC109604.ogg",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
           "commons_page": "https://commons.wikimedia.org/wiki/File%3AThryomanes%20bewickii%20-%20Bewick%27s%20Wren%20-%20XC109604.ogg"
         },
         {
-          "url": "/content/audio/bewr/wp_1.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Thryomanes_bewickii_-_Bewick%27s_Wren_-_XC109632.ogg",
           "filename": "File:Thryomanes bewickii - Bewick's Wren - XC109632.ogg",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
@@ -1241,7 +1241,7 @@
           {
             "xc_id": "860679",
             "xc_url": "https://xeno-canto.org/860679",
-            "audio_url": "/content/audio/anhu/860679.ogg",
+            "audio_url": "/content/audio/anhu/trimmed/xc-860679-song-40.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
@@ -1278,7 +1278,7 @@
           {
             "xc_id": "697495",
             "xc_url": "https://xeno-canto.org/697495",
-            "audio_url": "/content/audio/anhu/697495.ogg",
+            "audio_url": "/content/audio/anhu/trimmed/xc-697495-call-6.ogg",
             "type": "flight call",
             "xc_type": "flight call",
             "xc_types": [
@@ -1313,7 +1313,7 @@
         ]
       },
       "photo": {
-        "url": "/content/photos/anhu.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Anna%27s_hummingbird.jpg",
         "width": 2763,
         "height": 1784,
         "filename": "Anna's_hummingbird.jpg",
@@ -1323,7 +1323,7 @@
       },
       "wikipedia_audio": [
         {
-          "url": "/content/audio/anhu/wp_0.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Calypte_anna_-_Anna%27s_Hummingbird_-_XC109651.ogg",
           "filename": "File:Calypte anna - Anna's Hummingbird - XC109651.ogg",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
@@ -1357,7 +1357,7 @@
           {
             "xc_id": "702313",
             "xc_url": "https://xeno-canto.org/702313",
-            "audio_url": "/content/audio/cbch/702313.ogg",
+            "audio_url": "/content/audio/cbch/trimmed/xc-702313-call-10.ogg",
             "type": "call, song",
             "xc_type": "call, song",
             "xc_types": [
@@ -1395,7 +1395,7 @@
           {
             "xc_id": "364352",
             "xc_url": "https://xeno-canto.org/364352",
-            "audio_url": "/content/audio/cbch/364352.ogg",
+            "audio_url": "/content/audio/cbch/trimmed/xc-364352-call-27.ogg",
             "type": "call",
             "xc_type": "call",
             "xc_types": [
@@ -1430,7 +1430,7 @@
         ]
       },
       "photo": {
-        "url": "/content/photos/cbch.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/94/Chestnut-backed_Chickadee_2154ab_%28cropped%29.jpg",
         "width": 2447,
         "height": 1855,
         "filename": "Chestnut-backed_Chickadee_2154ab_(cropped).jpg",
@@ -1465,7 +1465,7 @@
           {
             "xc_id": "215759",
             "xc_url": "https://xeno-canto.org/215759",
-            "audio_url": "/content/audio/bush/215759.ogg",
+            "audio_url": "/content/audio/bush/trimmed/xc-215759-song-2.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
@@ -1502,7 +1502,7 @@
           {
             "xc_id": "149398",
             "xc_url": "https://xeno-canto.org/149398",
-            "audio_url": "/content/audio/bush/149398.ogg",
+            "audio_url": "/content/audio/bush/trimmed/xc-149398-call-45.ogg",
             "type": "call",
             "xc_type": "call",
             "xc_types": [
@@ -1537,7 +1537,7 @@
         ]
       },
       "photo": {
-        "url": "/content/photos/bush.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/d/d7/BushtitMale.jpg",
         "width": 2868,
         "height": 2294,
         "filename": "BushtitMale.jpg",
@@ -1547,7 +1547,7 @@
       },
       "wikipedia_audio": [
         {
-          "url": "/content/audio/bush/wp_0.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Psaltriparus_minimus_%28American_Bushtit%29_vocalizations_-_pone.0027052.s004.oga",
           "filename": "File:Psaltriparus minimus (American Bushtit) vocalizations - pone.0027052.s004.oga",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
@@ -1581,7 +1581,7 @@
           {
             "xc_id": "345344",
             "xc_url": "https://xeno-canto.org/345344",
-            "audio_url": "/content/audio/gcsp/345344.ogg",
+            "audio_url": "/content/audio/gcsp/trimmed/xc-345344-song-18.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
@@ -1618,7 +1618,7 @@
           {
             "xc_id": "440249",
             "xc_url": "https://xeno-canto.org/440249",
-            "audio_url": "/content/audio/gcsp/440249.ogg",
+            "audio_url": "/content/audio/gcsp/trimmed/xc-440249-call-4.ogg",
             "type": "call, song",
             "xc_type": "call, song",
             "xc_types": [
@@ -1654,7 +1654,7 @@
         ]
       },
       "photo": {
-        "url": "/content/photos/gcsp.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Zonotrichia_atricapilla_-British_Columbia%2C_Canada-8.jpg",
         "width": 4928,
         "height": 3264,
         "filename": "Zonotrichia_atricapilla_-British_Columbia,_Canada-8.jpg",
@@ -1689,7 +1689,7 @@
           {
             "xc_id": "593357",
             "xc_url": "https://xeno-canto.org/593357",
-            "audio_url": "/content/audio/eust/593357.ogg",
+            "audio_url": "/content/audio/eust/trimmed/xc-593357-song-28.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
@@ -1726,7 +1726,7 @@
           {
             "xc_id": "614156",
             "xc_url": "https://xeno-canto.org/614156",
-            "audio_url": "/content/audio/eust/614156.ogg",
+            "audio_url": "/content/audio/eust/trimmed/xc-614156-call-3.ogg",
             "type": "call, imitation, mimicry/imitation",
             "xc_type": "call, imitation, mimicry/imitation",
             "xc_types": [
@@ -1763,7 +1763,7 @@
         ]
       },
       "photo": {
-        "url": "/content/photos/eust.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg",
         "width": 1776,
         "height": 2372,
         "filename": "Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg",
@@ -1773,14 +1773,14 @@
       },
       "wikipedia_audio": [
         {
-          "url": "/content/audio/eust/wp_0.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Common_Starling_%28Sturnus_vulgaris%29_%28W1CDR0001431_BD8%29.ogg",
           "filename": "File:Common Starling (Sturnus vulgaris) (W1CDR0001431 BD8).ogg",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",
           "commons_page": "https://commons.wikimedia.org/wiki/File%3ACommon%20Starling%20%28Sturnus%20vulgaris%29%20%28W1CDR0001431%20BD8%29.ogg"
         },
         {
-          "url": "/content/audio/eust/wp_1.ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/0/07/Sturnus_vulgaris.ogg",
           "filename": "File:Sturnus vulgaris.ogg",
           "source": "wikimedia_commons",
           "license": "CC (see Commons page)",

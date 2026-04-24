@@ -61,7 +61,7 @@ The app is a single-page app with no backend — all data is served as static fi
 
 ## Audio Admin
 
-A local-only tool for reviewing the mixed candidate pool and assigning final export roles.
+A local-only tool for reviewing the mixed candidate pool, assigning final export roles, and saving non-destructive manual trims for selected clips.
 
 ```bash
 # Run from repo root (no extra dependencies — Python stdlib only)
@@ -69,7 +69,7 @@ python3 admin/server.py
 # → http://localhost:8765
 ```
 
-**What it shows per clip:** spectrogram (pre-rendered), play/pause, quality grade, type (song / call / alarm call / etc.), sex, stage, recording method, location, recordist, score/rank, license, BirdNET/segment evidence, remarks, and a link to the Xeno-canto page.
+**What it shows per clip:** spectrogram (pre-rendered), play/pause, quality grade, type (song / call / alarm call / etc.), sex, stage, recording method, location, recordist, score/rank, license, BirdNET/segment evidence, remarks, and a link to the Xeno-canto page. Clips assigned to `song` or `call` also show start/end trim controls, selected-segment preview, save, and reset.
 
 **Species header:** mnemonic and any Wikipedia audio clips for reference.
 
@@ -77,8 +77,9 @@ python3 admin/server.py
 1. Run `uv run python3 populate_content.py` to fetch/rank candidates and persist unified `audio_clips.candidates`
 2. Run `uv run python3 download_media.py` to download and normalize candidate media for local preview
 3. Open the admin and review mixed ranked candidates; assign each clip to `song`, `call`, or `none`
-4. Assignments save immediately to `tier1_seattle_birds_populated.json` via `/api/assign-role`
-5. Run `uv run python3 download_media.py --export-mode all` (or `--export-mode commercial`) to regenerate `manifest.json`
+4. For assigned clips, optionally save manual trim metadata. Trims are saved to `candidate.segment` and do not overwrite local audio.
+5. Assignments save immediately to `tier1_seattle_birds_populated.json` via `/api/assign-role`; trims save via `/api/segment`
+6. Run `uv run python3 export_app_audio.py --force-audio --export-mode all` (or `--export-mode commercial`) to generate trimmed app audio and regenerate `manifest.json`
 
 ## Re-generating media
 
@@ -92,10 +93,14 @@ python3 admin/server.py
 uv run python3 populate_content.py                   # → tier1_seattle_birds_populated.json
 uv run python3 download_media.py --export-mode all  # → beakspeak/public/content/ + manifest.json
 
-# Manifest/media rebuild after admin role assignment
-uv run python3 download_media.py --export-mode all
-uv run python3 download_media.py --export-mode commercial
+# Manifest/media rebuild after admin role assignment and optional manual trims
+uv run python3 export_app_audio.py --force-audio --export-mode all
+uv run python3 export_app_audio.py --force-audio --export-mode commercial
 ```
+
+Manual trim metadata is non-destructive. The existing source app audio stays at `beakspeak/public/content/audio/{species}/{xc_id}.ogg`; generated trimmed app audio is written to `beakspeak/public/content/audio/{species}/trimmed/{safe_candidate_id}.ogg`. If a trimmed output already exists, `export_app_audio.py` warns and skips regeneration unless `--force-audio` is provided. If source app audio is missing, rerun `uv run python3 download_media.py --export-mode all` to restore it before exporting trims.
+
+`export_app_audio.py` does not download original Xeno-canto audio and does not rerun BirdNET analysis. Use `populate_content.py` and `download_media.py` for full source refreshes.
 
 Audio and photos are gitignored; `manifest.json` and `tier1_seattle_birds_populated.json` are checked in.
 
