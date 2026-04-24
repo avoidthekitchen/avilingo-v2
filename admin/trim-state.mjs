@@ -24,6 +24,14 @@ export function getSegmentDurationWarning(startValue, endValue) {
   return ''
 }
 
+export function formatPlaybackTime(seconds) {
+  const value = Number(seconds)
+  if (!Number.isFinite(value) || value < 0) return '0:00.0'
+  const minutes = Math.floor(value / 60)
+  const remainingSeconds = value - minutes * 60
+  return `${minutes}:${remainingSeconds.toFixed(1).padStart(4, '0')}`
+}
+
 export function applyCandidateSegment(candidate, segment) {
   candidate.segment = normalizeSegmentForCandidate(segment)
   return candidate

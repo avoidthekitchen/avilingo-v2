@@ -3,6 +3,7 @@ import test from 'node:test'
 
 import {
   applyCandidateSegment,
+  formatPlaybackTime,
   getSegmentDurationWarning,
   normalizeSegment,
   resetCandidateSegment,
@@ -29,6 +30,13 @@ test('duration warnings flag unusually short or long segments without blocking v
   assert.equal(getSegmentDurationWarning(1, 1.5), 'Segment is shorter than 1 second.')
   assert.equal(getSegmentDurationWarning(1, 22), 'Segment is longer than 20 seconds.')
   assert.equal(getSegmentDurationWarning(1, 8), '')
+})
+
+test('formatPlaybackTime renders current audio time for clip playback', () => {
+  assert.equal(formatPlaybackTime(0), '0:00.0')
+  assert.equal(formatPlaybackTime(3.42), '0:03.4')
+  assert.equal(formatPlaybackTime(65.98), '1:06.0')
+  assert.equal(formatPlaybackTime(Number.NaN), '0:00.0')
 })
 
 test('applyCandidateSegment and resetCandidateSegment update in-memory candidate state', () => {
