@@ -37,6 +37,7 @@ admin/               ← Local-only audio curation tool (not deployed)
 site/                ← Landing page for unformedideas.com
 scripts/             ← Build/deploy scripts
 download_media.py    ← Content pipeline: downloads audio + photos, builds manifest
+export_app_audio.py  ← App-audio export: regenerates manual trim outputs + manifest from existing local app audio
 populate_content.py  ← Content pipeline: queries Xeno-canto + Wikipedia, ranks mixed candidates
 tier1_seattle_birds_populated.json  ← Candidate pool with per-clip role assignments (checked in)
 wrangler.toml        ← Cloudflare Workers config
@@ -152,6 +153,7 @@ Two Python scripts fetch and process media from external APIs. Not part of the a
 
 - `populate_content.py` — queries Xeno-canto API and Wikipedia; builds unified `audio_clips.candidates` (`schema_version: 2`) with `candidate_id`, `source_role`, and `selected_role` (`none`/`song`/`call`); stores rich metadata plus persisted `analysis` and `segment` fields; preserves manual role assignments from prior runs
 - `download_media.py` — downloads all candidates, normalizes with ffmpeg (loudnorm, persisted-segment trim, OGG Opus 96kbps), outputs to `beakspeak/public/content/`; manifest roles are resolved from `selected_role` with `--export-mode all|commercial`
+- `export_app_audio.py` — reads existing local app audio from `beakspeak/public/content/audio/{species}/{xc_id}.ogg`, writes manual trim outputs to `beakspeak/public/content/audio/{species}/trimmed/{xc_id}.ogg`, and regenerates the manifest with trim-aware URLs. Use `--force-audio` after changing an existing trim. It does not download Xeno-canto source audio; rerun `download_media.py` if local source app audio is missing.
 - Managed with `uv` (see `pyproject.toml`): https://docs.astral.sh/uv
 - Requires: Python 3.12+, ffmpeg, `requests`, `Pillow`
 - `XC_API_KEY` env var required for `populate_content.py`
@@ -160,7 +162,7 @@ Two Python scripts fetch and process media from external APIs. Not part of the a
 ### Audio Admin (local only, not deployed)
 
 - `admin/server.py` — Python stdlib HTTP server; run with `python3 admin/server.py` from repo root; serves on `http://localhost:8765`
-- `admin/index.html` — single-file vanilla JS UI; shows mixed ranked candidates with spectrogram/metadata/evidence and a role selector (`none`/`song`/`call`); saves immediately to `tier1_seattle_birds_populated.json`
+- `admin/index.html` — single-file vanilla JS UI; shows mixed ranked candidates with spectrogram/metadata/evidence, a role selector (`none`/`song`/`call`), and manual trim controls for selected clips; saves immediately to `tier1_seattle_birds_populated.json`
 - No extra dependencies beyond Python stdlib
 
 ## Build & Deploy

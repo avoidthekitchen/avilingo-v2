@@ -16,7 +16,7 @@ REPO_ROOT = Path(__file__).parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from populate_content import load_pool_file, save_pool_file
+from populate_content import load_pool_file, normalize_segment_payload, save_pool_file
 
 POOL_FILE = REPO_ROOT / "tier1_seattle_birds_populated.json"
 AUDIO_DIR = REPO_ROOT / "beakspeak/public/content/audio"
@@ -24,6 +24,43 @@ PHOTO_DIR = REPO_ROOT / "beakspeak/public/content/photos"
 ADMIN_DIR = Path(__file__).parent
 PORT = 8765
 VALID_SELECTED_ROLES = {"none", "song", "call"}
+
+
+def _find_candidate(data: dict, species_id: str, candidate_id: str, xc_id: str) -> dict | None:
+    for sp in data.get("species", []):
+        if sp["id"] != species_id:
+            continue
+        for candidate in sp.get("audio_clips", {}).get("candidates", []):
+            matches_candidate_id = candidate_id and str(candidate.get("candidate_id", "")) == candidate_id
+            matches_legacy_xc_id = not candidate_id and str(candidate.get("xc_id", "")) == xc_id
+            if matches_candidate_id or matches_legacy_xc_id:
+                return candidate
+        break
+    return None
+
+
+def _manual_segment_payload(start_s: object, end_s: object) -> dict:
+    try:
+        start = float(start_s)
+        end = float(end_s)
+    except (TypeError, ValueError) as exc:
+        raise ValueError("start_s and end_s must be numeric") from exc
+
+    if start < 0:
+        raise ValueError("start_s must be greater than or equal to 0")
+    if start >= end:
+        raise ValueError("start_s must be less than end_s")
+
+    start = round(start, 3)
+    end = round(end, 3)
+    return normalize_segment_payload({
+        "status": "manual",
+        "start_s": start,
+        "end_s": end,
+        "duration_s": round(end - start, 3),
+        "confidence": None,
+        "fallback_reason": None,
+    })
 
 
 def persist_candidate_role_assignment(
@@ -40,23 +77,58 @@ def persist_candidate_role_assignment(
 
     data = load_pool_file(pool_file)
 
-    updated_candidate = None
-    for sp in data.get("species", []):
-        if sp["id"] != species_id:
-            continue
-        for candidate in sp.get("audio_clips", {}).get("candidates", []):
-            matches_candidate_id = candidate_id and str(candidate.get("candidate_id", "")) == candidate_id
-            matches_legacy_xc_id = not candidate_id and str(candidate.get("xc_id", "")) == xc_id
-            if matches_candidate_id or matches_legacy_xc_id:
-                candidate["selected_role"] = selected_role
-                updated_candidate = candidate
-                break
-        break
+    updated_candidate = _find_candidate(data, species_id, candidate_id, xc_id)
 
     if updated_candidate is None:
         target = candidate_id or xc_id
         raise LookupError(f"clip {target} not found in species {species_id}")
 
+    updated_candidate["selected_role"] = selected_role
+    save_pool_file(pool_file, data)
+    return updated_candidate
+
+
+def persist_candidate_segment(
+    *,
+    pool_file: str | Path,
+    species_id: str,
+    candidate_id: str,
+    xc_id: str,
+    start_s: object,
+    end_s: object,
+) -> dict:
+    """Persist a manual trim window for a selected candidate."""
+    segment = _manual_segment_payload(start_s, end_s)
+    data = load_pool_file(pool_file)
+    updated_candidate = _find_candidate(data, species_id, candidate_id, xc_id)
+
+    if updated_candidate is None:
+        target = candidate_id or xc_id
+        raise LookupError(f"clip {target} not found in species {species_id}")
+    if updated_candidate.get("selected_role") not in {"song", "call"}:
+        raise ValueError("manual trims can only be saved for selected song or call clips")
+
+    updated_candidate["segment"] = segment
+    save_pool_file(pool_file, data)
+    return updated_candidate
+
+
+def reset_candidate_segment(
+    *,
+    pool_file: str | Path,
+    species_id: str,
+    candidate_id: str,
+    xc_id: str,
+) -> dict:
+    """Clear a candidate's manual trim window."""
+    data = load_pool_file(pool_file)
+    updated_candidate = _find_candidate(data, species_id, candidate_id, xc_id)
+
+    if updated_candidate is None:
+        target = candidate_id or xc_id
+        raise LookupError(f"clip {target} not found in species {species_id}")
+
+    updated_candidate["segment"] = normalize_segment_payload({"status": "not_set"})
     save_pool_file(pool_file, data)
     return updated_candidate
 
@@ -108,6 +180,9 @@ class Handler(BaseHTTPRequestHandler):
 
         elif path == "/clip-evidence.mjs":
             self.send_file(ADMIN_DIR / "clip-evidence.mjs")
+
+        elif path == "/trim-state.mjs":
+            self.send_file(ADMIN_DIR / "trim-state.mjs")
 
         elif path == "/api/pool":
             if not POOL_FILE.exists():
@@ -163,6 +238,59 @@ class Handler(BaseHTTPRequestHandler):
                 return
 
             self.send_json({"ok": True, "selected_role": updated_candidate["selected_role"]})
+
+        elif path == "/api/segment":
+            length = int(self.headers.get("Content-Length", 0))
+            body = json.loads(self.rfile.read(length))
+            species_id = body.get("species_id")
+            candidate_id = str(body.get("candidate_id", ""))
+            xc_id = str(body.get("xc_id", ""))
+
+            if not POOL_FILE.exists():
+                self.send_json({"error": "pool file not found"}, 404)
+                return
+
+            try:
+                updated_candidate = persist_candidate_segment(
+                    pool_file=POOL_FILE,
+                    species_id=species_id,
+                    candidate_id=candidate_id,
+                    xc_id=xc_id,
+                    start_s=body.get("start_s"),
+                    end_s=body.get("end_s"),
+                )
+            except ValueError as exc:
+                self.send_json({"error": str(exc)}, 400)
+                return
+            except LookupError as exc:
+                self.send_json({"error": str(exc)}, 404)
+                return
+
+            self.send_json({"ok": True, "segment": updated_candidate["segment"]})
+
+        elif path == "/api/reset-segment":
+            length = int(self.headers.get("Content-Length", 0))
+            body = json.loads(self.rfile.read(length))
+            species_id = body.get("species_id")
+            candidate_id = str(body.get("candidate_id", ""))
+            xc_id = str(body.get("xc_id", ""))
+
+            if not POOL_FILE.exists():
+                self.send_json({"error": "pool file not found"}, 404)
+                return
+
+            try:
+                updated_candidate = reset_candidate_segment(
+                    pool_file=POOL_FILE,
+                    species_id=species_id,
+                    candidate_id=candidate_id,
+                    xc_id=xc_id,
+                )
+            except LookupError as exc:
+                self.send_json({"error": str(exc)}, 404)
+                return
+
+            self.send_json({"ok": True, "segment": updated_candidate["segment"]})
 
         else:
             self.send_error(404)
