@@ -110,7 +110,9 @@ export class WebAudioPlayer implements AudioPlayer {
     }
     this.source.onended = null // Prevent double-fire from source.stop()
     try { this.source.stop() } catch { /* already stopped */ }
+    this.disconnectSource(this.source)
     this.source = null
+    this.pauseOutput()
   }
 
   // Activate the HTMLAudioElement output so iOS routes through the media channel.
@@ -122,6 +124,28 @@ export class WebAudioPlayer implements AudioPlayer {
 
   private isCurrentRequest(requestId: number, url: string) {
     return this.playRequestId === requestId && this.activeUrl === url
+  }
+
+  private pauseOutput() {
+    if (!this.outputElement) return
+    this.outputElement.pause()
+  }
+
+  private disconnectSource(source: AudioBufferSourceNode) {
+    try { source.disconnect() } catch { /* already disconnected */ }
+  }
+
+  private finishPlayback(source: AudioBufferSourceNode) {
+    if (this.source !== source) return
+
+    source.onended = null
+    this.disconnectSource(source)
+    this.source = null
+    this.pauseOutput()
+    // Fire idle BEFORE nulling so listeners can see which clip ended naturally
+    this.setState('idle')
+    this.activeUrl = null
+    this.activeBuffer = null
   }
 
   stop() {
@@ -184,22 +208,20 @@ export class WebAudioPlayer implements AudioPlayer {
     if (this.source) {
       this.source.onended = null
       try { this.source.stop() } catch { /* already stopped */ }
+      this.disconnectSource(this.source)
     }
 
     this.gainNode.gain.cancelScheduledValues(this.context.currentTime)
     this.gainNode.gain.setValueAtTime(1, this.context.currentTime)
 
-    this.source = this.context.createBufferSource()
-    this.source.buffer = buffer
-    this.source.connect(this.gainNode)
-    this.source.onended = () => {
-      this.source = null
-      // Fire idle BEFORE nulling so listeners can see which clip ended
-      this.setState('idle')
-      this.activeUrl = null
-      this.activeBuffer = null
+    const source = this.context.createBufferSource()
+    source.buffer = buffer
+    source.connect(this.gainNode)
+    source.onended = () => {
+      this.finishPlayback(source)
     }
-    this.source.start(0, time)
+    this.source = source
+    source.start(0, time)
     this.playbackStartTime = this.context.currentTime
     this.playbackOffset = time
   }
@@ -244,17 +266,14 @@ export class WebAudioPlayer implements AudioPlayer {
       this.gainNode.gain.cancelScheduledValues(ctx.currentTime)
       this.gainNode.gain.setValueAtTime(1, ctx.currentTime)
 
-      this.source = ctx.createBufferSource()
-      this.source.buffer = buffer
-      this.source.connect(this.gainNode)
-      this.source.onended = () => {
-        this.source = null
-        // Fire idle BEFORE nulling so listeners can see which clip ended naturally
-        this.setState('idle')
-        this.activeUrl = null
-        this.activeBuffer = null
+      const source = ctx.createBufferSource()
+      source.buffer = buffer
+      source.connect(this.gainNode)
+      source.onended = () => {
+        this.finishPlayback(source)
       }
-      this.source.start(0, offset ?? 0)
+      this.source = source
+      source.start(0, offset ?? 0)
       this.playbackStartTime = ctx.currentTime
       this.playbackOffset = offset ?? 0
       this.activeBuffer = buffer

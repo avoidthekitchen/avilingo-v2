@@ -50,6 +50,7 @@ let mockGainNode: ReturnType<typeof makeMockGainNode>
 let mockBuffer: AudioBuffer
 let mockAudioEl: {
   play: ReturnType<typeof vi.fn>
+  pause: ReturnType<typeof vi.fn>
   setAttribute: ReturnType<typeof vi.fn>
   srcObject: unknown
   style: { display: string }
@@ -81,6 +82,7 @@ function setupAudioContextMock() {
 
   mockAudioEl = {
     play: vi.fn().mockResolvedValue(undefined),
+    pause: vi.fn(),
     setAttribute: vi.fn(),
     srcObject: null,
     style: { display: '' },
@@ -194,6 +196,41 @@ describe('WebAudioPlayer', () => {
       expect(player.getState()).toBe('idle')
     })
 
+    it('disconnects the source and pauses output when a clip ends naturally', async () => {
+      const player = new WebAudioPlayer()
+      await player.play('https://example.com/song.ogg')
+
+      const source = mockSources[mockSources.length - 1]
+      source.onended!(new Event('ended'))
+
+      expect(source.disconnect).toHaveBeenCalled()
+      expect(mockAudioEl.pause).toHaveBeenCalled()
+    })
+
+    it('disconnects the source and pauses output on stop()', async () => {
+      const player = new WebAudioPlayer()
+      await player.play('https://example.com/song.ogg')
+
+      const source = mockSources[mockSources.length - 1]
+      player.stop()
+
+      expect(source.disconnect).toHaveBeenCalled()
+      expect(mockAudioEl.pause).toHaveBeenCalled()
+    })
+
+    it('ignores stale onended callbacks from replaced sources', async () => {
+      const player = new WebAudioPlayer()
+      await player.play('https://example.com/song.ogg')
+      const firstSource = mockSources[mockSources.length - 1]
+
+      await player.play('https://example.com/call.ogg')
+
+      firstSource.onended?.(new Event('ended'))
+
+      expect(player.getActiveUrl()).toBe('https://example.com/call.ogg')
+      expect(player.getState()).toBe('playing')
+    })
+
     it('does not restart playback after stop() cancels an in-flight play()', async () => {
       let resolveFetch!: (value: Response | PromiseLike<Response>) => void
       vi.stubGlobal('fetch', vi.fn(() => new Promise(resolve => {
@@ -299,6 +336,16 @@ describe('WebAudioPlayer', () => {
       expect(mockSources.length).toBe(countBefore + 1)
       const lastSource = mockSources[mockSources.length - 1]
       expect(lastSource.start).toHaveBeenCalledWith(0, 7.5)
+    })
+
+    it('disconnects the replaced source when seeking', async () => {
+      const player = new WebAudioPlayer()
+      await player.play('https://example.com/song.ogg')
+      const firstSource = mockSources[mockSources.length - 1]
+
+      player.seek(7.5)
+
+      expect(firstSource.disconnect).toHaveBeenCalled()
     })
   })
 
