@@ -110,15 +110,15 @@ export default function LearnTab() {
                   <span className="text-text-muted">›</span>
                 ) : null}
               </div>
-              <div className="flex gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 {species.map(s => (
-                  <div key={s.id} className="flex items-center gap-1.5">
+                  <div key={s.id} className="flex min-w-0 items-center gap-1.5">
                     <img
                       src={s.photo.url}
                       alt={s.common_name}
-                      className="w-8 h-8 rounded-full object-cover"
+                      className="h-8 w-8 shrink-0 rounded-full object-cover"
                     />
-                    <span className="text-xs text-text-muted">{s.common_name}</span>
+                    <span className="min-w-0 break-words text-xs leading-tight text-text-muted">{s.common_name}</span>
                   </div>
                 ))}
               </div>
