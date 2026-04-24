@@ -4,14 +4,23 @@ A Duolingo-style web app for learning Seattle-area bird songs and calls. Flash-c
 
 **Live at:** [unformedideas.com/beakspeak](https://unformedideas.com/beakspeak/)
 
+<table>
+  <tr>
+    <td><img src="qa-output/screenshots/flow-4-1-quiz-session.png" alt="Quiz session" width="240" /></td>
+    <td><img src="qa-output/screenshots/flow-3-4-lesson3-started.png" alt="Lesson 3 started" width="240" /></td>
+    <td><img src="qa-output/screenshots/flow-3-1-quiz-results.png" alt="Quiz results" width="240" /></td>
+  </tr>
+</table>
+
 ## What's been built
 
 **Content pipeline** (`populate_content.py`, `download_media.py`) → **React app** (`beakspeak/`)
 
 ### Content (Sprint 0)
 - 15 Seattle-area species across 5 lessons, curated by learnability
-- Each species: up to 5 songs + 5 calls fetched from Xeno-canto as candidates; top 3 songs + top 2 calls selected by default and included in the app
-- Clip selection scoring: quality grade (A=+50 … E=−30) dominates; bonuses for remarks (+5), confirmed sighting / adult stage / field recording (+3 each), PNW location (+0.4); penalties for playback-induced (−5), juvenile/nestling stage (−5), captive recording methods (−5); pure-typed songs ranked above compound types (e.g. "call, song") to preserve call pool
+- Unified candidate pool schema (`audio_clips.candidates`, `schema_version: 2`) with per-clip `candidate_id`, `source_role`, and curator-assigned `selected_role` (`none` / `song` / `call`)
+- Mixed candidate ranking (not pre-split song/call buckets): quality grade (A=+50 … E=−30) dominates; metadata bonuses/penalties and optional BirdNET-derived overlap/target signals refine ordering
+- Persisted analysis metadata (`analysis`) and persisted trim windows (`segment`) per candidate for reproducible media exports
 - Mnemonics, habitat tags, Wikipedia photos, and 5 confuser pairs per species
 - `tier1_seattle_birds_populated.json` → `beakspeak/public/content/manifest.json`
 - Manual curation via local Audio Admin tool (see below)
@@ -52,7 +61,7 @@ The app is a single-page app with no backend — all data is served as static fi
 
 ## Audio Admin
 
-A local-only tool for manually reviewing and curating which Xeno-canto clips are included in the app.
+A local-only tool for reviewing the mixed candidate pool and assigning final export roles.
 
 ```bash
 # Run from repo root (no extra dependencies — Python stdlib only)
@@ -60,29 +69,32 @@ python3 admin/server.py
 # → http://localhost:8765
 ```
 
-**What it shows per clip:** spectrogram (pre-rendered), play/pause, quality grade, type (song / call / alarm call / etc.), sex, stage, recording method, location, recordist, score, license, remarks, and a link to the Xeno-canto page.
+**What it shows per clip:** spectrogram (pre-rendered), play/pause, quality grade, type (song / call / alarm call / etc.), sex, stage, recording method, location, recordist, score/rank, license, BirdNET/segment evidence, remarks, and a link to the Xeno-canto page.
 
 **Species header:** mnemonic and any Wikipedia audio clips for reference.
 
 **Workflow:**
-1. Run `uv run populate_content.py` to fetch 5+5 candidates per species (top 3 songs + top 2 calls are selected by default)
-2. Run `uv run download_media.py` to download all candidates locally
-3. Open the admin and review — the sidebar shows `selected/total` per species; toggle "In app" on any clip to include or exclude it
-4. Selections save immediately to `tier1_seattle_birds_populated.json`
-5. Run `uv run download_media.py` again to regenerate `manifest.json` with your selections
+1. Run `uv run python3 populate_content.py` to fetch/rank candidates and persist unified `audio_clips.candidates`
+2. Run `uv run python3 download_media.py` to download and normalize candidate media for local preview
+3. Open the admin and review mixed ranked candidates; assign each clip to `song`, `call`, or `none`
+4. Assignments save immediately to `tier1_seattle_birds_populated.json` via `/api/assign-role`
+5. Run `uv run python3 download_media.py --export-mode all` (or `--export-mode commercial`) to regenerate `manifest.json`
 
 ## Re-generating media
 
 ```bash
-# Requires: Python 3, ffmpeg, uv (or pip install requests Pillow)
+# Requires: Python 3.12+, ffmpeg, uv (or pip install requests Pillow)
 # Also requires XC_API_KEY env var for populate_content.py
+# Optional BirdNET setup for analysis-assisted ranking/segments:
+#   BIRDNET_COMMAND or BIRDNET_HOME (falls back to FFmpeg-only when unavailable)
 
 # Full pipeline (re-query Xeno-canto + Wikipedia, re-download everything)
-uv run populate_content.py   # → tier1_seattle_birds_populated.json
-uv run download_media.py     # → beakspeak/public/content/ + manifest.json
+uv run python3 populate_content.py                   # → tier1_seattle_birds_populated.json
+uv run python3 download_media.py --export-mode all  # → beakspeak/public/content/ + manifest.json
 
-# Manifest-only rebuild (after changing selections in the admin)
-uv run download_media.py
+# Manifest/media rebuild after admin role assignment
+uv run python3 download_media.py --export-mode all
+uv run python3 download_media.py --export-mode commercial
 ```
 
 Audio and photos are gitignored; `manifest.json` and `tier1_seattle_birds_populated.json` are checked in.

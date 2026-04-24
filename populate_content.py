@@ -42,6 +42,13 @@ PREFERRED_SEGMENT_DURATION_S = 7.0
 MAX_FALLBACK_SEGMENT_DURATION_S = 12.0
 TARGET_REGION_PADDING_S = 0.75
 TARGET_REGION_GAP_S = 0.75
+MAX_RANKED_CANDIDATES = 30
+MIN_SONG_LIKE_CANDIDATES = 5
+MIN_CALL_LIKE_CANDIDATES = 5
+GOOD_ROLE_TARGET_COUNT = 3
+GOOD_CANDIDATE_MAX_OVERLAP_DETECTIONS = 3
+MAX_XC_REFILL_ATTEMPTS = 3
+INITIAL_XC_QUERY_PAGES = 2
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -104,6 +111,37 @@ def _build_segment_payload(
         "confidence": _round_segment_value(confidence),
         "fallback_reason": fallback_reason,
     })
+
+
+def candidate_cache_key(species_id: str, candidate: dict) -> tuple[str, str, str]:
+    return (
+        str(species_id or ""),
+        str(candidate.get("source_role", "") or ""),
+        str(candidate.get("xc_id", "") or ""),
+    )
+
+
+def candidate_reuse_signature(candidate: dict) -> tuple:
+    """Fields that indicate BirdNET outputs are still valid for this candidate."""
+    return (
+        str(candidate.get("audio_url", "") or ""),
+        str(candidate.get("type", "") or ""),
+        str(candidate.get("xc_type", "") or ""),
+        tuple(parse_xc_types(candidate.get("xc_types", candidate.get("type")))),
+        str(candidate.get("quality", "") or ""),
+        str(candidate.get("length", "") or ""),
+        str(candidate.get("license", "") or ""),
+        str(candidate.get("location", "") or ""),
+        str(candidate.get("country", "") or ""),
+        str(candidate.get("recordist", "") or ""),
+        str(candidate.get("remarks", "") or ""),
+        str(candidate.get("sex", "") or ""),
+        str(candidate.get("stage", "") or ""),
+        str(candidate.get("method", "") or ""),
+        str(candidate.get("animal_seen", "") or ""),
+        str(candidate.get("playback_used", "") or ""),
+        str(candidate.get("also", "") or ""),
+    )
 
 
 def build_candidate_id(xc_id: str, source_role: str, occurrence_index: int) -> str:
@@ -944,6 +982,18 @@ def attach_candidate_segments(
             downloader = lambda candidate: download_candidate_audio_for_birdnet(candidate, temp_dir)
 
         for candidate in candidates:
+            existing_segment = normalize_segment_payload(candidate.get("segment"))
+            if existing_segment.get("status") != "not_set":
+                candidate["segment"] = existing_segment
+                status = existing_segment.get("status")
+                if status == "birdnet_target_centered":
+                    summary["birdnet_target_centered"] += 1
+                elif status == "birdnet_extended_context":
+                    summary["birdnet_extended_context"] += 1
+                else:
+                    summary["ffmpeg_fallback"] += 1
+                continue
+
             audio_duration_s = MAX_FALLBACK_SEGMENT_DURATION_S
             try:
                 local_audio_path = downloader(candidate)
@@ -1326,6 +1376,74 @@ def candidate_quality_warnings(
     return warnings
 
 
+def is_good_birdnet_candidate(candidate: dict, max_overlap_detections: int = GOOD_CANDIDATE_MAX_OVERLAP_DETECTIONS) -> bool:
+    """True when a candidate passes the strict BirdNET gate for refill decisions."""
+    analysis = normalize_analysis_payload(candidate.get("analysis"))
+    if analysis.get("status") != "ok":
+        return False
+
+    summary = analysis.get("summary") or {}
+    target_detection_count = int(summary.get("target_detection_count") or 0)
+    overlap_detection_count = int(summary.get("overlap_detection_count") or 0)
+    return target_detection_count > 0 and overlap_detection_count <= max_overlap_detections
+
+
+def count_good_candidates_by_source_role(
+    candidates: list[dict],
+    *,
+    max_overlap_detections: int = GOOD_CANDIDATE_MAX_OVERLAP_DETECTIONS,
+) -> dict[str, int]:
+    """Count strict-gate BirdNET candidates by source role."""
+    counts = {"song": 0, "call": 0}
+    for candidate in candidates:
+        source_role = candidate.get("source_role")
+        if source_role not in counts:
+            continue
+        if is_good_birdnet_candidate(candidate, max_overlap_detections=max_overlap_detections):
+            counts[source_role] += 1
+    return counts
+
+
+def enforce_source_role_minimums(
+    ranked_candidates: list[dict],
+    *,
+    min_song_like_candidates: int = MIN_SONG_LIKE_CANDIDATES,
+    min_call_like_candidates: int = MIN_CALL_LIKE_CANDIDATES,
+    max_candidates: int = MAX_RANKED_CANDIDATES,
+) -> list[dict]:
+    """Guarantee a minimum source-role mix, then fill remaining slots by rank."""
+    songs = [candidate for candidate in ranked_candidates if candidate.get("source_role") == "song"]
+    calls = [candidate for candidate in ranked_candidates if candidate.get("source_role") == "call"]
+
+    selected: list[dict] = []
+    selected_ids: set[str] = set()
+
+    for candidate in songs[:min_song_like_candidates]:
+        candidate_id = str(candidate.get("candidate_id", ""))
+        if candidate_id in selected_ids:
+            continue
+        selected.append(candidate)
+        selected_ids.add(candidate_id)
+
+    for candidate in calls[:min_call_like_candidates]:
+        candidate_id = str(candidate.get("candidate_id", ""))
+        if candidate_id in selected_ids:
+            continue
+        selected.append(candidate)
+        selected_ids.add(candidate_id)
+
+    for candidate in ranked_candidates:
+        if len(selected) >= max_candidates:
+            break
+        candidate_id = str(candidate.get("candidate_id", ""))
+        if candidate_id in selected_ids:
+            continue
+        selected.append(candidate)
+        selected_ids.add(candidate_id)
+
+    return selected[:max_candidates]
+
+
 def rank_candidate_pool(candidates: list[dict], species_name: str) -> dict:
     """Sort a mixed candidate pool and attach rank, score, and warning metadata."""
     normalized_candidates = [normalize_candidate_record(candidate, candidate.get("source_role", "song"), index)
@@ -1358,7 +1476,11 @@ def rank_candidate_pool(candidates: list[dict], species_name: str) -> dict:
     }
 
 
-def build_ranked_candidate_pool(recordings: list[dict], species_name: str, max_candidates: int = 10) -> dict:
+def build_ranked_candidate_pool(
+    recordings: list[dict],
+    species_name: str,
+    max_candidates: int = MAX_RANKED_CANDIDATES,
+) -> dict:
     """Build one mixed ranked candidate pool for a species."""
     cc_recordings = [recording for recording in recordings if is_any_cc_license(recording.get("lic", ""))]
     occurrence_by_role = {"song": 0, "call": 0}
@@ -1372,7 +1494,12 @@ def build_ranked_candidate_pool(recordings: list[dict], species_name: str, max_c
         candidates.append(candidate)
 
     ranked = rank_candidate_pool(candidates, species_name=species_name)
-    ranked["candidates"] = ranked["candidates"][:max_candidates]
+    ranked["candidates"] = enforce_source_role_minimums(
+        ranked["candidates"],
+        min_song_like_candidates=MIN_SONG_LIKE_CANDIDATES,
+        min_call_like_candidates=MIN_CALL_LIKE_CANDIDATES,
+        max_candidates=max_candidates,
+    )
     ranked["candidate_count"] = len(ranked["candidates"])
     ranked["source_role_counts"] = count_candidates_by_source_role(ranked["candidates"])
     ranked["commercial_clip_count"] = sum(1 for candidate in ranked["candidates"] if candidate.get("commercial_ok"))
@@ -1390,14 +1517,16 @@ def build_ranked_candidate_pool(recordings: list[dict], species_name: str, max_c
     return ranked
 
 
-def query_xc(scientific_name: str, max_pages: int = 2) -> list[dict]:
+def query_xc(scientific_name: str, max_pages: int = 2, start_page: int = 1) -> list[dict]:
     """Query Xeno-canto API for recordings of a species."""
     api_key = require_xc_api_key()
     all_recs = []
     parts = scientific_name.split(None, 1)
     genus = parts[0] if parts else scientific_name
     species = parts[1] if len(parts) > 1 else ""
-    for page in range(1, max_pages + 1):
+    if start_page > max_pages:
+        return []
+    for page in range(start_page, max_pages + 1):
         # area:america broadens the pool beyond US; quality dominates scoring,
         # so location acts only as a small tiebreaker (WA +0.4, PNW +0.2, CA +0.05).
         # q:">D" keeps A/B/C so the client-side A/B-then-A/B/C fallback can still kick in.
@@ -1482,7 +1611,7 @@ def select_xc_clips(recordings: list[dict], clip_type: str, n: int,
 # MAIN
 # ═══════════════════════════════════════════════════════════════════
 
-def process_species(sp: dict) -> None:
+def process_species(sp: dict, prior_candidate_cache: dict[tuple[str, str, str], dict] | None = None) -> None:
     """Populate one species entry with photo + audio."""
     name = sp["common_name"]
     sci = sp["scientific_name"]
@@ -1519,28 +1648,141 @@ def process_species(sp: dict) -> None:
 
     # ── Xeno-canto audio ──────────────────────────────────────
     print(f"  [Xeno-canto] Querying recordings...")
-    recs = query_xc(sci)
+    recs = query_xc(sci, max_pages=INITIAL_XC_QUERY_PAGES, start_page=1)
     print(f"  [Xeno-canto] Found {len(recs)} total recordings")
 
     # Filter to any CC license first (ND excluded)
     recs = [r for r in recs if is_any_cc_license(r.get("lic", ""))]
+    seen_recording_ids = {str(recording.get("id", "")) for recording in recs if recording.get("id")}
     print(f"  [Xeno-canto] After license filter: {len(recs)}")
 
-    result = build_ranked_candidate_pool(recs, species_name=name)
-    sp["audio_clips"] = normalize_audio_clips({"candidates": result["candidates"]})
-    print(
-        "  [Xeno-canto] ✓ Built mixed candidate pool: "
-        f"{len(result['candidates'])} ranked candidate(s) "
-        f"({result['source_role_counts']['song']} song-like, {result['source_role_counts']['call']} call-like)"
-    )
+    refill_attempt = 0
+    birdnet_report = {
+        "status": "ffmpeg_only_fallback",
+        "ok_candidates": 0,
+        "fallback_candidates": 0,
+        "warning": None,
+        "refill_skipped_due_to_fallback": False,
+    }
+    reranked = {
+        "candidates": [],
+        "candidate_count": 0,
+        "source_role_counts": {"song": 0, "call": 0},
+        "commercial_clip_count": 0,
+        "nc_clip_count": 0,
+        "degraded_analysis_count": 0,
+        "quality_warnings": [],
+    }
+    good_counts = {"song": 0, "call": 0}
+    run_candidate_cache: dict[tuple[str, str, str], dict] = {}
+    refill_skipped_due_to_fallback = False
 
-    birdnet_report = analyze_candidates_with_birdnet(
-        sp["audio_clips"].get("candidates", []),
-        target_common_name=name,
-        target_scientific_name=sci,
-    )
-    reranked = rank_candidate_pool(sp["audio_clips"].get("candidates", []), species_name=name)
-    sp["audio_clips"]["candidates"] = reranked["candidates"]
+    while True:
+        result = build_ranked_candidate_pool(
+            recs,
+            species_name=name,
+            max_candidates=MAX_RANKED_CANDIDATES,
+        )
+        sp["audio_clips"] = normalize_audio_clips({"candidates": result["candidates"]})
+        print(
+            "  [Xeno-canto] ✓ Built mixed candidate pool: "
+            f"{len(result['candidates'])} ranked candidate(s) "
+            f"({result['source_role_counts']['song']} song-like, {result['source_role_counts']['call']} call-like)"
+        )
+
+        candidates = sp["audio_clips"].get("candidates", [])
+        reused_birdnet_count = 0
+        reused_segment_count = 0
+        pending_birdnet_candidates = []
+        for candidate in candidates:
+            cache_key = candidate_cache_key(sp.get("id", ""), candidate)
+            reusable_candidate = run_candidate_cache.get(cache_key)
+            if reusable_candidate is None:
+                reusable_candidate = (prior_candidate_cache or {}).get(cache_key)
+            if not reusable_candidate:
+                pending_birdnet_candidates.append(candidate)
+                continue
+            if candidate_reuse_signature(reusable_candidate) != candidate_reuse_signature(candidate):
+                pending_birdnet_candidates.append(candidate)
+                continue
+
+            prior_analysis = normalize_analysis_payload(reusable_candidate.get("analysis"))
+            if prior_analysis.get("status") == "ok":
+                candidate["analysis"] = normalize_analysis_payload(deepcopy(prior_analysis))
+                reused_birdnet_count += 1
+                prior_segment = normalize_segment_payload(reusable_candidate.get("segment"))
+                if prior_segment.get("status") != "not_set":
+                    candidate["segment"] = normalize_segment_payload(deepcopy(prior_segment))
+                    reused_segment_count += 1
+            else:
+                pending_birdnet_candidates.append(candidate)
+
+        if reused_birdnet_count:
+            print(
+                f"  [BirdNET] Reused cached analysis for {reused_birdnet_count} candidate(s); "
+                f"reused {reused_segment_count} segment window(s)"
+            )
+
+        fresh_birdnet_report = analyze_candidates_with_birdnet(
+            pending_birdnet_candidates,
+            target_common_name=name,
+            target_scientific_name=sci,
+        )
+        birdnet_report = {
+            "status": (
+                "birdnet_assisted"
+                if reused_birdnet_count + fresh_birdnet_report["ok_candidates"] > 0
+                else "ffmpeg_only_fallback"
+            ),
+            "ok_candidates": reused_birdnet_count + fresh_birdnet_report["ok_candidates"],
+            "fallback_candidates": fresh_birdnet_report["fallback_candidates"],
+            "warning": fresh_birdnet_report["warning"],
+            "refill_skipped_due_to_fallback": refill_skipped_due_to_fallback,
+        }
+        reranked = rank_candidate_pool(sp["audio_clips"].get("candidates", []), species_name=name)
+        sp["audio_clips"]["candidates"] = reranked["candidates"]
+        for candidate in sp["audio_clips"].get("candidates", []):
+            cache_key = candidate_cache_key(sp.get("id", ""), candidate)
+            run_candidate_cache[cache_key] = deepcopy(candidate)
+        good_counts = count_good_candidates_by_source_role(sp["audio_clips"].get("candidates", []))
+        print(
+            "  [Gate] ✓ Good candidates after BirdNET gate: "
+            f"{good_counts['song']} song, {good_counts['call']} call "
+            f"(target {GOOD_ROLE_TARGET_COUNT}+ each; overlap <= {GOOD_CANDIDATE_MAX_OVERLAP_DETECTIONS})"
+        )
+        if (
+            good_counts["song"] >= GOOD_ROLE_TARGET_COUNT
+            and good_counts["call"] >= GOOD_ROLE_TARGET_COUNT
+        ):
+            break
+        if fresh_birdnet_report["status"] == "ffmpeg_only_fallback":
+            refill_skipped_due_to_fallback = True
+            birdnet_report["refill_skipped_due_to_fallback"] = True
+            print("  [Xeno-canto] Refill skipped: BirdNET unavailable, so strict-gate counts cannot improve in this run.")
+            break
+        if refill_attempt >= MAX_XC_REFILL_ATTEMPTS:
+            break
+
+        refill_attempt += 1
+        next_page = INITIAL_XC_QUERY_PAGES + refill_attempt
+        new_recs = query_xc(sci, max_pages=next_page, start_page=next_page)
+        new_recs = [r for r in new_recs if is_any_cc_license(r.get("lic", ""))]
+        added_recordings = 0
+        for recording in new_recs:
+            recording_id = str(recording.get("id", ""))
+            if not recording_id or recording_id in seen_recording_ids:
+                continue
+            recs.append(recording)
+            seen_recording_ids.add(recording_id)
+            added_recordings += 1
+        print(
+            f"  [Xeno-canto] Refill {refill_attempt}/{MAX_XC_REFILL_ATTEMPTS}: "
+            f"queried page {next_page}, +{added_recordings} new licensed recording(s)"
+        )
+        if added_recordings <= 0:
+            print("  [Xeno-canto] Refill halted: no additional recordings were discovered.")
+            break
+
     segment_summary = attach_candidate_segments(sp["audio_clips"].get("candidates", []))
     result.update({
         "candidates": reranked["candidates"],
@@ -1551,6 +1793,14 @@ def process_species(sp: dict) -> None:
         "degraded_analysis_count": reranked["degraded_analysis_count"],
         "quality_warnings": reranked["quality_warnings"],
     })
+    if (
+        good_counts["song"] < GOOD_ROLE_TARGET_COUNT
+        or good_counts["call"] < GOOD_ROLE_TARGET_COUNT
+    ):
+        result["quality_warnings"].append(
+            f"{name}: strict BirdNET gate still has only {good_counts['song']} song and {good_counts['call']} call candidates "
+            f"after {refill_attempt} refill attempt(s); manual review may need additional fetches."
+        )
     if birdnet_report["warning"]:
         print(f"  [BirdNET] {birdnet_report['warning']}")
     else:
@@ -1638,6 +1888,11 @@ def format_summary_report(species_results: list[dict]) -> str:
                 f"    - {s['name']}: {s.get('birdnet_ok_candidates', 0)} analyzed, "
                 f"{s.get('birdnet_fallback_candidates', 0)} fallback"
             )
+    refill_skipped_species = [s for s in species_results if s.get("birdnet_refill_skipped_due_to_fallback")]
+    if refill_skipped_species:
+        lines.append("\n  Refill skipped due to BirdNET fallback:")
+        for s in refill_skipped_species:
+            lines.append(f"    - {s['name']}")
 
     # Totals
     total_commercial = sum(s["commercial_clips"] for s in species_results)
@@ -1678,6 +1933,7 @@ def main():
     # Preserve any manually-set selected flags from a prior run
     out_path = manifest_path.parent / "tier1_seattle_birds_populated.json"
     prior_role_assignments: dict[tuple[str, str, str], str] = {}
+    prior_candidate_cache: dict[tuple[str, str, str], dict] = {}
     if out_path.exists():
         try:
             prior = load_pool_file(out_path)
@@ -1688,6 +1944,7 @@ def main():
                     selected_role = candidate.get("selected_role", "none")
                     if xc_id and source_role:
                         prior_role_assignments[(sp.get("id", ""), source_role, xc_id)] = selected_role
+                        prior_candidate_cache[(sp.get("id", ""), source_role, xc_id)] = deepcopy(candidate)
         except Exception:
             pass
 
@@ -1710,7 +1967,7 @@ def main():
     species_results = []
     for i, sp in enumerate(species, 1):
         print(f"\n[{i}/{len(species)}]", end="")
-        result = process_species(sp)
+        result = process_species(sp, prior_candidate_cache=prior_candidate_cache)
         if result:
             # Restore prior role selections after normalizing into the new schema.
             if prior_role_assignments:
@@ -1738,6 +1995,7 @@ def main():
                 "birdnet_ok_candidates": result.get("birdnet", {}).get("ok_candidates", 0),
                 "birdnet_fallback_candidates": result.get("birdnet", {}).get("fallback_candidates", 0),
                 "birdnet_warning": result.get("birdnet", {}).get("warning"),
+                "birdnet_refill_skipped_due_to_fallback": result.get("birdnet", {}).get("refill_skipped_due_to_fallback", False),
             })
         time.sleep(1.0)
 

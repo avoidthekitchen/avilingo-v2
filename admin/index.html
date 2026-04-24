@@ -234,14 +234,14 @@
   }
   .clip-card.selected-card { border-color: var(--accent-dim); }
   .clip-card[data-selected-role="song"] {
-    border-color: #27573e;
-    box-shadow: 0 0 0 1px rgba(39, 87, 62, 0.45);
-    background: linear-gradient(180deg, rgba(24, 52, 37, 0.55), var(--surface));
+    border-color: #2f6a4c;
+    box-shadow: 0 0 0 1px rgba(47, 106, 76, 0.55), 0 0 14px rgba(47, 106, 76, 0.2);
+    background: linear-gradient(180deg, rgba(24, 52, 37, 0.7), var(--surface));
   }
   .clip-card[data-selected-role="call"] {
-    border-color: #29406f;
-    box-shadow: 0 0 0 1px rgba(41, 64, 111, 0.45);
-    background: linear-gradient(180deg, rgba(27, 40, 68, 0.55), var(--surface));
+    border-color: #8a4b14;
+    box-shadow: 0 0 0 1px rgba(138, 75, 20, 0.55), 0 0 14px rgba(138, 75, 20, 0.2);
+    background: linear-gradient(180deg, rgba(63, 42, 18, 0.7), var(--surface));
   }
   .clip-card.playing { border-color: var(--accent); }
 
@@ -357,9 +357,9 @@
     font-weight: 700;
   }
   .role-select.role-call {
-    background: #1b2844;
-    border-color: #29406f;
-    color: #bfdbfe;
+    background: #3f2a12;
+    border-color: #8a4b14;
+    color: #fed7aa;
     font-weight: 700;
   }
   .role-select:focus {
@@ -414,6 +414,21 @@
     background: #3a1a10;
     border: 1px solid #6d2d23;
     color: #fda4af;
+  }
+  .badge-gate-pass {
+    background: #183425;
+    border: 1px solid #27573e;
+    color: #86efac;
+  }
+  .badge-gate-fail {
+    background: #3a1a10;
+    border: 1px solid #6d2d23;
+    color: #fda4af;
+  }
+  .badge-background {
+    background: #2b2438;
+    border: 1px solid #4b3b66;
+    color: #d8b4fe;
   }
 
   .meta-item { color: var(--text-dim); }

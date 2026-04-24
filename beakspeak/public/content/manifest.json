@@ -45,39 +45,39 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "713003",
-            "xc_url": "https://xeno-canto.org/713003",
-            "audio_url": "/content/audio/amro/713003.ogg",
+            "xc_id": "171727",
+            "xc_url": "https://xeno-canto.org/171727",
+            "audio_url": "/content/audio/amro/171727.ogg",
             "type": "song",
             "xc_type": "song",
             "xc_types": [
               "song"
             ],
             "quality": "A",
-            "length": "0:08",
-            "recordist": "Manuel Grosselet",
+            "length": "0:21",
+            "recordist": "Ted Floyd",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Iztapalapa (near  Ciudad de M\u00e9xico), Ciudad de M\u00e9xico",
-            "country": "Mexico",
+            "location": "Lafayette, Boulder, Colorado",
+            "country": "United States",
             "commercial_ok": false,
-            "sex": "male",
+            "sex": "",
             "stage": "",
             "method": "field recording",
-            "remarks": "wildtronics mono amplified \r\nTascam Dr05",
+            "remarks": "A robin singing in my yard.",
             "animal_seen": "yes",
             "playback_used": "no",
             "also": [],
-            "score": 75.64,
+            "score": 91.5,
             "ranking_signals": {
-              "xc_score": 64,
+              "xc_score": 62,
               "commercial_ok": false,
               "background_species": [],
               "background_species_penalty": 0,
               "analysis_status": "ok",
-              "birdnet_max_target_confidence": 0.3881,
+              "birdnet_max_target_confidence": 0.9834,
               "birdnet_overlap_count": 0
             },
-            "rank": 7
+            "rank": 5
           }
         ],
         "calls": [
@@ -114,7 +114,7 @@
               "birdnet_max_target_confidence": 0.9089,
               "birdnet_overlap_count": 0
             },
-            "rank": 4
+            "rank": 6
           }
         ]
       },
@@ -205,39 +205,39 @@
         ],
         "calls": [
           {
-            "xc_id": "649367",
-            "xc_url": "https://xeno-canto.org/649367",
-            "audio_url": "/content/audio/amcr/649367.ogg",
-            "type": "alarm call",
-            "xc_type": "alarm call",
+            "xc_id": "682428",
+            "xc_url": "https://xeno-canto.org/682428",
+            "audio_url": "/content/audio/amcr/682428.ogg",
+            "type": "call",
+            "xc_type": "call",
             "xc_types": [
-              "alarm call"
+              "call"
             ],
             "quality": "A",
-            "length": "0:18",
-            "recordist": "Russ Wigh",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Skidaway Island, Chatham County, GA USA",
-            "country": "United States",
-            "commercial_ok": false,
+            "length": "0:06",
+            "recordist": "Doug Hynes",
+            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "location": "Big Fish Island, Nova Scotia",
+            "country": "Canada",
+            "commercial_ok": true,
             "sex": "uncertain",
-            "stage": "adult",
+            "stage": "uncertain",
             "method": "field recording",
-            "remarks": "A small gang, 3- 5 birds, mobbing an unseen predator.  Likely a Barred Owl or a Cooper's Hawk.  A raucus sound that carries long distances.",
-            "animal_seen": "yes",
+            "remarks": "Bird recorded with an autonomous recording device in a coastal habitat",
+            "animal_seen": "no",
             "playback_used": "no",
             "also": [],
-            "score": 94.06,
+            "score": 92.87,
             "ranking_signals": {
-              "xc_score": 65,
-              "commercial_ok": false,
+              "xc_score": 61,
+              "commercial_ok": true,
               "background_species": [],
               "background_species_penalty": 0,
               "analysis_status": "ok",
-              "birdnet_max_target_confidence": 0.9685,
+              "birdnet_max_target_confidence": 0.9958,
               "birdnet_overlap_count": 0
             },
-            "rank": 2
+            "rank": 5
           }
         ]
       },
@@ -586,7 +586,7 @@
               "birdnet_max_target_confidence": 0.9431,
               "birdnet_overlap_count": 3
             },
-            "rank": 6
+            "rank": 18
           }
         ]
       },
@@ -672,7 +672,7 @@
               "birdnet_max_target_confidence": null,
               "birdnet_overlap_count": 6
             },
-            "rank": 10
+            "rank": 28
           }
         ],
         "calls": [
@@ -789,7 +789,7 @@
               "birdnet_max_target_confidence": 0.9833,
               "birdnet_overlap_count": 5
             },
-            "rank": 9
+            "rank": 28
           }
         ],
         "calls": [
@@ -826,7 +826,7 @@
               "birdnet_max_target_confidence": 0.2138,
               "birdnet_overlap_count": 0
             },
-            "rank": 8
+            "rank": 22
           }
         ]
       },
@@ -943,7 +943,7 @@
               "birdnet_max_target_confidence": 0.9249,
               "birdnet_overlap_count": 0
             },
-            "rank": 3
+            "rank": 4
           }
         ]
       },
@@ -997,40 +997,41 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "1086866",
-            "xc_url": "https://xeno-canto.org/1086866",
-            "audio_url": "/content/audio/stja/1086866.ogg",
-            "type": "song, whisper song",
-            "xc_type": "song, whisper song",
+            "xc_id": "603262",
+            "xc_url": "https://xeno-canto.org/603262",
+            "audio_url": "/content/audio/stja/603262.ogg",
+            "type": "call, imitation, mimicry/imitation",
+            "xc_type": "call, imitation, mimicry/imitation",
             "xc_types": [
-              "song",
-              "whisper song"
+              "call",
+              "imitation",
+              "mimicry/imitation"
             ],
             "quality": "A",
-            "length": "0:30",
-            "recordist": "Eamon Riordan-Short",
+            "length": "0:14",
+            "recordist": "Thomas Magarian",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Kelowna, British Columbia",
-            "country": "Canada",
+            "location": "Camp Polk Meadow Preserve, Sisters, Deschutes County, Oregon",
+            "country": "United States",
             "commercial_ok": false,
-            "sex": "uncertain",
-            "stage": "adult",
+            "sex": "",
+            "stage": "",
             "method": "field recording",
-            "remarks": "Single bird in bushes, very quiet vocalizations recorded at ~1 ft away.",
+            "remarks": "Mimicking red-tailed hawk.",
             "animal_seen": "yes",
             "playback_used": "no",
             "also": [],
-            "score": 56.01,
+            "score": 47.2,
             "ranking_signals": {
-              "xc_score": 65.2,
+              "xc_score": 64.2,
               "commercial_ok": false,
               "background_species": [],
               "background_species_penalty": 0,
               "analysis_status": "ok",
-              "birdnet_max_target_confidence": 0.2603,
+              "birdnet_max_target_confidence": null,
               "birdnet_overlap_count": 2
             },
-            "rank": 10
+            "rank": 26
           }
         ],
         "calls": [
@@ -1067,7 +1068,7 @@
               "birdnet_max_target_confidence": 0.9923,
               "birdnet_overlap_count": 1
             },
-            "rank": 7
+            "rank": 12
           }
         ]
       },
@@ -1270,7 +1271,7 @@
               "birdnet_max_target_confidence": 0.9746,
               "birdnet_overlap_count": 1
             },
-            "rank": 7
+            "rank": 20
           }
         ],
         "calls": [
@@ -1387,7 +1388,7 @@
               "birdnet_max_target_confidence": 0.9999,
               "birdnet_overlap_count": 2
             },
-            "rank": 8
+            "rank": 14
           }
         ],
         "calls": [
@@ -1424,7 +1425,7 @@
               "birdnet_max_target_confidence": 0.9999,
               "birdnet_overlap_count": 1
             },
-            "rank": 5
+            "rank": 7
           }
         ]
       },
@@ -1610,7 +1611,7 @@
               "birdnet_max_target_confidence": 0.9724,
               "birdnet_overlap_count": 1
             },
-            "rank": 3
+            "rank": 4
           }
         ],
         "calls": [
@@ -1648,7 +1649,7 @@
               "birdnet_max_target_confidence": 0.9994,
               "birdnet_overlap_count": 2
             },
-            "rank": 6
+            "rank": 9
           }
         ]
       },
@@ -1757,7 +1758,7 @@
               "birdnet_max_target_confidence": 0.9178,
               "birdnet_overlap_count": 7
             },
-            "rank": 6
+            "rank": 16
           }
         ]
       },
