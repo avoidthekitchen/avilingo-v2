@@ -1662,6 +1662,7 @@ def process_species(sp: dict, prior_candidate_cache: dict[tuple[str, str, str], 
         "ok_candidates": 0,
         "fallback_candidates": 0,
         "warning": None,
+        "refill_skipped_due_to_fallback": False,
     }
     reranked = {
         "candidates": [],
@@ -1673,6 +1674,8 @@ def process_species(sp: dict, prior_candidate_cache: dict[tuple[str, str, str], 
         "quality_warnings": [],
     }
     good_counts = {"song": 0, "call": 0}
+    run_candidate_cache: dict[tuple[str, str, str], dict] = {}
+    refill_skipped_due_to_fallback = False
 
     while True:
         result = build_ranked_candidate_pool(
@@ -1693,19 +1696,21 @@ def process_species(sp: dict, prior_candidate_cache: dict[tuple[str, str, str], 
         pending_birdnet_candidates = []
         for candidate in candidates:
             cache_key = candidate_cache_key(sp.get("id", ""), candidate)
-            prior_candidate = (prior_candidate_cache or {}).get(cache_key)
-            if not prior_candidate:
+            reusable_candidate = run_candidate_cache.get(cache_key)
+            if reusable_candidate is None:
+                reusable_candidate = (prior_candidate_cache or {}).get(cache_key)
+            if not reusable_candidate:
                 pending_birdnet_candidates.append(candidate)
                 continue
-            if candidate_reuse_signature(prior_candidate) != candidate_reuse_signature(candidate):
+            if candidate_reuse_signature(reusable_candidate) != candidate_reuse_signature(candidate):
                 pending_birdnet_candidates.append(candidate)
                 continue
 
-            prior_analysis = normalize_analysis_payload(prior_candidate.get("analysis"))
+            prior_analysis = normalize_analysis_payload(reusable_candidate.get("analysis"))
             if prior_analysis.get("status") == "ok":
                 candidate["analysis"] = normalize_analysis_payload(deepcopy(prior_analysis))
                 reused_birdnet_count += 1
-                prior_segment = normalize_segment_payload(prior_candidate.get("segment"))
+                prior_segment = normalize_segment_payload(reusable_candidate.get("segment"))
                 if prior_segment.get("status") != "not_set":
                     candidate["segment"] = normalize_segment_payload(deepcopy(prior_segment))
                     reused_segment_count += 1
@@ -1732,9 +1737,13 @@ def process_species(sp: dict, prior_candidate_cache: dict[tuple[str, str, str], 
             "ok_candidates": reused_birdnet_count + fresh_birdnet_report["ok_candidates"],
             "fallback_candidates": fresh_birdnet_report["fallback_candidates"],
             "warning": fresh_birdnet_report["warning"],
+            "refill_skipped_due_to_fallback": refill_skipped_due_to_fallback,
         }
         reranked = rank_candidate_pool(sp["audio_clips"].get("candidates", []), species_name=name)
         sp["audio_clips"]["candidates"] = reranked["candidates"]
+        for candidate in sp["audio_clips"].get("candidates", []):
+            cache_key = candidate_cache_key(sp.get("id", ""), candidate)
+            run_candidate_cache[cache_key] = deepcopy(candidate)
         good_counts = count_good_candidates_by_source_role(sp["audio_clips"].get("candidates", []))
         print(
             "  [Gate] ✓ Good candidates after BirdNET gate: "
@@ -1745,6 +1754,11 @@ def process_species(sp: dict, prior_candidate_cache: dict[tuple[str, str, str], 
             good_counts["song"] >= GOOD_ROLE_TARGET_COUNT
             and good_counts["call"] >= GOOD_ROLE_TARGET_COUNT
         ):
+            break
+        if fresh_birdnet_report["status"] == "ffmpeg_only_fallback":
+            refill_skipped_due_to_fallback = True
+            birdnet_report["refill_skipped_due_to_fallback"] = True
+            print("  [Xeno-canto] Refill skipped: BirdNET unavailable, so strict-gate counts cannot improve in this run.")
             break
         if refill_attempt >= MAX_XC_REFILL_ATTEMPTS:
             break
@@ -1874,6 +1888,11 @@ def format_summary_report(species_results: list[dict]) -> str:
                 f"    - {s['name']}: {s.get('birdnet_ok_candidates', 0)} analyzed, "
                 f"{s.get('birdnet_fallback_candidates', 0)} fallback"
             )
+    refill_skipped_species = [s for s in species_results if s.get("birdnet_refill_skipped_due_to_fallback")]
+    if refill_skipped_species:
+        lines.append("\n  Refill skipped due to BirdNET fallback:")
+        for s in refill_skipped_species:
+            lines.append(f"    - {s['name']}")
 
     # Totals
     total_commercial = sum(s["commercial_clips"] for s in species_results)
@@ -1976,6 +1995,7 @@ def main():
                 "birdnet_ok_candidates": result.get("birdnet", {}).get("ok_candidates", 0),
                 "birdnet_fallback_candidates": result.get("birdnet", {}).get("fallback_candidates", 0),
                 "birdnet_warning": result.get("birdnet", {}).get("warning"),
+                "birdnet_refill_skipped_due_to_fallback": result.get("birdnet", {}).get("refill_skipped_due_to_fallback", False),
             })
         time.sleep(1.0)
 

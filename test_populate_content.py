@@ -21,6 +21,7 @@ from populate_content import (
     is_any_cc_license,
     load_pool_file,
     parse_birdnet_csv,
+    process_species,
     validate_role_assignments,
     resolve_birdnet_command,
     score_recording,
@@ -529,6 +530,7 @@ class TestSummaryReport:
                 "birdnet_status": "birdnet_assisted",
                 "birdnet_ok_candidates": 5,
                 "birdnet_fallback_candidates": 0,
+                "birdnet_refill_skipped_due_to_fallback": False,
             },
             {
                 "name": "Dark-eyed Junco",
@@ -542,6 +544,7 @@ class TestSummaryReport:
                 "birdnet_ok_candidates": 0,
                 "birdnet_fallback_candidates": 3,
                 "birdnet_warning": "WARNING: BirdNET unavailable; using FFmpeg-only fallback. BirdNET is not configured.",
+                "birdnet_refill_skipped_due_to_fallback": True,
             },
         ]
 
@@ -551,6 +554,8 @@ class TestSummaryReport:
         assert "American Robin: 5 analyzed, 0 fallback" in report
         assert "FFmpeg-only fallback species" in report
         assert "Dark-eyed Junco: 0 analyzed, 3 fallback" in report
+        assert "Refill skipped due to BirdNET fallback" in report
+        assert "Dark-eyed Junco" in report
 
     def test_report_contains_quality_gap_and_degraded_analysis_sections(self):
         report = format_summary_report(self._make_species_results())
@@ -761,6 +766,192 @@ class TestBirdNETAdapter:
                 "or place BirdNET-Analyzer at ~/Code/BirdNET-Analyzer."
             ),
         }
+
+
+class TestProcessSpeciesRefillBehavior:
+    _CC_BY = "https://creativecommons.org/licenses/by/4.0/"
+
+    @staticmethod
+    def _make_species() -> dict:
+        return {
+            "id": "robin",
+            "common_name": "American Robin",
+            "scientific_name": "Turdus migratorius",
+        }
+
+    @staticmethod
+    def _build_candidates_from_recordings(recs: list[dict]) -> list[dict]:
+        candidates: list[dict] = []
+        for index, rec in enumerate(recs):
+            xc_id = str(rec.get("id", ""))
+            source_role = str(rec.get("source_role", "song"))
+            candidates.append({
+                "candidate_id": f"xc:{xc_id}:{source_role}:{index}",
+                "xc_id": xc_id,
+                "source_role": source_role,
+                "selected_role": "none",
+                "audio_url": f"https://xeno-canto.org/{xc_id}.mp3",
+                "type": source_role,
+                "license": "https://creativecommons.org/licenses/by/4.0/",
+                "commercial_ok": True,
+            })
+        return candidates
+
+    def test_skips_refill_when_birdnet_fallback_is_active(self, monkeypatch):
+        query_calls: list[tuple[int, int]] = []
+
+        monkeypatch.setattr("populate_content.time.sleep", lambda *_args, **_kwargs: None)
+        monkeypatch.setattr("populate_content.get_wikipedia_title", lambda _query: None)
+        monkeypatch.setattr("populate_content.query_xc", lambda _sci, max_pages=2, start_page=1: (
+            query_calls.append((start_page, max_pages)) or [{"id": "101", "source_role": "song", "lic": self._CC_BY}]
+        ))
+        monkeypatch.setattr(
+            "populate_content.build_ranked_candidate_pool",
+            lambda recs, species_name, max_candidates=30: {
+                "candidates": self._build_candidates_from_recordings(recs),
+                "source_role_counts": {"song": len(recs), "call": 0},
+                "candidate_count": len(recs),
+                "commercial_clip_count": len(recs),
+                "nc_clip_count": 0,
+                "degraded_analysis_count": len(recs),
+                "quality_warnings": [],
+            },
+        )
+        monkeypatch.setattr(
+            "populate_content.analyze_candidates_with_birdnet",
+            lambda candidates, target_common_name, target_scientific_name: (
+                [
+                    candidate.__setitem__(
+                        "analysis",
+                        {
+                            "status": "unavailable",
+                            "provider": "birdnet",
+                            "target_detections": [],
+                            "overlap_detections": [],
+                            "summary": None,
+                            "failure": {"code": "birdnet_not_configured", "message": "BirdNET unavailable"},
+                        },
+                    )
+                    for candidate in candidates
+                ],
+                {
+                    "status": "ffmpeg_only_fallback",
+                    "ok_candidates": 0,
+                    "fallback_candidates": len(candidates),
+                    "warning": "WARNING: BirdNET unavailable",
+                },
+            )[1],
+        )
+        monkeypatch.setattr(
+            "populate_content.rank_candidate_pool",
+            lambda candidates, species_name: {
+                "candidates": candidates,
+                "candidate_count": len(candidates),
+                "source_role_counts": {
+                    "song": sum(1 for c in candidates if c.get("source_role") == "song"),
+                    "call": sum(1 for c in candidates if c.get("source_role") == "call"),
+                },
+                "commercial_clip_count": len(candidates),
+                "nc_clip_count": 0,
+                "degraded_analysis_count": len(candidates),
+                "quality_warnings": [],
+            },
+        )
+        monkeypatch.setattr(
+            "populate_content.attach_candidate_segments",
+            lambda _candidates: {
+                "birdnet_target_centered": 0,
+                "birdnet_extended_context": 0,
+                "ffmpeg_fallback": 1,
+            },
+        )
+
+        result = process_species(self._make_species(), prior_candidate_cache=None)
+
+        assert query_calls == [(1, 2)]
+        assert result["birdnet"]["status"] == "ffmpeg_only_fallback"
+        assert result["birdnet"]["refill_skipped_due_to_fallback"] is True
+
+    def test_reuses_fresh_analyses_across_refill_attempts(self, monkeypatch):
+        query_calls: list[tuple[int, int]] = []
+        analyzed_batches: list[list[str]] = []
+
+        def fake_query_xc(_sci, max_pages=2, start_page=1):
+            query_calls.append((start_page, max_pages))
+            if start_page == 1:
+                return [{"id": "101", "source_role": "song", "lic": self._CC_BY}]
+            if start_page == 3:
+                return [{"id": "102", "source_role": "song", "lic": self._CC_BY}]
+            return []
+
+        def fake_analyze(candidates, target_common_name, target_scientific_name):
+            analyzed_batches.append([str(candidate.get("xc_id", "")) for candidate in candidates])
+            for candidate in candidates:
+                candidate["analysis"] = {
+                    "status": "ok",
+                    "provider": "birdnet",
+                    "target_detections": [{"common_name": "American Robin", "confidence": 0.9}],
+                    "overlap_detections": [],
+                    "summary": {
+                        "target_detection_count": 1,
+                        "overlap_detection_count": 0,
+                        "max_target_confidence": 0.9,
+                    },
+                    "failure": None,
+                }
+            return {
+                "status": "birdnet_assisted",
+                "ok_candidates": len(candidates),
+                "fallback_candidates": 0,
+                "warning": None,
+            }
+
+        monkeypatch.setattr("populate_content.time.sleep", lambda *_args, **_kwargs: None)
+        monkeypatch.setattr("populate_content.get_wikipedia_title", lambda _query: None)
+        monkeypatch.setattr("populate_content.query_xc", fake_query_xc)
+        monkeypatch.setattr(
+            "populate_content.build_ranked_candidate_pool",
+            lambda recs, species_name, max_candidates=30: {
+                "candidates": self._build_candidates_from_recordings(recs),
+                "source_role_counts": {"song": len(recs), "call": 0},
+                "candidate_count": len(recs),
+                "commercial_clip_count": len(recs),
+                "nc_clip_count": 0,
+                "degraded_analysis_count": len(recs),
+                "quality_warnings": [],
+            },
+        )
+        monkeypatch.setattr("populate_content.analyze_candidates_with_birdnet", fake_analyze)
+        monkeypatch.setattr(
+            "populate_content.rank_candidate_pool",
+            lambda candidates, species_name: {
+                "candidates": candidates,
+                "candidate_count": len(candidates),
+                "source_role_counts": {
+                    "song": sum(1 for c in candidates if c.get("source_role") == "song"),
+                    "call": sum(1 for c in candidates if c.get("source_role") == "call"),
+                },
+                "commercial_clip_count": len(candidates),
+                "nc_clip_count": 0,
+                "degraded_analysis_count": 0,
+                "quality_warnings": [],
+            },
+        )
+        monkeypatch.setattr(
+            "populate_content.attach_candidate_segments",
+            lambda _candidates: {
+                "birdnet_target_centered": 0,
+                "birdnet_extended_context": 0,
+                "ffmpeg_fallback": 0,
+            },
+        )
+
+        result = process_species(self._make_species(), prior_candidate_cache=None)
+
+        assert query_calls == [(1, 2), (3, 3), (4, 4)]
+        assert analyzed_batches == [["101"], ["102"]]
+        assert result["birdnet"]["status"] == "birdnet_assisted"
+        assert result["birdnet"]["refill_skipped_due_to_fallback"] is False
 
 
 class TestSegmentSelection:

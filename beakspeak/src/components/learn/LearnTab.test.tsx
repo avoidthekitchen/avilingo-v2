@@ -304,10 +304,15 @@ describe('LearnTab locked lesson dialog', () => {
     fireEvent.click(screen.getByTestId('unlock-dialog-backdrop'))
     expect(screen.getByRole('dialog')).toBeInTheDocument()
 
-    // Resolve the pending operation — should launch normally since dismiss was blocked
-    await act(() => { resolveIntroduce() })
+    // Resolve the pending operation and flush async state updates.
+    await act(async () => {
+      resolveIntroduce()
+      await Promise.resolve()
+    })
 
-    expect(screen.getByTestId('learn-session')).toHaveTextContent('Lesson 2::unlock')
+    await waitFor(() => {
+      expect(screen.getByTestId('learn-session')).toHaveTextContent('Lesson 2::unlock')
+    })
   })
 
   it('closes the dialog when Escape is pressed', () => {
