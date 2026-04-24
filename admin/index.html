@@ -1266,7 +1266,7 @@ async function saveSegment(speciesId, candidateId, xcId, startS, endS, card) {
     ) : null;
     if (candidate) applyCandidateSegment(candidate, body.segment);
     setStatus(`XC${xcId} trim saved`);
-    if (candidate) renderSpeciesView(sp);
+    if (candidate && activeSpeciesId === speciesId) renderSpeciesView(sp);
   } catch (e) {
     setStatus('Error saving trim: ' + e.message);
     card.querySelector('.trim-warning').textContent = e.message;
@@ -1290,7 +1290,7 @@ async function resetSegment(speciesId, candidateId, xcId, card) {
     ) : null;
     if (candidate) resetCandidateSegment(candidate);
     setStatus(`XC${xcId} trim reset`);
-    if (sp) renderSpeciesView(sp);
+    if (sp && activeSpeciesId === speciesId) renderSpeciesView(sp);
   } catch (e) {
     setStatus('Error resetting trim: ' + e.message);
     card.querySelector('.trim-warning').textContent = e.message;
