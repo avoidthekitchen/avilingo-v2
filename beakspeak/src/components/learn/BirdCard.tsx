@@ -145,11 +145,21 @@ export default function BirdCard({ species }: Props) {
           src={species.photo.url}
           alt={species.common_name}
           className="w-full h-full object-cover"
-          style={{ maxHeight: '280px', minHeight: '200px' }}
+          style={{ maxHeight: '340px', minHeight: '200px', objectPosition: '50% 42%' }}
         />
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
           <h2 className="text-white text-xl font-bold">{species.common_name}</h2>
           <p className="text-white/80 text-sm italic">{species.scientific_name}</p>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {species.habitat.map(h => (
+              <span
+                key={h}
+                className="text-xs px-2 py-0.5 bg-white/20 text-white rounded-full backdrop-blur-sm"
+              >
+                {h}
+              </span>
+            ))}
+          </div>
         </div>
         <div className="absolute top-2 right-2">
           <AttributionInfo photo={species.photo} />
@@ -174,7 +184,7 @@ export default function BirdCard({ species }: Props) {
               clips={species.audio_clips.calls}
               label="Play Call"
               speciesId={species.id}
-              variant="secondary"
+              variant="primary"
             />
           )}
         </div>
@@ -192,18 +202,6 @@ export default function BirdCard({ species }: Props) {
         <p className="text-sm text-text/80 italic leading-relaxed">
           "{species.mnemonic}"
         </p>
-
-        {/* Habitat pills */}
-        <div className="flex flex-wrap gap-1.5">
-          {species.habitat.map(h => (
-            <span
-              key={h}
-              className="text-xs px-2 py-0.5 bg-secondary/10 text-secondary rounded-full"
-            >
-              {h}
-            </span>
-          ))}
-        </div>
       </div>
     </div>
   )

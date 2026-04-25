@@ -155,7 +155,7 @@ describe('Dashboard audio shortcuts', () => {
         clips: [expect.objectContaining({ xc_id: 'call-1' })],
         label: 'Call',
         speciesId: 'amro',
-        variant: 'secondary',
+        variant: 'primary',
       }),
     )
     expect(audioButtonMock).toHaveBeenNthCalledWith(3,

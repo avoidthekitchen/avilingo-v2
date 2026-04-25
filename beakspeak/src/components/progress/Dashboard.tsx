@@ -98,7 +98,7 @@ export default function Dashboard() {
                         clips={[species.audio_clips.calls[0]]}
                         label="Call"
                         speciesId={species.id}
-                        variant="secondary"
+                        variant="primary"
                       />
                     )}
                   </div>
