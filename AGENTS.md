@@ -34,13 +34,12 @@ admin/               ← Local-only audio curation tool (not deployed)
   server.py          ← Python stdlib HTTP server (run: python3 admin/server.py)
   index.html         ← Single-file admin UI (vanilla JS, no build step)
 
-site/                ← Landing page for unformedideas.com
-scripts/             ← Build/deploy scripts
+scripts/             ← BeakSpeak build/deploy scripts
 download_media.py    ← Content pipeline: downloads audio + photos, builds manifest
 export_app_audio.py  ← App-audio export: regenerates manual trim outputs + manifest from existing local app audio
 populate_content.py  ← Content pipeline: queries Xeno-canto + Wikipedia, ranks mixed candidates
 tier1_seattle_birds_populated.json  ← Candidate pool with per-clip role assignments (checked in)
-wrangler.toml        ← Cloudflare Workers config
+wrangler.toml        ← Cloudflare Workers config for /beakspeak/*
 rpi/                 ← Timestamped research and plan documents
   plans/             ← Sprint plans and implementation specs
   research/          ← Learning science and design research
@@ -143,6 +142,7 @@ Deployed as a Worker with no script — pure static asset serving. Requests to s
 - Static assets docs: https://developers.cloudflare.com/workers/static-assets
 - Wrangler CLI docs: https://developers.cloudflare.com/workers/wrangler
 - Config: `wrangler.toml` at repo root
+- Routes: `unformedideas.com/beakspeak`, `unformedideas.com/beakspeak/*`, `www.unformedideas.com/beakspeak`, and `www.unformedideas.com/beakspeak/*`
 - `not_found_handling = "single-page-application"` for SPA fallback
 - No `main` script, no `run_worker_first` — zero invocation costs
 - Deploy: `npx --prefix beakspeak wrangler deploy`
@@ -174,10 +174,18 @@ cd beakspeak && npm run dev
 # Run tests
 cd beakspeak && npx vitest run
 
-# Build and deploy to unformedideas.com
+# Build and deploy to unformedideas.com/beakspeak/
 bash scripts/build-site.sh
 npx --prefix beakspeak wrangler deploy
 ```
+
+Deployment boundary:
+
+- This repo owns only the BeakSpeak app at `/beakspeak/`.
+- `scripts/build-site.sh` assembles `dist/beakspeak/` for the route and `dist/index.html` as the Worker SPA fallback.
+- The root landing page is owned by the `unformedideas` repo.
+- Other projects on unformedideas.com are owned by their own respective repos.
+- Do not reintroduce `site/index.html` or deploy this Worker to `unformedideas.com/*`.
 
 ## Testing Guidance For Agents
 

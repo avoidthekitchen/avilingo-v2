@@ -216,19 +216,24 @@ CI currently performs:
 
 ## Deploying
 
-The site is deployed to Cloudflare Workers (static assets only, no Worker invocations):
+BeakSpeak is deployed from this repo to the `/beakspeak/` route on `unformedideas.com`. The root landing page is owned by the `unformedideas` repo, and other projects are deployed from other repos.
 
 ```bash
-# Build and assemble the combined site
+# Build and assemble the BeakSpeak deploy artifact
 bash scripts/build-site.sh
 
 # Deploy to Cloudflare
 npx --prefix beakspeak wrangler deploy
 ```
 
-This serves:
-- `unformedideas.com/` — landing page
-- `unformedideas.com/beakspeak/` — BeakSpeak app
+This serves only:
+
+- `unformedideas.com/beakspeak`
+- `unformedideas.com/beakspeak/`
+- `www.unformedideas.com/beakspeak`
+- `www.unformedideas.com/beakspeak/`
+
+Do not add the root `unformedideas.com/` landing page or other project assets to this repo. Root content belongs in `unformedideas`; other projects are deployed from other repos.
 
 ## Project structure
 

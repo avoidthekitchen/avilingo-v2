@@ -1,9 +1,11 @@
-name = "unformedideas"
+name = "beakspeak"
 compatibility_date = "2026-04-14"
 
 routes = [
-  { pattern = "unformedideas.com/*", zone_name = "unformedideas.com" },
-  { pattern = "www.unformedideas.com/*", zone_name = "unformedideas.com" },
+  { pattern = "unformedideas.com/beakspeak", zone_name = "unformedideas.com" },
+  { pattern = "unformedideas.com/beakspeak/*", zone_name = "unformedideas.com" },
+  { pattern = "www.unformedideas.com/beakspeak", zone_name = "unformedideas.com" },
+  { pattern = "www.unformedideas.com/beakspeak/*", zone_name = "unformedideas.com" },
 ]
 
 [assets]

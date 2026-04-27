@@ -10,10 +10,10 @@ npx vite build
 echo "Assembling site..."
 rm -rf "$REPO_ROOT/dist"
 mkdir -p "$REPO_ROOT/dist/beakspeak"
-cp "$REPO_ROOT/site/index.html" "$REPO_ROOT/dist/"
 cp -r "$REPO_ROOT/beakspeak/dist/"* "$REPO_ROOT/dist/beakspeak/"
+cp "$REPO_ROOT/beakspeak/dist/index.html" "$REPO_ROOT/dist/index.html"
 
 echo "Done. Output in dist/"
-echo "  dist/index.html          <- under construction landing"
-echo "  dist/beakspeak/          <- BeakSpeak app"
+echo "  dist/index.html          <- SPA fallback for the BeakSpeak Worker"
+echo "  dist/beakspeak/          <- BeakSpeak app for /beakspeak/"
 du -sh "$REPO_ROOT/dist/"
