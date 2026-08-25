@@ -20,9 +20,9 @@ start_s = 0.002
 end_s = 4.6
 
 [[species.amro.calls]]
-xc = 385843
-start_s = 0.0
-end_s = 3.1
+xc = 779497
+start_s = 17.0
+end_s = 19.0
 
 [[species.amcr.songs]]
 xc = 531008
@@ -45,14 +45,13 @@ start_s = 4.0
 end_s = 8.0
 
 [[species.deju.songs]]
-xc = 569535
-start_s = 8.98
-end_s = 11.48
-note = "Migrated from a preview-relative trim; review this offset-corrected clip in the app."
+xc = 1082015
+start_s = 0.0
+end_s = 2.5
 
 [[species.deju.calls]]
-xc = 254480
-start_s = 1.2
+xc = 1014358
+start_s = 1.5
 end_s = 3.5
 
 [[species.bcch.songs]]
@@ -71,9 +70,9 @@ start_s = 5.0
 end_s = 7.3
 
 [[species.spto.calls]]
-xc = 717557
-start_s = 0.7
-end_s = 2.7
+xc = 540262
+start_s = 2.5
+end_s = 4.5
 
 [[species.hofi.songs]]
 xc = 875451
@@ -97,9 +96,7 @@ start_s = 5.5
 end_s = 9.1
 
 [[species.stja.songs]]
-xc = 603262
-start_s = 2.3
-end_s = 6.3
+xc = 178944
 
 [[species.stja.calls]]
 xc = 109654
@@ -107,15 +104,14 @@ start_s = 1.6
 end_s = 3.6
 
 [[species.bewr.songs]]
-xc = 800769
-start_s = 0.8
-end_s = 6.0
+xc = 1139582
+start_s = 0.0
+end_s = 4.0
 
 [[species.bewr.calls]]
-xc = 553922
-start_s = 23.8
-end_s = 28.9
-note = "Migrated from a preview-relative trim; review this offset-corrected clip in the app."
+xc = 985688
+start_s = 0.0
+end_s = 2.0
 
 [[species.anhu.songs]]
 xc = 860679
@@ -150,14 +146,14 @@ start_s = 1.7
 end_s = 6.9
 
 [[species.gcsp.songs]]
-xc = 345344
-start_s = 0.2
-end_s = 2.2
+xc = 680976
+start_s = 2.0
+end_s = 5.0
 
 [[species.gcsp.calls]]
-xc = 440249
+xc = 425100
 start_s = 2.0
-end_s = 4.4
+end_s = 4.0
 
 [[species.eust.songs]]
 xc = 593357

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "algorithm_version": "sustained-energy-v1",
   "encoder_version": "opus-96k-atrim-loudnorm-v2",
-  "selection_digest": "bf0cd05a5926607d9cc23b754cb838d127d2f9c2ac4ac63d6c17f01cfb6b5f9b",
+  "selection_digest": "961d9f81b6a2b695d7a0fbe5d1f0cc0798cdbec5cdb0a32375a32f1d078e2a32",
   "base_manifest_digest": "64fa17499400fb68bbc096922700f4a688930221d3e8a2e6d7b069b14145bd8a",
   "recordings": {
     "171727": {
@@ -22,22 +22,22 @@
       "source_sha256": "5ec2c3716c3f49f89635423ab0262a08f1d4adcc0056fff9e56ba1085887b8d3",
       "source_duration_s": 21.592
     },
-    "385843": {
-      "xc_id": "385843",
-      "xc_url": "https://xeno-canto.org/385843",
-      "source_url": "https://xeno-canto.org/385843/download",
+    "779497": {
+      "xc_id": "779497",
+      "xc_url": "https://xeno-canto.org/779497",
+      "source_url": "https://xeno-canto.org/779497/download",
       "scientific_name": "Turdus migratorius",
       "common_name": "American Robin",
       "type": "call",
       "quality": "A",
-      "length": "0:13",
-      "recordist": "Antonio Xeira",
+      "length": "0:27",
+      "recordist": "Manuel Grosselet",
       "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-      "location": "Stony Creek Metropark, Macomb County, Michigan",
-      "country": "United States",
+      "location": "Magdalena Contreras (near  Ciudad de México), Ciudad de México",
+      "country": "Mexico",
       "commercial_ok": false,
-      "source_sha256": "761def71b41a4bd2cfa49f35e463f35d2d6deada44fc54a70c22fa6f0544c262",
-      "source_duration_s": 13.6
+      "source_sha256": "5c2fbce6c87c3651e238341583fe0e3a6bbea169fa33445a86a494c3eb3b10aa",
+      "source_duration_s": 27.353
     },
     "531008": {
       "xc_id": "531008",
@@ -107,39 +107,39 @@
       "source_sha256": "0dc57d1c6ad4edef07a33a08558715e0e05900238bd02010cfa9e62a28793a0e",
       "source_duration_s": 10.342
     },
-    "569535": {
-      "xc_id": "569535",
-      "xc_url": "https://xeno-canto.org/569535",
-      "source_url": "https://xeno-canto.org/569535/download",
+    "1082015": {
+      "xc_id": "1082015",
+      "xc_url": "https://xeno-canto.org/1082015",
+      "source_url": "https://xeno-canto.org/1082015/download",
       "scientific_name": "Junco hyemalis",
       "common_name": "Dark-eyed Junco",
       "type": "song",
       "quality": "A",
-      "length": "0:12",
-      "recordist": "Doug Hynes",
-      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
-      "location": "Terra Nova (Village), Newfoundland and Labrador",
-      "country": "Canada",
-      "commercial_ok": true,
-      "source_sha256": "418e3b907d6cf07a1568f980f0fdbae1a13209606f30400a9474c6528a552468",
-      "source_duration_s": 12.98
-    },
-    "254480": {
-      "xc_id": "254480",
-      "xc_url": "https://xeno-canto.org/254480",
-      "source_url": "https://xeno-canto.org/254480/download",
-      "scientific_name": "Junco hyemalis",
-      "common_name": "Dark-eyed Junco",
-      "type": "song",
-      "quality": "A",
-      "length": "0:05",
-      "recordist": "Jonathon Jongsma",
-      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
-      "location": "Blue Bell Campground, Custer State Park, South Dakota",
+      "length": "0:37",
+      "recordist": "Manuel Grosselet - Kristine Taylor",
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "location": "Del Monte Forest, Monterey County, California",
       "country": "United States",
-      "commercial_ok": true,
-      "source_sha256": "e671454e92abe9689db3e3a749c23a07064e5404770a6d3106b9a735b6b1e338",
-      "source_duration_s": 5.29
+      "commercial_ok": false,
+      "source_sha256": "f54daf1cb0eb1a8d4dc240e7905f9047e5b1499deb5a83b26f601f562116c022",
+      "source_duration_s": 37.786
+    },
+    "1014358": {
+      "xc_id": "1014358",
+      "xc_url": "https://xeno-canto.org/1014358",
+      "source_url": "https://xeno-canto.org/1014358/download",
+      "scientific_name": "Junco hyemalis",
+      "common_name": "Dark-eyed Junco",
+      "type": "flight call",
+      "quality": "A",
+      "length": "0:09",
+      "recordist": "Stanislas Wroza",
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "location": "Stationnement des dunes (near  Tadoussac), Côte-Nord, Québec",
+      "country": "Canada",
+      "commercial_ok": false,
+      "source_sha256": "b17de9c78a16f99e45bae0bd48fda6e4c55a0f2da66af697504b83aa8aff2bc2",
+      "source_duration_s": 9.609
     },
     "866009": {
       "xc_id": "866009",
@@ -192,22 +192,22 @@
       "source_sha256": "0171d4090927ef86649e85418c9fb53ae78e1e35f2e93ffb715b436c346ca36c",
       "source_duration_s": 14.328
     },
-    "717557": {
-      "xc_id": "717557",
-      "xc_url": "https://xeno-canto.org/717557",
-      "source_url": "https://xeno-canto.org/717557/download",
+    "540262": {
+      "xc_id": "540262",
+      "xc_url": "https://xeno-canto.org/540262",
+      "source_url": "https://xeno-canto.org/540262/download",
       "scientific_name": "Pipilo maculatus",
       "common_name": "Spotted Towhee",
-      "type": "song",
-      "quality": "A",
-      "length": "0:22",
-      "recordist": "Bobby Wilcox",
+      "type": "call",
+      "quality": "no score",
+      "length": "0:33",
+      "recordist": "Thomas Magarian",
       "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-      "location": "First Creek Trail, Clark County, Nevada",
+      "location": "Willamette Bluff, North Portland, Multnomah County, Oregon",
       "country": "United States",
       "commercial_ok": false,
-      "source_sha256": "394afaf949547ac2a9e8db67d4748c3d74eacaccdac690ab5fcc8ecd7b09e14f",
-      "source_duration_s": 22.922
+      "source_sha256": "2880443a047a1061c1f185687af69ce378948bb64f43bff6eb9f2b1d5fc2eeb5",
+      "source_duration_s": 33.873
     },
     "875451": {
       "xc_id": "875451",
@@ -277,22 +277,22 @@
       "source_sha256": "02c63548847fe91f3e07b7848ec517aedb7d7a0a1b2a29be1c6cafdea5bb6b4a",
       "source_duration_s": 11.059
     },
-    "603262": {
-      "xc_id": "603262",
-      "xc_url": "https://xeno-canto.org/603262",
-      "source_url": "https://xeno-canto.org/603262/download",
+    "178944": {
+      "xc_id": "178944",
+      "xc_url": "https://xeno-canto.org/178944",
+      "source_url": "https://xeno-canto.org/178944/download",
       "scientific_name": "Cyanocitta stelleri",
       "common_name": "Steller's Jay",
-      "type": "call, imitation, mimicry/imitation",
-      "quality": "A",
-      "length": "0:14",
-      "recordist": "Thomas Magarian",
+      "type": "call",
+      "quality": "B",
+      "length": "0:02",
+      "recordist": "Eric Cannizzaro",
       "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-      "location": "Camp Polk Meadow Preserve, Sisters, Deschutes County, Oregon",
+      "location": "Olympia, Thurston County, Washington",
       "country": "United States",
       "commercial_ok": false,
-      "source_sha256": "5ec53394ed4c1eb551164ca945a1e2541560f921e00d5df77f26fac474e25383",
-      "source_duration_s": 14.156
+      "source_sha256": "8feb283e3d3ba513ee112c0b0edfacbe242076a5d1aaca49d38b0cde6ecbe531",
+      "source_duration_s": 2.655
     },
     "109654": {
       "xc_id": "109654",
@@ -311,39 +311,39 @@
       "source_sha256": "a64eec80657e6f4f3f1de35f74f8ae706d2d085f30b42f84688ec8abe0982d1d",
       "source_duration_s": 5.08
     },
-    "800769": {
-      "xc_id": "800769",
-      "xc_url": "https://xeno-canto.org/800769",
-      "source_url": "https://xeno-canto.org/800769/download",
+    "1139582": {
+      "xc_id": "1139582",
+      "xc_url": "https://xeno-canto.org/1139582",
+      "source_url": "https://xeno-canto.org/1139582/download",
       "scientific_name": "Thryomanes bewickii",
       "common_name": "Bewick's Wren",
       "type": "song",
       "quality": "A",
-      "length": "0:16",
-      "recordist": "Scott Crabtree",
+      "length": "1:21",
+      "recordist": "Ed Pandolfino",
       "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-      "location": "Santa Cruz River Park,Tucson, Pima County, Arizona",
+      "location": "Elk Mtn Rd, Lake County, California",
       "country": "United States",
       "commercial_ok": false,
-      "source_sha256": "6c7116f2b13ed6f757a209948e1f5e1a6b9e5c0528a93ac05248ff9cf37a0347",
-      "source_duration_s": 16.935
+      "source_sha256": "a045f81306cb3e7252b76f07ea72555a8357c6f31675e46bb1bcadfde1a881ba",
+      "source_duration_s": 81.239
     },
-    "553922": {
-      "xc_id": "553922",
-      "xc_url": "https://xeno-canto.org/553922",
-      "source_url": "https://xeno-canto.org/553922/download",
+    "985688": {
+      "xc_id": "985688",
+      "xc_url": "https://xeno-canto.org/985688",
+      "source_url": "https://xeno-canto.org/985688/download",
       "scientific_name": "Thryomanes bewickii",
       "common_name": "Bewick's Wren",
-      "type": "song",
+      "type": "call",
       "quality": "A",
-      "length": "0:50",
-      "recordist": "Barry Edmonston",
+      "length": "0:32",
+      "recordist": "Ed Pandolfino",
       "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-      "location": "Vancouver Island (near  Victoria), Capital, British Columbia",
-      "country": "Canada",
+      "location": "Mix Canyon Road, Solano County, California",
+      "country": "United States",
       "commercial_ok": false,
-      "source_sha256": "cb9e159e1575e7144370900488c99bdf2a7d2ae763a23d206cd5ce4831e66743",
-      "source_duration_s": 50.116
+      "source_sha256": "b0b6e40b377f53dab17ccbada2cd31a1fea0cfb03d741b33bee7dde6bf4bfe48",
+      "source_duration_s": 32.25
     },
     "860679": {
       "xc_id": "860679",
@@ -447,39 +447,39 @@
       "source_sha256": "7799e906dd569625670d15e6daca52abc633e720c0467070303908eb1a4a56a6",
       "source_duration_s": 15.862
     },
-    "345344": {
-      "xc_id": "345344",
-      "xc_url": "https://xeno-canto.org/345344",
-      "source_url": "https://xeno-canto.org/345344/download",
+    "680976": {
+      "xc_id": "680976",
+      "xc_url": "https://xeno-canto.org/680976",
+      "source_url": "https://xeno-canto.org/680976/download",
       "scientific_name": "Zonotrichia atricapilla",
       "common_name": "Golden-crowned Sparrow",
       "type": "song",
       "quality": "A",
-      "length": "0:11",
-      "recordist": "Michael Lester",
+      "length": "0:48",
+      "recordist": "Steve Hampton",
       "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-      "location": "Carmel Valley, Monterey, California",
+      "location": "Port Townsend, Jefferson County, Washington",
       "country": "United States",
       "commercial_ok": false,
-      "source_sha256": "dfef71cb000ed77a0da62fd8cec4ccaf4c2ccde90f64ed690e082a09b80180bb",
-      "source_duration_s": 11.257
+      "source_sha256": "fa70f837e3a8d97310df9cf378f6c9de55726cca475a8064f7ad4f50f8dfda41",
+      "source_duration_s": 48.537
     },
-    "440249": {
-      "xc_id": "440249",
-      "xc_url": "https://xeno-canto.org/440249",
-      "source_url": "https://xeno-canto.org/440249/download",
+    "425100": {
+      "xc_id": "425100",
+      "xc_url": "https://xeno-canto.org/425100",
+      "source_url": "https://xeno-canto.org/425100/download",
       "scientific_name": "Zonotrichia atricapilla",
       "common_name": "Golden-crowned Sparrow",
-      "type": "call, song",
+      "type": "call",
       "quality": "A",
-      "length": "0:18",
-      "recordist": "Rachel Hudson",
+      "length": "0:28",
+      "recordist": "Jeff Dyck",
       "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-      "location": "Chehalis, Lewis County, Washington",
-      "country": "United States",
+      "location": "Fraser-Fort George G, Fraser-Fort George, British Columbia",
+      "country": "Canada",
       "commercial_ok": false,
-      "source_sha256": "484e5502a1b22e9d794ebf7daca0b63d45c11a053406c27a29b07ff2abcfe67d",
-      "source_duration_s": 18.065
+      "source_sha256": "c5c21fefd37c5a97af8cdac3307f568c822d98f7db5a413320a5bb882a8a49f1",
+      "source_duration_s": 27.998
     },
     "593357": {
       "xc_id": "593357",
@@ -536,22 +536,22 @@
       "algorithm_version": "sustained-energy-v1",
       "encoder_version": "opus-96k-atrim-loudnorm-v2"
     },
-    "amro:call:xc385843": {
+    "amro:call:xc779497": {
       "species_id": "amro",
       "role": "call",
-      "xc_id": "385843",
-      "filename": "amro/call-xc385843.ogg",
-      "audio_url": "/content/audio/manual/amro/call-xc385843.ogg",
+      "xc_id": "779497",
+      "filename": "amro/call-xc779497.ogg",
+      "audio_url": "/content/audio/manual/amro/call-xc779497.ogg",
       "trim": {
         "mode": "manual",
-        "start_s": 0.0,
-        "end_s": 3.1,
+        "start_s": 17.0,
+        "end_s": 19.0,
         "activity_pct": null,
         "warning": null
       },
-      "selection_fingerprint": "5bdf694e64cbd6518cc6419b4df312b7d0b65a765c1d2f8d69f032e678fb8172",
-      "source_sha256": "761def71b41a4bd2cfa49f35e463f35d2d6deada44fc54a70c22fa6f0544c262",
-      "output_sha256": "7f1651f6621f5406625105ff601c024a1bbf804a467bcd456cad7d46c9297052",
+      "selection_fingerprint": "20194c6c931ca470b28ea5e8140b2cebc9de64905f40564d9dab2e931350a4a2",
+      "source_sha256": "5c2fbce6c87c3651e238341583fe0e3a6bbea169fa33445a86a494c3eb3b10aa",
+      "output_sha256": "15b8c0734d607b38063e3619a2aa923484892fe525f58c8098f8ccada4b8cd6d",
       "algorithm_version": "sustained-energy-v1",
       "encoder_version": "opus-96k-atrim-loudnorm-v2"
     },
@@ -631,41 +631,41 @@
       "algorithm_version": "sustained-energy-v1",
       "encoder_version": "opus-96k-atrim-loudnorm-v2"
     },
-    "deju:song:xc569535": {
+    "deju:song:xc1082015": {
       "species_id": "deju",
       "role": "song",
-      "xc_id": "569535",
-      "filename": "deju/song-xc569535.ogg",
-      "audio_url": "/content/audio/manual/deju/song-xc569535.ogg",
+      "xc_id": "1082015",
+      "filename": "deju/song-xc1082015.ogg",
+      "audio_url": "/content/audio/manual/deju/song-xc1082015.ogg",
       "trim": {
         "mode": "manual",
-        "start_s": 8.98,
-        "end_s": 11.48,
+        "start_s": 0.0,
+        "end_s": 2.5,
         "activity_pct": null,
         "warning": null
       },
-      "selection_fingerprint": "875dbd5d110324db8d38111c76c90e07a898f0320fac5fb5a36395384cb78183",
-      "source_sha256": "418e3b907d6cf07a1568f980f0fdbae1a13209606f30400a9474c6528a552468",
-      "output_sha256": "e2de28e88cd92e1529250f895c427aa49a4a56ce45420ef191378480ebaaa91b",
+      "selection_fingerprint": "8f187cd7ac18d911fc8faf280f099e72bbe6e7a5f07e4960596c336a1185fce0",
+      "source_sha256": "f54daf1cb0eb1a8d4dc240e7905f9047e5b1499deb5a83b26f601f562116c022",
+      "output_sha256": "d67ecc2ee12d969108e3e13f25d0de48120cccd1aff0954fa7c67cd2c446f71e",
       "algorithm_version": "sustained-energy-v1",
       "encoder_version": "opus-96k-atrim-loudnorm-v2"
     },
-    "deju:call:xc254480": {
+    "deju:call:xc1014358": {
       "species_id": "deju",
       "role": "call",
-      "xc_id": "254480",
-      "filename": "deju/call-xc254480.ogg",
-      "audio_url": "/content/audio/manual/deju/call-xc254480.ogg",
+      "xc_id": "1014358",
+      "filename": "deju/call-xc1014358.ogg",
+      "audio_url": "/content/audio/manual/deju/call-xc1014358.ogg",
       "trim": {
         "mode": "manual",
-        "start_s": 1.2,
+        "start_s": 1.5,
         "end_s": 3.5,
         "activity_pct": null,
         "warning": null
       },
-      "selection_fingerprint": "c09a40e0f8abe67964ee237e9c7cbb8be7f62e6dec8ec9c43a018f625b8d7706",
-      "source_sha256": "e671454e92abe9689db3e3a749c23a07064e5404770a6d3106b9a735b6b1e338",
-      "output_sha256": "819cd93bd567ec487508d144085ff3d0acd3c1c0dea767c2d6977d4e55262d2c",
+      "selection_fingerprint": "eb8e4a0ad134f38d11e7fdfc7eab6d62b833d8d16388cb452bf02454f28db74b",
+      "source_sha256": "b17de9c78a16f99e45bae0bd48fda6e4c55a0f2da66af697504b83aa8aff2bc2",
+      "output_sha256": "62691fc7642927d8fc5e0418b58daa43763f8899e5706ff275d67131ef556f28",
       "algorithm_version": "sustained-energy-v1",
       "encoder_version": "opus-96k-atrim-loudnorm-v2"
     },
@@ -726,22 +726,22 @@
       "algorithm_version": "sustained-energy-v1",
       "encoder_version": "opus-96k-atrim-loudnorm-v2"
     },
-    "spto:call:xc717557": {
+    "spto:call:xc540262": {
       "species_id": "spto",
       "role": "call",
-      "xc_id": "717557",
-      "filename": "spto/call-xc717557.ogg",
-      "audio_url": "/content/audio/manual/spto/call-xc717557.ogg",
+      "xc_id": "540262",
+      "filename": "spto/call-xc540262.ogg",
+      "audio_url": "/content/audio/manual/spto/call-xc540262.ogg",
       "trim": {
         "mode": "manual",
-        "start_s": 0.7,
-        "end_s": 2.7,
+        "start_s": 2.5,
+        "end_s": 4.5,
         "activity_pct": null,
         "warning": null
       },
-      "selection_fingerprint": "b9260522a8726112bb71fb61c4be0cbe0cd8f5517e068cc89ec22391aa9b8823",
-      "source_sha256": "394afaf949547ac2a9e8db67d4748c3d74eacaccdac690ab5fcc8ecd7b09e14f",
-      "output_sha256": "d2cddc347f62b764dd9e451158f4760a7911fb5026d2a6cf65a3816a405b8833",
+      "selection_fingerprint": "e540d8f8061175f8dda62b667cbc442ef7db7fd5c8eb9cee2735265b50b7cb73",
+      "source_sha256": "2880443a047a1061c1f185687af69ce378948bb64f43bff6eb9f2b1d5fc2eeb5",
+      "output_sha256": "9928688cf0b3eb77e9a665841acbae2af19332e957bc2d024f11523ba94a3920",
       "algorithm_version": "sustained-energy-v1",
       "encoder_version": "opus-96k-atrim-loudnorm-v2"
     },
@@ -821,22 +821,22 @@
       "algorithm_version": "sustained-energy-v1",
       "encoder_version": "opus-96k-atrim-loudnorm-v2"
     },
-    "stja:song:xc603262": {
+    "stja:song:xc178944": {
       "species_id": "stja",
       "role": "song",
-      "xc_id": "603262",
-      "filename": "stja/song-xc603262.ogg",
-      "audio_url": "/content/audio/manual/stja/song-xc603262.ogg",
+      "xc_id": "178944",
+      "filename": "stja/song-xc178944.ogg",
+      "audio_url": "/content/audio/manual/stja/song-xc178944.ogg",
       "trim": {
-        "mode": "manual",
-        "start_s": 2.3,
-        "end_s": 6.3,
+        "mode": "full",
+        "start_s": 0.0,
+        "end_s": 2.655,
         "activity_pct": null,
         "warning": null
       },
-      "selection_fingerprint": "e250cd0d3535ab3a1a502a32d0d18ace009f9753c85449fb79ab43a66c4c93a9",
-      "source_sha256": "5ec53394ed4c1eb551164ca945a1e2541560f921e00d5df77f26fac474e25383",
-      "output_sha256": "90e8a2aa8bcc7d59c3f454f7f21ac098d5adc01e2d2a49b57db08c22e1fbaa95",
+      "selection_fingerprint": "692de9c231c24ebe3ad8df6f834e34d588d7ce667540c35390f2993e4ed6d74b",
+      "source_sha256": "8feb283e3d3ba513ee112c0b0edfacbe242076a5d1aaca49d38b0cde6ecbe531",
+      "output_sha256": "e7c15d130b99b953621829a32626f3dd934f0417a84c2a00ac85145f92a8f566",
       "algorithm_version": "sustained-energy-v1",
       "encoder_version": "opus-96k-atrim-loudnorm-v2"
     },
@@ -859,41 +859,41 @@
       "algorithm_version": "sustained-energy-v1",
       "encoder_version": "opus-96k-atrim-loudnorm-v2"
     },
-    "bewr:song:xc800769": {
+    "bewr:song:xc1139582": {
       "species_id": "bewr",
       "role": "song",
-      "xc_id": "800769",
-      "filename": "bewr/song-xc800769.ogg",
-      "audio_url": "/content/audio/manual/bewr/song-xc800769.ogg",
+      "xc_id": "1139582",
+      "filename": "bewr/song-xc1139582.ogg",
+      "audio_url": "/content/audio/manual/bewr/song-xc1139582.ogg",
       "trim": {
         "mode": "manual",
-        "start_s": 0.8,
-        "end_s": 6.0,
+        "start_s": 0.0,
+        "end_s": 4.0,
         "activity_pct": null,
         "warning": null
       },
-      "selection_fingerprint": "bf84f0ebecd49485d1ee4036cff438f7f6094800a75661a6b29f34d3bbb282d7",
-      "source_sha256": "6c7116f2b13ed6f757a209948e1f5e1a6b9e5c0528a93ac05248ff9cf37a0347",
-      "output_sha256": "a6aac89fa156d3c5c0254635599673642b5b99de3157e61f11bf9dd6b78ff533",
+      "selection_fingerprint": "927c34e1f633781ab894376bbcd50ef5133fc661adc9a8bca88418cd3be9c5d3",
+      "source_sha256": "a045f81306cb3e7252b76f07ea72555a8357c6f31675e46bb1bcadfde1a881ba",
+      "output_sha256": "ee3fa96fb2b5da54760689e134bc01c650ee037d73d8bb8eabdd52e40ff0eea2",
       "algorithm_version": "sustained-energy-v1",
       "encoder_version": "opus-96k-atrim-loudnorm-v2"
     },
-    "bewr:call:xc553922": {
+    "bewr:call:xc985688": {
       "species_id": "bewr",
       "role": "call",
-      "xc_id": "553922",
-      "filename": "bewr/call-xc553922.ogg",
-      "audio_url": "/content/audio/manual/bewr/call-xc553922.ogg",
+      "xc_id": "985688",
+      "filename": "bewr/call-xc985688.ogg",
+      "audio_url": "/content/audio/manual/bewr/call-xc985688.ogg",
       "trim": {
         "mode": "manual",
-        "start_s": 23.8,
-        "end_s": 28.9,
+        "start_s": 0.0,
+        "end_s": 2.0,
         "activity_pct": null,
         "warning": null
       },
-      "selection_fingerprint": "4b227e24fe1ec0e7cad233ff8f61f579db0806e8d5930d127bff15989ca6bd72",
-      "source_sha256": "cb9e159e1575e7144370900488c99bdf2a7d2ae763a23d206cd5ce4831e66743",
-      "output_sha256": "ca886ee88b8ccf3c8973647774695ab680c7296d63ed695b51f4e133468ac692",
+      "selection_fingerprint": "669af84e8a05f4431c8f3ee26989560e276bdc32db0f7aba827810328437c8fd",
+      "source_sha256": "b0b6e40b377f53dab17ccbada2cd31a1fea0cfb03d741b33bee7dde6bf4bfe48",
+      "output_sha256": "510482bfc3e364562b249665bdc58388d8257b4a651dcd86381cd793577e7ec8",
       "algorithm_version": "sustained-energy-v1",
       "encoder_version": "opus-96k-atrim-loudnorm-v2"
     },
@@ -1011,41 +1011,41 @@
       "algorithm_version": "sustained-energy-v1",
       "encoder_version": "opus-96k-atrim-loudnorm-v2"
     },
-    "gcsp:song:xc345344": {
+    "gcsp:song:xc680976": {
       "species_id": "gcsp",
       "role": "song",
-      "xc_id": "345344",
-      "filename": "gcsp/song-xc345344.ogg",
-      "audio_url": "/content/audio/manual/gcsp/song-xc345344.ogg",
-      "trim": {
-        "mode": "manual",
-        "start_s": 0.2,
-        "end_s": 2.2,
-        "activity_pct": null,
-        "warning": null
-      },
-      "selection_fingerprint": "415b0aca2dcdc366fce75d1efc81dbbc3bb322189ffcdacc9eea73c01af36208",
-      "source_sha256": "dfef71cb000ed77a0da62fd8cec4ccaf4c2ccde90f64ed690e082a09b80180bb",
-      "output_sha256": "a70e17eb3202314eaa5497823bd8dd226c276f8357c52c516d2915ed58e03df9",
-      "algorithm_version": "sustained-energy-v1",
-      "encoder_version": "opus-96k-atrim-loudnorm-v2"
-    },
-    "gcsp:call:xc440249": {
-      "species_id": "gcsp",
-      "role": "call",
-      "xc_id": "440249",
-      "filename": "gcsp/call-xc440249.ogg",
-      "audio_url": "/content/audio/manual/gcsp/call-xc440249.ogg",
+      "xc_id": "680976",
+      "filename": "gcsp/song-xc680976.ogg",
+      "audio_url": "/content/audio/manual/gcsp/song-xc680976.ogg",
       "trim": {
         "mode": "manual",
         "start_s": 2.0,
-        "end_s": 4.4,
+        "end_s": 5.0,
         "activity_pct": null,
         "warning": null
       },
-      "selection_fingerprint": "3b688201a822b082b31c7bd62a9f0a54fa39fc19ae70af1cf5c9ff223f68afc9",
-      "source_sha256": "484e5502a1b22e9d794ebf7daca0b63d45c11a053406c27a29b07ff2abcfe67d",
-      "output_sha256": "19d39029d665bbdb532d5c1009fb807b100ac24a95a9a293d7418c1217db3860",
+      "selection_fingerprint": "8cd9bb7e4f38d48df3be7d461d0d1a14ad682e78d08d96e941bf04f9a4cab560",
+      "source_sha256": "fa70f837e3a8d97310df9cf378f6c9de55726cca475a8064f7ad4f50f8dfda41",
+      "output_sha256": "8950804b208a560a5a6ca128529b4d59459b6d1aee8e84eae61c18b640fc2d72",
+      "algorithm_version": "sustained-energy-v1",
+      "encoder_version": "opus-96k-atrim-loudnorm-v2"
+    },
+    "gcsp:call:xc425100": {
+      "species_id": "gcsp",
+      "role": "call",
+      "xc_id": "425100",
+      "filename": "gcsp/call-xc425100.ogg",
+      "audio_url": "/content/audio/manual/gcsp/call-xc425100.ogg",
+      "trim": {
+        "mode": "manual",
+        "start_s": 2.0,
+        "end_s": 4.0,
+        "activity_pct": null,
+        "warning": null
+      },
+      "selection_fingerprint": "1f69a7f5066d578a2d77359fa900cf7eed783cc59e5ee320f462e6602e08f808",
+      "source_sha256": "c5c21fefd37c5a97af8cdac3307f568c822d98f7db5a413320a5bb882a8a49f1",
+      "output_sha256": "e70189f6748f54d45ce0a2b345b4100a5f06ee30079acfbc84a0354dcb4220fd",
       "algorithm_version": "sustained-energy-v1",
       "encoder_version": "opus-96k-atrim-loudnorm-v2"
     },

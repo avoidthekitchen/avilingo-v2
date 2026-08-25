@@ -61,16 +61,16 @@
         ],
         "calls": [
           {
-            "xc_id": "385843",
-            "xc_url": "https://xeno-canto.org/385843",
-            "audio_url": "/content/audio/manual/amro/call-xc385843.ogg",
+            "xc_id": "779497",
+            "xc_url": "https://xeno-canto.org/779497",
+            "audio_url": "/content/audio/manual/amro/call-xc779497.ogg",
             "type": "call",
             "quality": "A",
-            "length": "0:13",
-            "recordist": "Antonio Xeira",
+            "length": "0:27",
+            "recordist": "Manuel Grosselet",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Stony Creek Metropark, Macomb County, Michigan",
-            "country": "United States",
+            "location": "Magdalena Contreras (near  Ciudad de México), Ciudad de México",
+            "country": "Mexico",
             "score": 0,
             "commercial_ok": false
           }
@@ -284,34 +284,34 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "569535",
-            "xc_url": "https://xeno-canto.org/569535",
-            "audio_url": "/content/audio/manual/deju/song-xc569535.ogg",
+            "xc_id": "1082015",
+            "xc_url": "https://xeno-canto.org/1082015",
+            "audio_url": "/content/audio/manual/deju/song-xc1082015.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:12",
-            "recordist": "Doug Hynes",
-            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
-            "location": "Terra Nova (Village), Newfoundland and Labrador",
-            "country": "Canada",
+            "length": "0:37",
+            "recordist": "Manuel Grosselet - Kristine Taylor",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Del Monte Forest, Monterey County, California",
+            "country": "United States",
             "score": 0,
-            "commercial_ok": true
+            "commercial_ok": false
           }
         ],
         "calls": [
           {
-            "xc_id": "254480",
-            "xc_url": "https://xeno-canto.org/254480",
-            "audio_url": "/content/audio/manual/deju/call-xc254480.ogg",
-            "type": "song",
+            "xc_id": "1014358",
+            "xc_url": "https://xeno-canto.org/1014358",
+            "audio_url": "/content/audio/manual/deju/call-xc1014358.ogg",
+            "type": "flight call",
             "quality": "A",
-            "length": "0:05",
-            "recordist": "Jonathon Jongsma",
-            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
-            "location": "Blue Bell Campground, Custer State Park, South Dakota",
-            "country": "United States",
+            "length": "0:09",
+            "recordist": "Stanislas Wroza",
+            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "location": "Stationnement des dunes (near  Tadoussac), Côte-Nord, Québec",
+            "country": "Canada",
             "score": 0,
-            "commercial_ok": true
+            "commercial_ok": false
           }
         ]
       },
@@ -446,15 +446,15 @@
         ],
         "calls": [
           {
-            "xc_id": "717557",
-            "xc_url": "https://xeno-canto.org/717557",
-            "audio_url": "/content/audio/manual/spto/call-xc717557.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:22",
-            "recordist": "Bobby Wilcox",
+            "xc_id": "540262",
+            "xc_url": "https://xeno-canto.org/540262",
+            "audio_url": "/content/audio/manual/spto/call-xc540262.ogg",
+            "type": "call",
+            "quality": "no score",
+            "length": "0:33",
+            "recordist": "Thomas Magarian",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "First Creek Trail, Clark County, Nevada",
+            "location": "Willamette Bluff, North Portland, Multnomah County, Oregon",
             "country": "United States",
             "score": 0,
             "commercial_ok": false
@@ -660,15 +660,15 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "603262",
-            "xc_url": "https://xeno-canto.org/603262",
-            "audio_url": "/content/audio/manual/stja/song-xc603262.ogg",
-            "type": "call, imitation, mimicry/imitation",
-            "quality": "A",
-            "length": "0:14",
-            "recordist": "Thomas Magarian",
+            "xc_id": "178944",
+            "xc_url": "https://xeno-canto.org/178944",
+            "audio_url": "/content/audio/manual/stja/song-xc178944.ogg",
+            "type": "call",
+            "quality": "B",
+            "length": "0:02",
+            "recordist": "Eric Cannizzaro",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Camp Polk Meadow Preserve, Sisters, Deschutes County, Oregon",
+            "location": "Olympia, Thurston County, Washington",
             "country": "United States",
             "score": 0,
             "commercial_ok": false
@@ -735,15 +735,15 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "800769",
-            "xc_url": "https://xeno-canto.org/800769",
-            "audio_url": "/content/audio/manual/bewr/song-xc800769.ogg",
+            "xc_id": "1139582",
+            "xc_url": "https://xeno-canto.org/1139582",
+            "audio_url": "/content/audio/manual/bewr/song-xc1139582.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:16",
-            "recordist": "Scott Crabtree",
+            "length": "1:21",
+            "recordist": "Ed Pandolfino",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Santa Cruz River Park,Tucson, Pima County, Arizona",
+            "location": "Elk Mtn Rd, Lake County, California",
             "country": "United States",
             "score": 0,
             "commercial_ok": false
@@ -751,16 +751,16 @@
         ],
         "calls": [
           {
-            "xc_id": "553922",
-            "xc_url": "https://xeno-canto.org/553922",
-            "audio_url": "/content/audio/manual/bewr/call-xc553922.ogg",
-            "type": "song",
+            "xc_id": "985688",
+            "xc_url": "https://xeno-canto.org/985688",
+            "audio_url": "/content/audio/manual/bewr/call-xc985688.ogg",
+            "type": "call",
             "quality": "A",
-            "length": "0:50",
-            "recordist": "Barry Edmonston",
+            "length": "0:32",
+            "recordist": "Ed Pandolfino",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Vancouver Island (near  Victoria), Capital, British Columbia",
-            "country": "Canada",
+            "location": "Mix Canyon Road, Solano County, California",
+            "country": "United States",
             "score": 0,
             "commercial_ok": false
           }
@@ -1029,15 +1029,15 @@
       "audio_clips": {
         "songs": [
           {
-            "xc_id": "345344",
-            "xc_url": "https://xeno-canto.org/345344",
-            "audio_url": "/content/audio/manual/gcsp/song-xc345344.ogg",
+            "xc_id": "680976",
+            "xc_url": "https://xeno-canto.org/680976",
+            "audio_url": "/content/audio/manual/gcsp/song-xc680976.ogg",
             "type": "song",
             "quality": "A",
-            "length": "0:11",
-            "recordist": "Michael Lester",
+            "length": "0:48",
+            "recordist": "Steve Hampton",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Carmel Valley, Monterey, California",
+            "location": "Port Townsend, Jefferson County, Washington",
             "country": "United States",
             "score": 0,
             "commercial_ok": false
@@ -1045,16 +1045,16 @@
         ],
         "calls": [
           {
-            "xc_id": "440249",
-            "xc_url": "https://xeno-canto.org/440249",
-            "audio_url": "/content/audio/manual/gcsp/call-xc440249.ogg",
-            "type": "call, song",
+            "xc_id": "425100",
+            "xc_url": "https://xeno-canto.org/425100",
+            "audio_url": "/content/audio/manual/gcsp/call-xc425100.ogg",
+            "type": "call",
             "quality": "A",
-            "length": "0:18",
-            "recordist": "Rachel Hudson",
+            "length": "0:28",
+            "recordist": "Jeff Dyck",
             "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Chehalis, Lewis County, Washington",
-            "country": "United States",
+            "location": "Fraser-Fort George G, Fraser-Fort George, British Columbia",
+            "country": "Canada",
             "score": 0,
             "commercial_ok": false
           }
@@ -1257,7 +1257,7 @@
   "schema_version": 2,
   "audio_build": {
     "mode": "manual",
-    "selection_digest": "bf0cd05a5926607d9cc23b754cb838d127d2f9c2ac4ac63d6c17f01cfb6b5f9b",
+    "selection_digest": "961d9f81b6a2b695d7a0fbe5d1f0cc0798cdbec5cdb0a32375a32f1d078e2a32",
     "algorithm_version": "sustained-energy-v1",
     "encoder_version": "opus-96k-atrim-loudnorm-v2"
   }
