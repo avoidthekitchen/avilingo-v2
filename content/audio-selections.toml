@@ -1,0 +1,171 @@
+version = 1
+
+# Roles are assigned by the section in which a recording appears. Xeno-canto's
+# own type label is metadata only and never overrides this file.
+# start_s/end_s are seconds in the original Xeno-canto recording.
+#
+# Bird code reference:
+#   amro = American Robin             amcr = American Crow
+#   sosp = Song Sparrow               deju = Dark-eyed Junco
+#   bcch = Black-capped Chickadee      spto = Spotted Towhee
+#   hofi = House Finch                 nofl = Northern Flicker
+#   stja = Steller's Jay               bewr = Bewick's Wren
+#   anhu = Anna's Hummingbird          cbch = Chestnut-backed Chickadee
+#   bush = Bushtit                     gcsp = Golden-crowned Sparrow
+#   eust = European Starling
+
+[[species.amro.songs]]
+xc = 171727
+start_s = 0.002
+end_s = 4.6
+
+[[species.amro.calls]]
+xc = 385843
+start_s = 0.0
+end_s = 3.1
+
+[[species.amcr.songs]]
+xc = 531008
+start_s = 2.5
+end_s = 5.5
+
+[[species.amcr.calls]]
+xc = 682428
+start_s = 2.0
+end_s = 5.0
+
+[[species.sosp.songs]]
+xc = 803814
+start_s = 2.5
+end_s = 6.0
+
+[[species.sosp.calls]]
+xc = 829233
+start_s = 4.0
+end_s = 8.0
+
+[[species.deju.songs]]
+xc = 569535
+start_s = 8.98
+end_s = 11.48
+note = "Migrated from a preview-relative trim; review this offset-corrected clip in the app."
+
+[[species.deju.calls]]
+xc = 254480
+start_s = 1.2
+end_s = 3.5
+
+[[species.bcch.songs]]
+xc = 866009
+start_s = 3.6
+end_s = 5.0
+
+[[species.bcch.calls]]
+xc = 636533
+start_s = 2.6
+end_s = 7.0
+
+[[species.spto.songs]]
+xc = 575461
+start_s = 5.0
+end_s = 7.3
+
+[[species.spto.calls]]
+xc = 717557
+start_s = 0.7
+end_s = 2.7
+
+[[species.hofi.songs]]
+xc = 875451
+start_s = 7.65
+end_s = 13.25
+note = "Migrated from a preview-relative trim; review this offset-corrected clip in the app."
+
+[[species.hofi.calls]]
+xc = 573017
+start_s = 0.0
+end_s = 3.7
+
+[[species.nofl.songs]]
+xc = 645833
+start_s = 1.5
+end_s = 7.5
+
+[[species.nofl.calls]]
+xc = 613544
+start_s = 5.5
+end_s = 9.1
+
+[[species.stja.songs]]
+xc = 603262
+start_s = 2.3
+end_s = 6.3
+
+[[species.stja.calls]]
+xc = 109654
+start_s = 1.6
+end_s = 3.6
+
+[[species.bewr.songs]]
+xc = 800769
+start_s = 0.8
+end_s = 6.0
+
+[[species.bewr.calls]]
+xc = 553922
+start_s = 23.8
+end_s = 28.9
+note = "Migrated from a preview-relative trim; review this offset-corrected clip in the app."
+
+[[species.anhu.songs]]
+xc = 860679
+start_s = 13.2
+end_s = 17.0
+note = "Migrated from a preview-relative trim; review this offset-corrected clip in the app."
+
+[[species.anhu.calls]]
+xc = 697495
+start_s = 1.8
+end_s = 3.8
+
+[[species.cbch.songs]]
+xc = 702313
+start_s = 7.0
+end_s = 11.7
+
+[[species.cbch.calls]]
+xc = 364352
+start_s = 2.65
+end_s = 7.15
+note = "Migrated from a preview-relative trim; review this offset-corrected clip in the app."
+
+[[species.bush.songs]]
+xc = 215759
+start_s = 2.8
+end_s = 5.5
+
+[[species.bush.calls]]
+xc = 149398
+start_s = 1.7
+end_s = 6.9
+
+[[species.gcsp.songs]]
+xc = 345344
+start_s = 0.2
+end_s = 2.2
+
+[[species.gcsp.calls]]
+xc = 440249
+start_s = 2.0
+end_s = 4.4
+
+[[species.eust.songs]]
+xc = 593357
+start_s = 0.0
+end_s = 3.6
+
+[[species.eust.calls]]
+xc = 614156
+start_s = 57.75
+end_s = 60.05
+note = "Migrated from a preview-relative trim; review this offset-corrected clip in the app."

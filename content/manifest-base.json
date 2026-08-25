@@ -43,38 +43,8 @@
       ],
       "confuser_notes": "Varied Thrush has a single eerie buzzy note on one pitch, not a caroling phrase",
       "audio_clips": {
-        "songs": [
-          {
-            "xc_id": "171727",
-            "xc_url": "https://xeno-canto.org/171727",
-            "audio_url": "/content/audio/manual/amro/song-xc171727.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:21",
-            "recordist": "Ted Floyd",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Lafayette, Boulder, Colorado",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ],
-        "calls": [
-          {
-            "xc_id": "385843",
-            "xc_url": "https://xeno-canto.org/385843",
-            "audio_url": "/content/audio/manual/amro/call-xc385843.ogg",
-            "type": "call",
-            "quality": "A",
-            "length": "0:13",
-            "recordist": "Antonio Xeira",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Stony Creek Metropark, Macomb County, Michigan",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ]
+        "songs": [],
+        "calls": []
       },
       "photo": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/9/97/American_robin_%2871307%29.jpg",
@@ -124,38 +94,8 @@
       ],
       "confuser_notes": "Raven is deeper, hoarser, and gives a croaking pruk-pruk rather than a clean caw",
       "audio_clips": {
-        "songs": [
-          {
-            "xc_id": "531008",
-            "xc_url": "https://xeno-canto.org/531008",
-            "audio_url": "/content/audio/manual/amcr/song-xc531008.ogg",
-            "type": "call",
-            "quality": "A",
-            "length": "0:07",
-            "recordist": "Thomas G. Graves",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "San Simeon, San Luis Obispo County, California",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ],
-        "calls": [
-          {
-            "xc_id": "682428",
-            "xc_url": "https://xeno-canto.org/682428",
-            "audio_url": "/content/audio/manual/amcr/call-xc682428.ogg",
-            "type": "call",
-            "quality": "A",
-            "length": "0:06",
-            "recordist": "Doug Hynes",
-            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
-            "location": "Big Fish Island, Nova Scotia",
-            "country": "Canada",
-            "score": 0,
-            "commercial_ok": true
-          }
-        ]
+        "songs": [],
+        "calls": []
       },
       "photo": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Corvus-brachyrhynchos-001.jpg",
@@ -207,38 +147,8 @@
       ],
       "confuser_notes": "Fox Sparrow is richer and more musical; Lincoln's is buzzier throughout; Savannah is more insect-like",
       "audio_clips": {
-        "songs": [
-          {
-            "xc_id": "803814",
-            "xc_url": "https://xeno-canto.org/803814",
-            "audio_url": "/content/audio/manual/sosp/song-xc803814.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:09",
-            "recordist": "Bobby Wilcox",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "DeWitt (near  East Syracuse), Onondaga County, New York",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ],
-        "calls": [
-          {
-            "xc_id": "829233",
-            "xc_url": "https://xeno-canto.org/829233",
-            "audio_url": "/content/audio/manual/sosp/call-xc829233.ogg",
-            "type": "call",
-            "quality": "A",
-            "length": "0:10",
-            "recordist": "Barry Edmonston",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Saanich (near  Victoria), Capital, British Columbia",
-            "country": "Canada",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ]
+        "songs": [],
+        "calls": []
       },
       "photo": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/0/00/Song_sparrow_in_Prospect_Park_%2893031%29.jpg",
@@ -282,38 +192,8 @@
       ],
       "confuser_notes": "Chipping Sparrow trill is drier and faster; Pine Siskin trill rises at the end",
       "audio_clips": {
-        "songs": [
-          {
-            "xc_id": "569535",
-            "xc_url": "https://xeno-canto.org/569535",
-            "audio_url": "/content/audio/manual/deju/song-xc569535.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:12",
-            "recordist": "Doug Hynes",
-            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
-            "location": "Terra Nova (Village), Newfoundland and Labrador",
-            "country": "Canada",
-            "score": 0,
-            "commercial_ok": true
-          }
-        ],
-        "calls": [
-          {
-            "xc_id": "254480",
-            "xc_url": "https://xeno-canto.org/254480",
-            "audio_url": "/content/audio/manual/deju/call-xc254480.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:05",
-            "recordist": "Jonathon Jongsma",
-            "license": "https://creativecommons.org/licenses/by-sa/4.0/",
-            "location": "Blue Bell Campground, Custer State Park, South Dakota",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": true
-          }
-        ]
+        "songs": [],
+        "calls": []
       },
       "photo": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/5/55/Junco_hyemalis_hyemalis_CT1_%28cropped%29.jpg",
@@ -347,38 +227,8 @@
       ],
       "confuser_notes": "Chestnut-backed is faster, higher-pitched, and lacks the clear fee-bee song",
       "audio_clips": {
-        "songs": [
-          {
-            "xc_id": "866009",
-            "xc_url": "https://xeno-canto.org/866009",
-            "audio_url": "/content/audio/manual/bcch/song-xc866009.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:06",
-            "recordist": "Don Profota",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "South Bozeman, Gallatin County, Montana",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ],
-        "calls": [
-          {
-            "xc_id": "636533",
-            "xc_url": "https://xeno-canto.org/636533",
-            "audio_url": "/content/audio/manual/bcch/call-xc636533.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:16",
-            "recordist": "Thomas Ryder Payne",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Minden Hills (near  Minden), Haliburton County, Ontario",
-            "country": "Canada",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ]
+        "songs": [],
+        "calls": []
       },
       "photo": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Poecile-atricapilla-001.jpg",
@@ -428,38 +278,8 @@
       ],
       "confuser_notes": "Junco trill is more even and simpler; Towhee has the distinctive 2-note intro",
       "audio_clips": {
-        "songs": [
-          {
-            "xc_id": "575461",
-            "xc_url": "https://xeno-canto.org/575461",
-            "audio_url": "/content/audio/manual/spto/song-xc575461.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:14",
-            "recordist": "Sue Riffe",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Saguaro NP - east, Pima Cty, Arizona",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ],
-        "calls": [
-          {
-            "xc_id": "717557",
-            "xc_url": "https://xeno-canto.org/717557",
-            "audio_url": "/content/audio/manual/spto/call-xc717557.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:22",
-            "recordist": "Bobby Wilcox",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "First Creek Trail, Clark County, Nevada",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ]
+        "songs": [],
+        "calls": []
       },
       "photo": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/d/d6/Spotted_Towhee_%2832684403303%29.jpg",
@@ -503,38 +323,8 @@
       ],
       "confuser_notes": "Purple Finch is richer and more musical without the harsh ending; Cassin's is higher and clearer",
       "audio_clips": {
-        "songs": [
-          {
-            "xc_id": "875451",
-            "xc_url": "https://xeno-canto.org/875451",
-            "audio_url": "/content/audio/manual/hofi/song-xc875451.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:56",
-            "recordist": "Matthew L. Brady",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Apple Valley, San Bernardino County, California",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ],
-        "calls": [
-          {
-            "xc_id": "573017",
-            "xc_url": "https://xeno-canto.org/573017",
-            "audio_url": "/content/audio/manual/hofi/call-xc573017.ogg",
-            "type": "flight call",
-            "quality": "A",
-            "length": "0:05",
-            "recordist": "Manuel Grosselet",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Topolobampo, Ahome, Sinaloa",
-            "country": "Mexico",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ]
+        "songs": [],
+        "calls": []
       },
       "photo": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/f/f1/House_finch_%2833688%292.jpg",
@@ -577,38 +367,8 @@
       ],
       "confuser_notes": "Pileated is louder, slower, and has a wilder irregular rhythm; Flicker is evenly spaced",
       "audio_clips": {
-        "songs": [
-          {
-            "xc_id": "645833",
-            "xc_url": "https://xeno-canto.org/645833",
-            "audio_url": "/content/audio/manual/nofl/song-xc645833.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:13",
-            "recordist": "Ted Floyd",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Lafayette, Boulder County, Colorado",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ],
-        "calls": [
-          {
-            "xc_id": "613544",
-            "xc_url": "https://xeno-canto.org/613544",
-            "audio_url": "/content/audio/manual/nofl/call-xc613544.ogg",
-            "type": "call, contact call",
-            "quality": "A",
-            "length": "0:11",
-            "recordist": "Peter Ward and Ken Hall",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Crippen Park (near  Bowen Island), Metro Vancouver, British Columbia",
-            "country": "Canada",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ]
+        "songs": [],
+        "calls": []
       },
       "photo": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/6/60/Northern_yellow-shafted_flicker_male_%2833737%29_%28cropped%29.jpg",
@@ -658,38 +418,8 @@
       ],
       "confuser_notes": "Blue Jay (rare in Seattle) has a clearer jay-jay call; Steller's is harsher and more grating",
       "audio_clips": {
-        "songs": [
-          {
-            "xc_id": "603262",
-            "xc_url": "https://xeno-canto.org/603262",
-            "audio_url": "/content/audio/manual/stja/song-xc603262.ogg",
-            "type": "call, imitation, mimicry/imitation",
-            "quality": "A",
-            "length": "0:14",
-            "recordist": "Thomas Magarian",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Camp Polk Meadow Preserve, Sisters, Deschutes County, Oregon",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ],
-        "calls": [
-          {
-            "xc_id": "109654",
-            "xc_url": "https://xeno-canto.org/109654",
-            "audio_url": "/content/audio/manual/stja/call-xc109654.ogg",
-            "type": "call",
-            "quality": "A",
-            "length": "0:05",
-            "recordist": "Jonathon Jongsma",
-            "license": "https://creativecommons.org/licenses/by-sa/3.0/",
-            "location": "McClellan Ranch Preserve, Santa Clara, California",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": true
-          }
-        ]
+        "songs": [],
+        "calls": []
       },
       "photo": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Steller%27s_Jay_flagstaff_arizona.jpg",
@@ -733,38 +463,8 @@
       ],
       "confuser_notes": "Pacific Wren is much faster and more cascading; House Wren is bubblier and less structured",
       "audio_clips": {
-        "songs": [
-          {
-            "xc_id": "800769",
-            "xc_url": "https://xeno-canto.org/800769",
-            "audio_url": "/content/audio/manual/bewr/song-xc800769.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:16",
-            "recordist": "Scott Crabtree",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Santa Cruz River Park,Tucson, Pima County, Arizona",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ],
-        "calls": [
-          {
-            "xc_id": "553922",
-            "xc_url": "https://xeno-canto.org/553922",
-            "audio_url": "/content/audio/manual/bewr/call-xc553922.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:50",
-            "recordist": "Barry Edmonston",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Vancouver Island (near  Victoria), Capital, British Columbia",
-            "country": "Canada",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ]
+        "songs": [],
+        "calls": []
       },
       "photo": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/7/71/Bewicks_Wren.jpg",
@@ -814,38 +514,8 @@
       ],
       "confuser_notes": "Rufous (seasonal visitor) has a simpler, lower-pitched buzz; Anna's song is longer and more complex",
       "audio_clips": {
-        "songs": [
-          {
-            "xc_id": "860679",
-            "xc_url": "https://xeno-canto.org/860679",
-            "audio_url": "/content/audio/manual/anhu/song-xc860679.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:39",
-            "recordist": "Scott Crabtree",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Sabino Canyon National Recreation Area, Pima County, Arizona",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ],
-        "calls": [
-          {
-            "xc_id": "697495",
-            "xc_url": "https://xeno-canto.org/697495",
-            "audio_url": "/content/audio/manual/anhu/call-xc697495.ogg",
-            "type": "flight call",
-            "quality": "A",
-            "length": "0:05",
-            "recordist": "Paul Marvin",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Monument Rd and nearby trails, Tijuana River Valley, San Diego, California",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ]
+        "songs": [],
+        "calls": []
       },
       "photo": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Anna%27s_hummingbird.jpg",
@@ -888,38 +558,8 @@
       ],
       "confuser_notes": "Key confuser pair — Black-capped is slower with clear fee-bee song; Chestnut-backed is higher and faster",
       "audio_clips": {
-        "songs": [
-          {
-            "xc_id": "702313",
-            "xc_url": "https://xeno-canto.org/702313",
-            "audio_url": "/content/audio/manual/cbch/song-xc702313.ogg",
-            "type": "call, song",
-            "quality": "A",
-            "length": "0:33",
-            "recordist": "Barry Edmonston",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Swan Lake, Victoria, Vancouver Island, BC",
-            "country": "Canada",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ],
-        "calls": [
-          {
-            "xc_id": "364352",
-            "xc_url": "https://xeno-canto.org/364352",
-            "audio_url": "/content/audio/manual/cbch/call-xc364352.ogg",
-            "type": "call",
-            "quality": "A",
-            "length": "0:26",
-            "recordist": "Paul Marvin",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Patrick Point State Park, Humboldt County, California",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ]
+        "songs": [],
+        "calls": []
       },
       "photo": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/9/94/Chestnut-backed_Chickadee_2154ab_%28cropped%29.jpg",
@@ -953,38 +593,8 @@
       ],
       "confuser_notes": "Kinglet is even higher-pitched with a sibilant see-see-see; Bushtit is slightly lower with a harder tsit quality",
       "audio_clips": {
-        "songs": [
-          {
-            "xc_id": "215759",
-            "xc_url": "https://xeno-canto.org/215759",
-            "audio_url": "/content/audio/manual/bush/song-xc215759.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:11",
-            "recordist": "Ted Floyd",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Lafayette, Boulder, Colorado",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ],
-        "calls": [
-          {
-            "xc_id": "149398",
-            "xc_url": "https://xeno-canto.org/149398",
-            "audio_url": "/content/audio/manual/bush/call-xc149398.ogg",
-            "type": "call",
-            "quality": "A",
-            "length": "0:15",
-            "recordist": "Paul Marvin",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/3.0/",
-            "location": "Otay Lakes, San Diego Co., California",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ]
+        "songs": [],
+        "calls": []
       },
       "photo": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/d/d7/BushtitMale.jpg",
@@ -1027,38 +637,8 @@
       ],
       "confuser_notes": "White-crowned has a more complex song with buzzy trills; Golden-crowned is simpler — just the 3 descending whistles",
       "audio_clips": {
-        "songs": [
-          {
-            "xc_id": "345344",
-            "xc_url": "https://xeno-canto.org/345344",
-            "audio_url": "/content/audio/manual/gcsp/song-xc345344.ogg",
-            "type": "song",
-            "quality": "A",
-            "length": "0:11",
-            "recordist": "Michael Lester",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Carmel Valley, Monterey, California",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ],
-        "calls": [
-          {
-            "xc_id": "440249",
-            "xc_url": "https://xeno-canto.org/440249",
-            "audio_url": "/content/audio/manual/gcsp/call-xc440249.ogg",
-            "type": "call, song",
-            "quality": "A",
-            "length": "0:18",
-            "recordist": "Rachel Hudson",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Chehalis, Lewis County, Washington",
-            "country": "United States",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ]
+        "songs": [],
+        "calls": []
       },
       "photo": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Zonotrichia_atricapilla_-British_Columbia%2C_Canada-8.jpg",
@@ -1092,38 +672,8 @@
       ],
       "confuser_notes": "Mockingbird (rare in Seattle) repeats phrases 3+ times; Starling jumbles everything without repeating",
       "audio_clips": {
-        "songs": [
-          {
-            "xc_id": "593357",
-            "xc_url": "https://xeno-canto.org/593357",
-            "audio_url": "/content/audio/manual/eust/song-xc593357.ogg",
-            "type": "song",
-            "quality": "B",
-            "length": "0:11",
-            "recordist": "Risto Milner",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Thompson-Nicola J (near  Kamloops), Thompson-Nicola, British Columbia",
-            "country": "Canada",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ],
-        "calls": [
-          {
-            "xc_id": "614156",
-            "xc_url": "https://xeno-canto.org/614156",
-            "audio_url": "/content/audio/manual/eust/call-xc614156.ogg",
-            "type": "call, imitation, mimicry/imitation",
-            "quality": "A",
-            "length": "1:20",
-            "recordist": "Peter Ward and Ken Hall",
-            "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-            "location": "Cariboo H (near  Mahood Falls), Cariboo, British Columbia",
-            "country": "Canada",
-            "score": 0,
-            "commercial_ok": false
-          }
-        ]
+        "songs": [],
+        "calls": []
       },
       "photo": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg",
@@ -1254,11 +804,5 @@
       }
     ]
   },
-  "schema_version": 2,
-  "audio_build": {
-    "mode": "manual",
-    "selection_digest": "bf0cd05a5926607d9cc23b754cb838d127d2f9c2ac4ac63d6c17f01cfb6b5f9b",
-    "algorithm_version": "sustained-energy-v1",
-    "encoder_version": "opus-96k-atrim-loudnorm-v2"
-  }
+  "schema_version": 2
 }

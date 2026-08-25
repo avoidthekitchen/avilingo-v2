@@ -17,7 +17,7 @@ A Duolingo-style bird song identification trainer. Static SPA deployed to Cloudf
 | Testing | Vitest + Testing Library | 4.1 / 16.3 |
 | Linting | ESLint + typescript-eslint | 9.39 / 8.58 |
 | Deploy | Cloudflare Workers (static assets) | wrangler 4.83 |
-| Content pipeline | Python 3 + requests + Pillow (+ optional BirdNET Analyzer) | 3.12+ |
+| Content pipeline | Python 3 + requests + ffmpeg | 3.12+ |
 
 ## Architecture
 
@@ -35,10 +35,14 @@ admin/               ← Local-only audio curation tool (not deployed)
   index.html         ← Single-file admin UI (vanilla JS, no build step)
 
 scripts/             ← BeakSpeak build/deploy scripts
+content/audio-selections.toml      ← Production audio source of truth (XC IDs + optional original-source trims)
+content/audio-metadata.lock.json   ← Resolved XC metadata, trim windows, and output hashes
+content/manifest-base.json         ← Non-audio content used to generate the runtime manifest
+manual_audio.py      ← Production manual-audio sync, encoder, manifest builder, and offline checker
 download_media.py    ← Content pipeline: downloads audio + photos, builds manifest
 export_app_audio.py  ← App-audio export: regenerates manual trim outputs + manifest from existing local app audio
 populate_content.py  ← Content pipeline: queries Xeno-canto + Wikipedia, ranks mixed candidates
-tier1_seattle_birds_populated.json  ← Candidate pool with per-clip role assignments (checked in)
+tier1_seattle_birds_populated.json  ← Legacy candidate pool (not used by production audio builds)
 wrangler.toml        ← Cloudflare Workers config for /beakspeak/*
 rpi/                 ← Timestamped research and plan documents
   plans/             ← Sprint plans and implementation specs
@@ -149,17 +153,18 @@ Deployed as a Worker with no script — pure static asset serving. Requests to s
 
 ### Content Pipeline (Python)
 
-Two Python scripts fetch and process media from external APIs. Not part of the app runtime.
+Production audio is a manual, declarative content build and is not part of the app runtime.
 
-- `populate_content.py` — queries Xeno-canto API and Wikipedia; builds unified `audio_clips.candidates` (`schema_version: 2`) with `candidate_id`, `source_role`, and `selected_role` (`none`/`song`/`call`); stores rich metadata plus persisted `analysis` and `segment` fields; preserves manual role assignments from prior runs
-- `download_media.py` — downloads all candidates, normalizes with ffmpeg (loudnorm, persisted-segment trim, OGG Opus 96kbps), outputs to `beakspeak/public/content/`; manifest roles are resolved from `selected_role` with `--export-mode all|commercial`
-- `export_app_audio.py` — reads existing local app audio from `beakspeak/public/content/audio/{species}/{xc_id}.ogg`, writes manual trim outputs to `beakspeak/public/content/audio/{species}/trimmed/{safe_candidate_id}.ogg`, and regenerates the manifest with trim-aware URLs. Use `--force-audio` after changing an existing trim. It does not download Xeno-canto source audio; rerun `download_media.py` if local source app audio is missing.
+- `content/audio-selections.toml` is authoritative for app roles, XC IDs, optional notes, and optional original-source `start_s`/`end_s` trims. Every species must have at least one song and one call.
+- `manual_audio.py` resolves new XC metadata, validates species and licenses, caches untouched sources, chooses a sustained-energy window of at most 10 seconds when no trim is supplied, performs one trim/loudness-normalization/Opus encode, and generates the runtime manifest.
+- `content/audio-metadata.lock.json` preserves metadata, resolved automatic windows, source/output hashes, and algorithm versions. Ordinary builds use `manual_audio.py --check` and never contact Xeno-canto.
+- Generated audio lives under `beakspeak/public/content/audio/manual/` and source downloads under `.cache/manual-audio/`; both are gitignored and reconstructed by `uv run python3 manual_audio.py`.
+- `XC_API_KEY` is required only when resolving a new XC ID or using `--refresh-metadata`.
+- `populate_content.py`, `download_media.py`, `export_app_audio.py`, and `admin/` are the legacy candidate-research workflow. They remain callable but must not generate or overwrite production audio or `manifest.json` during normal build/deploy work.
 - Managed with `uv` (see `pyproject.toml`): https://docs.astral.sh/uv
-- Requires: Python 3.12+, ffmpeg, `requests`, `Pillow`
-- `XC_API_KEY` env var required for `populate_content.py`
-- BirdNET is optional: configure `BIRDNET_COMMAND` or `BIRDNET_HOME` for analysis-assisted ranking; fallback mode remains functional without BirdNET
+- Requires: Python 3.12+, ffmpeg/ffprobe, and `requests`
 
-### Audio Admin (local only, not deployed)
+### Legacy Audio Admin (local only, not deployed)
 
 - `admin/server.py` — Python stdlib HTTP server; run with `python3 admin/server.py` from repo root; serves on `http://localhost:8765`
 - `admin/index.html` — single-file vanilla JS UI; shows mixed ranked candidates with spectrogram/metadata/evidence, a role selector (`none`/`song`/`call`), and manual trim controls for selected clips; saves immediately to `tier1_seattle_birds_populated.json`

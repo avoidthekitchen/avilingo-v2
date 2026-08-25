@@ -1,6 +1,6 @@
 # avilingo-v2
 
-A Duolingo-style web app for learning Seattle-area bird songs and calls. Flash-card style introduction, spaced repetition reviews, and discrimination exercises — all in a mobile-first PWA. This repo also includes an extensive audio pipeline that uses Xeno-Canto metadata and BirdNET-Analyzer data to help curate, select, and trim audio files in an audio admin interface. 
+A Duolingo-style web app for learning Seattle-area bird songs and calls. Flash-card style introduction, spaced repetition reviews, and discrimination exercises — all in a mobile-first PWA. Bird recordings are selected explicitly by Xeno-canto ID in a small TOML file, then resolved, trimmed, normalized, and attributed by a reproducible content sync.
 
 **Live at:** [unformedideas.com/beakspeak](https://unformedideas.com/beakspeak/)
 
@@ -14,16 +14,15 @@ A Duolingo-style web app for learning Seattle-area bird songs and calls. Flash-c
 
 ## What's been built
 
-**Content pipeline** (`populate_content.py`, `download_media.py`) → **React app** (`beakspeak/`)
+**Manual audio selections** (`content/audio-selections.toml`) → **content sync** (`manual_audio.py`) → **React app** (`beakspeak/`)
 
 ### Content (Sprint 0)
 - 15 Seattle-area species across 5 lessons, curated by learnability
-- Unified candidate pool schema (`audio_clips.candidates`, `schema_version: 2`) with per-clip `candidate_id`, `source_role`, and curator-assigned `selected_role` (`none` / `song` / `call`)
-- Mixed candidate ranking (not pre-split song/call buckets): quality grade (A=+50 … E=−30) dominates; metadata bonuses/penalties and optional BirdNET-derived overlap/target signals refine ordering
-- Persisted analysis metadata (`analysis`) and persisted trim windows (`segment`) per candidate for reproducible media exports
+- Explicit Xeno-canto recording IDs and app roles, with optional original-source trim intervals
+- Automatic ten-second sustained-energy selection when a recording has no manual trim
+- Checked-in Xeno-canto metadata and resolved-window lock for reproducible attribution and builds
 - Mnemonics, habitat tags, Wikipedia photos, and 5 confuser pairs per species
-- `tier1_seattle_birds_populated.json` → `beakspeak/public/content/manifest.json`
-- Manual curation via local Audio Admin tool (see below)
+- `content/manifest-base.json` + manual audio → `beakspeak/public/content/manifest.json`
 
 ### Learn mode (Sprint 1)
 - Swipeable bird cards (framer-motion) with edge-to-edge photo, song/call playback, mnemonic
@@ -59,50 +58,46 @@ npm run dev
 
 The app is a single-page app with no backend — all data is served as static files from `beakspeak/public/content/`.
 
-## Audio Admin
+## Manual audio selections
 
-A local-only tool for reviewing the mixed candidate pool, assigning final export roles, and saving non-destructive manual trims for selected clips.
+`content/audio-selections.toml` is the production source of truth. Each species must have at least one song and one call. The section assigns the app role even when Xeno-canto uses a different type label.
 
-```bash
-# Run from repo root (no extra dependencies — Python stdlib only)
-python3 admin/server.py
-# → http://localhost:8765
+```toml
+[[species.stja.songs]]
+xc = 603262
+start_s = 2.3
+end_s = 6.3
+
+[[species.stja.calls]]
+xc = "XC109654"
+# With no trim, sync chooses the strongest sustained window up to 10 seconds.
 ```
 
-**What it shows per clip:** spectrogram (pre-rendered), play/pause, quality grade, type (song / call / alarm call / etc.), sex, stage, recording method, location, recordist, score/rank, license, BirdNET/segment evidence, remarks, and a link to the Xeno-canto page. Clips assigned to `song` or `call` also show start/end trim controls, selected-segment preview, save, and reset.
+Trim values are seconds in the untouched Xeno-canto source. Provide both `start_s` and `end_s`, or neither. Manual trims longer than ten seconds are preserved with a warning. The same recording cannot be assigned more than once.
 
-**Species header:** mnemonic and any Wikipedia audio clips for reference.
+The initial file contains the previous 30 curated choices: one song and one call for all 15 species.
 
-**Workflow:**
-1. Run `uv run python3 populate_content.py` to fetch/rank candidates and persist unified `audio_clips.candidates`
-2. Run `uv run python3 download_media.py` to download and normalize candidate media for local preview
-3. Open the admin and review mixed ranked candidates; assign each clip to `song`, `call`, or `none`
-4. For assigned clips, optionally save manual trim metadata. Trims are saved to `candidate.segment` and do not overwrite local audio.
-5. Assignments save immediately to `tier1_seattle_birds_populated.json` via `/api/assign-role`; trims save via `/api/segment`
-6. Run `uv run python3 export_app_audio.py --force-audio --export-mode all` (or `--export-mode commercial`) to generate trimmed app audio and regenerate `manifest.json`
-
-## Re-generating media
+## Synchronizing audio
 
 ```bash
-# Requires: Python 3.12+, ffmpeg, uv (or pip install requests Pillow)
-# Also requires XC_API_KEY env var for populate_content.py
-# Optional BirdNET setup for analysis-assisted ranking/segments:
-#   BIRDNET_COMMAND or BIRDNET_HOME (falls back to FFmpeg-only when unavailable)
+# Requires Python 3.12+, uv, ffmpeg, ffprobe, and XC_API_KEY for new metadata.
+uv run python3 manual_audio.py
 
-# Full pipeline (re-query Xeno-canto + Wikipedia, re-download everything)
-uv run python3 populate_content.py                   # → tier1_seattle_birds_populated.json
-uv run python3 download_media.py --export-mode all  # → beakspeak/public/content/ + manifest.json
+# Deliberately refresh all locked Xeno-canto metadata.
+uv run python3 manual_audio.py --refresh-metadata
 
-# Manifest/media rebuild after admin role assignment and optional manual trims
-uv run python3 export_app_audio.py --force-audio --export-mode all
-uv run python3 export_app_audio.py --force-audio --export-mode commercial
+# Recalculate only automatically chosen windows.
+uv run python3 manual_audio.py --refresh-windows
+
+# Offline verification used by the production site build.
+uv run python3 manual_audio.py --check
 ```
 
-Manual trim metadata is non-destructive. The existing source app audio stays at `beakspeak/public/content/audio/{species}/{xc_id}.ogg`; generated trimmed app audio is written to `beakspeak/public/content/audio/{species}/trimmed/{safe_candidate_id}.ogg`. If a trimmed output already exists, `export_app_audio.py` warns and skips regeneration unless `--force-audio` is provided. If source app audio is missing, rerun `uv run python3 download_media.py --export-mode all` to restore it before exporting trims.
+Sync fetches metadata for new IDs, caches untouched sources under `.cache/manual-audio/`, and writes generated OGG files under `beakspeak/public/content/audio/manual/`. These media directories are gitignored. Existing outputs and automatic windows are reused until their selection, source URL, algorithm version, or encoder version changes.
 
-`export_app_audio.py` does not download original Xeno-canto audio and does not rerun BirdNET analysis. Use `populate_content.py` and `download_media.py` for full source refreshes.
+`content/audio-metadata.lock.json` and the generated manifest are checked in. The normal site build never contacts Xeno-canto; it fails with sync guidance when selections, metadata, the manifest, or local audio assets are stale or missing.
 
-Audio and photos are gitignored; `manifest.json` and `tier1_seattle_birds_populated.json` are checked in.
+The previous candidate-ranking, BirdNET, and local Audio Admin workflow remains available as a legacy research tool, but it no longer supplies production audio or the runtime manifest.
 
 ## Testing
 
@@ -241,7 +236,7 @@ Do not add the root `unformedideas.com/` landing page or other project assets to
 beakspeak/
   public/content/
     manifest.json          # Species data with local audio/photo paths
-    audio/{species_id}/    # OGG Opus clips (gitignored)
+    audio/manual/          # Generated manual-selection OGG clips (gitignored)
     photos/                # JPEG photos (gitignored)
   src/
     core/                  # Pure TS — no React/DOM deps (portable to iOS later)
@@ -262,6 +257,8 @@ beakspeak/
       credits/             # CreditsPage
       shared/              # Navigation, AudioButton, AttributionInfo
 ```
+
+At the repository root, `content/manifest-base.json` owns non-audio app content, `content/audio-selections.toml` owns human recording choices, and `content/audio-metadata.lock.json` records fetched metadata and generated-output state.
 
 ## Key design decisions
 
