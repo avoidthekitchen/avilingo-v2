@@ -73,7 +73,7 @@ npm run native:sync
 npm run native:open
 ```
 
-`native:sync` validates the manual-audio lock, builds with relative asset URLs, keeps exactly the 30 production recordings, removes legacy/archive media, and synchronizes that output into Xcode. The generated `ios/App/App/public/` directory is ignored; rerun the command after changing web code or content.
+`native:sync` validates the manual-audio lock, builds with relative asset URLs, keeps exactly the production recordings referenced by the manifest, removes legacy/archive media, and synchronizes that output into Xcode. The generated `ios/App/App/public/` directory is ignored; rerun the command after changing web code or content.
 
 ## Manual audio selections
 

@@ -30,7 +30,7 @@ This command:
 1. verifies `content/audio-selections.toml`, its metadata lock, the runtime manifest, and local production audio without contacting Xeno-canto;
 2. type-checks and builds the app in Vite's `native` mode;
 3. removes unreferenced local photos, legacy audio, archive media, and Finder metadata from the output;
-4. verifies that all 30 production Ogg/Opus clips remain; and
+4. verifies that the packaged Ogg/Opus file set exactly matches the production manifest; and
 5. runs `cap sync ios` to copy the clean bundle and update native dependencies.
 
 The synchronized web output under `ios/App/App/public/` is generated and gitignored. Never edit it directly.

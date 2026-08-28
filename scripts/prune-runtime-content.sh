@@ -13,8 +13,4 @@ find "$CONTENT_BUILD_DIR" -mindepth 1 -maxdepth 1 -type d -name 'audio-archive-*
 find "$CONTENT_BUILD_DIR" -mindepth 1 -maxdepth 1 -type d -name photos -exec rm -rf -- {} +
 find "$CONTENT_BUILD_DIR" -name '.DS_Store' -delete
 
-AUDIO_COUNT="$(find "$CONTENT_BUILD_DIR/audio/manual" -type f -name '*.ogg' | wc -l | tr -d ' ')"
-if [[ "$AUDIO_COUNT" != "30" ]]; then
-  echo "Expected 30 production audio clips, found $AUDIO_COUNT." >&2
-  exit 1
-fi
+node "$(dirname "$0")/validate-runtime-content.mjs" "$CONTENT_BUILD_DIR"
