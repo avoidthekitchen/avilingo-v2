@@ -1,8 +1,8 @@
 import type { Manifest, Species, ConfuserPair, Lesson } from './types'
 
-function prefixUrl(url: string): string {
+export function resolveAssetUrl(url: string, baseUrl = import.meta.env.BASE_URL): string {
   if (url.startsWith('/')) {
-    return import.meta.env.BASE_URL + url.slice(1)
+    return baseUrl + url.slice(1)
   }
   return url
 }
@@ -16,9 +16,9 @@ export async function loadManifest(): Promise<Manifest> {
 
   // Prefix content URLs so they resolve correctly when served from a subpath
   for (const species of manifest.species) {
-    species.photo.url = prefixUrl(species.photo.url)
-    for (const clip of species.audio_clips.songs) clip.audio_url = prefixUrl(clip.audio_url)
-    for (const clip of species.audio_clips.calls) clip.audio_url = prefixUrl(clip.audio_url)
+    species.photo.url = resolveAssetUrl(species.photo.url)
+    for (const clip of species.audio_clips.songs) clip.audio_url = resolveAssetUrl(clip.audio_url)
+    for (const clip of species.audio_clips.calls) clip.audio_url = resolveAssetUrl(clip.audio_url)
   }
 
   return manifest

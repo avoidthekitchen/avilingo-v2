@@ -5,7 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "npm run build:web",
+    "build:web": "tsc -b && vite build --mode web",
+    "build:native": "npm run content:check && tsc -b && vite build --mode native && bash ../scripts/prune-runtime-content.sh dist/content",
+    "content:check": "cd .. && uv run python3 manual_audio.py --check",
+    "native:sync": "npm run build:native && cap sync ios",
+    "native:open": "cap open ios",
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.app.json --noEmit",
@@ -14,6 +19,8 @@
     "test:ci": "npm run typecheck && npm run lint && npm run test:unit && npm run test:e2e"
   },
   "dependencies": {
+    "@capacitor/core": "^8.5.0",
+    "@capacitor/ios": "^8.5.0",
     "dexie": "^4.4.2",
     "framer-motion": "^12.38.0",
     "react": "^19.2.4",
@@ -22,6 +29,7 @@
     "zustand": "^5.0.12"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.5.0",
     "@eslint/js": "^9.39.4",
     "@playwright/test": "^1.59.1",
     "@tailwindcss/vite": "^4.2.2",

@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { getSpeciesById, getSpeciesByIds, getInTierConfuserPairs, getLessons } from './manifest'
+import {
+  getSpeciesById,
+  getSpeciesByIds,
+  getInTierConfuserPairs,
+  getLessons,
+  resolveAssetUrl,
+} from './manifest'
 import type { Manifest, Species, ConfuserPair } from './types'
 
 function makeSpecies(id: string): Species {
@@ -85,5 +91,22 @@ describe('getLessons', () => {
     const lessons = getLessons(manifest)
     expect(lessons).toHaveLength(1)
     expect(lessons[0].lesson).toBe(1)
+  })
+})
+
+describe('resolveAssetUrl', () => {
+  it('places local content under the Cloudflare deployment route', () => {
+    expect(resolveAssetUrl('/content/audio/manual/amro/song.ogg', '/beakspeak/'))
+      .toBe('/beakspeak/content/audio/manual/amro/song.ogg')
+  })
+
+  it('uses relative local content URLs in the packaged web view', () => {
+    expect(resolveAssetUrl('/content/audio/manual/amro/song.ogg', './'))
+      .toBe('./content/audio/manual/amro/song.ogg')
+  })
+
+  it('leaves remote photo URLs unchanged', () => {
+    const photoUrl = 'https://upload.wikimedia.org/example.jpg'
+    expect(resolveAssetUrl(photoUrl, './')).toBe(photoUrl)
   })
 })

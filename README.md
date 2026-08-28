@@ -44,7 +44,7 @@ A Duolingo-style web app for learning Seattle-area bird songs and calls. Flash-c
 
 ## Running locally
 
-**Prerequisites:** Node.js 18+, the media files already downloaded (see below)
+**Prerequisites:** Node.js 22+, the media files already downloaded (see below)
 
 ```bash
 # 1. Install dependencies
@@ -57,6 +57,23 @@ npm run dev
 ```
 
 The app is a single-page app with no backend — all data is served as static files from `beakspeak/public/content/`.
+
+## Running on iPhone with Capacitor
+
+The iOS feasibility app packages the same React application as the web build. It targets portrait iPhones on iOS 18.4 or newer; Android is intentionally not configured.
+
+See [`docs/native-ios.md`](docs/native-ios.md) for the complete build, synchronization, Personal Team signing, physical-device launch, and web-regression workflow.
+
+The normal development loop is:
+
+```bash
+cd beakspeak
+npm install
+npm run native:sync
+npm run native:open
+```
+
+`native:sync` validates the manual-audio lock, builds with relative asset URLs, keeps exactly the 30 production recordings, removes legacy/archive media, and synchronizes that output into Xcode. The generated `ios/App/App/public/` directory is ignored; rerun the command after changing web code or content.
 
 ## Manual audio selections
 
