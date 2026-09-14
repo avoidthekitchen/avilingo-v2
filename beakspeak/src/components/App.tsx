@@ -11,25 +11,10 @@ export default function App() {
   const error = useAppStore(s => s.error)
   const activeTab = useAppStore(s => s.activeTab)
   const initialize = useAppStore(s => s.initialize)
-  const fastForwardToLesson = useAppStore(s => s.fastForwardToLesson)
 
   useEffect(() => {
-    const run = async () => {
-      await initialize()
-      const params = new URLSearchParams(window.location.search)
-      const lessonParam = params.get('lesson')
-      if (lessonParam) {
-        const lessonNum = parseInt(lessonParam, 10)
-        if (!isNaN(lessonNum) && lessonNum > 1) {
-          await fastForwardToLesson(lessonNum)
-        }
-        params.delete('lesson')
-        const newSearch = params.toString()
-        history.replaceState(null, '', newSearch ? `?${newSearch}` : window.location.pathname)
-      }
-    }
-    run()
-  }, [initialize, fastForwardToLesson])
+    initialize()
+  }, [initialize])
 
   if (error) {
     return (

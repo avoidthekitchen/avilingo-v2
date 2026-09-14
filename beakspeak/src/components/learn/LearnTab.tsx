@@ -60,7 +60,7 @@ export default function LearnTab() {
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-text">Learn Birds</h1>
         <p className="text-text-muted mt-1">
-          {introducedCount} of {manifest.target_species_count} birds learned
+          {introducedCount} of {manifest.target_species_count} birds introduced
         </p>
         <div className="mt-2 h-2 bg-border rounded-full overflow-hidden">
           <div
