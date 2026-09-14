@@ -7,7 +7,7 @@ on:
       - 'content/**'
       - 'manual_audio.py'
       - 'test_manual_audio.py'
-      - 'scripts/build-site.sh'
+      - 'scripts/**'
       - 'pyproject.toml'
       - 'uv.lock'
       - '.github/workflows/beakspeak-ci.yml'
@@ -19,12 +19,53 @@ on:
       - 'content/**'
       - 'manual_audio.py'
       - 'test_manual_audio.py'
-      - 'scripts/build-site.sh'
+      - 'scripts/**'
       - 'pyproject.toml'
       - 'uv.lock'
       - '.github/workflows/beakspeak-ci.yml'
 
 jobs:
+  ios-smoke:
+    name: iOS simulator smoke
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: beakspeak/package-lock.json
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          npm ci --prefix beakspeak
+          npm install --global xcodebuildmcp@2.7.0
+          brew install ffmpeg
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .cache/manual-audio
+            beakspeak/public/content/audio/manual
+          key: ios-audio-${{ runner.os }}-${{ hashFiles('content/audio-selections.toml', 'content/audio-metadata.lock.json', 'manual_audio.py') }}
+      - name: Reconstruct locked production audio
+        run: uv run python3 manual_audio.py
+      - name: Build and test packaged iOS app
+        run: npm run test:ios --prefix beakspeak
+      - name: Upload simulator evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-smoke-results
+          path: |
+            .artifacts/ios-smoke/*.json
+            .artifacts/ios-smoke/*.log
+            .artifacts/ios-smoke/*LogPath
+            .artifacts/ios-smoke/*.xcresult
+          if-no-files-found: warn
+
   test:
     runs-on: ubuntu-latest
     defaults:
@@ -68,7 +109,7 @@ jobs:
         run: npm run lint
 
       - name: Unit tests
-        run: npx vitest run
+        run: npm run test:unit
 
       - name: Mobile E2E
         run: npm run test:e2e

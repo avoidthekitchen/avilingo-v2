@@ -11,11 +11,12 @@
     "content:check": "cd .. && uv run python3 manual_audio.py --check",
     "native:sync": "npm run build:native && cap sync ios",
     "native:open": "cap open ios",
-    "lint": "eslint .",
+    "lint": "cd .. && eslint beakspeak scripts --config beakspeak/eslint.config.js",
     "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.app.json --noEmit",
-    "test:unit": "vitest run",
+    "test:unit": "vitest run && node --test ../scripts/*.test.mjs",
     "test:e2e": "playwright test",
+    "test:ios": "npm run native:sync && node ../scripts/ios-smoke.mjs",
     "test:ci": "npm run typecheck && npm run lint && npm run test:unit && npm run test:e2e"
   },
   "dependencies": {

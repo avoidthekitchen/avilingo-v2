@@ -8,6 +8,10 @@ const manifest = JSON.parse(
 
 const expectedFiles = new Set()
 for (const species of manifest.species) {
+  if (species.photo.url.startsWith('/content/')) {
+    throw new Error(`Manifest references a local photo that packaging removes: ${species.photo.url}`)
+  }
+
   const clips = [
     ...species.audio_clips.songs,
     ...species.audio_clips.calls,

@@ -7,12 +7,12 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
   globalIgnores([
-    'dist',
-    'playwright-report',
-    'test-results',
-    'ios/**/build',
-    'ios/**/DerivedData',
-    'ios/App/App/public',
+    '**/dist/**',
+    '**/playwright-report/**',
+    '**/test-results/**',
+    '**/ios/**/build/**',
+    '**/ios/**/DerivedData/**',
+    '**/ios/App/App/public/**',
   ]),
   {
     files: ['**/*.{ts,tsx}'],
@@ -25,6 +25,14 @@ export default defineConfig([
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+    },
+  },
+  {
+    files: ['scripts/**/*.mjs'],
+    extends: [js.configs.recommended],
+    languageOptions: {
+      ecmaVersion: 2023,
+      globals: globals.node,
     },
   },
 ])

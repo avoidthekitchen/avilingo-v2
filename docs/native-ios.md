@@ -1,5 +1,66 @@
 # Capacitor iOS feasibility build
 
+## Automated simulator smoke check
+
+Install Xcode with an iPhone simulator running iOS 18.4 or newer, Node 22+, uv,
+ffmpeg, and `xcodebuildmcp@2.7.0`. Reconstruct audio on a fresh checkout with
+`uv run python3 manual_audio.py`, then run from `beakspeak/`:
+
+```bash
+npm run test:ios
+```
+
+This synchronizes the native bundle, builds and installs the app, and runs the
+small XCTest target currently stored in `ios/Smoke`. It asserts Learn Birds
+appears, taps Lesson 1 by its accessibility label, and asserts American Crow
+appears. Screenshots are attached even on failure. It does not complete a lesson
+or manufacture progress. The target may move into the App Xcode project later;
+its scope does not depend on its project location. The newest available compatible
+iPhone simulator is selected; set `IOS_SIMULATOR_ID` to use a particular installed
+device.
+
+Playwright owns the complete learner journey and shared application behavior.
+XCTest owns only the installed-app launch and navigation smoke. Do not reproduce
+the complete Playwright journey in XCTest.
+
+The `iOS simulator smoke` GitHub Actions job runs this same command on macOS for
+pull requests and main pushes covered by the workflow. It reconstructs production
+audio from the committed metadata lock (no new metadata/API key required), caches
+the downloads and generated clips, and uploads JSON results, logs, and the XCTest
+result bundle. Local evidence lives in the ignored `.artifacts/ios-smoke/` folder.
+The runner fails on tool-reported errors even when the CLI exits with status zero,
+and requires exactly one passing test.
+
+XcodeBuildMCP's `snapshot-ui` did not traverse WKWebView's remote accessibility
+child in our iOS 26.3/26.5 checks. XCTest did find and tap the HTML controls on both
+runtimes. This smoke uses `xcodebuildmcp simulator test`; it does not depend on
+coordinate tapping or the snapshot interface. It does not replace physical-device
+audio, lifecycle, or VoiceOver acceptance.
+
+### Known Capacitor 8.5.0 startup diagnostic
+
+The generic `JS Eval error A JavaScript exception occurred` was traced on
+2026-09-13 using temporary native diagnostic logging (removed after investigation).
+The failed expression was:
+
+```javascript
+window.Capacitor.triggerEvent('resume', 'document')
+```
+
+WebKit reported `TypeError: undefined is not an object (evaluating
+'window.Capacitor.triggerEvent')`, at line 1, column 17, before `WebView loaded`.
+Capacitor's `setupCordovaCompatibility()` observes the scene entering foreground
+and evaluates the resume event before the JavaScript bridge exists on cold start.
+BeakSpeak currently has no listener for this document event; initialization and
+the element-based navigation test succeed. This is a confirmed dropped early
+resume event, not evidence of a failed asset request or React initialization.
+
+No vendor patch or blanket error suppression is applied. Revisit this condition
+in #29 when implementing lifecycle recovery: initialization must not rely on this
+early event, and warm foreground/resume behavior needs separate verification.
+Other runtime exceptions must not be treated as this known condition merely
+because Capacitor prints the same generic message.
+
 BeakSpeak has one React application with two explicit production build modes:
 
 - `npm run build:web` uses `/beakspeak/` asset URLs for the existing Cloudflare route.
