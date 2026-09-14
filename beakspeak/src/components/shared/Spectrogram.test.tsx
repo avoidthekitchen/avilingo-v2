@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, fireEvent } from '@testing-library/react'
+import { render, fireEvent, screen } from '@testing-library/react'
 import Spectrogram from './Spectrogram'
 import type { SpectrogramData } from '../../core/spectrogram'
 
@@ -69,5 +69,28 @@ describe('Spectrogram', () => {
     fireEvent.click(canvas, { clientX: 200 })
 
     expect(onSeek).not.toHaveBeenCalled()
+  })
+
+  it('exposes playback position and keyboard seeking as an accessible slider', () => {
+    const onSeek = vi.fn()
+    render(
+      <Spectrogram
+        data={makeSpectrogramData()}
+        currentTime={2}
+        duration={5}
+        isPlaying={false}
+        onSeek={onSeek}
+      />,
+    )
+
+    const slider = screen.getByRole('slider', { name: 'Audio position' })
+    expect(slider).toHaveAttribute('aria-valuenow', '2')
+    expect(slider).toHaveAttribute('aria-valuemax', '5')
+
+    fireEvent.keyDown(slider, { key: 'ArrowRight' })
+    expect(onSeek).toHaveBeenCalledWith(3)
+
+    fireEvent.keyDown(slider, { key: 'End' })
+    expect(onSeek).toHaveBeenCalledWith(5)
   })
 })

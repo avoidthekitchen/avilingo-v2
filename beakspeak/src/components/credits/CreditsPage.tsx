@@ -1,4 +1,6 @@
 import { useAppStore } from '../../store/appStore'
+import BirdPhoto from '../shared/BirdPhoto'
+import ExternalLink from '../shared/ExternalLink'
 
 export default function CreditsPage() {
   const manifest = useAppStore(s => s.manifest)
@@ -16,7 +18,7 @@ export default function CreditsPage() {
         {manifest.species.map(species => (
           <div key={species.id} className="bg-card rounded-xl border border-border p-4">
             <div className="flex items-center gap-3 mb-3">
-              <img
+              <BirdPhoto
                 src={species.photo.url}
                 alt={species.common_name}
                 className="w-10 h-10 rounded-full object-cover"
@@ -33,14 +35,12 @@ export default function CreditsPage() {
               </h4>
               <p className="text-xs text-text-muted">
                 {species.photo.license} ·{' '}
-                <a
+                <ExternalLink
                   href={species.photo.wikipedia_page}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="text-primary underline"
                 >
                   Wikipedia
-                </a>
+                </ExternalLink>
               </p>
             </div>
 
@@ -52,14 +52,12 @@ export default function CreditsPage() {
                 {[...species.audio_clips.songs, ...species.audio_clips.calls].map((clip, i) => (
                   <p key={`${clip.xc_id}-${i}`} className="text-xs text-text-muted">
                     {clip.recordist} ·{' '}
-                    <a
+                    <ExternalLink
                       href={clip.xc_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
                       className="text-primary underline"
                     >
                       XC{clip.xc_id}
-                    </a>{' '}
+                    </ExternalLink>{' '}
                     · {clip.type} · {clip.license}
                   </p>
                 ))}

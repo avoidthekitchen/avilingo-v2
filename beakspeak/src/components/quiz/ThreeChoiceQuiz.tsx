@@ -2,6 +2,8 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { useAppStore } from '../../store/appStore'
 import { useAudioStateForUrl } from '../../hooks/useAudioStateForUrl'
 import type { QuizItem } from '../../core/types'
+import BirdPhoto from '../shared/BirdPhoto'
+import FeedbackAnnouncement from '../shared/FeedbackAnnouncement'
 
 interface Props {
   item: QuizItem
@@ -51,6 +53,9 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
 
   return (
     <div className="p-4 flex flex-col h-full">
+      <FeedbackAnnouncement
+        message={showingResult ? (isCorrect ? 'Correct!' : `That was ${item.targetSpecies.common_name}`) : ''}
+      />
       <div className="text-center mb-4">
         <button
           onClick={() => {
@@ -97,7 +102,7 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
               disabled={showingResult}
               className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${borderColor} ${bg}`}
             >
-              <img
+              <BirdPhoto
                 src={choice.photo.url}
                 alt={choice.common_name}
                 className="w-14 h-14 rounded-lg object-cover"

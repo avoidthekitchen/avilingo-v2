@@ -6,6 +6,7 @@ import { getSpeciesByIds } from '../../core/manifest'
 import LearnSession from './LearnSession'
 import type { Lesson } from '../../core/types'
 import UnlockDialog from './UnlockDialog'
+import BirdPhoto from '../shared/BirdPhoto'
 
 type LearnLaunch = {
   lesson: Lesson
@@ -113,7 +114,7 @@ export default function LearnTab() {
               <div className="grid grid-cols-3 gap-2">
                 {species.map(s => (
                   <div key={s.id} className="flex min-w-0 items-center gap-1.5">
-                    <img
+                    <BirdPhoto
                       src={s.photo.url}
                       alt={s.common_name}
                       className="h-8 w-8 shrink-0 rounded-full object-cover"

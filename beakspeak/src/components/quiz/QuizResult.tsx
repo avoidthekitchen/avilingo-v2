@@ -1,4 +1,5 @@
 import type { Species } from '../../core/types'
+import BirdPhoto from '../shared/BirdPhoto'
 
 interface QuizAnswer {
   species: Species
@@ -49,7 +50,7 @@ export default function QuizResult({ answers, mode, onDone }: Props) {
                 key={`${a.species.id}-${index}`}
                 className="flex items-center gap-3 p-3 bg-error/5 border border-error/20 rounded-xl"
               >
-                <img
+                <BirdPhoto
                   src={a.species.photo.url}
                   alt={a.species.common_name}
                   className="w-10 h-10 rounded-lg object-cover"

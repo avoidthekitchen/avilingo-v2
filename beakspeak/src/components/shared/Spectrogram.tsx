@@ -178,10 +178,42 @@ export default function Spectrogram({ data, currentTime, duration, onSeek }: Pro
     [duration, onSeek],
   )
 
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLCanvasElement>) => {
+      if (duration <= 0) return
+
+      const seekStep = 1
+      let nextTime: number | null = null
+      if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
+        nextTime = Math.min(duration, currentTime + seekStep)
+      } else if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
+        nextTime = Math.max(0, currentTime - seekStep)
+      } else if (event.key === 'Home') {
+        nextTime = 0
+      } else if (event.key === 'End') {
+        nextTime = duration
+      }
+
+      if (nextTime !== null) {
+        event.preventDefault()
+        onSeek(nextTime)
+      }
+    },
+    [currentTime, duration, onSeek],
+  )
+
   return (
     <canvas
       ref={canvasRef}
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      role="slider"
+      aria-label="Audio position"
+      aria-valuemin={0}
+      aria-valuemax={duration}
+      aria-valuenow={Math.min(currentTime, duration)}
+      aria-valuetext={`${Math.round(Math.min(currentTime, duration))} seconds of ${Math.round(duration)} seconds`}
+      tabIndex={duration > 0 ? 0 : -1}
       className="w-full cursor-pointer rounded"
       style={{ height: 60 }}
     />

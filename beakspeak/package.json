@@ -20,6 +20,7 @@
     "test:ci": "npm run typecheck && npm run lint && npm run test:unit && npm run test:e2e"
   },
   "dependencies": {
+    "@capacitor/browser": "^8.0.4",
     "@capacitor/core": "^8.5.0",
     "@capacitor/ios": "^8.5.0",
     "dexie": "^4.4.2",

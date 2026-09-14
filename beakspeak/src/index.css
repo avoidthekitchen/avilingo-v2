@@ -27,13 +27,31 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+button {
+  min-height: 44px;
+}
+
 #root {
   display: flex;
   flex-direction: column;
   max-width: 430px;
   margin: 0 auto;
   padding-top: env(safe-area-inset-top, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
+}
+
+.app-scroll-region {
+  padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+  scroll-padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+}
+
+.safe-area-dialog {
+  padding-top: max(1rem, env(safe-area-inset-top, 0px));
+  padding-right: max(1rem, env(safe-area-inset-right, 0px));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  padding-left: max(1rem, env(safe-area-inset-left, 0px));
 }

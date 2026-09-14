@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-labelledby="title description">
+  <title id="title">Bird photo unavailable</title>
+  <desc id="description">A neutral silhouette of a perched bird</desc>
+  <rect width="640" height="480" fill="#e5e1db"/>
+  <circle cx="338" cy="203" r="71" fill="#8b6f47" opacity=".72"/>
+  <ellipse cx="286" cy="288" rx="112" ry="91" fill="#8b6f47" opacity=".72" transform="rotate(-12 286 288)"/>
+  <path d="M381 197l86 32-87 20zM202 321l-89 86 126-54z" fill="#8b6f47" opacity=".72"/>
+  <circle cx="356" cy="185" r="7" fill="#faf8f5"/>
+  <path d="M145 390h350" stroke="#5b8a72" stroke-linecap="round" stroke-width="18" opacity=".7"/>
+</svg>

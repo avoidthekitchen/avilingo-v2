@@ -6,6 +6,7 @@ import { computeSpectrogram } from '../../core/spectrogram'
 import AudioButton from '../shared/AudioButton'
 import AttributionInfo from '../shared/AttributionInfo'
 import Spectrogram from '../shared/Spectrogram'
+import BirdPhoto from '../shared/BirdPhoto'
 
 const EMPTY_SPECTROGRAM: SpectrogramData = {
   magnitudes: [], timeBins: 0, frequencyBins: 0, duration: 0, sampleRate: 44100,
@@ -138,10 +139,10 @@ export default function BirdCard({ species }: Props) {
   }, [audioPlayer])
 
   return (
-    <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-sm h-full flex flex-col">
+    <div className="flex h-full min-h-0 flex-col overflow-x-hidden overflow-y-auto rounded-2xl border border-border bg-card shadow-sm">
       {/* Photo section */}
       <div className="relative" style={{ minHeight: '45%' }}>
-        <img
+        <BirdPhoto
           src={species.photo.url}
           alt={species.common_name}
           className="w-full h-full object-cover"

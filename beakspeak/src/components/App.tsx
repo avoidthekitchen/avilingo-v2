@@ -42,7 +42,7 @@ export default function App() {
 
   return (
     <>
-      <main className="flex-1 overflow-y-auto pb-20">
+      <main className="app-scroll-region flex-1 overflow-y-auto">
         {activeTab === 'learn' && <LearnTab />}
         {activeTab === 'quiz' && <QuizTab />}
         {activeTab === 'progress' && <Dashboard />}

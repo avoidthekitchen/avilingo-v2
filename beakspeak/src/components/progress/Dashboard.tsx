@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAppStore } from '../../store/appStore'
 import AudioButton from '../shared/AudioButton'
+import BirdPhoto from '../shared/BirdPhoto'
 
 export default function Dashboard() {
   const manifest = useAppStore(s => s.manifest)
@@ -68,7 +69,7 @@ export default function Dashboard() {
               key={species.id}
               className="flex items-start gap-3 p-3 bg-card rounded-xl border border-border"
             >
-              <img
+              <BirdPhoto
                 src={species.photo.url}
                 alt={species.common_name}
                 className="w-10 h-10 rounded-full object-cover"
