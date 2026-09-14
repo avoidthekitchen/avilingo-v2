@@ -23,12 +23,14 @@ export function stopAudioDuringInterruptions(
   let disposed = false
   let nativeHandle: LifecycleHandle | undefined
 
-  void nativeLifecycle?.addListener('appStateChange', ({ isActive }) => {
+  nativeLifecycle?.addListener('appStateChange', ({ isActive }) => {
     if (!isActive) audioPlayer.stop()
   }).then(handle => {
     if (disposed) void handle?.remove()
     else nativeHandle = handle
-  })
+  // Losing the native hook leaves the visibilitychange path in place; it must not
+  // surface as an unhandled rejection.
+  }).catch(() => {})
 
   return () => {
     disposed = true

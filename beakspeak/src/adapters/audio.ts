@@ -48,6 +48,8 @@ export function playAudioToCompletion(audioPlayer: AudioPlayer, url: string): Pr
 }
 
 export class WebAudioPlayer implements AudioPlayer {
+  private static readonly START_TIMEOUT_MS = 5000
+
   private context: AudioContext | null = null
   private gainNode: GainNode | null = null
   private source: AudioBufferSourceNode | null = null
@@ -153,6 +155,22 @@ export class WebAudioPlayer implements AudioPlayer {
   // playing element are no-ops, so it's safe to call on every play().
   private activateOutput(): Promise<void> {
     return this.outputElement?.play() ?? Promise.reject(new Error('Audio output is unavailable'))
+  }
+
+  // One deadline for the whole loading phase. HTMLAudioElement.play(), AudioContext.resume(),
+  // and the buffer fetch can each fail to settle on iOS rather than reject, and any of them
+  // would otherwise pin the learner in 'loading' with the replay control disabled.
+  private createStartDeadline(): { expired: Promise<never>; clear: () => void } {
+    let timeoutId: ReturnType<typeof setTimeout>
+    const expired = new Promise<never>((_, reject) => {
+      timeoutId = setTimeout(
+        () => reject(new Error('Audio playback did not start')),
+        WebAudioPlayer.START_TIMEOUT_MS,
+      )
+    })
+    // Keeps the deadline handled if play() throws before the first race attaches one.
+    expired.catch(() => {})
+    return { expired, clear: () => clearTimeout(timeoutId) }
   }
 
   private isCurrentRequest(requestId: number, url: string) {
@@ -276,6 +294,7 @@ export class WebAudioPlayer implements AudioPlayer {
     this.playRequestId = requestId
     this.activeUrl = url
     this.setState('loading')
+    const deadline = this.createStartDeadline()
 
     try {
       const ctx = this.getContext()
@@ -286,18 +305,18 @@ export class WebAudioPlayer implements AudioPlayer {
       const bufferPromise = this.loadBuffer(url)
 
       try {
-        await outputActivation
+        await Promise.race([outputActivation, deadline.expired])
       } catch (cause) {
         throw new Error('Audio playback was blocked', { cause })
       }
 
       // Resume if suspended (mobile browsers)
       if (ctx.state === 'suspended') {
-        await ctx.resume()
+        await Promise.race([ctx.resume(), deadline.expired])
         if (!this.isCurrentRequest(requestId, url)) return
       }
 
-      const buffer = await bufferPromise
+      const buffer = await Promise.race([bufferPromise, deadline.expired])
       if (!this.isCurrentRequest(requestId, url)) return
       if (!buffer || !this.gainNode) throw new Error('Failed to load audio')
 
@@ -325,6 +344,8 @@ export class WebAudioPlayer implements AudioPlayer {
       this.activeBuffer = null
       this.setState('error')
       throw error
+    } finally {
+      deadline.clear()
     }
   }
 }

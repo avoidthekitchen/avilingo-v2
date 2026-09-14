@@ -46,10 +46,28 @@ const simulator = process.env.IOS_SIMULATOR_ID
 if (!simulator) throw new Error('No matching iPhone simulator with iOS 18.4 or newer is available.')
 console.log(`Using ${simulator.name}, ${simulator.runtime} (${simulator.simulatorId})`)
 
-run('build-launch', ['simulator', 'build-and-run',
-  '--project-path', join(root, 'beakspeak/ios/App/App.xcodeproj'),
+// Build and install only. The smoke test owns the single launch: leaving an instance
+// running here makes XCUITest terminate and relaunch it, and that race times the
+// launch out on a cold CI runner.
+const appProject = join(root, 'beakspeak/ios/App/App.xcodeproj')
+const appDerivedData = join(artifacts, 'app-derived-data')
+
+// Booting an already-booted device is an error, and a warm local device is the common case.
+if (simulator.state === 'Shutdown') {
+  run('boot', ['simulator', 'boot', '--simulator-id', simulator.simulatorId])
+}
+run('build', ['simulator', 'build',
+  '--project-path', appProject,
   '--scheme', 'App', '--simulator-id', simulator.simulatorId,
-  '--derived-data-path', join(artifacts, 'app-derived-data')])
+  '--derived-data-path', appDerivedData])
+const appPath = run('app-path', ['simulator', 'get-app-path',
+  '--project-path', appProject,
+  '--scheme', 'App', '--platform', 'iOS Simulator',
+  '--simulator-id', simulator.simulatorId,
+  '--derived-data-path', appDerivedData]).artifacts?.appPath
+if (!appPath) throw new Error('Could not resolve the built App.app path.')
+run('install', ['simulator', 'install',
+  '--simulator-id', simulator.simulatorId, '--app-path', appPath])
 const tests = run('test', ['simulator', 'test',
   '--project-path', join(root, 'beakspeak/ios/Smoke/Smoke.xcodeproj'),
   '--scheme', 'Smoke', '--simulator-id', simulator.simulatorId,

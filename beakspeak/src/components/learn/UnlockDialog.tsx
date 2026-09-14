@@ -69,9 +69,14 @@ export default function UnlockDialog({
         onKeyDown={e => {
           if (e.key === 'Tab') {
             const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
-              'button',
+              'button:not([disabled])',
             )
-            if (!focusable?.length) return
+            // Both buttons are disabled while the unlock is in flight. Swallow Tab
+            // rather than letting focus escape the modal to the page behind it.
+            if (!focusable?.length) {
+              e.preventDefault()
+              return
+            }
             const first = focusable[0]
             const last = focusable[focusable.length - 1]
             if (e.shiftKey && document.activeElement === first) {
