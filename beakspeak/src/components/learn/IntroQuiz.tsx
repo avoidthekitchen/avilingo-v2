@@ -2,6 +2,8 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { useAppStore } from '../../store/appStore'
 import { useAudioStateForUrl } from '../../hooks/useAudioStateForUrl'
 import type { IntroQuizItem } from '../../core/types'
+import BirdPhoto from '../shared/BirdPhoto'
+import FeedbackAnnouncement from '../shared/FeedbackAnnouncement'
 
 interface Props {
   items: IntroQuizItem[]
@@ -77,6 +79,11 @@ export default function IntroQuiz({ items, onComplete, onBack }: Props) {
 
   const feedbackRef = useRef<HTMLDivElement>(null)
   const isCorrect = !current || selectedId === current.targetSpecies.id
+  const feedbackMessage = !showingResult
+    ? ''
+    : isCorrect
+      ? 'Correct!'
+      : `That was ${current?.targetSpecies.common_name ?? ''}`
 
   useEffect(() => {
     if (showingResult && !isCorrect && feedbackRef.current) {
@@ -88,6 +95,7 @@ export default function IntroQuiz({ items, onComplete, onBack }: Props) {
 
   return (
     <div className="flex flex-col h-full overflow-y-auto">
+      <FeedbackAnnouncement message={feedbackMessage} />
       <div className="p-4 flex flex-col flex-1">
         <div className="mb-4 flex items-center justify-between gap-3">
           {onBack ? (
@@ -153,7 +161,7 @@ export default function IntroQuiz({ items, onComplete, onBack }: Props) {
                 disabled={showingResult}
                 className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${borderColor} ${bg}`}
               >
-                <img
+                <BirdPhoto
                   src={choice.photo.url}
                   alt={choice.common_name}
                   className="w-14 h-14 rounded-lg object-cover"

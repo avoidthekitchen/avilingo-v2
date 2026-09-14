@@ -1,6 +1,8 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useAppStore } from '../../store/appStore'
 import type { QuizItem } from '../../core/types'
+import BirdPhoto from '../shared/BirdPhoto'
+import FeedbackAnnouncement from '../shared/FeedbackAnnouncement'
 
 interface Props {
   item: QuizItem
@@ -69,6 +71,9 @@ export default function SameDifferent({ item, onAnswer }: Props) {
 
   return (
     <div className="p-4 flex flex-col h-full">
+      <FeedbackAnnouncement
+        message={isAnswered ? (isCorrect ? 'Correct!' : 'Incorrect') : ''}
+      />
       {/* Clip indicator */}
       <div className="text-center mb-6">
         <div className="flex items-center justify-center gap-4 mb-4">
@@ -144,7 +149,7 @@ export default function SameDifferent({ item, onAnswer }: Props) {
           </p>
           <div className="flex items-center justify-center gap-4 mt-3">
             <div className="text-center">
-              <img
+              <BirdPhoto
                 src={item.targetSpecies.photo.url}
                 alt={item.targetSpecies.common_name}
                 className="w-12 h-12 rounded-lg object-cover mx-auto mb-1"
@@ -155,7 +160,7 @@ export default function SameDifferent({ item, onAnswer }: Props) {
               <>
                 <span className="text-text-muted">≠</span>
                 <div className="text-center">
-                  <img
+                  <BirdPhoto
                     src={item.secondSpecies.photo.url}
                     alt={item.secondSpecies.common_name}
                     className="w-12 h-12 rounded-lg object-cover mx-auto mb-1"

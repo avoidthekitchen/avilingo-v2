@@ -67,7 +67,7 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
       return null
     }
     return (
-      <div className="flex flex-col h-full">
+      <div className="flex h-full min-h-0 flex-col">
         <div className="p-4 bg-secondary/10 text-center">
           <p className="text-sm text-secondary font-medium">Quick Review</p>
           <p className="text-xs text-text-muted">Let's warm up with some familiar birds</p>
@@ -96,7 +96,7 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
           </p>
         </div>
 
-        <div className="flex-1 px-4 pb-4 relative overflow-hidden">
+        <div className="relative min-h-0 flex-1 overflow-hidden px-4 pb-4">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentSpecies.id}
@@ -121,7 +121,7 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
                   handleSwipeLeft()
                 }
               }}
-              className="h-full"
+              className="h-full min-h-0"
             >
               <BirdCard species={currentSpecies} />
             </motion.div>

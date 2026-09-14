@@ -21,6 +21,8 @@ export default function UnlockDialog({
   onDismiss,
 }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null)
+  const dismissButtonRef = useRef<HTMLButtonElement>(null)
+  const returnFocusRef = useRef<HTMLElement | null>(null)
   const title = lockReason.type === 'relearning' ? 'Practice First' : 'Take It Step by Step'
   const confirmLabel = lockReason.type === 'relearning' ? 'Open Lesson Anyway' : 'Skip Ahead Anyway'
   const explanation =
@@ -34,7 +36,11 @@ export default function UnlockDialog({
   }, [pending, onDismiss])
 
   useEffect(() => {
-    dialogRef.current?.focus()
+    returnFocusRef.current = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null
+    dismissButtonRef.current?.focus()
+    return () => returnFocusRef.current?.focus()
   }, [])
 
   useEffect(() => {
@@ -47,13 +53,14 @@ export default function UnlockDialog({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end bg-black/50 p-4 sm:items-center sm:justify-center"
+      className="safe-area-dialog fixed inset-0 z-50 flex items-end bg-black/50 sm:items-center sm:justify-center"
       data-testid="unlock-dialog-backdrop"
       onClick={handleDismiss}
     >
       <div
         ref={dialogRef}
         aria-labelledby="unlock-dialog-title"
+        aria-describedby="unlock-dialog-explanation unlock-dialog-consequence"
         aria-modal="true"
         className="w-full max-w-md rounded-3xl border border-border bg-bg p-6 shadow-xl"
         role="dialog"
@@ -81,11 +88,12 @@ export default function UnlockDialog({
         <h2 className="mb-3 text-2xl font-semibold text-text" id="unlock-dialog-title">
           {title}
         </h2>
-        <p className="mb-3 text-sm leading-6 text-text">{explanation}</p>
-        <p className="mb-6 text-sm leading-6 text-text-muted">{consequence}</p>
+        <p className="mb-3 text-sm leading-6 text-text" id="unlock-dialog-explanation">{explanation}</p>
+        <p className="mb-6 text-sm leading-6 text-text-muted" id="unlock-dialog-consequence">{consequence}</p>
 
         <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
           <button
+            ref={dismissButtonRef}
             className="rounded-full border border-border px-5 py-3 text-sm font-medium text-text disabled:opacity-50"
             disabled={pending}
             onClick={handleDismiss}

@@ -158,6 +158,13 @@ describe('LearnTab locked lesson dialog', () => {
     expect(screen.getByRole('dialog')).toBeInTheDocument()
     expect(screen.getByText('Take It Step by Step')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Skip Ahead Anyway' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Never mind' })).toHaveFocus()
+
+    fireEvent.keyDown(screen.getByRole('button', { name: 'Never mind' }), {
+      key: 'Tab',
+      shiftKey: true,
+    })
+    expect(screen.getByRole('button', { name: 'Skip Ahead Anyway' })).toHaveFocus()
   })
 
   it('uses relearning framing when relearning and prerequisite locks both apply', () => {
@@ -177,10 +184,14 @@ describe('LearnTab locked lesson dialog', () => {
   it('closes the dialog when Never mind is clicked', () => {
     render(<LearnTab />)
 
-    fireEvent.click(screen.getByRole('button', { name: /lesson 2: lesson 2/i }))
+    const lessonButton = screen.getByRole('button', { name: /lesson 2: lesson 2/i })
+    lessonButton.focus()
+    fireEvent.click(lessonButton)
+    expect(screen.getByRole('dialog')).toHaveAccessibleDescription()
     fireEvent.click(screen.getByRole('button', { name: 'Never mind' }))
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(lessonButton).toHaveFocus()
   })
 
   it('closes the dialog when the backdrop is clicked', () => {
