@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { Browser } from '@capacitor/browser'
+import { AppLauncher } from '@capacitor/app-launcher'
 import { Capacitor } from '@capacitor/core'
 import { openExternalUrl } from './externalLinks'
 
-vi.mock('@capacitor/browser', () => ({
-  Browser: { open: vi.fn().mockResolvedValue(undefined) },
+vi.mock('@capacitor/app-launcher', () => ({
+  AppLauncher: { openUrl: vi.fn().mockResolvedValue({ completed: true }) },
 }))
 
 vi.mock('@capacitor/core', () => ({
@@ -16,12 +16,12 @@ describe('openExternalUrl', () => {
     vi.clearAllMocks()
   })
 
-  it('opens an external destination in the native browser surface', () => {
+  it('hands an HTTPS destination to the native external-app launcher', () => {
     vi.mocked(Capacitor.isNativePlatform).mockReturnValue(true)
 
     expect(openExternalUrl('https://xeno-canto.org/123')).toBe(true)
 
-    expect(Browser.open).toHaveBeenCalledWith({ url: 'https://xeno-canto.org/123' })
+    expect(AppLauncher.openUrl).toHaveBeenCalledWith({ url: 'https://xeno-canto.org/123' })
   })
 
   it('leaves external destinations to normal browser link behavior on the web', () => {
@@ -29,6 +29,6 @@ describe('openExternalUrl', () => {
 
     expect(openExternalUrl('https://en.wikipedia.org/wiki/Bird')).toBe(false)
 
-    expect(Browser.open).not.toHaveBeenCalled()
+    expect(AppLauncher.openUrl).not.toHaveBeenCalled()
   })
 })

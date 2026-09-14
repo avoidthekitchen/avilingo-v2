@@ -144,6 +144,22 @@ describe('LearnSession unlock mode', () => {
     expect(screen.getByText('Bird Card: D')).toBeInTheDocument()
   })
 
+  it('moves focus into the session when launched from the unlock dialog', () => {
+    const { container } = render(
+      <LearnSession lesson={makeLesson(2, ['d', 'e', 'f'])} mode="unlock" onComplete={() => {}} />,
+    )
+
+    expect(container.firstElementChild).toHaveFocus()
+  })
+
+  it('leaves focus alone on non-unlock launches', () => {
+    const { container } = render(
+      <LearnSession lesson={makeLesson(2, ['d', 'e', 'f'])} mode="redo" onComplete={() => {}} />,
+    )
+
+    expect(container.firstElementChild).not.toHaveFocus()
+  })
+
   it('introduces the selected lesson species when an unlock session is completed', async () => {
     render(<LearnSession lesson={makeLesson(2, ['d', 'e', 'f'])} mode="unlock" onComplete={() => {}} />)
 

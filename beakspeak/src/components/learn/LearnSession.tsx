@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAppStore } from '../../store/appStore'
 import { getSpeciesByIds } from '../../core/manifest'
@@ -28,6 +28,12 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
   const [cardIndex, setCardIndex] = useState(0)
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null)
   const lessonSpecies = manifest ? getSpeciesByIds(manifest, lesson.species) : []
+  const rootRef = useRef<HTMLDivElement>(null)
+
+  // Unlock launches replace the dialog whose focus-return target is gone; move focus into the session
+  useEffect(() => {
+    if (mode === 'unlock') rootRef.current?.focus()
+  }, [mode])
 
   const handleSwipeRight = useCallback(() => {
     if (cardIndex < lessonSpecies.length - 1) {
@@ -83,7 +89,7 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
     if (!currentSpecies) return null
 
     return (
-      <div className="flex flex-col h-full">
+      <div ref={rootRef} tabIndex={-1} className="flex flex-col h-full focus:outline-none">
         <div className="p-4 flex items-center justify-between">
           <button
             onClick={onComplete}
@@ -161,7 +167,7 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
       <div className="flex flex-col h-full">
         <div className="p-4 bg-primary/10 text-center">
           <p className="text-sm text-primary font-medium">Quick Quiz</p>
-          <p className="text-xs text-text-muted">Test what you just learned!</p>
+          <p className="text-xs text-text-muted">Test the birds you just met!</p>
         </div>
         <IntroQuiz items={quizItems} onComplete={handleQuizComplete} onBack={onComplete} />
       </div>
@@ -187,7 +193,7 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
       ) : (
         <>
           <p className="text-text-muted mb-2">
-            You've learned {lessonSpecies.map(s => s.common_name).join(', ')}
+            You've been introduced to {lessonSpecies.map(s => s.common_name).join(', ')}
           </p>
           <p className="text-sm text-text-muted mb-6">
             They'll appear in your review sessions soon.
