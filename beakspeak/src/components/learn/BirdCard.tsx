@@ -134,7 +134,7 @@ export default function BirdCard({ species }: Props) {
     if (audioPlayer.getActiveUrl() === url) {
       audioPlayer.seek(time)
     } else {
-      audioPlayer.play(url, time)
+      audioPlayer.play(url, time).catch(() => {})
     }
   }, [audioPlayer])
 

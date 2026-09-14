@@ -50,7 +50,7 @@ export default function AudioButton({ clips, label, speciesId, variant = 'primar
     }
 
     setLastPlayedClip(speciesId, currentClip.xc_id)
-    await audioPlayer.play(currentClip.audio_url)
+    await audioPlayer.play(currentClip.audio_url).catch(() => {})
   }, [audioPlayer, currentClip, speciesId, setLastPlayedClip, displayState])
 
   if (!currentClip) return null
@@ -58,26 +58,31 @@ export default function AudioButton({ clips, label, speciesId, variant = 'primar
   const isPrimary = variant === 'primary'
 
   return (
-    <button
-      onClick={handlePlay}
-      disabled={displayState === 'loading'}
-      className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all ${
-        isPrimary
-          ? 'bg-primary text-white hover:bg-primary/90'
-          : 'bg-border text-text hover:bg-border/80'
-      } ${displayState === 'loading' ? 'opacity-60' : ''}`}
-    >
-      {displayState === 'loading' && (
-        <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+    <div className="flex flex-col items-start gap-1">
+      <button
+        onClick={handlePlay}
+        disabled={displayState === 'loading'}
+        className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all ${
+          isPrimary
+            ? 'bg-primary text-white hover:bg-primary/90'
+            : 'bg-border text-text hover:bg-border/80'
+        } ${displayState === 'loading' ? 'opacity-60' : ''}`}
+      >
+        {displayState === 'loading' && (
+          <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+        )}
+        {displayState === 'playing' && <span aria-hidden="true">⏹</span>}
+        {displayState !== 'loading' && displayState !== 'playing' && <span aria-hidden="true">▶</span>}
+        {displayState === 'error' ? `Try ${label} again` : label}
+        {clips.length > 1 && (
+          <span className="text-xs opacity-70">
+            {clipIndex + 1}/{clips.length}
+          </span>
+        )}
+      </button>
+      {displayState === 'error' && (
+        <span role="status" className="text-xs text-error">Audio didn’t play. Tap to try again.</span>
       )}
-      {displayState === 'playing' && <span>⏹</span>}
-      {displayState !== 'loading' && displayState !== 'playing' && <span>▶</span>}
-      {label}
-      {clips.length > 1 && (
-        <span className="text-xs opacity-70">
-          {clipIndex + 1}/{clips.length}
-        </span>
-      )}
-    </button>
+    </div>
   )
 }

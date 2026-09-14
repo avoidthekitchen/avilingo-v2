@@ -124,6 +124,16 @@ If Xcode reports that the iOS platform is not installed, add it from Xcode > Set
 
 Cold-launch the installed Home Screen app and confirm that BeakSpeak appears without browser chrome, a blank screen, or missing local interface assets. Complete the physical-device checks from issue #26 before treating the feasibility gate as passed; command-line compilation cannot validate signing, installation, silent-switch audio, lifecycle behavior, or real-device rendering.
 
+### Audio acceptance for issue #29
+
+Run these checks on the supported physical iPhone after `npm run native:sync`; simulator and browser playback are not substitutes for the iOS media-session checks.
+
+1. With the silent switch enabled, play every song and call from Progress and confirm all 30 bundled clips are audible and finish normally.
+2. Start a lesson and its introductory quiz. Confirm automatic playback continues after the learner has interacted with the session. If iOS blocks an attempt, confirm the loading indicator clears and **Tap to play sound** immediately retries it.
+3. Start a review and repeat play, stop, replay, and spectrogram seeking across several consecutive questions. Include a same/different question and confirm clip 2 waits for clip 1 to finish.
+4. While a clip is playing, background or lock the phone. Return to BeakSpeak and confirm playback is stopped, navigation remains responsive, and tapping play starts the current or a later clip normally. Background and lock-screen playback should not continue.
+5. Record the device model, iOS version, and results for silent-switch playback, all 30 clips, blocked-autoplay recovery, repeated playback, and background/foreground recovery on issue #29.
+
 ## Web regression checks
 
 From the repository root, rebuild the deploy artifact:

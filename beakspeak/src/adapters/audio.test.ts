@@ -256,6 +256,23 @@ describe('WebAudioPlayer', () => {
       expect(mockSources).toHaveLength(0)
       expect(states).toEqual(['idle', 'loading', 'idle'])
     })
+
+    it('releases the output and allows a later clip after a decode failure', async () => {
+      vi.mocked(fetch).mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+      } as Response)
+      const player = new WebAudioPlayer()
+
+      await expect(player.play('https://example.com/missing.ogg')).rejects.toThrow('Failed to load audio')
+
+      expect(player.getState()).toBe('error')
+      expect(player.getActiveUrl()).toBe('https://example.com/missing.ogg')
+      expect(mockAudioEl.pause).toHaveBeenCalled()
+
+      await expect(player.play('https://example.com/song.ogg')).resolves.toBeUndefined()
+      expect(player.getState()).toBe('playing')
+    })
   })
 
   describe('getBuffer', () => {
@@ -415,6 +432,28 @@ describe('WebAudioPlayer', () => {
       const player = new WebAudioPlayer()
       void player.play('https://example.com/song.ogg')
       expect(mockAudioEl.play).toHaveBeenCalled()
+    })
+
+    it('reports a blocked media-channel activation for the requested clip', async () => {
+      mockAudioEl.play.mockRejectedValueOnce(new DOMException('Blocked', 'NotAllowedError'))
+      const player = new WebAudioPlayer()
+
+      await expect(player.play('https://example.com/song.ogg')).rejects.toThrow('Audio playback was blocked')
+
+      expect(player.getState()).toBe('error')
+      expect(player.getActiveUrl()).toBe('https://example.com/song.ogg')
+      expect(mockSources).toHaveLength(0)
+    })
+
+    it('can play a later clip after a blocked media-channel activation', async () => {
+      mockAudioEl.play.mockRejectedValueOnce(new DOMException('Blocked', 'NotAllowedError'))
+      const player = new WebAudioPlayer()
+
+      await expect(player.play('https://example.com/song.ogg')).rejects.toThrow()
+      await expect(player.play('https://example.com/call.ogg')).resolves.toBeUndefined()
+
+      expect(player.getState()).toBe('playing')
+      expect(player.getActiveUrl()).toBe('https://example.com/call.ogg')
     })
   })
 })

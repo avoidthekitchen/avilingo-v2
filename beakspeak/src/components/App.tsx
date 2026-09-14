@@ -1,16 +1,28 @@
 import { useEffect } from 'react'
+import { Capacitor } from '@capacitor/core'
+import { App as CapacitorApp } from '@capacitor/app'
 import { useAppStore } from '../store/appStore'
 import Navigation from './shared/Navigation'
 import LearnTab from './learn/LearnTab'
 import QuizTab from './quiz/QuizTab'
 import Dashboard from './progress/Dashboard'
 import CreditsPage from './credits/CreditsPage'
+import { stopAudioDuringInterruptions } from '../adapters/audioLifecycle'
 
 export default function App() {
   const initialized = useAppStore(s => s.initialized)
   const error = useAppStore(s => s.error)
   const activeTab = useAppStore(s => s.activeTab)
   const initialize = useAppStore(s => s.initialize)
+  const audioPlayer = useAppStore(s => s.audioPlayer)
+
+  useEffect(
+    () => stopAudioDuringInterruptions(
+      audioPlayer,
+      Capacitor.isNativePlatform() ? CapacitorApp : undefined,
+    ),
+    [audioPlayer],
+  )
 
   useEffect(() => {
     initialize()
