@@ -31,4 +31,26 @@ describe('openExternalUrl', () => {
 
     expect(AppLauncher.openUrl).not.toHaveBeenCalled()
   })
+
+  it('opens the destination itself when the native launch is rejected', async () => {
+    vi.mocked(Capacitor.isNativePlatform).mockReturnValue(true)
+    vi.mocked(AppLauncher.openUrl).mockRejectedValueOnce(new Error('No handler'))
+    const openSpy = vi.spyOn(window, 'open').mockReturnValue(null)
+
+    openExternalUrl('https://xeno-canto.org/123')
+    await vi.waitFor(() => expect(openSpy).toHaveBeenCalled())
+
+    expect(openSpy).toHaveBeenCalledWith('https://xeno-canto.org/123', '_blank', 'noopener,noreferrer')
+  })
+
+  it('opens the destination itself when iOS declines to complete the launch', async () => {
+    vi.mocked(Capacitor.isNativePlatform).mockReturnValue(true)
+    vi.mocked(AppLauncher.openUrl).mockResolvedValueOnce({ completed: false })
+    const openSpy = vi.spyOn(window, 'open').mockReturnValue(null)
+
+    openExternalUrl('https://en.wikipedia.org/wiki/Bird')
+    await vi.waitFor(() => expect(openSpy).toHaveBeenCalled())
+
+    expect(openSpy).toHaveBeenCalledWith('https://en.wikipedia.org/wiki/Bird', '_blank', 'noopener,noreferrer')
+  })
 })

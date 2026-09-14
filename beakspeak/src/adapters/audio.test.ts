@@ -456,4 +456,52 @@ describe('WebAudioPlayer', () => {
       expect(player.getActiveUrl()).toBe('https://example.com/call.ogg')
     })
   })
+
+  describe('playback that never starts', () => {
+    // iOS can leave these promises pending rather than rejecting. Without a deadline the
+    // learner sits in 'loading' with the replay control disabled and no way to recover.
+    const stalls = {
+      'media-channel activation': () => mockAudioEl.play.mockReturnValueOnce(new Promise(() => {})),
+      'audio context resume': () => {
+        const SuspendedContext = AudioContext as unknown as new () => { state: string; resume: () => Promise<void> }
+        vi.stubGlobal('AudioContext', class extends SuspendedContext {
+          state = 'suspended'
+          resume = () => new Promise<void>(() => {})
+        })
+      },
+      'clip download': () => vi.stubGlobal('fetch', vi.fn(() => new Promise(() => {}))),
+    }
+
+    for (const [label, stall] of Object.entries(stalls)) {
+      it(`leaves loading and reports an error when the ${label} never settles`, async () => {
+        vi.useFakeTimers()
+        stall()
+        const player = new WebAudioPlayer()
+
+        const attempt = player.play('https://example.com/song.ogg')
+        const rejection = expect(attempt).rejects.toThrow()
+        await vi.advanceTimersByTimeAsync(5000)
+        await rejection
+
+        expect(player.getState()).toBe('error')
+        vi.useRealTimers()
+      })
+    }
+
+    it('can play a later clip after a stalled attempt', async () => {
+      vi.useFakeTimers()
+      mockAudioEl.play.mockReturnValueOnce(new Promise(() => {}))
+      const player = new WebAudioPlayer()
+
+      const attempt = player.play('https://example.com/song.ogg')
+      const rejection = expect(attempt).rejects.toThrow()
+      await vi.advanceTimersByTimeAsync(5000)
+      await rejection
+      vi.useRealTimers()
+
+      await expect(player.play('https://example.com/call.ogg')).resolves.toBeUndefined()
+      expect(player.getState()).toBe('playing')
+      expect(player.getActiveUrl()).toBe('https://example.com/call.ogg')
+    })
+  })
 })

@@ -7,28 +7,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    // AVAudioSession calls can block for seconds while the audio server starts, so they
+    // are serialized off the main thread. Nothing blocks app launch or activation, and the
+    // category only has to be set before the learner's first tap to play.
+    private let audioSessionQueue = DispatchQueue(label: "com.unformedideas.beakspeak.audio-session")
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         configureAudioSession()
         return true
     }
 
+    // Route bird audio through the media channel so lessons stay audible with the silent switch on.
+    // The category persists for the lifetime of the process, so it is set once at launch.
     private func configureAudioSession() {
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-        } catch {
-            NSLog("Unable to configure the BeakSpeak audio session: %@", error.localizedDescription)
+        audioSessionQueue.async {
+            do {
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            } catch {
+                NSLog("Unable to configure the BeakSpeak audio session: %@", error.localizedDescription)
+            }
         }
     }
 
     private func deactivateAudioSession() {
-        do {
-            try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
-        } catch {
-            NSLog("Unable to deactivate the BeakSpeak audio session: %@", error.localizedDescription)
+        audioSessionQueue.async {
+            do {
+                try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+            } catch {
+                NSLog("Unable to deactivate the BeakSpeak audio session: %@", error.localizedDescription)
+            }
         }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
+        // Let other apps resume their audio; the web layer has already stopped playback.
         deactivateAudioSession()
     }
 
@@ -42,8 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        // Preserve the playback category, but let the learner's next play action activate it.
-        configureAudioSession()
+        // The playback category set at launch survives deactivation, so there is nothing to restore.
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

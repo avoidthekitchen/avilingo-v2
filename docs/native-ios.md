@@ -11,7 +11,10 @@ npm run test:ios
 ```
 
 This synchronizes the native bundle, builds and installs the app, and runs the
-small XCTest target currently stored in `ios/Smoke`. It asserts Learn Birds
+small XCTest target currently stored in `ios/Smoke`. It installs without
+launching: XCTest owns the only launch, because leaving a running instance
+behind makes XCUITest terminate and relaunch it, and that race times the launch
+out on a cold runner. It asserts Learn Birds
 appears, taps Lesson 1 by its accessibility label, and asserts American Crow
 appears. Screenshots are attached even on failure. It does not complete a lesson
 or manufacture progress. The target may move into the App Xcode project later;
