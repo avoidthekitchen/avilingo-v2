@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useAppStore } from '../../store/appStore'
-import { useAudioStateForUrl } from '../../hooks/useAudioStateForUrl'
 import type { QuizItem } from '../../core/types'
+import AudioPlaybackControl from '../shared/AudioPlaybackControl'
 import BirdPhoto from '../shared/BirdPhoto'
 import FeedbackAnnouncement from '../shared/FeedbackAnnouncement'
 
@@ -15,8 +15,6 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [showingResult, setShowingResult] = useState(false)
   const startTime = useRef(0)
-  const playState = useAudioStateForUrl(audioPlayer, item.clip.audio_url)
-
   // Auto-play clip on mount
   useEffect(() => {
     startTime.current = Date.now()
@@ -57,23 +55,7 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
         message={showingResult ? (isCorrect ? 'Correct!' : `That was ${item.targetSpecies.common_name}`) : ''}
       />
       <div className="text-center mb-4">
-        <button
-          onClick={() => {
-            if (playState === 'playing') audioPlayer.stop()
-            else audioPlayer.play(item.clip.audio_url).catch(() => {})
-          }}
-          disabled={playState === 'loading'}
-          className={`inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-full font-medium transition-all ${
-            playState === 'loading' ? 'opacity-60' : ''
-          }`}
-        >
-          {playState === 'loading' && (
-            <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-          )}
-          {playState === 'playing' && <span>⏹</span>}
-          {playState !== 'loading' && playState !== 'playing' && <span>▶</span>}
-          Play Sound
-        </button>
+        <AudioPlaybackControl audioPlayer={audioPlayer} url={item.clip.audio_url} />
       </div>
 
       <p className="text-lg font-semibold text-text text-center mb-4">
@@ -128,7 +110,7 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
           {!isCorrect && (
             <div className="flex justify-center mt-3 gap-2">
               <button
-                onClick={() => audioPlayer.play(item.clip.audio_url)}
+                onClick={() => audioPlayer.play(item.clip.audio_url).catch(() => {})}
                 className="text-sm text-primary underline"
               >
                 Play correct sound

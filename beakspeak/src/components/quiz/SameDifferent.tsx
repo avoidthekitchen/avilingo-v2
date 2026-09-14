@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useAppStore } from '../../store/appStore'
+import { playAudioToCompletion } from '../../adapters/audio'
 import type { QuizItem } from '../../core/types'
 import BirdPhoto from '../shared/BirdPhoto'
 import FeedbackAnnouncement from '../shared/FeedbackAnnouncement'
@@ -13,40 +14,50 @@ type PlayPhase = 'clip1' | 'pause' | 'clip2' | 'ready' | 'answered'
 
 export default function SameDifferent({ item, onAnswer }: Props) {
   const audioPlayer = useAppStore(s => s.audioPlayer)
-  const [playPhase, setPlayPhase] = useState<PlayPhase>('clip1')
+  const [playPhase, setPlayPhase] = useState<PlayPhase | 'blocked'>('clip1')
   const [selectedAnswer, setSelectedAnswer] = useState<boolean | null>(null)
   const startTime = useRef(0)
+  const sequenceId = useRef(0)
+
+  const playSequence = useCallback(async () => {
+    const sequenceRequestId = sequenceId.current + 1
+    sequenceId.current = sequenceRequestId
+    audioPlayer.stop()
+
+    try {
+      setPlayPhase('clip1')
+      await playAudioToCompletion(audioPlayer, item.clip.audio_url)
+      if (sequenceId.current !== sequenceRequestId) return
+
+      setPlayPhase('pause')
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      if (sequenceId.current !== sequenceRequestId) return
+
+      if (item.secondClip) {
+        setPlayPhase('clip2')
+        await playAudioToCompletion(audioPlayer, item.secondClip.audio_url)
+        if (sequenceId.current !== sequenceRequestId) return
+      }
+
+      setPlayPhase('ready')
+      startTime.current = Date.now()
+    } catch {
+      if (sequenceId.current === sequenceRequestId) setPlayPhase('blocked')
+    }
+  }, [audioPlayer, item])
 
   // Play the two clips sequentially with 1.5s pause
   useEffect(() => {
     let cancelled = false
-
-    async function playSequence() {
-      setPlayPhase('clip1')
-      try {
-        await audioPlayer.play(item.clip.audio_url)
-      } catch { /* */ }
-
-      if (cancelled) return
-      setPlayPhase('pause')
-      await new Promise(r => setTimeout(r, 1500))
-
-      if (cancelled) return
-      setPlayPhase('clip2')
-      if (item.secondClip) {
-        try {
-          await audioPlayer.play(item.secondClip.audio_url)
-        } catch { /* */ }
-      }
-
-      if (cancelled) return
-      setPlayPhase('ready')
-      startTime.current = Date.now()
+    queueMicrotask(() => {
+      if (!cancelled) void playSequence()
+    })
+    return () => {
+      cancelled = true
+      sequenceId.current += 1
+      audioPlayer.stop()
     }
-
-    playSequence()
-    return () => { cancelled = true; audioPlayer.stop() }
-  }, [item, audioPlayer])
+  }, [audioPlayer, playSequence])
 
   const handleAnswer = useCallback((answeredSame: boolean) => {
     if (playPhase !== 'ready') return
@@ -84,6 +95,7 @@ export default function SameDifferent({ item, onAnswer }: Props) {
             {playPhase === 'clip1' ? 'Clip 1 of 2' :
              playPhase === 'pause' ? 'Listen...' :
              playPhase === 'clip2' ? 'Clip 2 of 2' :
+             playPhase === 'blocked' ? 'Playback needs a tap' :
              'Your turn'}
           </span>
           <div className={`w-3 h-3 rounded-full transition-colors ${
@@ -92,15 +104,18 @@ export default function SameDifferent({ item, onAnswer }: Props) {
         </div>
 
         <button
-          onClick={async () => {
-            await audioPlayer.play(item.clip.audio_url)
-            await new Promise(r => setTimeout(r, 1500))
-            if (item.secondClip) await audioPlayer.play(item.secondClip.audio_url)
-          }}
+          type="button"
+          onClick={() => { void playSequence() }}
+          disabled={playPhase === 'clip1' || playPhase === 'pause' || playPhase === 'clip2'}
           className="px-4 py-2 text-sm text-primary underline"
         >
-          Replay both clips
+          {playPhase === 'blocked' ? 'Tap to play both clips' : 'Replay both clips'}
         </button>
+        {playPhase === 'blocked' && (
+          <p role="status" className="mt-2 text-sm text-error">
+            Audio didn’t play. Tap to try both clips again.
+          </p>
+        )}
       </div>
 
       <p className="text-lg font-semibold text-text text-center mb-6">

@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useAppStore } from '../../store/appStore'
-import { useAudioStateForUrl } from '../../hooks/useAudioStateForUrl'
 import type { IntroQuizItem } from '../../core/types'
+import AudioPlaybackControl from '../shared/AudioPlaybackControl'
 import BirdPhoto from '../shared/BirdPhoto'
 import FeedbackAnnouncement from '../shared/FeedbackAnnouncement'
 
@@ -20,8 +20,6 @@ export default function IntroQuiz({ items, onComplete, onBack }: Props) {
   const autoAdvanceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const current = items[currentIndex]
-  const playState = useAudioStateForUrl(audioPlayer, current?.clip.audio_url ?? '')
-
   const clearAutoAdvanceTimeout = useCallback(() => {
     if (autoAdvanceTimeoutRef.current !== null) {
       clearTimeout(autoAdvanceTimeoutRef.current)
@@ -115,23 +113,7 @@ export default function IntroQuiz({ items, onComplete, onBack }: Props) {
         </div>
 
         <div className="text-center mb-4">
-          <button
-            onClick={() => {
-              if (playState === 'playing') audioPlayer.stop()
-              else audioPlayer.play(current.clip.audio_url).catch(() => {})
-            }}
-            disabled={playState === 'loading'}
-            className={`inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-full font-medium transition-all ${
-              playState === 'loading' ? 'opacity-60' : ''
-            }`}
-          >
-            {playState === 'loading' && (
-              <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-            )}
-            {playState === 'playing' && <span>⏹</span>}
-            {playState !== 'loading' && playState !== 'playing' && <span>▶</span>}
-            Play Sound
-          </button>
+          <AudioPlaybackControl audioPlayer={audioPlayer} url={current.clip.audio_url} />
         </div>
 
         <p className="text-lg font-semibold text-text text-center mb-4">
@@ -175,7 +157,10 @@ export default function IntroQuiz({ items, onComplete, onBack }: Props) {
 
       {/* Feedback - pinned to bottom */}
       {showingResult && (
-        <div ref={feedbackRef} className="sticky bottom-0 p-4 border-t border-border bg-bg">
+        <div
+          ref={feedbackRef}
+          className="sticky bottom-0 p-4 border-t border-border bg-bg"
+        >
           <div className="p-3 rounded-xl border border-border bg-card">
             {isCorrect ? (
               <p className="text-success font-medium text-center">Correct!</p>
@@ -190,7 +175,7 @@ export default function IntroQuiz({ items, onComplete, onBack }: Props) {
             {!isCorrect && (
               <div className="flex justify-center mt-3 gap-2">
                 <button
-                  onClick={() => audioPlayer.play(current.clip.audio_url)}
+                  onClick={() => audioPlayer.play(current.clip.audio_url).catch(() => {})}
                   className="text-sm text-primary underline"
                 >
                   Play correct sound

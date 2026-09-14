@@ -14,6 +14,39 @@ export interface AudioPlayer {
   getBuffer(url: string): AudioBuffer | null
 }
 
+export function playAudioToCompletion(audioPlayer: AudioPlayer, url: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    let started = false
+    let settled = false
+    const unsubscribe = audioPlayer.onStateChange((state) => {
+      if ((state === 'loading' || state === 'playing') && audioPlayer.getActiveUrl() === url) {
+        started = true
+        return
+      }
+      if (!started || settled) return
+
+      const endedNaturally = state === 'idle' && audioPlayer.getActiveUrl() === url
+      settled = true
+      unsubscribe()
+      if (endedNaturally) resolve()
+      else reject(new Error('Audio playback was interrupted'))
+    })
+
+    audioPlayer.play(url).then(() => {
+      if (!settled && (audioPlayer.getState() !== 'playing' || audioPlayer.getActiveUrl() !== url)) {
+        settled = true
+        unsubscribe()
+        reject(new Error('Audio playback did not start'))
+      }
+    }).catch(error => {
+      if (settled) return
+      settled = true
+      unsubscribe()
+      reject(error)
+    })
+  })
+}
+
 export class WebAudioPlayer implements AudioPlayer {
   private context: AudioContext | null = null
   private gainNode: GainNode | null = null
@@ -118,8 +151,8 @@ export class WebAudioPlayer implements AudioPlayer {
   // Activate the HTMLAudioElement output so iOS routes through the media channel.
   // play() must run synchronously within the user gesture — repeat calls on an already
   // playing element are no-ops, so it's safe to call on every play().
-  private activateOutput() {
-    this.outputElement?.play().catch(() => {})
+  private activateOutput(): Promise<void> {
+    return this.outputElement?.play() ?? Promise.reject(new Error('Audio output is unavailable'))
   }
 
   private isCurrentRequest(requestId: number, url: string) {
@@ -249,7 +282,14 @@ export class WebAudioPlayer implements AudioPlayer {
 
       // Must run synchronously within the user gesture, before any await,
       // so the HTMLAudioElement activates in the media channel.
-      this.activateOutput()
+      const outputActivation = this.activateOutput()
+      const bufferPromise = this.loadBuffer(url)
+
+      try {
+        await outputActivation
+      } catch (cause) {
+        throw new Error('Audio playback was blocked', { cause })
+      }
 
       // Resume if suspended (mobile browsers)
       if (ctx.state === 'suspended') {
@@ -257,7 +297,7 @@ export class WebAudioPlayer implements AudioPlayer {
         if (!this.isCurrentRequest(requestId, url)) return
       }
 
-      const buffer = await this.loadBuffer(url)
+      const buffer = await bufferPromise
       if (!this.isCurrentRequest(requestId, url)) return
       if (!buffer || !this.gainNode) throw new Error('Failed to load audio')
 
@@ -278,11 +318,13 @@ export class WebAudioPlayer implements AudioPlayer {
       this.playbackOffset = offset ?? 0
       this.activeBuffer = buffer
       this.setState('playing')
-    } catch {
+    } catch (error) {
       if (!this.isCurrentRequest(requestId, url)) return
-      this.activeUrl = null
+      this.stopSource()
+      this.pauseOutput()
       this.activeBuffer = null
       this.setState('error')
+      throw error
     }
   }
 }
