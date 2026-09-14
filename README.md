@@ -44,7 +44,7 @@ A Duolingo-style web app for learning Seattle-area bird songs and calls. Flash-c
 
 ## Running locally
 
-**Prerequisites:** Node.js 18+, the media files already downloaded (see below)
+**Prerequisites:** Node.js 22+, the media files already downloaded (see below)
 
 ```bash
 # 1. Install dependencies
@@ -57,6 +57,23 @@ npm run dev
 ```
 
 The app is a single-page app with no backend — all data is served as static files from `beakspeak/public/content/`.
+
+## Running on iPhone with Capacitor
+
+The iOS feasibility app packages the same React application as the web build. It targets portrait iPhones on iOS 18.4 or newer; Android is intentionally not configured.
+
+See [`docs/native-ios.md`](docs/native-ios.md) for the complete build, synchronization, Personal Team signing, physical-device launch, and web-regression workflow.
+
+The normal development loop is:
+
+```bash
+cd beakspeak
+npm install
+npm run native:sync
+npm run native:open
+```
+
+`native:sync` validates the manual-audio lock, builds with relative asset URLs, keeps exactly the production recordings referenced by the manifest, removes legacy/archive media, and synchronizes that output into Xcode. The generated `ios/App/App/public/` directory is ignored; rerun the command after changing web code or content.
 
 ## Manual audio selections
 
@@ -101,14 +118,15 @@ The previous candidate-ranking, BirdNET, and local Audio Admin workflow remains 
 
 ## Testing
 
-BeakSpeak has four practical validation layers:
+BeakSpeak has five practical validation layers:
 
 - **Type checking** with `tsc`
 - **Linting** with `eslint`
 - **Unit tests** with `vitest`
 - **Mobile end-to-end tests** with Playwright
+- **Installed-app smoke tests** with XCTest on an iOS simulator
 
-GitHub Actions runs the same checks in automation, but `test:ci` is mainly a CI mirror and is not the default local workflow.
+GitHub Actions runs all five checks. The `test:ci` command runs the four cross-platform checks and excludes the macOS XCTest smoke.
 
 ### Install test tooling
 
@@ -162,6 +180,17 @@ The Playwright suite runs at a mobile viewport and currently covers:
 
 Reusable E2E helpers live in `beakspeak/e2e/fixtures.ts` so future browser tests can compose app flows cleanly.
 
+### iOS installed-app smoke test
+
+```bash
+cd beakspeak
+npm run test:ios
+```
+
+Run this after changes to the native build, Capacitor synchronization, Xcode project, app startup, or smoke test. The XCTest smoke launches the packaged app, confirms that the web view rendered, and performs one accessible navigation step. Playwright remains responsible for the complete learner journey and shared application behavior.
+
+See [`docs/native-ios.md`](docs/native-ios.md) for prerequisites, simulator selection, artifacts, and physical-device checks. The simulator smoke does not validate silent-switch audio, lifecycle recovery, VoiceOver, performance, signing, or physical installation.
+
 ### Manual testing
 
 If you want to sanity-check the app yourself, the usual sequence is:
@@ -179,7 +208,7 @@ Then verify the main mobile flows in the browser:
 - check that progress persists after a reload
 - open the Progress tab and start a review session
 
-### Full local CI-equivalent run
+### Combined cross-platform test run
 
 ```bash
 cd beakspeak
@@ -193,7 +222,7 @@ This runs:
 - `npm run test:unit`
 - `npm run test:e2e`
 
-Use this only when you explicitly want the full local mirror of CI.
+Use this when you want all cross-platform checks in one command. Run `npm run test:ios` separately for the installed-app smoke.
 
 ### Continuous integration
 
@@ -202,6 +231,7 @@ GitHub Actions workflow: `.github/workflows/beakspeak-ci.yml`
 CI currently performs:
 
 - dependency install
+- native build synchronization and an XCTest simulator smoke on macOS
 - Playwright Chromium install
 - typecheck
 - lint
