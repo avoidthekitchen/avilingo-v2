@@ -20,11 +20,11 @@ function formatSkippedLessonLabel(skippedLessons: Lesson[]): string {
 
 export function getUnlockConsequenceCopy(skippedLessons: Lesson[], selectedLessonNum: number): string {
   if (skippedLessons.length === 0) {
-    return `This will open Lesson ${selectedLessonNum} now. Nothing will be marked learned unless you finish the lesson.`
+    return `This will open Lesson ${selectedLessonNum} now. Nothing will be introduced unless you finish the lesson.`
   }
 
   const birdCount = skippedLessons.reduce((count, lesson) => count + lesson.species.length, 0)
   const birdLabel = `${birdCount} ${birdCount === 1 ? 'bird' : 'birds'}`
 
-  return `${formatSkippedLessonLabel(skippedLessons)} will be marked learned now, so those ${birdLabel} will start showing up in your reviews.`
+  return `${formatSkippedLessonLabel(skippedLessons)} will be introduced now, so those ${birdLabel} will start showing up in your reviews.`
 }

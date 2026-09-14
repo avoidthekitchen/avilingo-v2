@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { useAppStore } from '../../store/appStore'
 import { buildQuizSession } from '../../core/quiz'
 import { scheduleReview, ratingFromOutcome } from '../../core/fsrs'
@@ -30,10 +30,10 @@ export default function QuizSession({ mode, onComplete }: Props) {
   const [answers, setAnswers] = useState<QuizAnswer[]>([])
   const [showResults, setShowResults] = useState(false)
 
-  const items = useMemo(() => {
+  const [items] = useState(() => {
     if (!manifest) return []
     return buildQuizSession(allProgress, manifest, lastPlayedClipId)
-  }, [manifest, allProgress, lastPlayedClipId])
+  })
 
   const handleAnswer = useCallback(async (correct: boolean, responseTimeMs: number) => {
     const item = items[currentIndex]
