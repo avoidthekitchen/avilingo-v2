@@ -106,7 +106,7 @@ export default function SameDifferent({ item, onAnswer }: Props) {
         <button
           type="button"
           onClick={() => { void playSequence() }}
-          disabled={playPhase === 'clip1' || playPhase === 'pause' || playPhase === 'clip2'}
+          disabled={playPhase !== 'ready' && playPhase !== 'blocked'}
           className="px-4 py-2 text-sm text-primary underline"
         >
           {playPhase === 'blocked' ? 'Tap to play both clips' : 'Replay both clips'}

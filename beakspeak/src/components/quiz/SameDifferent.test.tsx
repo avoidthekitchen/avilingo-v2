@@ -141,4 +141,35 @@ describe('SameDifferent audio sequence', () => {
     await act(async () => { await Promise.resolve() })
     expect(controlled.play).toHaveBeenCalledTimes(2)
   })
+
+  it('locks replay and answering after an incorrect answer reveals the species', async () => {
+    const controlled = makeControllablePlayer()
+    audioPlayer = controlled.player
+    const onAnswer = vi.fn()
+
+    render(<SameDifferent item={makeItem()} onAnswer={onAnswer} />)
+    await act(async () => { await Promise.resolve() })
+
+    await act(async () => {
+      controlled.finishNaturally()
+      await Promise.resolve()
+      vi.advanceTimersByTime(1500)
+    })
+    await act(async () => {
+      controlled.finishNaturally()
+      await Promise.resolve()
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: 'Different' }))
+    expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument()
+
+    expect(screen.getByRole('button', { name: 'Replay both clips' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Same' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Different' })).toBeDisabled()
+
+    await act(async () => {
+      vi.advanceTimersByTime(5000)
+    })
+    expect(onAnswer).not.toHaveBeenCalled()
+  })
 })
