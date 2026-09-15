@@ -32,12 +32,10 @@ Three tests run:
   app, relaunches it, and asserts the Introduced Species count is unchanged. This
   covers Dexie durability across an ordinary force quit on the simulator only.
 
-These cover native lifecycle, which Playwright cannot reach. They are not a
-licence to grow the journey coverage below.
-
-Playwright owns the complete learner journey and shared application behavior.
-XCTest owns only the installed-app launch and navigation smoke. Do not reproduce
-the complete Playwright journey in XCTest.
+These tests cover native integration seams that Playwright cannot reach. Use the
+shortest learner-visible setup needed for each seam. Playwright owns the complete
+learner journey and shared application behavior. Do not reproduce that journey
+or domain-level assertions in XCTest.
 
 The `iOS simulator smoke` GitHub Actions job runs this same command on macOS for
 pull requests and main pushes covered by the workflow. It reconstructs production
@@ -45,13 +43,14 @@ audio from the committed metadata lock (no new metadata/API key required), cache
 the downloads and generated clips, and uploads JSON results, logs, and the XCTest
 result bundle. Local evidence lives in the ignored `.artifacts/ios-smoke/` folder.
 The runner fails on tool-reported errors even when the CLI exits with status zero,
-and requires exactly one passing test.
+and requires exactly three passing tests.
 
 XcodeBuildMCP's `snapshot-ui` did not traverse WKWebView's remote accessibility
 child in our iOS 26.3/26.5 checks. XCTest did find and tap the HTML controls on both
 runtimes. This smoke uses `xcodebuildmcp simulator test`; it does not depend on
-coordinate tapping or the snapshot interface. It does not replace physical-device
-audio, lifecycle, or VoiceOver acceptance.
+coordinate tapping or the snapshot interface. It does not verify audio audibility,
+silent-switch routing, exact stop-on-background behavior, VoiceOver quality,
+sustained performance, signing, or physical installation.
 
 ### Known Capacitor 8.5.0 startup diagnostic
 
@@ -71,11 +70,11 @@ BeakSpeak currently has no listener for this document event; initialization and
 the element-based navigation test succeed. This is a confirmed dropped early
 resume event, not evidence of a failed asset request or React initialization.
 
-No vendor patch or blanket error suppression is applied. Revisit this condition
-in #29 when implementing lifecycle recovery: initialization must not rely on this
-early event, and warm foreground/resume behavior needs separate verification.
-Other runtime exceptions must not be treated as this known condition merely
-because Capacitor prints the same generic message.
+No vendor patch or blanket error suppression is applied. Initialization does not
+rely on this early event. The simulator smoke checks warm foreground recovery, and
+the physical-device procedure below covers behavior the simulator cannot verify.
+Do not treat other runtime exceptions as this known condition solely because
+Capacitor prints the same generic message.
 
 BeakSpeak has one React application with two explicit production build modes:
 
