@@ -46,6 +46,13 @@ function setupFetchMock() {
   }))
 }
 
+interface MockContextHandle {
+  state: string
+  resume: ReturnType<typeof vi.fn>
+  interrupt(state?: string): void
+}
+
+let mockContextInstance: MockContextHandle
 let mockSources: ReturnType<typeof makeMockSource>[]
 let mockGainNode: ReturnType<typeof makeMockGainNode>
 let mockBuffer: AudioBuffer
@@ -104,6 +111,22 @@ function setupAudioContextMock() {
     createGain = mockContext.createGain
     createMediaStreamDestination = mockContext.createMediaStreamDestination
     decodeAudioData = mockContext.decodeAudioData
+
+    private stateListeners: Array<() => void> = []
+
+    constructor() {
+      mockContextInstance = this as unknown as MockContextHandle
+    }
+
+    addEventListener(type: string, listener: () => void) {
+      if (type === 'statechange') this.stateListeners.push(listener)
+    }
+
+    // Stand-in for a WebKit interruption: set the state, then fire statechange.
+    interrupt(state = 'interrupted') {
+      this.state = state
+      this.stateListeners.forEach(listener => listener())
+    }
   })
 }
 
@@ -456,6 +479,66 @@ describe('WebAudioPlayer', () => {
       const player = new WebAudioPlayer()
 
       await expect(player.play('https://example.com/song.ogg')).rejects.toThrow()
+      await expect(player.play('https://example.com/call.ogg')).resolves.toBeUndefined()
+
+      expect(player.getState()).toBe('playing')
+      expect(player.getActiveUrl()).toBe('https://example.com/call.ogg')
+    })
+  })
+
+  // Regression: one AudioContext is shared by every tab, so a context that is left
+  // unusable takes the whole app's audio down until it restarts.
+  describe('audio context interruptions', () => {
+    it('resumes a suspended context inside the gesture, before any await', () => {
+      const SuspendedContext = AudioContext as unknown as new () => { state: string }
+      vi.stubGlobal('AudioContext', class extends SuspendedContext { state = 'suspended' })
+      const player = new WebAudioPlayer()
+
+      void player.play('https://example.com/song.ogg')
+
+      expect(mockContextInstance.resume).toHaveBeenCalled()
+    })
+
+    // WebKit's non-standard 'interrupted' state is not 'suspended', so a check for
+    // 'suspended' alone leaves source.start() feeding a context that makes no sound.
+    it('resumes an interrupted context', async () => {
+      const InterruptedContext = AudioContext as unknown as new () => { state: string }
+      vi.stubGlobal('AudioContext', class extends InterruptedContext { state = 'interrupted' })
+      const player = new WebAudioPlayer()
+
+      await expect(player.play('https://example.com/song.ogg')).resolves.toBeUndefined()
+
+      expect(mockContextInstance.resume).toHaveBeenCalled()
+      expect(player.getState()).toBe('playing')
+    })
+
+    it('does not resume a context that is already running', async () => {
+      const player = new WebAudioPlayer()
+
+      await player.play('https://example.com/song.ogg')
+
+      expect(mockContextInstance.resume).not.toHaveBeenCalled()
+    })
+
+    // An interruption mid-clip never fires source.onended, so without the statechange
+    // listener the control stays on stop and the learner cannot replay.
+    it('returns to idle when the context is interrupted mid-playback', async () => {
+      const player = new WebAudioPlayer()
+      await player.play('https://example.com/song.ogg')
+      expect(player.getState()).toBe('playing')
+
+      mockContextInstance.interrupt()
+
+      expect(player.getState()).toBe('idle')
+      expect(player.getActiveUrl()).toBeNull()
+    })
+
+    it('plays again after an interruption', async () => {
+      const player = new WebAudioPlayer()
+      await player.play('https://example.com/song.ogg')
+      mockContextInstance.interrupt()
+
+      mockContextInstance.state = 'running'
       await expect(player.play('https://example.com/call.ogg')).resolves.toBeUndefined()
 
       expect(player.getState()).toBe('playing')

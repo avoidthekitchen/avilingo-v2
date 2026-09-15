@@ -2,6 +2,16 @@ import { Capacitor } from '@capacitor/core'
 
 export type AudioState = 'idle' | 'loading' | 'playing' | 'error'
 
+// WebKit adds a non-standard 'interrupted' state to AudioContext — a phone call, Siri, an
+// alarm, or the app deactivating its AVAudioSession on resign-active. It is absent from the
+// AudioContextState union, so a `state === 'suspended'` check silently skips it and
+// source.start() feeds a dead context: the player reports 'playing', nothing is audible, and
+// because one context is shared by every tab nothing recovers until the app restarts.
+// Testing for "not already usable" covers both states without naming the non-standard one.
+function needsResume(state: AudioContextState): boolean {
+  return state !== 'running' && state !== 'closed'
+}
+
 export interface AudioPlayer {
   play(url: string, offset?: number): Promise<void>
   stop(): void
@@ -77,6 +87,14 @@ export class WebAudioPlayer implements AudioPlayer {
   private getContext(): AudioContext {
     if (!this.context) {
       this.context = new AudioContext()
+      // An interruption mid-clip never fires source.onended, so the player would sit on
+      // 'playing' against a dead context with the control stuck on stop. Drop back to idle
+      // so the next tap starts a fresh request and resumes inside a live gesture.
+      this.context.addEventListener('statechange', () => {
+        if (this.state === 'playing' && needsResume(this.context?.state ?? 'closed')) {
+          this.stop()
+        }
+      })
       this.gainNode = this.context.createGain()
       this.streamDest = this.context.createMediaStreamDestination()
       this.gainNode.connect(this.streamDest)
@@ -326,22 +344,23 @@ export class WebAudioPlayer implements AudioPlayer {
     try {
       const ctx = this.getContext()
 
-      // Must run synchronously within the user gesture, before any await,
-      // so the HTMLAudioElement activates in the media channel.
+      // Both must be issued synchronously within the user gesture, before any await: the
+      // HTMLAudioElement activates the media channel, and iOS only honours resume() when
+      // it is called in the same task as the gesture that triggered playback.
       const outputActivation = this.activateOutput()
+      const contextResume = needsResume(ctx.state) ? ctx.resume() : Promise.resolve()
       bufferPromise = this.loadBuffer(url)
 
+      const started = Promise.all([outputActivation, contextResume])
+      // Keeps a late rejection handled when the deadline wins the race below.
+      started.catch(() => {})
+
       try {
-        await Promise.race([outputActivation, deadline.expired])
+        await Promise.race([started, deadline.expired])
       } catch (cause) {
         throw new Error('Audio playback was blocked', { cause })
       }
-
-      // Resume if suspended (mobile browsers)
-      if (ctx.state === 'suspended') {
-        await Promise.race([ctx.resume(), deadline.expired])
-        if (!this.isCurrentRequest(requestId, url)) return
-      }
+      if (!this.isCurrentRequest(requestId, url)) return
 
       const buffer = await Promise.race([bufferPromise, deadline.expired])
       if (!this.isCurrentRequest(requestId, url)) return
