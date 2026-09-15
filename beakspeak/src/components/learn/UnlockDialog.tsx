@@ -57,7 +57,7 @@ export default function UnlockDialog({
 
   return (
     <div
-      className="safe-area-dialog fixed inset-0 z-50 flex items-end bg-black/50 sm:items-center sm:justify-center"
+      className="safe-area-dialog fixed inset-0 z-50 flex items-center justify-center bg-black/50"
       data-testid="unlock-dialog-backdrop"
       onClick={handleDismiss}
     >
@@ -66,7 +66,7 @@ export default function UnlockDialog({
         aria-labelledby="unlock-dialog-title"
         aria-describedby="unlock-dialog-explanation unlock-dialog-consequence"
         aria-modal="true"
-        className="w-full max-w-md rounded-3xl border border-border bg-bg p-6 shadow-xl"
+        className="max-h-full w-full max-w-md overflow-y-auto rounded-3xl border border-border bg-bg p-6 shadow-xl"
         role="dialog"
         tabIndex={-1}
         onClick={event => event.stopPropagation()}
