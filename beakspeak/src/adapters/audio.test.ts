@@ -533,6 +533,34 @@ describe('WebAudioPlayer', () => {
       expect(player.getActiveUrl()).toBeNull()
     })
 
+    it('does not start a source when the context is interrupted while loading', async () => {
+      let resolveFetch!: (value: Response) => void
+      vi.stubGlobal('fetch', vi.fn(() => new Promise(resolve => {
+        resolveFetch = resolve as typeof resolveFetch
+      })))
+      const player = new WebAudioPlayer()
+
+      const attempt = player.play('https://example.com/song.ogg')
+      expect(player.getState()).toBe('loading')
+
+      mockContextInstance.interrupt()
+      resolveFetch({
+        ok: true,
+        arrayBuffer: () => Promise.resolve(new ArrayBuffer(8)),
+      } as Response)
+      await attempt
+
+      expect(mockSources).toHaveLength(0)
+      expect(player.getState()).toBe('idle')
+      expect(player.getActiveUrl()).toBeNull()
+
+      mockContextInstance.state = 'running'
+      await expect(player.play('https://example.com/song.ogg')).resolves.toBeUndefined()
+
+      expect(mockSources).toHaveLength(1)
+      expect(player.getState()).toBe('playing')
+    })
+
     it('plays again after an interruption', async () => {
       const player = new WebAudioPlayer()
       await player.play('https://example.com/song.ogg')
