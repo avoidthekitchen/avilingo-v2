@@ -187,9 +187,9 @@ cd beakspeak
 npm run test:ios
 ```
 
-Run this after changes to the native build, Capacitor synchronization, Xcode project, app startup, or smoke test. The XCTest smoke launches the packaged app, confirms that the web view rendered, and performs one accessible navigation step. Playwright remains responsible for the complete learner journey and shared application behavior.
+Run this after changes to the native build, Capacitor synchronization, Xcode project, app startup, lifecycle or audio integration, storage persistence, or smoke tests. The XCTest suite checks packaged launch and rendering, one accessible navigation step, recovery after backgrounding and foregrounding, and persistence across a force-quit and relaunch. It uses the shortest learner-visible setup needed. Playwright remains responsible for the complete learner journey and shared application behavior.
 
-See [`docs/native-ios.md`](docs/native-ios.md) for prerequisites, simulator selection, artifacts, and physical-device checks. The simulator smoke does not validate silent-switch audio, lifecycle recovery, VoiceOver, performance, signing, or physical installation.
+See [`docs/native-ios.md`](docs/native-ios.md) for prerequisites, simulator selection, artifacts, and physical-device checks. The simulator smoke does not validate audio audibility, silent-switch routing, exact stop-on-background behavior, VoiceOver quality, sustained performance, signing, or physical installation.
 
 ### Manual testing
 

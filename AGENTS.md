@@ -225,7 +225,7 @@ Use the lightest test layer that gives confidence for the change, and escalate o
 - When adding or modifying Playwright tests, make sure the changed spec passes locally before finishing.
 - Treat browser console errors surfaced by the E2E fixture as real regressions unless there is a documented reason to ignore them.
 - Keep the automated product-flow boundary in Playwright. It owns the complete learner journey and shared React behavior used by both web and Capacitor builds.
-- Keep XCTest focused on a short installed-app smoke: launch the packaged app, confirm the web view rendered, and perform one accessible navigation step. Do not duplicate the complete learner journey in XCTest.
-- Run `cd beakspeak && npm run test:ios` when a change affects Capacitor configuration, native synchronization, Xcode project files, app startup, or the XCTest smoke. The XCTest target may live in the App project or a separate Xcode project; preserve its scope either way.
+- Keep XCTest focused on native integration seams that Playwright cannot exercise: packaged launch and rendering, one accessible navigation step, lifecycle recovery, and persistence across process termination. Use the shortest learner-visible setup needed, and do not duplicate the complete learner journey or domain-level assertions in XCTest.
+- Run `cd beakspeak && npm run test:ios` when a change affects Capacitor configuration, native synchronization, Xcode project files, app startup, lifecycle or audio integration, storage persistence, or the XCTest smoke. The XCTest target may live in the App project or a separate Xcode project; preserve its scope either way.
 - Treat simulator automation as additional evidence, not a replacement for physical-device checks covering signing, installation, silent-switch audio, lifecycle behavior, VoiceOver, and sustained performance.
 - If using XcodeBuildMCP, use the installed XcodeBuildMCP skill before calling XcodeBuildMCP tools.
