@@ -14,13 +14,26 @@ This synchronizes the native bundle, builds and installs the app, and runs the
 small XCTest target currently stored in `ios/Smoke`. It installs without
 launching: XCTest owns the only launch, because leaving a running instance
 behind makes XCUITest terminate and relaunch it, and that race times the launch
-out on a cold runner. It asserts Learn Birds
-appears, taps Lesson 1 by its accessibility label, and asserts American Crow
-appears. Screenshots are attached even on failure. It does not complete a lesson
-or manufacture progress. The target may move into the App Xcode project later;
-its scope does not depend on its project location. The newest available compatible
-iPhone simulator is selected; set `IOS_SIMULATOR_ID` to use a particular installed
-device.
+out on a cold runner. Screenshots are attached even on failure. The target may
+move into the App Xcode project later; its scope does not depend on its project
+location. The newest available compatible iPhone simulator is selected; set
+`IOS_SIMULATOR_ID` to use a particular installed device.
+
+Three tests run:
+
+- **Navigation** asserts Learn Birds appears, taps Lesson 1 by its accessibility
+  label, and asserts American Crow appears. It does not complete a lesson.
+- **Background and foreground** opens Lesson 1, starts a clip, sends the app to
+  the Home Screen, reactivates it, and asserts the session came back and
+  playback is not wedged. XCUITest cannot see whether the clip actually stopped —
+  the control's accessible name is unchanged while playing — so silent-switch and
+  stop-on-background behavior still need the physical-device checks below.
+- **Force-quit persistence** uses Skip Ahead to introduce species, terminates the
+  app, relaunches it, and asserts the Introduced Species count is unchanged. This
+  covers Dexie durability across an ordinary force quit on the simulator only.
+
+These cover native lifecycle, which Playwright cannot reach. They are not a
+licence to grow the journey coverage below.
 
 Playwright owns the complete learner journey and shared application behavior.
 XCTest owns only the installed-app launch and navigation smoke. Do not reproduce
