@@ -59,6 +59,20 @@ export default function SameDifferent({ item, onAnswer }: Props) {
     }
   }, [audioPlayer, playSequence])
 
+  useEffect(() => {
+    const cancelHiddenSequence = () => {
+      const sequenceIsActive = playPhase === 'clip1' || playPhase === 'pause' || playPhase === 'clip2'
+      if (document.visibilityState !== 'hidden' || !sequenceIsActive) return
+
+      sequenceId.current += 1
+      audioPlayer.stop()
+      setPlayPhase('blocked')
+    }
+
+    document.addEventListener('visibilitychange', cancelHiddenSequence)
+    return () => document.removeEventListener('visibilitychange', cancelHiddenSequence)
+  }, [audioPlayer, playPhase])
+
   const handleAnswer = useCallback((answeredSame: boolean) => {
     if (playPhase !== 'ready') return
 

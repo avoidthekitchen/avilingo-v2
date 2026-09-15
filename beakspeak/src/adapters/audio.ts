@@ -1,3 +1,5 @@
+import { Capacitor } from '@capacitor/core'
+
 export type AudioState = 'idle' | 'loading' | 'playing' | 'error'
 
 export interface AudioPlayer {
@@ -48,7 +50,8 @@ export function playAudioToCompletion(audioPlayer: AudioPlayer, url: string): Pr
 }
 
 export class WebAudioPlayer implements AudioPlayer {
-  private static readonly START_TIMEOUT_MS = 5000
+  private static readonly NATIVE_START_TIMEOUT_MS = 5000
+  private static readonly WEB_START_TIMEOUT_MS = 30_000
 
   private context: AudioContext | null = null
   private gainNode: GainNode | null = null
@@ -63,7 +66,11 @@ export class WebAudioPlayer implements AudioPlayer {
   private progressListeners: Array<(currentTime: number, duration: number) => void> = []
   private rafId: number | null = null
   private playRequestId = 0
-  private pendingLoads = new Map<string, Promise<AudioBuffer | null>>()
+  private pendingLoads = new Map<string, {
+    promise: Promise<AudioBuffer | null>
+    abort: () => void
+    token: object
+  }>()
   private outputElement: HTMLAudioElement | null = null
   private streamDest: MediaStreamAudioDestinationNode | null = null
 
@@ -162,10 +169,13 @@ export class WebAudioPlayer implements AudioPlayer {
   // would otherwise pin the learner in 'loading' with the replay control disabled.
   private createStartDeadline(): { expired: Promise<never>; clear: () => void } {
     let timeoutId: ReturnType<typeof setTimeout>
+    const timeoutMs = Capacitor.isNativePlatform()
+      ? WebAudioPlayer.NATIVE_START_TIMEOUT_MS
+      : WebAudioPlayer.WEB_START_TIMEOUT_MS
     const expired = new Promise<never>((_, reject) => {
       timeoutId = setTimeout(
         () => reject(new Error('Audio playback did not start')),
-        WebAudioPlayer.START_TIMEOUT_MS,
+        timeoutMs,
       )
     })
     // Keeps the deadline handled if play() throws before the first race attaches one.
@@ -208,17 +218,19 @@ export class WebAudioPlayer implements AudioPlayer {
     this.setState('idle')
   }
 
-  private async loadBuffer(url: string): Promise<AudioBuffer | null> {
+  private loadBuffer(url: string): Promise<AudioBuffer | null> {
     const cached = this.cache.get(url)
-    if (cached) return cached
+    if (cached) return Promise.resolve(cached)
 
     const existingLoad = this.pendingLoads.get(url)
-    if (existingLoad) return existingLoad
+    if (existingLoad) return existingLoad.promise
 
+    const controller = new AbortController()
+    const token = {}
     const loadPromise = (async () => {
       try {
         const ctx = this.getContext()
-        const response = await fetch(url)
+        const response = await fetch(url, { signal: controller.signal })
         if (!response.ok) throw new Error(`Failed to fetch audio: ${response.status}`)
         const arrayBuffer = await response.arrayBuffer()
         const audioBuffer = await ctx.decodeAudioData(arrayBuffer)
@@ -227,12 +239,26 @@ export class WebAudioPlayer implements AudioPlayer {
       } catch {
         return null
       } finally {
-        this.pendingLoads.delete(url)
+        if (this.pendingLoads.get(url)?.token === token) {
+          this.pendingLoads.delete(url)
+        }
       }
     })()
 
-    this.pendingLoads.set(url, loadPromise)
+    this.pendingLoads.set(url, {
+      promise: loadPromise,
+      abort: () => controller.abort(),
+      token,
+    })
     return loadPromise
+  }
+
+  private cancelPendingLoad(url: string, promise: Promise<AudioBuffer | null>) {
+    const pendingLoad = this.pendingLoads.get(url)
+    if (pendingLoad?.promise !== promise) return
+
+    this.pendingLoads.delete(url)
+    pendingLoad.abort()
   }
 
   prefetch(url: string): Promise<AudioBuffer | null> {
@@ -295,6 +321,7 @@ export class WebAudioPlayer implements AudioPlayer {
     this.activeUrl = url
     this.setState('loading')
     const deadline = this.createStartDeadline()
+    let bufferPromise: Promise<AudioBuffer | null> | undefined
 
     try {
       const ctx = this.getContext()
@@ -302,7 +329,7 @@ export class WebAudioPlayer implements AudioPlayer {
       // Must run synchronously within the user gesture, before any await,
       // so the HTMLAudioElement activates in the media channel.
       const outputActivation = this.activateOutput()
-      const bufferPromise = this.loadBuffer(url)
+      bufferPromise = this.loadBuffer(url)
 
       try {
         await Promise.race([outputActivation, deadline.expired])
@@ -339,6 +366,7 @@ export class WebAudioPlayer implements AudioPlayer {
       this.setState('playing')
     } catch (error) {
       if (!this.isCurrentRequest(requestId, url)) return
+      if (bufferPromise) this.cancelPendingLoad(url, bufferPromise)
       this.stopSource()
       this.pauseOutput()
       this.activeBuffer = null

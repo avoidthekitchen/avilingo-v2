@@ -1,4 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { afterEach, describe, it, expect, vi, beforeEach } from 'vitest'
+import { Capacitor } from '@capacitor/core'
 import { WebAudioPlayer } from './audio'
 
 // --- Web Audio API mocks ---
@@ -108,8 +109,13 @@ function setupAudioContextMock() {
 
 beforeEach(() => {
   vi.restoreAllMocks()
+  vi.spyOn(Capacitor, 'isNativePlatform').mockReturnValue(false)
   setupAudioContextMock()
   setupFetchMock()
+})
+
+afterEach(() => {
+  vi.useRealTimers()
 })
 
 describe('WebAudioPlayer', () => {
@@ -475,6 +481,7 @@ describe('WebAudioPlayer', () => {
     for (const [label, stall] of Object.entries(stalls)) {
       it(`leaves loading and reports an error when the ${label} never settles`, async () => {
         vi.useFakeTimers()
+        vi.mocked(Capacitor.isNativePlatform).mockReturnValue(true)
         stall()
         const player = new WebAudioPlayer()
 
@@ -484,12 +491,53 @@ describe('WebAudioPlayer', () => {
         await rejection
 
         expect(player.getState()).toBe('error')
-        vi.useRealTimers()
       })
     }
 
+    it('allows a slow web download to finish after the native startup budget', async () => {
+      vi.useFakeTimers()
+      let resolveFetch!: (value: Response | PromiseLike<Response>) => void
+      vi.stubGlobal('fetch', vi.fn(() => new Promise(resolve => {
+        resolveFetch = resolve as typeof resolveFetch
+      })))
+      const player = new WebAudioPlayer()
+
+      const attempt = player.play('https://example.com/slow-song.ogg')
+      await vi.advanceTimersByTimeAsync(5001)
+
+      expect(player.getState()).toBe('loading')
+      resolveFetch({
+        ok: true,
+        arrayBuffer: () => Promise.resolve(new ArrayBuffer(8)),
+      } as Response)
+      await expect(attempt).resolves.toBeUndefined()
+      expect(player.getState()).toBe('playing')
+    })
+
+    it('starts a fresh request when retrying a download that timed out', async () => {
+      vi.useFakeTimers()
+      vi.stubGlobal('fetch', vi.fn()
+        .mockImplementationOnce(() => new Promise(() => {}))
+        .mockResolvedValueOnce({
+          ok: true,
+          arrayBuffer: () => Promise.resolve(new ArrayBuffer(8)),
+        } as Response))
+      const player = new WebAudioPlayer()
+      const url = 'https://example.com/stalled-song.ogg'
+
+      const firstAttempt = player.play(url)
+      const firstRejection = expect(firstAttempt).rejects.toThrow()
+      await vi.advanceTimersByTimeAsync(30_000)
+      await firstRejection
+
+      await expect(player.play(url)).resolves.toBeUndefined()
+      expect(fetch).toHaveBeenCalledTimes(2)
+      expect(player.getState()).toBe('playing')
+    })
+
     it('can play a later clip after a stalled attempt', async () => {
       vi.useFakeTimers()
+      vi.mocked(Capacitor.isNativePlatform).mockReturnValue(true)
       mockAudioEl.play.mockReturnValueOnce(new Promise(() => {}))
       const player = new WebAudioPlayer()
 
@@ -497,7 +545,6 @@ describe('WebAudioPlayer', () => {
       const rejection = expect(attempt).rejects.toThrow()
       await vi.advanceTimersByTimeAsync(5000)
       await rejection
-      vi.useRealTimers()
 
       await expect(player.play('https://example.com/call.ogg')).resolves.toBeUndefined()
       expect(player.getState()).toBe('playing')
