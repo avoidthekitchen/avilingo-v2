@@ -87,11 +87,14 @@ export class WebAudioPlayer implements AudioPlayer {
   private getContext(): AudioContext {
     if (!this.context) {
       this.context = new AudioContext()
-      // An interruption mid-clip never fires source.onended, so the player would sit on
-      // 'playing' against a dead context with the control stuck on stop. Drop back to idle
-      // so the next tap starts a fresh request and resumes inside a live gesture.
+      // An interruption never fires source.onended, so the player would sit on 'playing'
+      // against a dead context with the control stuck on stop. It can also land mid-load,
+      // where the request would otherwise stay valid and start a silent source once the
+      // clip arrives. stop() covers both: it invalidates the in-flight request and drops
+      // back to idle, so the next tap resumes inside a live gesture.
       this.context.addEventListener('statechange', () => {
-        if (this.state === 'playing' && needsResume(this.context?.state ?? 'closed')) {
+        const interrupted = needsResume(this.context?.state ?? 'closed')
+        if (interrupted && (this.state === 'playing' || this.state === 'loading')) {
           this.stop()
         }
       })
