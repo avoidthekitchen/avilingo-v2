@@ -1,5 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import SameDifferent from './SameDifferent'
 import type { AudioPlayer, AudioState } from '../../adapters/audio'
 import type { AudioClip, QuizItem, Species } from '../../core/types'
@@ -104,6 +104,11 @@ describe('SameDifferent audio sequence', () => {
     vi.useFakeTimers()
   })
 
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.restoreAllMocks()
+  })
+
   it('waits for the first clip to finish before starting the second clip', async () => {
     const controlled = makeControllablePlayer()
     audioPlayer = controlled.player
@@ -140,6 +145,29 @@ describe('SameDifferent audio sequence', () => {
     fireEvent.click(retry)
     await act(async () => { await Promise.resolve() })
     expect(controlled.play).toHaveBeenCalledTimes(2)
+  })
+
+  it('cancels the sequence when the app is hidden during the pause', async () => {
+    let visibilityState: DocumentVisibilityState = 'visible'
+    vi.spyOn(document, 'visibilityState', 'get').mockImplementation(() => visibilityState)
+    const controlled = makeControllablePlayer()
+    audioPlayer = controlled.player
+
+    render(<SameDifferent item={makeItem()} onAnswer={vi.fn()} />)
+    await act(async () => { await Promise.resolve() })
+
+    await act(async () => {
+      controlled.finishNaturally()
+      await Promise.resolve()
+    })
+    visibilityState = 'hidden'
+    fireEvent(document, new Event('visibilitychange'))
+    await act(async () => {
+      vi.advanceTimersByTime(1500)
+    })
+
+    expect(controlled.play).toHaveBeenCalledTimes(1)
+    expect(screen.getByRole('button', { name: 'Tap to play both clips' })).toBeEnabled()
   })
 
   it('locks replay and answering after an incorrect answer reveals the species', async () => {

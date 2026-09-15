@@ -310,6 +310,7 @@ describe('LearnTab locked lesson dialog', () => {
 
     expect(screen.getByRole('button', { name: 'Unlocking…' })).toBeDisabled()
     expect(screen.getByRole('button', { name: 'Never mind' })).toBeDisabled()
+    expect(screen.getByRole('dialog')).toHaveFocus()
 
     // Backdrop click is blocked while pending
     fireEvent.click(screen.getByTestId('unlock-dialog-backdrop'))

@@ -44,6 +44,10 @@ export default function UnlockDialog({
   }, [])
 
   useEffect(() => {
+    if (pending) dialogRef.current?.focus()
+  }, [pending])
+
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') handleDismiss()
     }
