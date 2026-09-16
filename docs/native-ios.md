@@ -81,7 +81,7 @@ BeakSpeak has one React application with two explicit production build modes:
 - `npm run build:web` uses `/beakspeak/` asset URLs for the existing Cloudflare route.
 - `npm run build:native` uses relative asset URLs for Capacitor's packaged web view.
 
-Only the iOS platform is configured. The feasibility target is portrait iPhone on iOS 18.4 or newer. Its bundle identifier, `com.unformedideas.beakspeak.feasibility`, is intentionally disposable; choose and update the permanent identifier before the first TestFlight upload.
+Only the iOS platform is configured. The target is portrait iPhone on iOS 18.4 or newer. Its permanent bundle identifier is `com.unformedideas.beakspeak`; use this same identifier when registering the app with Apple and creating its App Store Connect record. This identity installs separately from the earlier feasibility app and does not migrate its local progress.
 
 ## Prerequisites
 

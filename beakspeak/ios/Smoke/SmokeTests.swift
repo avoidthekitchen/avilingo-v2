@@ -1,7 +1,7 @@
 import XCTest
 
 final class SmokeTests: XCTestCase {
-    private let bundleIdentifier = "com.unformedideas.beakspeak.feasibility"
+    private let bundleIdentifier = "com.unformedideas.beakspeak"
 
     override func setUpWithError() throws {
         continueAfterFailure = false

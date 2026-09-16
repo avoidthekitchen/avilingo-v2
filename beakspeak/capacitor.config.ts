@@ -1,8 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli'
 
 const config: CapacitorConfig = {
-  // Disposable feasibility identifier. Choose the permanent identifier before TestFlight.
-  appId: 'com.unformedideas.beakspeak.feasibility',
+  appId: 'com.unformedideas.beakspeak',
   appName: 'BeakSpeak',
   webDir: 'dist',
   experimental: {
