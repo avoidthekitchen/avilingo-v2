@@ -199,6 +199,11 @@ describe('SameDifferent audio sequence', () => {
       vi.advanceTimersByTime(5000)
     })
     expect(onAnswer).not.toHaveBeenCalled()
+
+    // Next reports the wrong answer with the target itself as the confused species:
+    // this item was a Same pair, so the learner failed to recognise one bird twice.
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+    expect(onAnswer).toHaveBeenCalledWith(false, expect.any(Number), 'a')
   })
 
   it('does not record a correct answer if the question unmounts during auto-advance', async () => {
