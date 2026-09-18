@@ -15,7 +15,9 @@ export default function IntroQuiz({ items, onComplete, onBack }: Props) {
   const audioPlayer = useAppStore(s => s.audioPlayer)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [results, setResults] = useState<Array<{ correct: boolean }>>([])
+  // Kept in a ref: the auto-advance timeout fires from a closure created when the
+  // answer was recorded, so state captured there would be one answer behind.
+  const resultsRef = useRef<Array<{ correct: boolean }>>([])
   const [showingResult, setShowingResult] = useState(false)
   const autoAdvanceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -44,13 +46,13 @@ export default function IntroQuiz({ items, onComplete, onBack }: Props) {
 
   const advance = useCallback(() => {
     if (currentIndex + 1 >= items.length) {
-      onComplete([...results])
+      onComplete([...resultsRef.current])
       return
     }
     setCurrentIndex(prev => prev + 1)
     setSelectedId(null)
     setShowingResult(false)
-  }, [currentIndex, items.length, onComplete, results])
+  }, [currentIndex, items.length, onComplete])
 
   const handleSelect = useCallback((speciesId: string) => {
     if (showingResult || !current) return
@@ -58,7 +60,7 @@ export default function IntroQuiz({ items, onComplete, onBack }: Props) {
     const correct = speciesId === current.targetSpecies.id
     setSelectedId(speciesId)
     setShowingResult(true)
-    setResults(prev => [...prev, { correct }])
+    resultsRef.current = [...resultsRef.current, { correct }]
 
     if (correct) {
       // Auto-advance after 1.5s for correct answers
