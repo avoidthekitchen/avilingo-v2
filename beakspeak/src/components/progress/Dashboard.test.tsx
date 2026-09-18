@@ -174,4 +174,20 @@ describe('Dashboard audio shortcuts', () => {
     expect(audioButtonMock).toHaveBeenCalledTimes(3)
     expect(screen.getByText('Northern Rough-winged Swallow')).toBeInTheDocument()
   })
+
+  it('describes the next review relative to now instead of as a bare date', () => {
+    const species = makeSpecies({ id: 'amro', common_name: 'American Robin' })
+    mockState = {
+      manifest: makeManifest([species]),
+      allProgress: new Map([['amro', makeProgress('amro', { nextReview: Date.now() + 10 * 60_000 })]]),
+      getIntroducedSpecies: () => [species],
+      getDueForReview: () => [],
+      resetProgress: vi.fn(),
+      setTab: vi.fn(),
+    }
+
+    render(<Dashboard />)
+
+    expect(screen.getByText(/Due in 10 min/)).toBeInTheDocument()
+  })
 })
