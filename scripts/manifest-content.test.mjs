@@ -37,24 +37,6 @@ test('every species has at least one song and one call', () => {
   }
 })
 
-// Known defect, kept visible as a todo: SameDifferent decides whether clip 1 was a
-// call with `clip.type.includes('call')` instead of using the song/call role. Four
-// clips disagree with their role (American Crow song XC531008 and Steller's Jay song
-// XC178944 are typed "call", Chestnut-backed Chickadee song XC702313 is "call, song",
-// Black-capped Chickadee call XC636533 is "song"), so a Same question for those birds
-// plays the identical clip twice. Remove `todo` once the quiz logic keys off the role
-// or the data is relabelled.
-test('song clips are not typed as calls and call clips are', { todo: 'four clips are typed against their song/call role' }, () => {
-  for (const species of manifest.species) {
-    for (const clip of species.audio_clips.songs) {
-      assert.ok(!clip.type.includes('call'), `${species.id} song ${clip.xc_id} is typed "${clip.type}"`)
-    }
-    for (const clip of species.audio_clips.calls) {
-      assert.ok(clip.type.includes('call'), `${species.id} call ${clip.xc_id} is typed "${clip.type}"`)
-    }
-  }
-})
-
 test('clips reference only production audio with unique Xeno-canto ids', () => {
   const xcIds = allClips.map(clip => clip.xc_id)
   assert.equal(new Set(xcIds).size, xcIds.length)

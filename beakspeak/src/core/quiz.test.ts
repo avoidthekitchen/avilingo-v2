@@ -126,3 +126,46 @@ describe('buildQuizSession', () => {
       })
   })
 })
+
+describe('same/different questions', () => {
+  function makeManifest(species: Species[]): Manifest {
+    return {
+      version: '0.1.0', tier: 1, region: 'Test', target_species_count: species.length,
+      curation_date: '2026-01-01', data_sources: {},
+      species,
+      confuser_pairs: [],
+      lesson_plan: { description: 'test', lessons: [] },
+    } as Manifest
+  }
+
+  it('contrasts a song with a call even when the song is labelled "call"', () => {
+    // Crows and jays do not sing, so their curated "song" clips carry a "call" label.
+    const crow = makeSpecies('amcr')
+    crow.audio_clips.songs = [{ ...crow.audio_clips.songs[0], type: 'call' }]
+    const progress = new Map([['amcr', makeProgress('amcr', { reps: 3 })]])
+
+    for (let attempt = 0; attempt < 50; attempt += 1) {
+      const [item] = buildQuizSession(progress, makeManifest([crow]), new Map())
+      expect(item.exerciseType).toBe('same_different')
+      expect(item.secondClip).toBeDefined()
+      expect(item.secondClip!.xc_id).not.toBe(item.clip.xc_id)
+    }
+  })
+
+  it('never plays the identical clip twice while an alternative exists', () => {
+    const species = ['a', 'b', 'c'].map(makeSpecies)
+    const progress = new Map(species.map(s => [s.id, makeProgress(s.id, { reps: 4 })]))
+
+    for (let attempt = 0; attempt < 30; attempt += 1) {
+      for (const item of buildQuizSession(progress, makeManifest(species), new Map())) {
+        if (item.exerciseType !== 'same_different') continue
+        expect(item.secondClip!.xc_id).not.toBe(item.clip.xc_id)
+        if (item.isSame) {
+          const inCalls = (clip: { xc_id: string }) =>
+            item.targetSpecies.audio_clips.calls.some(c => c.xc_id === clip.xc_id)
+          expect(inCalls(item.clip)).not.toBe(inCalls(item.secondClip!))
+        }
+      }
+    }
+  })
+})
