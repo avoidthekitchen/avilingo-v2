@@ -18,8 +18,8 @@ vi.mock('../../core/quiz', () => ({
 }))
 
 vi.mock('./ThreeChoiceQuiz', () => ({
-  default: ({ onAnswer }: { onAnswer: (correct: boolean, responseTimeMs: number) => void }) => (
-    <button onClick={() => onAnswer(false, 1200)}>Answer Question</button>
+  default: ({ onAnswer }: { onAnswer: (correct: boolean, responseTimeMs: number, chosenId: string) => void }) => (
+    <button onClick={() => onAnswer(false, 1200, 'b')}>Answer Question</button>
   ),
 }))
 
@@ -117,5 +117,14 @@ describe('QuizSession practice mode', () => {
     expect(mockState.logConfusion).not.toHaveBeenCalled()
     expect(screen.getByText('Needs More Practice')).toBeInTheDocument()
     expect(screen.getByText(/didn’t change your review schedule|didn't change your review schedule/i)).toBeInTheDocument()
+  })
+
+  it('logs a wrong review answer as a confusion between the two specific birds', async () => {
+    render(<QuizSession mode="review" onComplete={vi.fn()} />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Answer Question' }))
+
+    await vi.waitFor(() => expect(mockState.logConfusion).toHaveBeenCalledWith('a', 'b'))
+    expect(mockState.updateProgress).toHaveBeenCalledTimes(1)
   })
 })

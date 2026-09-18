@@ -8,7 +8,9 @@ import FeedbackAnnouncement from '../shared/FeedbackAnnouncement'
 
 interface Props {
   item: QuizItem
-  onAnswer: (correct: boolean, responseTimeMs: number) => void
+  // chosenId is the species the learner picked; it lets a wrong answer be logged as
+  // a confusion between two specific birds.
+  onAnswer: (correct: boolean, responseTimeMs: number, chosenId: string) => void
 }
 
 export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
@@ -53,14 +55,14 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
     setShowingResult(true)
 
     if (correct) {
-      autoAdvanceRef.current = setTimeout(() => onAnswer(true, responseTime), 1500)
+      autoAdvanceRef.current = setTimeout(() => onAnswer(true, responseTime, speciesId), 1500)
     }
     // For incorrect, user must tap "Next"
   }, [showingResult, item, onAnswer, responseTimeMs])
 
   const handleNext = useCallback(() => {
-    onAnswer(false, responseTimeMs())
-  }, [onAnswer, responseTimeMs])
+    onAnswer(false, responseTimeMs(), selectedId ?? item.targetSpecies.id)
+  }, [onAnswer, responseTimeMs, selectedId, item.targetSpecies.id])
 
   if (!item.choices) return null
 
