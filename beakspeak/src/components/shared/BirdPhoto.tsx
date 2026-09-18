@@ -14,7 +14,10 @@ export default function BirdPhoto({ src, alt, ...props }: Props) {
     <img
       {...props}
       src={usesFallback ? fallbackPhotoUrl : src}
-      alt={usesFallback ? `${alt} photo unavailable` : alt}
+      // A decorative photo (alt="") stays decorative on fallback; the visible label
+      // next to it already names the bird, so repeating it would double the control's
+      // accessible name.
+      alt={usesFallback && alt !== '' ? `${alt} photo unavailable` : alt}
       data-photo-fallback={usesFallback ? 'true' : undefined}
       onError={() => {
         if (!usesFallback) setFailedUrl(src)
