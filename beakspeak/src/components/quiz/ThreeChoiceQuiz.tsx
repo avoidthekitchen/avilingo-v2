@@ -86,7 +86,7 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
             >
               <BirdPhoto
                 src={choice.photo.url}
-                alt={choice.common_name}
+                alt=""
                 className="w-14 h-14 rounded-lg object-cover"
               />
               <span className="font-medium text-text">{choice.common_name}</span>
