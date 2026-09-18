@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useAppStore } from '../../store/appStore'
 import AudioButton from '../shared/AudioButton'
 import BirdPhoto from '../shared/BirdPhoto'
@@ -11,6 +11,16 @@ export default function Dashboard() {
   const getDueForReview = useAppStore(s => s.getDueForReview)
   const resetProgress = useAppStore(s => s.resetProgress)
   const [confirming, setConfirming] = useState(false)
+
+  // AudioButton re-subscribes to the player whenever its clips prop changes identity,
+  // so give each row a stable array instead of a fresh one per render.
+  const clipsBySpecies = useMemo(
+    () => new Map((manifest?.species ?? []).map(species => [species.id, {
+      song: species.audio_clips.songs[0] ? [species.audio_clips.songs[0]] : null,
+      call: species.audio_clips.calls[0] ? [species.audio_clips.calls[0]] : null,
+    }])),
+    [manifest],
+  )
 
   if (!manifest) return null
 
@@ -51,6 +61,7 @@ export default function Dashboard() {
       <div className="space-y-2">
         {manifest.species.map(species => {
           const progress = allProgress.get(species.id)
+          const clips = clipsBySpecies.get(species.id)
           const stateLabel = !progress?.introduced
             ? 'New'
             : progress.state === 'new'
@@ -84,19 +95,19 @@ export default function Dashboard() {
                     <> · Next: {new Date(progress.nextReview).toLocaleDateString()}</>
                   )}
                 </p>
-                {(species.audio_clips.songs[0] || species.audio_clips.calls[0]) && (
+                {(clips?.song || clips?.call) && (
                   <div className="mt-2 flex flex-wrap gap-2">
-                    {species.audio_clips.songs[0] && (
+                    {clips.song && (
                       <AudioButton
-                        clips={[species.audio_clips.songs[0]]}
+                        clips={clips.song}
                         label="Song"
                         speciesId={species.id}
                         variant="primary"
                       />
                     )}
-                    {species.audio_clips.calls[0] && (
+                    {clips.call && (
                       <AudioButton
-                        clips={[species.audio_clips.calls[0]]}
+                        clips={clips.call}
                         label="Call"
                         speciesId={species.id}
                         variant="primary"

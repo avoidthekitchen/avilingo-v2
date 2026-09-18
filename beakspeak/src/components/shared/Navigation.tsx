@@ -13,6 +13,7 @@ export default function Navigation() {
 
   return (
     <nav
+      aria-label="Main"
       className="fixed bottom-0 left-0 right-0 bg-card border-t border-border z-40"
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
     >

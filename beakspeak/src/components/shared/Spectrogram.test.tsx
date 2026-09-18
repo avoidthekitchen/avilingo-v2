@@ -15,7 +15,7 @@ describe('Spectrogram', () => {
   it('renders a canvas element', () => {
     const data = makeSpectrogramData()
     const { container } = render(
-      <Spectrogram data={data} currentTime={0} duration={5} isPlaying={false} onSeek={() => {}} />,
+      <Spectrogram data={data} currentTime={0} duration={5} onSeek={() => {}} />,
     )
     expect(container.querySelector('canvas')).toBeInTheDocument()
   })
@@ -24,7 +24,7 @@ describe('Spectrogram', () => {
     const data = makeSpectrogramData()
     const onSeek = vi.fn()
     const { container } = render(
-      <Spectrogram data={data} currentTime={0} duration={12} isPlaying={false} onSeek={onSeek} />,
+      <Spectrogram data={data} currentTime={0} duration={12} onSeek={onSeek} />,
     )
     const canvas = container.querySelector('canvas')!
 
@@ -46,7 +46,7 @@ describe('Spectrogram', () => {
       sampleRate: 44100,
     }
     const { container } = render(
-      <Spectrogram data={emptyData} currentTime={0} duration={0} isPlaying={false} onSeek={() => {}} />,
+      <Spectrogram data={emptyData} currentTime={0} duration={0} onSeek={() => {}} />,
     )
     expect(container.querySelector('canvas')).toBeInTheDocument()
   })
@@ -61,7 +61,7 @@ describe('Spectrogram', () => {
     }
     const onSeek = vi.fn()
     const { container } = render(
-      <Spectrogram data={emptyData} currentTime={0} duration={0} isPlaying={false} onSeek={onSeek} />,
+      <Spectrogram data={emptyData} currentTime={0} duration={0} onSeek={onSeek} />,
     )
     const canvas = container.querySelector('canvas')!
     canvas.getBoundingClientRect = () => ({ left: 0, top: 0, right: 400, bottom: 80, width: 400, height: 80, x: 0, y: 0, toJSON() {} })
@@ -78,7 +78,7 @@ describe('Spectrogram', () => {
         data={makeSpectrogramData()}
         currentTime={2}
         duration={5}
-        isPlaying={false}
+       
         onSeek={onSeek}
       />,
     )
