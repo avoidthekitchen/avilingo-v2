@@ -119,7 +119,7 @@ export default function LearnTab() {
                       alt={s.common_name}
                       className="h-8 w-8 shrink-0 rounded-full object-cover"
                     />
-                    <span className="min-w-0 break-words text-xs leading-tight text-text-muted">{s.common_name}</span>
+                    <span className="min-w-0 break-words hyphenate-long-words text-xs leading-tight text-text-muted">{s.common_name}</span>
                   </div>
                 ))}
               </div>
