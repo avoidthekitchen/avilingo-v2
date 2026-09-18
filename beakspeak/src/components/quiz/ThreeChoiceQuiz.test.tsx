@@ -131,4 +131,16 @@ describe('ThreeChoiceQuiz response timing', () => {
     expect(correct).toBe(false)
     expect(responseTime).toBeGreaterThanOrEqual(2000)
   })
+
+  it('does not record a correct answer if the question unmounts during auto-advance', async () => {
+    const onAnswer = vi.fn()
+    const { unmount } = render(<ThreeChoiceQuiz item={makeItem()} onAnswer={onAnswer} />)
+    await act(async () => { await Promise.resolve() })
+
+    fireEvent.click(screen.getByText('A').closest('button')!)
+    unmount()
+    act(() => { vi.advanceTimersByTime(1500) })
+
+    expect(onAnswer).not.toHaveBeenCalled()
+  })
 })
