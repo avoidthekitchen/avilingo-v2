@@ -1,6 +1,14 @@
 import { describe, it, expect } from 'vitest'
-import { createNewProgress, scheduleReview, isDue, ratingFromOutcome } from './fsrs'
+import { createNewProgress, scheduleReview, isDue, ratingFromOutcome, schedulerParameters } from './fsrs'
 import { Rating } from 'ts-fsrs'
+
+describe('schedulerParameters', () => {
+  it('passes a complete FSRS-6 weight vector so nothing is auto-filled', () => {
+    expect(schedulerParameters.w).toHaveLength(21)
+    expect(schedulerParameters.request_retention).toBe(0.85)
+    expect(schedulerParameters.maximum_interval).toBe(180)
+  })
+})
 
 describe('createNewProgress', () => {
   it('creates progress with new state and introduced false', () => {
