@@ -78,7 +78,6 @@ describe('Spectrogram', () => {
         data={makeSpectrogramData()}
         currentTime={2}
         duration={5}
-       
         onSeek={onSeek}
       />,
     )
