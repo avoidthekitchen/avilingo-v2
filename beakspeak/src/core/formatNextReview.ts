@@ -10,8 +10,15 @@ const DAY = 24 * HOUR
 export function formatNextReview(nextReview: number, now = Date.now()): string {
   const delta = nextReview - now
   if (delta <= 0) return 'Due now'
-  if (delta < HOUR) return `Due in ${Math.max(1, Math.round(delta / MINUTE))} min`
-  if (delta < DAY) return `Due in ${Math.round(delta / HOUR)} h`
+  // Each band is chosen by the rounded value and clamped to it, so a delta is never
+  // reported in a unit it has not reached: 59 min 40 s rounds to 60 minutes and is
+  // handed to the hour band as "Due in 1 h", and 23 h 30 m rounds to 24 hours but
+  // reads "Due in 23 h". The clamp also keeps sub-day deltas out of the day
+  // arithmetic below, which assumes a full day and would answer "Due in 0 days"
+  // for a review later the same day when now is midnight.
+  const minutes = Math.round(delta / MINUTE)
+  if (minutes < 60) return `Due in ${Math.max(1, minutes)} min`
+  if (delta < DAY) return `Due in ${Math.min(23, Math.round(delta / HOUR))} h`
 
   const startOfToday = new Date(now)
   startOfToday.setHours(0, 0, 0, 0)

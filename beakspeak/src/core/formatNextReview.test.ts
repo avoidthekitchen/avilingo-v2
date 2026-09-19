@@ -19,6 +19,19 @@ describe('formatNextReview', () => {
     expect(formatNextReview(now + 3 * hour, now)).toBe('Due in 3 h')
   })
 
+  it('never reports a unit the delta has not reached', () => {
+    expect(formatNextReview(now + 59 * min + 40 * 1000, now)).toBe('Due in 1 h')
+    expect(formatNextReview(now + hour - 1, now)).toBe('Due in 1 h')
+    expect(formatNextReview(now + 23 * hour + 30 * min, now)).toBe('Due in 23 h')
+    expect(formatNextReview(now + day - 1, now)).toBe('Due in 23 h')
+  })
+
+  it('keeps sub-day deltas out of the day arithmetic at midnight', () => {
+    const midnight = new Date(2026, 8, 18, 0, 0, 0).getTime()
+    expect(formatNextReview(midnight + 23 * hour + 35 * min, midnight)).toBe('Due in 23 h')
+    expect(formatNextReview(midnight + day, midnight)).toBe('Due tomorrow')
+  })
+
   it('uses tomorrow and day counts within a week', () => {
     expect(formatNextReview(now + day, now)).toBe('Due tomorrow')
     expect(formatNextReview(now + 5 * day, now)).toBe('Due in 5 days')
