@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { useAppStore } from '../../store/appStore'
 import type { AudioClip } from '../../core/types'
 import type { AudioState } from '../../adapters/audio'
@@ -39,6 +39,18 @@ export default function AudioButton({ clips, label, speciesId, variant = 'primar
     })
     return unsub
   }, [audioPlayer, clips])
+
+  // Stop this button's own clip when the button goes away (tab switch, card change).
+  // Dashboard is the only screen without a stop-on-unmount of its own, so a clip
+  // started there would otherwise keep playing with no visible control anywhere.
+  const clipUrlsRef = useRef(clips.map(clip => clip.audio_url))
+  useEffect(() => {
+    clipUrlsRef.current = clips.map(clip => clip.audio_url)
+  }, [clips])
+  useEffect(() => () => {
+    const activeUrl = audioPlayer.getActiveUrl()
+    if (activeUrl && clipUrlsRef.current.includes(activeUrl)) audioPlayer.stop()
+  }, [audioPlayer])
 
   const currentClip = clips[clipIndex]
 
