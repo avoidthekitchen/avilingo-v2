@@ -116,7 +116,7 @@ export default function LearnTab() {
                   <div key={s.id} className="flex min-w-0 items-center gap-1.5">
                     <BirdPhoto
                       src={s.photo.url}
-                      alt={s.common_name}
+                      alt=""
                       className="h-8 w-8 shrink-0 rounded-full object-cover"
                     />
                     <span className="min-w-0 break-words text-xs leading-tight text-text-muted">{s.common_name}</span>
