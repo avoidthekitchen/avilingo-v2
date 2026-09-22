@@ -42,9 +42,6 @@ export default function BirdCard({ species }: Props) {
     spectrogramCacheRef.current = spectrogramCache
   }, [spectrogramCache])
 
-  const activeUrl = audioPlayer.getActiveUrl()
-  const isPlaying = activeUrl != null && activeUrl === activeClipUrl
-
   // Keep a ref so the onStateChange callback always sees the latest activeClipUrl
   const activeClipUrlRef = useRef(activeClipUrl)
   useEffect(() => {
@@ -195,7 +192,6 @@ export default function BirdCard({ species }: Props) {
           data={spectrogramData}
           currentTime={currentTime}
           duration={duration}
-          isPlaying={isPlaying}
           onSeek={handleSeek}
         />
 
