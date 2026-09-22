@@ -101,10 +101,10 @@ export default function LearnTab() {
               }`}
             >
               <div className="flex items-center justify-between mb-2">
-                <h3 className="font-semibold text-text">
+                <span className="font-semibold text-text">
                   {completed && '✓ '}
                   Lesson {lesson.lesson}: {lesson.title}
-                </h3>
+                </span>
                 {!available && !completed ? (
                   <span className="text-xs text-text-muted">🔒</span>
                 ) : available && !completed ? (

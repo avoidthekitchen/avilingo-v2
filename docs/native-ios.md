@@ -46,8 +46,9 @@ The runner fails on tool-reported errors even when the CLI exits with status zer
 and requires exactly three passing tests.
 
 XcodeBuildMCP's `snapshot-ui` did not traverse WKWebView's remote accessibility
-child in our iOS 26.3/26.5 checks. XCTest did find and tap the HTML controls on both
-runtimes. This smoke uses `xcodebuildmcp simulator test`; it does not depend on
+child in our iOS 26.3/26.5 checks (the smoke also passes on iOS 27.0 with
+Xcode 27). XCTest did find and tap the HTML controls on both runtimes. This
+smoke uses `xcodebuildmcp simulator test`; it does not depend on
 coordinate tapping or the snapshot interface. It does not verify audio audibility,
 silent-switch routing, exact stop-on-background behavior, VoiceOver quality,
 sustained performance, signing, or physical installation.
