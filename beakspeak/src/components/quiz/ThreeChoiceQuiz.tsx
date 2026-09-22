@@ -34,9 +34,14 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
     [],
   )
 
-  // Stop audio when the quiz question unmounts (quit/complete/navigate)
+  // Stop audio and cancel a pending auto-advance when the question unmounts
+  // (quit/complete/navigate), so a quit inside the 1.5 s window records nothing.
+  const autoAdvanceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   useEffect(() => {
-    return () => { audioPlayer.stop() }
+    return () => {
+      if (autoAdvanceRef.current !== null) clearTimeout(autoAdvanceRef.current)
+      audioPlayer.stop()
+    }
   }, [audioPlayer])
 
   const handleSelect = useCallback((speciesId: string) => {
@@ -48,7 +53,7 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
     setShowingResult(true)
 
     if (correct) {
-      setTimeout(() => onAnswer(true, responseTime), 1500)
+      autoAdvanceRef.current = setTimeout(() => onAnswer(true, responseTime), 1500)
     }
     // For incorrect, user must tap "Next"
   }, [showingResult, item, onAnswer, responseTimeMs])
