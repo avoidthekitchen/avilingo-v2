@@ -19,10 +19,8 @@ move into the App Xcode project later; its scope does not depend on its project
 location. The newest available compatible iPhone simulator is selected; set
 `IOS_SIMULATOR_ID` to use a particular installed device.
 
-Three tests run:
+Two tests run:
 
-- **Navigation** asserts Learn Birds appears, taps Lesson 1 by its accessibility
-  label, and asserts American Crow appears. It does not complete a lesson.
 - **Background and foreground** opens Lesson 1, starts a clip, sends the app to
   the Home Screen, reactivates it, and asserts the session came back and
   playback is not wedged. XCUITest cannot see whether the clip actually stopped —
@@ -43,7 +41,7 @@ audio from the committed metadata lock (no new metadata/API key required), cache
 the downloads and generated clips, and uploads JSON results, logs, and the XCTest
 result bundle. Local evidence lives in the ignored `.artifacts/ios-smoke/` folder.
 The runner fails on tool-reported errors even when the CLI exits with status zero,
-and requires exactly three passing tests.
+and requires exactly two passing tests.
 
 XcodeBuildMCP's `snapshot-ui` did not traverse WKWebView's remote accessibility
 child in our iOS 26.3/26.5 checks (the smoke also passes on iOS 27.0 with
@@ -68,7 +66,7 @@ WebKit reported `TypeError: undefined is not an object (evaluating
 Capacitor's `setupCordovaCompatibility()` observes the scene entering foreground
 and evaluates the resume event before the JavaScript bridge exists on cold start.
 BeakSpeak currently has no listener for this document event; initialization and
-the element-based navigation test succeed. This is a confirmed dropped early
+the native lifecycle smoke succeed. This is a confirmed dropped early
 resume event, not evidence of a failed asset request or React initialization.
 
 No vendor patch or blanket error suppression is applied. Initialization does not

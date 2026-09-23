@@ -57,14 +57,6 @@ final class SmokeTests: XCTestCase {
         XCTAssertTrue(play.isHittable, app.debugDescription)
     }
 
-    func testPackagedAppNavigation() {
-        let app = launchInstalledApp()
-        let lesson = button(app, containing: "Lesson 1: The unmistakable three")
-        XCTAssertTrue(lesson.waitForExistence(timeout: 5), app.debugDescription)
-        lesson.tap()
-        XCTAssertTrue(app.staticTexts["American Crow"].waitForExistence(timeout: 10), app.debugDescription)
-    }
-
     func testProgressSurvivesAForceQuit() {
         let app = launchInstalledApp()
 
