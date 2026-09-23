@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useAppStore } from '../../store/appStore'
 import AudioButton from '../shared/AudioButton'
 import BirdPhoto from '../shared/BirdPhoto'
+import { formatNextReview } from '../../core/formatNextReview'
 
 export default function Dashboard() {
   const manifest = useAppStore(s => s.manifest)
@@ -92,7 +93,7 @@ export default function Dashboard() {
                 <p className="text-xs text-text-muted">
                   {progress?.reps ?? 0} reps
                   {progress?.nextReview && (
-                    <> · Next: {new Date(progress.nextReview).toLocaleDateString()}</>
+                    <> · {formatNextReview(progress.nextReview)}</>
                   )}
                 </p>
                 {(clips?.song || clips?.call) && (
