@@ -1,9 +1,9 @@
-import { useState, useCallback, useEffect, useRef } from 'react'
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAppStore } from '../../store/appStore'
 import { getSpeciesByIds } from '../../core/manifest'
 import { buildIntroQuiz, buildReviewQuiz } from '../../core/lesson'
-import type { Lesson } from '../../core/types'
+import type { IntroQuizItem, Lesson } from '../../core/types'
 import BirdCard from './BirdCard'
 import IntroQuiz from './IntroQuiz'
 
@@ -22,12 +22,21 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
   const introduceSpecies = useAppStore(s => s.introduceSpecies)
 
   const introducedSpecies = getIntroducedSpecies()
-  const hasReviewPhase = mode === 'normal' && introducedSpecies.length >= 3
+  const lessonSpecies = useMemo(
+    () => (manifest ? getSpeciesByIds(manifest, lesson.species) : []),
+    [manifest, lesson.species],
+  )
 
-  const [phase, setPhase] = useState<Phase>(hasReviewPhase ? 'review' : 'cards')
+  // Quiz items are random, so they are built once when their phase starts and held in
+  // state. Building them during render would hand IntroQuiz a fresh question set on
+  // every re-render, including the one caused by introduceSpecies at completion.
+  const [reviewItems] = useState(() =>
+    mode === 'normal' && introducedSpecies.length >= 3 ? buildReviewQuiz(introducedSpecies) : [],
+  )
+  const [quizItems, setQuizItems] = useState<IntroQuizItem[]>([])
+  const [phase, setPhase] = useState<Phase>(reviewItems.length > 0 ? 'review' : 'cards')
   const [cardIndex, setCardIndex] = useState(0)
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null)
-  const lessonSpecies = manifest ? getSpeciesByIds(manifest, lesson.species) : []
   const rootRef = useRef<HTMLDivElement>(null)
 
   // Unlock launches replace the dialog whose focus-return target is gone; move focus into the session
@@ -41,9 +50,10 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
       setCardIndex(prev => prev + 1)
     } else {
       // All cards seen, move to quiz
+      setQuizItems(buildIntroQuiz(lessonSpecies, introducedSpecies))
       setPhase('quiz')
     }
-  }, [cardIndex, lessonSpecies.length])
+  }, [cardIndex, lessonSpecies, introducedSpecies])
 
   const handleSwipeLeft = useCallback(() => {
     if (cardIndex > 0) {
@@ -67,11 +77,6 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
 
   // Phase: forward testing review
   if (phase === 'review') {
-    const reviewItems = buildReviewQuiz(introducedSpecies)
-    if (reviewItems.length === 0) {
-      setPhase('cards')
-      return null
-    }
     return (
       <div className="flex h-full min-h-0 flex-col">
         <div className="p-4 bg-secondary/10 text-center">
@@ -162,7 +167,6 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
 
   // Phase: intro quiz
   if (phase === 'quiz') {
-    const quizItems = buildIntroQuiz(lessonSpecies, introducedSpecies)
     return (
       <div className="flex flex-col h-full">
         <div className="p-4 bg-primary/10 text-center">

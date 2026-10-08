@@ -148,6 +148,14 @@ export const test = base.extend<{ app: BeakSpeakApp }>({
       consoleErrors.push(error.message)
     })
 
+    // Product-flow tests should not depend on Wikimedia uptime or rate limits.
+    // The photo-fallback spec registers a later route to exercise image failure.
+    await page.route('https://upload.wikimedia.org/**', route => route.fulfill({
+      status: 200,
+      contentType: 'image/svg+xml',
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect width="80" height="80" fill="#dfe8df"/></svg>',
+    }))
+
     await runFixture(new BeakSpeakApp(page))
 
     expect(consoleErrors).toEqual([])

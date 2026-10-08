@@ -18,6 +18,7 @@ export default function SameDifferent({ item, onAnswer }: Props) {
   const [selectedAnswer, setSelectedAnswer] = useState<boolean | null>(null)
   const startTime = useRef(0)
   const sequenceId = useRef(0)
+  const autoAdvanceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const playSequence = useCallback(async () => {
     const sequenceRequestId = sequenceId.current + 1
@@ -55,6 +56,7 @@ export default function SameDifferent({ item, onAnswer }: Props) {
     return () => {
       cancelled = true
       sequenceId.current += 1
+      if (autoAdvanceRef.current !== null) clearTimeout(autoAdvanceRef.current)
       audioPlayer.stop()
     }
   }, [audioPlayer, playSequence])
@@ -82,7 +84,7 @@ export default function SameDifferent({ item, onAnswer }: Props) {
     setPlayPhase('answered')
 
     if (correct) {
-      setTimeout(() => onAnswer(true, responseTime), 1500)
+      autoAdvanceRef.current = setTimeout(() => onAnswer(true, responseTime), 1500)
     }
   }, [playPhase, item.isSame, onAnswer])
 
