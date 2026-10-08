@@ -17,8 +17,22 @@ final class SmokeTests: XCTestCase {
     private func launchInstalledApp() -> XCUIApplication {
         let app = XCUIApplication(bundleIdentifier: bundleIdentifier)
         app.launch()
-        XCTAssertTrue(app.staticTexts["Learn Birds"].waitForExistence(timeout: 20), app.debugDescription)
+        XCTAssertTrue(app.staticTexts["Learn Birds"].waitForExistence(timeout: 30), app.debugDescription)
         return app
+    }
+
+    // A cold WKWebView can expose an element before its remote accessibility
+    // process can activate it. Wait for interaction readiness, then tap once.
+    private func tapWhenReady(_ element: XCUIElement, in app: XCUIApplication) {
+        let ready = XCTNSPredicateExpectation(
+            predicate: NSPredicate { object, _ in
+                guard let candidate = object as? XCUIElement else { return false }
+                return candidate.exists && candidate.isHittable
+            },
+            object: element
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [ready], timeout: 20), .completed, app.debugDescription)
+        element.tap()
     }
 
     private func button(_ app: XCUIApplication, containing text: String) -> XCUIElement {
@@ -38,11 +52,11 @@ final class SmokeTests: XCTestCase {
 
         let lesson = button(app, containing: "Lesson 1: The unmistakable three")
         XCTAssertTrue(lesson.waitForExistence(timeout: 5), app.debugDescription)
-        lesson.tap()
+        tapWhenReady(lesson, in: app)
 
         let play = app.buttons["Play Song"]
         XCTAssertTrue(play.waitForExistence(timeout: 10), app.debugDescription)
-        play.tap()
+        tapWhenReady(play, in: app)
 
         XCUIDevice.shared.press(.home)
         app.activate()
@@ -53,7 +67,7 @@ final class SmokeTests: XCTestCase {
         // failure this guards against.
         XCTAssertTrue(app.staticTexts["American Crow"].waitForExistence(timeout: 20), app.debugDescription)
         XCTAssertTrue(play.waitForExistence(timeout: 10), app.debugDescription)
-        play.tap()
+        tapWhenReady(play, in: app)
         XCTAssertTrue(play.isHittable, app.debugDescription)
     }
 
@@ -65,16 +79,16 @@ final class SmokeTests: XCTestCase {
         // already holds progress the lesson is unlocked and no dialog appears.
         let lockedLesson = button(app, containing: "Lesson 3:")
         XCTAssertTrue(lockedLesson.waitForExistence(timeout: 5), app.debugDescription)
-        lockedLesson.tap()
+        tapWhenReady(lockedLesson, in: app)
 
         let confirm = app.buttons["Skip Ahead Anyway"]
         if confirm.waitForExistence(timeout: 5) {
-            confirm.tap()
+            tapWhenReady(confirm, in: app)
         }
 
         let back = button(app, containing: "Back")
         XCTAssertTrue(back.waitForExistence(timeout: 10), app.debugDescription)
-        back.tap()
+        tapWhenReady(back, in: app)
 
         guard let introduced = introducedSpeciesCount(app) else {
             return XCTFail("Could not read the introduced-species summary. \(app.debugDescription)")
@@ -86,7 +100,7 @@ final class SmokeTests: XCTestCase {
 
         app.terminate()
         app.launch()
-        XCTAssertTrue(app.staticTexts["Learn Birds"].waitForExistence(timeout: 20), app.debugDescription)
+        XCTAssertTrue(app.staticTexts["Learn Birds"].waitForExistence(timeout: 30), app.debugDescription)
 
         XCTAssertEqual(
             introducedSpeciesCount(app),
