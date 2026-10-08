@@ -23,15 +23,19 @@ final class SmokeTests: XCTestCase {
 
     // A cold WKWebView can expose an element before its remote accessibility
     // process can activate it. Wait for interaction readiness, then tap once.
-    private func tapWhenReady(_ element: XCUIElement, in app: XCUIApplication) {
+    private func waitUntilReady(_ element: XCUIElement, in app: XCUIApplication) {
         let ready = XCTNSPredicateExpectation(
             predicate: NSPredicate { object, _ in
                 guard let candidate = object as? XCUIElement else { return false }
-                return candidate.exists && candidate.isHittable
+                return candidate.exists && candidate.isHittable && candidate.isEnabled
             },
             object: element
         )
         XCTAssertEqual(XCTWaiter.wait(for: [ready], timeout: 20), .completed, app.debugDescription)
+    }
+
+    private func tapWhenReady(_ element: XCUIElement, in app: XCUIApplication) {
+        waitUntilReady(element, in: app)
         element.tap()
     }
 
@@ -54,7 +58,9 @@ final class SmokeTests: XCTestCase {
         XCTAssertTrue(lesson.waitForExistence(timeout: 5), app.debugDescription)
         tapWhenReady(lesson, in: app)
 
-        let play = app.buttons["Play Song"]
+        // A failed audio start offers "Try Play Song again". That is a valid,
+        // enabled recovery control, so keep the query stable across its states.
+        let play = button(app, containing: "Song")
         XCTAssertTrue(play.waitForExistence(timeout: 10), app.debugDescription)
         tapWhenReady(play, in: app)
 
@@ -68,7 +74,7 @@ final class SmokeTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["American Crow"].waitForExistence(timeout: 20), app.debugDescription)
         XCTAssertTrue(play.waitForExistence(timeout: 10), app.debugDescription)
         tapWhenReady(play, in: app)
-        XCTAssertTrue(play.isHittable, app.debugDescription)
+        waitUntilReady(play, in: app)
     }
 
     func testProgressSurvivesAForceQuit() {

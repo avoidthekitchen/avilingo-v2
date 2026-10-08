@@ -183,3 +183,8 @@ The app window is created by SceneDelegate. Info.plist must not also select a ma
 or scene storyboard, and the delegate configuration keeps storyboard nil. This
 preserves one Capacitor controller per scene instead of competing bootstrap paths.
 The launch storyboard remains separate and is still used.
+
+The playback smoke query includes both normal and retry labels for the same Song
+control. After foreground recovery and another play attempt it must become
+hittable and enabled again; a temporary loading state cannot pass that readiness
+check. The smoke does not infer audio audibility from an enabled control.
