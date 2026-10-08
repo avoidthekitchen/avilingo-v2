@@ -15,6 +15,8 @@ interface AppState {
   audioPlayer: AudioPlayer
   storage: StorageAdapter
   initialized: boolean
+  initializing: boolean
+  progressLoadError: boolean
   error: string | null
 
   // Derived getters
@@ -41,6 +43,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   audioPlayer: new WebAudioPlayer(),
   storage: new DexieStorage(),
   initialized: false,
+  initializing: false,
+  progressLoadError: false,
   error: null,
 
   getCompletedLessons: () => {
@@ -68,34 +72,45 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   initialize: async () => {
+    if (get().initializing) return
+    set({ initializing: true })
     try {
-      const { storage } = get()
-      const manifest = await loadManifest()
-      const progressList = await storage.getAllProgress()
-      const allProgress = new Map(progressList.map(p => [p.speciesId, p]))
-      set({ manifest, allProgress, initialized: true, error: null })
+      const manifest = get().manifest ?? await loadManifest()
+      set({ manifest, error: null })
+      try {
+        const progressList = await get().storage.getAllProgress()
+        set({ allProgress: new Map(progressList.map(p => [p.speciesId, p])), progressLoadError: false })
+      } catch {
+        // Keep content available, but never overwrite unreadable saved progress.
+        set({ progressLoadError: true })
+      }
+      set({ initialized: true })
     } catch (e) {
       set({ error: e instanceof Error ? e.message : 'Failed to load', initialized: false })
+    } finally {
+      set({ initializing: false })
     }
   },
 
   setTab: (tab: Tab) => set({ activeTab: tab }),
 
   updateProgress: async (speciesId: string, progress: UserProgress) => {
-    const { storage, allProgress } = get()
+    const { storage, progressLoadError } = get()
+    if (progressLoadError) throw new Error('Saved progress is unavailable')
     await storage.saveProgress(progress)
-    const updated = new Map(allProgress)
+    const updated = new Map(get().allProgress)
     updated.set(speciesId, progress)
     set({ allProgress: updated })
   },
 
   introduceSpecies: async (speciesIds: string[]) => {
-    const { storage, allProgress } = get()
-    const updated = new Map(allProgress)
+    const { storage, allProgress, progressLoadError } = get()
+    if (progressLoadError) throw new Error('Saved progress is unavailable')
+    const records: UserProgress[] = []
     const now = Date.now()
 
     for (const id of speciesIds) {
-      const existing = updated.get(id)
+      const existing = allProgress.get(id)
       const progress: UserProgress = existing
         ? { ...existing, introduced: true, introducedAt: existing.introducedAt ?? now }
         : {
@@ -110,15 +125,18 @@ export const useAppStore = create<AppState>((set, get) => ({
             lapses: 0,
             state: 'new',
           }
-      updated.set(id, progress)
-      await storage.saveProgress(progress)
+      records.push(progress)
     }
 
+    await storage.saveProgressBatch(records)
+    const updated = new Map(get().allProgress)
+    for (const progress of records) updated.set(progress.speciesId, progress)
     set({ allProgress: updated })
   },
 
   logConfusion: async (targetId: string, chosenId: string) => {
-    const { storage } = get()
+    const { storage, progressLoadError } = get()
+    if (progressLoadError) throw new Error('Saved progress is unavailable')
     await storage.logConfusion({
       targetId,
       chosenId,
@@ -134,8 +152,10 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   resetProgress: async () => {
-    const { storage } = get()
+    const { storage, progressLoadError } = get()
+    if (progressLoadError) throw new Error('Saved progress is unavailable')
     await storage.clearAll()
-    set({ allProgress: new Map() })
+    get().audioPlayer.stop()
+    set({ allProgress: new Map(), lastPlayedClipId: new Map() })
   },
 }))

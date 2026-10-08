@@ -38,13 +38,13 @@ class BeakSpeakApp {
     await expect(this.page.getByText('Due Now')).toBeVisible()
   }
 
-  async answerIntroQuiz(questionCount = 5) {
+  async answerIntroQuiz(questionCount = 5, finalView?: Locator) {
     for (let question = 1; question <= questionCount; question += 1) {
       await expect(this.page.getByText(`Question ${question} of ${questionCount}`)).toBeVisible()
 
       const expectedNextView = question < questionCount
         ? this.page.getByText(`Question ${question + 1} of ${questionCount}`)
-        : this.page.getByRole('heading', { name: 'Lesson Complete!' })
+        : finalView ?? this.page.getByRole('heading', { name: 'Lesson Complete!' })
       await this.answerThreeChoiceAndAdvance(expectedNextView)
     }
   }

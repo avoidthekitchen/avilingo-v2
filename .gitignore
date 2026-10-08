@@ -4,3 +4,7 @@ node_modules/
 .DS_Store
 __pycache__/
 .cache/manual-audio/
+
+# Generated browser test evidence
+/beakspeak/test-results/
+/beakspeak/playwright-report/

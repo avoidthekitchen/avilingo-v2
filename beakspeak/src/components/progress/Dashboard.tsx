@@ -4,7 +4,7 @@ import AudioButton from '../shared/AudioButton'
 import BirdPhoto from '../shared/BirdPhoto'
 import { formatNextReview } from '../../core/formatNextReview'
 
-export default function Dashboard() {
+export default function Dashboard({ progressAvailable = true }: { progressAvailable?: boolean }) {
   const manifest = useAppStore(s => s.manifest)
   const allProgress = useAppStore(s => s.allProgress)
   const getIntroducedSpecies = useAppStore(s => s.getIntroducedSpecies)
@@ -12,6 +12,8 @@ export default function Dashboard() {
   const getDueForReview = useAppStore(s => s.getDueForReview)
   const resetProgress = useAppStore(s => s.resetProgress)
   const [confirming, setConfirming] = useState(false)
+  const [resetting, setResetting] = useState(false)
+  const [resetError, setResetError] = useState(false)
   const [now, setNow] = useState(() => Date.now())
 
   useEffect(() => {
@@ -52,7 +54,7 @@ export default function Dashboard() {
     <div className="p-4">
       <h1 className="text-2xl font-bold text-text mb-4">Progress</h1>
 
-      <div className="grid grid-cols-3 gap-3 mb-6">
+      {progressAvailable && <div className="grid grid-cols-3 gap-3 mb-6">
         <div className="bg-card rounded-xl border border-border p-3 text-center">
           <p className="text-2xl font-bold text-primary">{introduced.length}</p>
           <p className="text-xs text-text-muted">Introduced</p>
@@ -65,9 +67,9 @@ export default function Dashboard() {
           <p className="text-2xl font-bold text-error">{dueForReview.length}</p>
           <p className="text-xs text-text-muted">Due Now</p>
         </div>
-      </div>
+      </div>}
 
-      {dueForReview.length > 0 && (
+      {progressAvailable && dueForReview.length > 0 && (
         <button
           onClick={() => setTab('quiz')}
           className="w-full mb-4 px-4 py-3 bg-primary text-white rounded-xl font-medium"
@@ -107,12 +109,12 @@ export default function Dashboard() {
                 <p className="font-medium text-text text-sm truncate">
                   {species.common_name}
                 </p>
-                <p className="text-xs text-text-muted">
+                {progressAvailable && <p className="text-xs text-text-muted">
                   {progress?.reps ?? 0} reps
                   {progress?.nextReview && (
                     <> · {formatNextReview(progress.nextReview, now)}</>
                   )}
-                </p>
+                </p>}
                 {(clips?.song || clips?.call) && (
                   <div className="mt-2 flex flex-wrap gap-2">
                     {clips.song && (
@@ -134,15 +136,15 @@ export default function Dashboard() {
                   </div>
                 )}
               </div>
-              <span className={`shrink-0 text-xs px-2 py-0.5 rounded-full font-medium ${stateColor}`}>
+              {progressAvailable && <span className={`shrink-0 text-xs px-2 py-0.5 rounded-full font-medium ${stateColor}`}>
                 {stateLabel}
-              </span>
+              </span>}
             </div>
           )
         })}
       </div>
 
-      <div className="mt-8 pt-6 border-t border-border">
+      {progressAvailable && <div className="mt-8 pt-6 border-t border-border">
         {!confirming ? (
           <button
             onClick={() => setConfirming(true)}
@@ -155,26 +157,37 @@ export default function Dashboard() {
             <p className="text-sm text-center text-text-muted">
               This will erase all progress. Are you sure?
             </p>
+            {resetError && <p role="alert" className="mb-3 text-error">Progress could not be reset. Please try again.</p>}
             <div className="flex gap-2">
               <button
-                onClick={() => setConfirming(false)}
+                disabled={resetting}
+                onClick={() => { setConfirming(false); setResetError(false) }}
                 className="flex-1 px-4 py-3 text-sm border border-border rounded-xl text-text-muted"
               >
                 Cancel
               </button>
               <button
+                disabled={resetting}
                 onClick={async () => {
-                  await resetProgress()
-                  setConfirming(false)
+                  setResetting(true)
+                  setResetError(false)
+                  try {
+                    await resetProgress()
+                    setConfirming(false)
+                  } catch {
+                    setResetError(true)
+                  } finally {
+                    setResetting(false)
+                  }
                 }}
                 className="flex-1 px-4 py-3 text-sm bg-error text-white rounded-xl font-medium"
               >
-                Yes, Reset
+                {resetting ? 'Resetting…' : resetError ? 'Retry reset' : 'Yes, Reset'}
               </button>
             </div>
           </div>
         )}
-      </div>
+      </div>}
     </div>
   )
 }

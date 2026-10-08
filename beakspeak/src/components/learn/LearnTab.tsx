@@ -32,6 +32,7 @@ export default function LearnTab() {
   const [activeLaunch, setActiveLaunch] = useState<LearnLaunch | null>(null)
   const [unlockLesson, setUnlockLesson] = useState<Lesson | null>(null)
   const [unlockPending, setUnlockPending] = useState(false)
+  const [unlockError, setUnlockError] = useState<string | undefined>()
   const dismissedRef = useRef(false)
 
   if (!manifest) return null
@@ -90,6 +91,7 @@ export default function LearnTab() {
                   setActiveLaunch({ lesson, mode: 'normal' })
                   return
                 }
+                setUnlockError(undefined)
                 setUnlockLesson(lesson)
               }}
               className={`w-full text-left p-4 rounded-xl border transition-all ${
@@ -133,11 +135,16 @@ export default function LearnTab() {
           lesson={unlockLesson}
           lockReason={unlockReason}
           pending={unlockPending}
+          error={unlockError}
           onConfirm={async () => {
             dismissedRef.current = false
             setUnlockPending(true)
+            setUnlockError(undefined)
             try {
               await introduceSpecies(skippedLessons.flatMap(lesson => lesson.species))
+            } catch {
+              setUnlockError('Skipped lessons could not be saved. Please try again.')
+              return
             } finally {
               setUnlockPending(false)
             }

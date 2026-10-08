@@ -167,3 +167,18 @@ npm run lint
 npm run test:unit
 npm run test:e2e
 ```
+
+## Storage failure recovery
+
+If progress cannot be read, the app retains the loaded content and offers bird
+sounds and credits while preventing progress writes. Retry explicitly reopens
+IndexedDB without resetting saved data. Lessons save their species in one atomic
+batch, and reset clears progress plus confusion history in one transaction.
+Failed lesson, Skip Ahead, review, and reset writes show a recoverable state.
+Review retry keeps the originally scheduled card and tracks completed writes so
+an error while logging confusion cannot apply the same review twice.
+
+These recovery paths preserve the existing storage-adapter boundary. A future
+native adapter must also implement atomic saveProgressBatch and clearAll. They
+do not migrate disposable beta data or substitute for issue #32's distributed
+native-storage gate.
