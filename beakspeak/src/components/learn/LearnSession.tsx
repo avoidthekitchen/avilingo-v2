@@ -6,8 +6,9 @@ import { buildIntroQuiz, buildReviewQuiz } from '../../core/lesson'
 import type { IntroQuizItem, Lesson } from '../../core/types'
 import BirdCard from './BirdCard'
 import IntroQuiz from './IntroQuiz'
+import SaveError from '../shared/SaveError'
 
-type Phase = 'review' | 'cards' | 'quiz' | 'complete'
+type Phase = 'review' | 'cards' | 'quiz' | 'saving' | 'save-error' | 'complete'
 type LearnSessionMode = 'normal' | 'unlock' | 'redo'
 
 interface Props {
@@ -38,6 +39,7 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
   const [cardIndex, setCardIndex] = useState(0)
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null)
   const rootRef = useRef<HTMLDivElement>(null)
+  const savingRef = useRef(false)
 
   // Unlock launches replace the dialog whose focus-return target is gone; move focus into the session
   useEffect(() => {
@@ -63,10 +65,17 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
   }, [cardIndex])
 
   const handleQuizComplete = useCallback(async () => {
-    if (mode !== 'redo') {
-      await introduceSpecies(lesson.species)
+    if (savingRef.current) return
+    savingRef.current = true
+    setPhase('saving')
+    try {
+      if (mode !== 'redo') await introduceSpecies(lesson.species)
+      setPhase('complete')
+    } catch {
+      setPhase('save-error')
+    } finally {
+      savingRef.current = false
     }
-    setPhase('complete')
   }, [introduceSpecies, lesson.species, mode])
 
   const handleReviewComplete = useCallback(() => {
@@ -74,6 +83,11 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
   }, [])
 
   if (!manifest) return null
+
+  if (phase === 'saving') return <p role="status" className="p-6 text-center">Saving lesson…</p>
+  if (phase === 'save-error') {
+    return <SaveError message="Your lesson could not be saved. Retry to finish this lesson." onRetry={() => { void handleQuizComplete() }} onBack={onComplete} />
+  }
 
   // Phase: forward testing review
   if (phase === 'review') {
