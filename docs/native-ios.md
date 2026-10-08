@@ -188,3 +188,8 @@ The playback smoke query includes both normal and retry labels for the same Song
 control. After foreground recovery and another play attempt it must become
 hittable and enabled again; a temporary loading state cannot pass that readiness
 check. The smoke does not infer audio audibility from an enabled control.
+
+The native launch wordmark, window, and web-view background use BeakSpeak's warm
+light palette. Native chrome deliberately stays light while the app has one
+light theme, including when the device uses dark mode. The launch wordmark and
+initial React loader share their size and safe-area-centered placement.

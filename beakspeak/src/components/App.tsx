@@ -44,8 +44,8 @@ export default function App() {
 
   if (!initialized) {
     return (
-      <div className="flex flex-1 items-center justify-center">
-        <h1 className="text-3xl font-semibold text-primary animate-pulse">
+      <div className="flex flex-1 items-center justify-center" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+        <h1 className="text-[30px] font-semibold text-primary animate-pulse motion-reduce:animate-none">
           BeakSpeak
         </h1>
       </div>
