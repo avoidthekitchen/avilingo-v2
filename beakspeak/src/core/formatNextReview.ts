@@ -20,9 +20,12 @@ export function formatNextReview(nextReview: number, now = Date.now()): string {
   if (minutes < 60) return `Due in ${Math.max(1, minutes)} min`
   if (delta < DAY) return `Due in ${Math.min(23, Math.round(delta / HOUR))} h`
 
-  const startOfToday = new Date(now)
-  startOfToday.setHours(0, 0, 0, 0)
-  const dayOffset = Math.floor((nextReview - startOfToday.getTime()) / DAY)
+  // Compare local calendar dates, not elapsed hours: a DST day can be 23 or 25 h.
+  const currentDate = new Date(now)
+  const dueDate = new Date(nextReview)
+  const today = Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())
+  const dueDay = Date.UTC(dueDate.getFullYear(), dueDate.getMonth(), dueDate.getDate())
+  const dayOffset = (dueDay - today) / DAY
   if (dayOffset === 1) return 'Due tomorrow'
   if (dayOffset <= 7) return `Due in ${dayOffset} days`
   return `Next: ${new Date(nextReview).toLocaleDateString()}`

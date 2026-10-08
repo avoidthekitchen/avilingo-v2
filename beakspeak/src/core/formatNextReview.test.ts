@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { formatNextReview } from './formatNextReview'
 
 // A fixed mid-afternoon reference keeps the day arithmetic away from midnight.
@@ -8,6 +8,7 @@ const hour = 60 * min
 const day = 24 * hour
 
 describe('formatNextReview', () => {
+  afterEach(() => vi.unstubAllEnvs())
   it('reports a past or present due time as due now', () => {
     expect(formatNextReview(now - 5 * min, now)).toBe('Due now')
     expect(formatNextReview(now, now)).toBe('Due now')
@@ -41,4 +42,20 @@ describe('formatNextReview', () => {
     const later = now + 30 * day
     expect(formatNextReview(later, now)).toBe(`Next: ${new Date(later).toLocaleDateString()}`)
   })
+  it('counts calendar dates across the spring DST transition', () => {
+    vi.stubEnv('TZ', 'America/Los_Angeles')
+    const before = new Date(2027, 2, 14, 0, 0, 0)
+    const after = new Date(2027, 2, 16, 0, 0, 0)
+    expect(after.getTime() - before.getTime()).toBe(47 * hour)
+    expect(formatNextReview(after.getTime(), before.getTime())).toBe('Due in 2 days')
+  })
+
+  it('counts calendar dates across the fall DST transition', () => {
+    vi.stubEnv('TZ', 'America/Los_Angeles')
+    const before = new Date(2027, 10, 7, 0, 0, 0)
+    const after = new Date(2027, 10, 9, 0, 0, 0)
+    expect(after.getTime() - before.getTime()).toBe(49 * hour)
+    expect(formatNextReview(after.getTime(), before.getTime())).toBe('Due in 2 days')
+  })
+
 })
