@@ -85,3 +85,11 @@ test('launch and native chrome use the existing light BeakSpeak presentation', (
   assert.match(capacitorConfig, /backgroundColor: '#FAF8F5'/)
   assert.match(infoPlist, /<key>UIUserInterfaceStyle<\/key>\s*<string>Light<\/string>/)
 })
+
+test('native Swift package pins the installed patched Capacitor iOS version', () => {
+  const lock = JSON.parse(read('../beakspeak/package-lock.json'))
+  const version = lock.packages['node_modules/@capacitor/ios'].version
+  assert.equal(packageSwift.match(/capacitor-swift-pm.git", exact: "([^"]+)"/)[1], version)
+  const resolved = JSON.parse(read('../beakspeak/ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved'))
+  assert.equal(resolved.pins.find(pin => pin.identity === 'capacitor-swift-pm').state.version, version)
+})
