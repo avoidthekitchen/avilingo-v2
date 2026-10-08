@@ -1,3 +1,4 @@
+import { BoundedCache } from '../core/boundedCache'
 import { Capacitor } from '@capacitor/core'
 
 export type AudioState = 'idle' | 'loading' | 'playing' | 'error'
@@ -66,7 +67,7 @@ export class WebAudioPlayer implements AudioPlayer {
   private context: AudioContext | null = null
   private gainNode: GainNode | null = null
   private source: AudioBufferSourceNode | null = null
-  private cache = new Map<string, AudioBuffer>()
+  private cache = new BoundedCache<string, AudioBuffer>(16 * 1024 * 1024, 16, buffer => buffer.length * buffer.numberOfChannels * 4)
   private state: AudioState = 'idle'
   private activeUrl: string | null = null
   private activeBuffer: AudioBuffer | null = null
@@ -299,7 +300,7 @@ export class WebAudioPlayer implements AudioPlayer {
 
   seek(time: number): void {
     if (this.state !== 'playing' || !this.activeUrl) return
-    const buffer = this.cache.get(this.activeUrl)
+    const buffer = this.activeBuffer
     if (!buffer || !this.context || !this.gainNode) return
 
     // Silently swap the source node — no state transitions, no button flicker
@@ -332,7 +333,7 @@ export class WebAudioPlayer implements AudioPlayer {
   }
 
   getBuffer(url: string): AudioBuffer | null {
-    return this.cache.get(url) ?? null
+    return (url === this.activeUrl ? this.activeBuffer : null) ?? this.cache.get(url) ?? null
   }
 
   async play(url: string, offset?: number): Promise<void> {

@@ -663,3 +663,19 @@ describe('WebAudioPlayer', () => {
     })
   })
 })
+
+describe('decoded audio memory budget', () => {
+  it('evicts old clips while the active clip remains playable and seekable', async () => {
+    const player = new WebAudioPlayer()
+    await player.play('/active.ogg')
+    for (let i = 0; i < 20; i++) await player.prefetch(`/other-${i}.ogg`)
+    expect(player.getBuffer('/other-0.ogg')).toBeNull()
+    expect(player.getBuffer('/active.ogg')).toBe(mockBuffer)
+    const count = mockSources.length
+    player.seek(2)
+    expect(mockSources.length).toBe(count + 1)
+    expect(player.getProgress().currentTime).toBe(2)
+    player.stop()
+    expect(player.getBuffer('/active.ogg')).toBeNull()
+  })
+})

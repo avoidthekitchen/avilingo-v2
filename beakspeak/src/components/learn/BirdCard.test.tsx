@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, fireEvent, act } from '@testing-library/react'
 import BirdCard from './BirdCard'
+import { computeSpectrogram } from '../../core/spectrogram'
 import type { Species, AudioClip } from '../../core/types'
 import type { AudioPlayer, AudioState } from '../../adapters/audio'
 
@@ -252,4 +253,22 @@ describe('BirdCard spectrogram integration', () => {
     )
     expect(mockAudioPlayer.seek).not.toHaveBeenCalled()
   })
+})
+
+it('reuses a decoded clip spectrogram across card remounts and isolates progress renders', async () => {
+  const buffer = { duration: 10, length: 441000, sampleRate: 44100, numberOfChannels: 1 } as AudioBuffer
+  let tick: (time: number, duration: number) => void = () => {}
+  mockAudioPlayer = makeMockAudioPlayer({
+    getBuffer: vi.fn(() => buffer),
+    onProgress: vi.fn(cb => { tick = cb; return () => {} }),
+  })
+  const species = makeSpecies()
+  const first = render(<BirdCard species={species} />)
+  await act(async () => {})
+  const reads = vi.mocked(mockAudioPlayer.getBuffer).mock.calls.length
+  for (let i = 0; i < 60; i++) act(() => tick(i / 6, 10))
+  expect(mockAudioPlayer.getBuffer).toHaveBeenCalledTimes(reads)
+  first.unmount()
+  render(<BirdCard species={species} />)
+  expect(computeSpectrogram).toHaveBeenCalledTimes(1)
 })
