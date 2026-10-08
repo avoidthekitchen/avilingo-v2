@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { DatabaseSync } from 'node:sqlite'
+import { createRequire } from 'node:module'
 import { mkdtempSync, rmSync } from 'node:fs'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
@@ -8,9 +8,13 @@ import type { CapacitorSQLitePlugin } from '@capacitor-community/sqlite'
 import { SQLiteStorage } from './sqliteStorage'
 import { createNewProgress } from '../core/fsrs'
 
+// Node 22 omits node:sqlite from builtinModules, so Vitest/Vite tries to bundle
+// a static import. Load the real built-in through Node on every supported runtime.
+const { DatabaseSync }: typeof import('node:sqlite') = createRequire(import.meta.url)('node:sqlite')
+
 // Exercise real SQL at the Capacitor plugin boundary; no mock SQL parser.
 class TestSQLiteBridge {
-  db: DatabaseSync
+  db: InstanceType<typeof DatabaseSync>
   private transactionOpen = false
   constructor(path = ':memory:') { this.db = new DatabaseSync(path) }
   createConnection: CapacitorSQLitePlugin['createConnection'] = async () => {}
@@ -69,6 +73,7 @@ class TestSQLiteBridge {
 const bridges: TestSQLiteBridge[] = []
 const directories: string[] = []
 afterEach(() => {
+  vi.useRealTimers()
   vi.restoreAllMocks()
   for (const bridge of bridges.splice(0)) bridge.db.close()
   for (const directory of directories.splice(0)) rmSync(directory, { recursive: true })
@@ -115,6 +120,42 @@ describe('SQLite storage contract', () => {
     vi.spyOn(bridge, 'query').mockResolvedValueOnce({})
     await expect(storage.getAllProgress()).rejects.toThrow()
     expect(await storage.getAllProgress()).toEqual([createNewProgress('a')])
+  })
+
+  it('identifies malformed saved records and permits an explicit erase without changing the schema', async () => {
+    const { bridge, storage } = setup()
+    await storage.saveProgress(createNewProgress('a'))
+    await storage.logConfusion({ targetId: 'a', chosenId: 'b', timestamp: 123 })
+    bridge.db.exec("UPDATE progress SET stability = 'invalid'")
+    await expect(storage.getAllProgress()).rejects.toMatchObject({ kind: 'corrupt' })
+    expect(await storage.getConfusionLog()).toHaveLength(1)
+    await storage.clearAll()
+    expect(await storage.getAllProgress()).toEqual([])
+    expect(await storage.getConfusionLog()).toEqual([])
+    await storage.saveProgress(createNewProgress('b'))
+    expect(await storage.getProgress('b')).toEqual(createNewProgress('b'))
+  })
+
+  it('bounds a stalled native initialization and prevents overlapping retry, save, or reset', async () => {
+    const { bridge, storage } = setup()
+    const saved = createNewProgress('a')
+    await storage.saveProgress(saved)
+    let finishOpen!: () => void
+    vi.spyOn(bridge, 'open').mockImplementationOnce(() => new Promise<void>(resolve => { finishOpen = resolve }))
+    const loadingApp = new SQLiteStorage(bridge)
+    vi.useFakeTimers()
+    const load = loadingApp.getAllProgress()
+    const timedOut = expect(load).rejects.toMatchObject({ kind: 'timeout' })
+    await vi.advanceTimersByTimeAsync(15_000)
+    await timedOut
+    await expect(loadingApp.getAllProgress()).rejects.toMatchObject({ kind: 'timeout' })
+    await expect(loadingApp.saveProgress(createNewProgress('b'))).rejects.toMatchObject({ kind: 'timeout' })
+    await expect(loadingApp.clearAll()).rejects.toMatchObject({ kind: 'timeout' })
+    // A late result releases the barrier, but does not publish stale data to the UI.
+    finishOpen()
+    await vi.advanceTimersByTimeAsync(0)
+    expect(await loadingApp.getAllProgress()).toEqual([saved])
+    expect(await loadingApp.getProgress('b')).toBeUndefined()
   })
 
   it('round-trips FSRS values, timestamps, Unicode IDs, and cleared optional fields', async () => {
@@ -203,7 +244,7 @@ describe('SQLite storage contract', () => {
     await storage.saveProgress(createNewProgress('a'))
     bridge.db.exec('PRAGMA user_version = 2')
     const olderApp = new SQLiteStorage(bridge)
-    await expect(olderApp.getAllProgress()).rejects.toThrow('Unsupported saved database version')
+    await expect(olderApp.getAllProgress()).rejects.toMatchObject({ kind: 'newer-schema' })
     await expect(olderApp.clearAll()).rejects.toThrow()
     expect(await storage.getProgress('a')).toEqual(createNewProgress('a'))
   })

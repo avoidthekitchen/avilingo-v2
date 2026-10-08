@@ -198,6 +198,10 @@ the web IndexedDB connection without resetting saved data; native initialization
 and storage calls remain retryable. Lessons save their species in one atomic
 batch, and reset clears progress plus confusion history in one transaction.
 Failed lesson, Skip Ahead, review, and reset writes show a recoverable state.
+Native load failures explain when an app update or full quit/relaunch is needed.
+Only malformed saved records offer a separate, confirmed erase-and-start-over
+action; newer-schema data remains protected. Native loads have a deadline while
+their outstanding operations remain serialized.
 Review retry keeps the originally scheduled card and tracks completed writes so
 an error while logging confusion cannot apply the same review twice.
 

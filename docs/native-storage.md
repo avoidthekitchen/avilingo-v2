@@ -63,11 +63,34 @@ set a permanent declaration only after that classification is confirmed. Referen
   tables in a transaction that also sets the version. Append future migrations;
   retain released migrations and preserve user data. A newer unsupported version
   rejects initialization rather than downgrading or resetting data.
-- Initialization is lazy and failures remain retryable. A WebView reload closes
-  orphan native connections before opening a new one; it does not delete data.
+- Adapter initialization and connection/operation failures remain retryable.
+  The community plugin prepares its directory once when the native bridge loads;
+  if that bootstrap fails, its failed state persists for that bridge. After the
+  underlying filesystem problem resolves, fully quit and relaunch the app to
+  recreate the plugin; the in-app Retry action cannot recover that specific
+  failure. Neither recovery path deletes saved data. A WebView reload closes
+  orphan native connections before opening a new one.
 - Errors propagate to the existing application recovery UI. An unreadable
   progress store prevents learning writes, while sounds and Credits remain
   available. There is no silent Dexie fallback or destructive automatic recovery.
+- The recovery UI distinguishes malformed saved records, newer-schema data,
+  transient failures, and slow native loads. Newer-schema data directs the learner
+  to update BeakSpeak and offers neither retry nor erase. Generic failures retain
+  retry and full quit/relaunch guidance; they do not offer destructive recovery.
+- Malformed progress fields in a readable, supported database offer a separate
+  **Erase saved progress and start over** action. It requires explicit confirmation
+  that all progress and confusion history will be permanently erased. It uses the
+  same atomic `clearAll`, retaining schema protection and the ordinary reset guard.
+  Only a successful commit clears the error and returns to a clean Guided Path;
+  failed erasure leaves saved records and the confirmation available for retry.
+  This is not file repair, row skipping, or forced deletion of an unreadable file.
+- Native `getAllProgress` has a 15-second deadline covering initialization and
+  querying. It rejects to the controlled recovery UI rather than leaving a loader
+  indefinitely. A deadline cannot cancel a Capacitor call: the queue stays attached
+  to the actual operation and rejects further reads, saves, or reset while it is
+  outstanding. A late result does not update the UI. After the operation settles,
+  the learner may retry; if it never returns, fully quit/relaunch. Writes retain
+  their existing commit semantics and do not receive generic timeouts.
 
 The first SQLite build intentionally ignores feasibility/first-beta Dexie progress
 and confusion history and opens a new Guided Path. No beta data is imported.
@@ -83,13 +106,18 @@ Adapter tests use real SQLite through a test implementation of the Capacitor
 plugin boundary, including a file-backed close/reopen check. They cover SQL and
 transaction behavior, but do not substitute for the actual native plugin.
 Dexie's tests continue covering the equivalent save/load/log/reset contract and
-read/write failures. Platform-selection and native configuration tests verify
+read/write failures, including recovery of failed progress and confusion list
+reads without changing committed records. Platform-selection and native configuration tests verify
 the adapter choice, SPM linkage, directory configuration, and backup preparation.
 
 Use the existing unit suite and mobile Playwright suite for the shared learner
 journey and failure UI. `npm run test:ios` synchronizes/builds the native app and
 runs the narrow XCTest lifecycle and force-quit persistence smoke. Keep learner
 flows in Playwright; do not expand XCTest into the full training journey.
+The native-storage recovery browser spec injects an external Capacitor bridge to
+exercise the production adapter, store, and UI for corrupted records, unsupported
+schema versions, and stalled loads. This complements real SQLite contract tests;
+it does not exercise the actual iOS plugin or complete the TestFlight gate.
 
 ## Physical-device TestFlight gate (pending)
 

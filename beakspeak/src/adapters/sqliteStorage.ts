@@ -2,6 +2,7 @@ import type { CapacitorSQLitePlugin, capSQLiteSet } from '@capacitor-community/s
 import { registerPlugin } from '@capacitor/core'
 import type { StorageAdapter } from './storage'
 import type { ConfusionEvent, UserProgress } from '../core/types'
+import { StorageLoadError } from './storageErrors'
 import {
   databaseName, schemaVersion, migrations, progressValues,
   readProgress, readConfusion, readRows, saveProgressStatement, statements, confusionValues,
@@ -26,6 +27,8 @@ export class SQLiteStorage implements StorageAdapter {
   private initialized = false
   private needsRecovery = false
   private queue: Promise<void> = Promise.resolve()
+  private loading?: Promise<UserProgress[]>
+  private loadTimedOut = false
 
   constructor(bridge?: SQLiteBridge) {
     this.bridge = bridge
@@ -64,8 +67,11 @@ export class SQLiteStorage implements StorageAdapter {
     }
     if (!this.initialized) {
       const { version } = await bridge.getVersion({ database: databaseName })
-      if (typeof version !== 'number' || !Number.isInteger(version) || version < 0 || version > schemaVersion) {
-        throw new Error('Unsupported saved database version')
+      if (typeof version !== 'number' || !Number.isInteger(version) || version < 0) {
+        throw new StorageLoadError('unavailable', 'Could not read the saved database version')
+      }
+      if (version > schemaVersion) {
+        throw new StorageLoadError('newer-schema', 'Unsupported saved database version')
       }
       for (const migration of migrations) {
         if (migration.version > version) {
@@ -82,6 +88,7 @@ export class SQLiteStorage implements StorageAdapter {
   // Native calls are asynchronous. Serialize whole operations so reset and batches
   // cannot interleave; a rejected operation must not poison later retries.
   private run<T>(operation: (bridge: SQLiteBridge) => Promise<T>): Promise<T> {
+    if (this.loadTimedOut) return Promise.reject(this.timeoutError())
     const result = this.queue.then(async () => {
       await this.initialize()
       const bridge = this.bridge
@@ -116,10 +123,37 @@ export class SQLiteStorage implements StorageAdapter {
   }
 
   getAllProgress(): Promise<UserProgress[]> {
-    return this.run(async bridge => {
+    if (this.loadTimedOut) return Promise.reject(this.timeoutError())
+    if (this.loading) return this.loading
+    const operation = this.run(async bridge => {
       const { values } = await bridge.query({ database: databaseName, statement: statements.getAllProgress, values: [] })
       return queryRows(values).map(readProgress)
     })
+    this.loading = new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        this.loadTimedOut = true
+        reject(this.timeoutError())
+      }, 15_000)
+      // A deadline cannot cancel a Capacitor call. Keep the queue attached to the
+      // actual operation and reject new work until it settles; never publish its
+      // late result through the already-rejected load promise.
+      operation.then(value => {
+        clearTimeout(timer)
+        this.loading = undefined
+        this.loadTimedOut = false
+        resolve(value)
+      }, error => {
+        clearTimeout(timer)
+        this.loading = undefined
+        this.loadTimedOut = false
+        reject(error)
+      })
+    })
+    return this.loading
+  }
+
+  private timeoutError(): StorageLoadError {
+    return new StorageLoadError('timeout', 'Saved progress loading took too long')
   }
 
   getConfusionLog(): Promise<ConfusionEvent[]> {

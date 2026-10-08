@@ -1,4 +1,5 @@
 import type { ConfusionEvent, UserProgress } from '../core/types'
+import { StorageLoadError } from './storageErrors'
 
 export const databaseName = 'beakspeak'
 export const schemaVersion = 1
@@ -65,7 +66,7 @@ export function readProgress(row: Record<string, unknown>): UserProgress {
   const state = row.state
   if ((introduced !== 0 && introduced !== 1) ||
     (state !== 'new' && state !== 'learning' && state !== 'review' && state !== 'relearning')) {
-    throw new Error('Invalid saved progress')
+    throw new StorageLoadError('corrupt', 'Invalid saved progress')
   }
   return {
     speciesId: readString(row.speciesId), introduced: introduced === 1,
@@ -89,12 +90,12 @@ export function confusionValues(event: ConfusionEvent) {
 }
 
 export function readString(value: unknown): string {
-  if (typeof value !== 'string') throw new Error('Invalid saved storage record')
+  if (typeof value !== 'string') throw new StorageLoadError('corrupt', 'Invalid saved storage record')
   return value
 }
 
 export function readNumber(value: unknown): number {
-  if (typeof value !== 'number' || !Number.isFinite(value)) throw new Error('Invalid saved storage record')
+  if (typeof value !== 'number' || !Number.isFinite(value)) throw new StorageLoadError('corrupt', 'Invalid saved storage record')
   return value
 }
 

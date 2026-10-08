@@ -68,4 +68,18 @@ describe('Dexie storage contract', () => {
     expect(await storage.getProgress('a')).toEqual(existing)
     expect(await storage.getConfusionLog()).toEqual([expect.objectContaining(event)])
   })
+
+  it.each(['progress', 'confusions'] as const)('recovers a failed %s list read without changing saved records', async table => {
+    const existing = createNewProgress('a')
+    const event = { targetId: 'a', chosenId: 'b', timestamp: 123 }
+    await storage.saveProgress(existing)
+    await storage.logConfusion(event)
+    vi.spyOn(IDBObjectStore.prototype, 'getAll').mockImplementationOnce(() => {
+      throw new DOMException('unavailable', 'UnknownError')
+    })
+    const load = table === 'progress' ? () => storage.getAllProgress() : () => storage.getConfusionLog()
+    await expect(load()).rejects.toThrow('unavailable')
+    expect(await storage.getAllProgress()).toEqual([existing])
+    expect(await storage.getConfusionLog()).toEqual([expect.objectContaining(event)])
+  })
 })

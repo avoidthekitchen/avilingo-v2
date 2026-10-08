@@ -6,6 +6,7 @@ import { isDue } from '../core/fsrs'
 import { WebAudioPlayer, type AudioPlayer } from '../adapters/audio'
 import type { StorageAdapter } from '../adapters/storage'
 import { createStorage } from '../adapters/createStorage'
+import { StorageLoadError, type StorageFailureKind } from '../adapters/storageErrors'
 
 interface AppState {
   // State
@@ -19,6 +20,7 @@ interface AppState {
   initialized: boolean
   initializing: boolean
   progressLoadError: boolean
+  progressLoadFailure: StorageFailureKind | null
   error: string | null
 
   // Derived getters
@@ -36,6 +38,7 @@ interface AppState {
   logConfusion: (targetId: string, chosenId: string) => Promise<void>
   setLastPlayedClip: (speciesId: string, clipId: string) => void
   resetProgress: () => Promise<void>
+  eraseCorruptProgress: () => Promise<void>
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -49,6 +52,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   initialized: false,
   initializing: false,
   progressLoadError: false,
+  progressLoadFailure: null,
   error: null,
 
   getCompletedLessons: () => {
@@ -83,10 +87,10 @@ export const useAppStore = create<AppState>((set, get) => ({
       set({ manifest, error: null })
       try {
         const progressList = await get().storage.getAllProgress()
-        set({ allProgress: new Map(progressList.map(p => [p.speciesId, p])), progressLoadError: false })
-      } catch {
+        set({ allProgress: new Map(progressList.map(p => [p.speciesId, p])), progressLoadError: false, progressLoadFailure: null })
+      } catch (error) {
         // Keep content available, but never overwrite unreadable saved progress.
-        set({ progressLoadError: true })
+        set({ progressLoadError: true, progressLoadFailure: error instanceof StorageLoadError ? error.kind : 'unavailable' })
       }
       set({ initialized: true })
     } catch (e) {
@@ -162,5 +166,25 @@ export const useAppStore = create<AppState>((set, get) => ({
     await storage.clearAll()
     get().audioPlayer.stop()
     set({ allProgress: new Map(), lastPlayedClipId: new Map() })
+  },
+
+  eraseCorruptProgress: async () => {
+    const { storage, progressLoadError, progressLoadFailure, initializing } = get()
+    if (!progressLoadError || progressLoadFailure !== 'corrupt' || initializing) {
+      throw new Error('Saved progress cannot be erased from this state')
+    }
+    set({ initializing: true })
+    try {
+      // Explicit confirmation in the recovery UI is the only path that may erase
+      // unreadable records. clearAll still verifies native schema compatibility.
+      await storage.clearAll()
+      get().audioPlayer.stop()
+      set({
+        allProgress: new Map(), lastPlayedClipId: new Map(), activeTab: 'learn', sessionActive: false,
+        progressLoadError: false, progressLoadFailure: null,
+      })
+    } finally {
+      set({ initializing: false })
+    }
   },
 }))
