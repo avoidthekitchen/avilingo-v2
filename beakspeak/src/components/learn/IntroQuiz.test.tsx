@@ -152,4 +152,26 @@ describe('IntroQuiz back navigation', () => {
 
     expect(onComplete).not.toHaveBeenCalled()
   })
+
+  it('reports every answer, including a correct final one that auto-advances', () => {
+    vi.useFakeTimers()
+    // jsdom has no scrollIntoView; the wrong-answer feedback scrolls itself into view.
+    Element.prototype.scrollIntoView = vi.fn()
+    const onComplete = vi.fn()
+    const items = [makeItem(), makeItem()]
+
+    render(<IntroQuiz items={items} onComplete={onComplete} />)
+
+    // Question 1: wrong, then Next.
+    fireEvent.click(screen.getByText('B').closest('button')!)
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+    // Question 2: correct, auto-advances off the last question.
+    fireEvent.click(screen.getByText('A').closest('button')!)
+    act(() => {
+      vi.advanceTimersByTime(1500)
+    })
+
+    expect(onComplete).toHaveBeenCalledTimes(1)
+    expect(onComplete).toHaveBeenCalledWith([{ correct: false }, { correct: true }])
+  })
 })

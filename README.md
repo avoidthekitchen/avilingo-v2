@@ -31,7 +31,7 @@ A Duolingo-style web app for learning Seattle-area bird songs and calls. Flash-c
 - Forward testing: Lesson 2+ starts with a 2-question warm-up on already-learned birds
 
 ### Quiz mode (Sprint 2)
-- FSRS-6 spaced repetition with custom auditory-learning parameters (faster initial stability decay)
+- FSRS-6 spaced repetition (default weights, 85% retention target, 180-day interval cap)
 - Two exercise types: `three_choice` (identify the bird) and `same_different` (same species?)
 - 8–10 items per session; exercise type based on rep count (3-choice first, then discrimination)
 - Response-time ratings: three_choice fast <2.5s / slow >7s; same_different fast <4s / slow >10s

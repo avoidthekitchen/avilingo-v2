@@ -55,3 +55,13 @@ button {
   padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
   padding-left: max(1rem, env(safe-area-inset-left, 0px));
 }
+
+/* Hyphenate only long single words (e.g. "Hummingbird") in narrow labels; short
+   words such as "Sparrow" wrap whole instead of splitting. */
+@utility hyphenate-long-words {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  -webkit-hyphenate-limit-before: 5;
+  -webkit-hyphenate-limit-after: 4;
+  hyphenate-limit-chars: 10 5 4;
+}

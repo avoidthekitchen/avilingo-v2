@@ -95,10 +95,10 @@ Typed IndexedDB wrapper. Used for persisting user progress and confusion event l
 
 ### ts-fsrs 5.3
 
-TypeScript implementation of the FSRS-6 spaced repetition algorithm. Wrapped in `beakspeak/src/core/fsrs.ts` with custom parameters tuned for auditory learning.
+TypeScript implementation of the FSRS-6 spaced repetition algorithm. Wrapped in `beakspeak/src/core/fsrs.ts` with the FSRS-6 default weights and a tuned retention target.
 
 - Docs: https://github.com/open-spaced-repetition/ts-fsrs
-- Custom params: faster initial stability decay than defaults
+- Params: default FSRS-6 weights, `request_retention` 0.85, `maximum_interval` 180 days
 - Rating mapped from response time, not self-report
 
 ### Framer Motion 12.38
