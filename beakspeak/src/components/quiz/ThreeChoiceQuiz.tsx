@@ -17,19 +17,32 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
   const audioPlayer = useAppStore(s => s.audioPlayer)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [showingResult, setShowingResult] = useState(false)
-  // Response time is measured from the end of the first playback (or from the moment
-  // playback fails or is stopped), so the grade reflects recall rather than how long
-  // the clip was. Answering before the clip ends counts as an immediate recall.
+  // Failed autoplay must not make listening to the first successful retry count
+  // against recall. Later replays keep the original clock rather than resetting it.
   const startTime = useRef<number | null>(null)
-  useEffect(() => {
-    let cancelled = false
-    startTime.current = null
-    const markReady = () => {
-      if (!cancelled && startTime.current === null) startTime.current = Date.now()
+  const firstListenComplete = useRef(false)
+  const playbackRequest = useRef(0)
+  const playQuestionClip = useCallback(async () => {
+    const request = ++playbackRequest.current
+    const measureFirstListen = !firstListenComplete.current
+    if (measureFirstListen) startTime.current = null
+    try {
+      await playAudioToCompletion(audioPlayer, item.clip.audio_url)
+      if (request !== playbackRequest.current || !measureFirstListen) return
+      firstListenComplete.current = true
+      startTime.current = Date.now()
+    } catch {
+      if (request === playbackRequest.current && measureFirstListen) {
+        startTime.current = Date.now()
+      }
     }
-    playAudioToCompletion(audioPlayer, item.clip.audio_url).then(markReady, markReady)
-    return () => { cancelled = true }
-  }, [item, audioPlayer])
+  }, [audioPlayer, item.clip.audio_url])
+
+  useEffect(() => {
+    firstListenComplete.current = false
+    void playQuestionClip()
+    return () => { playbackRequest.current += 1 }
+  }, [item, playQuestionClip])
 
   const responseTimeMs = useCallback(
     () => (startTime.current === null ? 0 : Date.now() - startTime.current),
@@ -74,7 +87,7 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
         message={showingResult ? (isCorrect ? 'Correct!' : `That was ${item.targetSpecies.common_name}`) : ''}
       />
       <div className="text-center mb-4">
-        <AudioPlaybackControl audioPlayer={audioPlayer} url={item.clip.audio_url} />
+        <AudioPlaybackControl audioPlayer={audioPlayer} url={item.clip.audio_url} onPlay={playQuestionClip} />
       </div>
 
       <p className="text-lg font-semibold text-text text-center mb-4">

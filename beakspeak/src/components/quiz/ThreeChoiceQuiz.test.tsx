@@ -154,4 +154,42 @@ describe('ThreeChoiceQuiz response timing', () => {
 
     expect(onAnswer).toHaveBeenCalledWith(false, expect.any(Number), 'b')
   })
+
+  it('measures recall after listening to a manual retry of failed autoplay', async () => {
+    audioPlayer.play = vi.fn()
+      .mockImplementationOnce(async () => { emit('error', '/a.ogg'); throw new Error('blocked') })
+      .mockImplementation(async (url: string) => { emit('playing', url) })
+    const onAnswer = vi.fn()
+    render(<ThreeChoiceQuiz item={makeItem()} onAnswer={onAnswer} />)
+    await act(async () => { await Promise.resolve(); await Promise.resolve() })
+    act(() => { vi.advanceTimersByTime(2000) })
+    fireEvent.click(screen.getByRole('button', { name: 'Tap to play sound' }))
+    await act(async () => { await Promise.resolve() })
+    act(() => { vi.advanceTimersByTime(6000) })
+    await act(async () => { endClipNaturally('/a.ogg') })
+    act(() => { vi.advanceTimersByTime(1000) })
+    fireEvent.click(screen.getByText('A').closest('button')!)
+    act(() => { vi.advanceTimersByTime(1500) })
+    const [correct, responseTime] = onAnswer.mock.calls[0]
+    expect(correct).toBe(true)
+    expect(responseTime).toBe(1000)
+  })
+
+  it('keeps the first successful listening clock during a later replay', async () => {
+    const onAnswer = vi.fn()
+    render(<ThreeChoiceQuiz item={makeItem()} onAnswer={onAnswer} />)
+    await act(async () => { await Promise.resolve() })
+    await act(async () => { endClipNaturally('/a.ogg') })
+    act(() => { vi.advanceTimersByTime(3000) })
+    fireEvent.click(screen.getByRole('button', { name: 'Play sound' }))
+    await act(async () => { await Promise.resolve() })
+    act(() => { vi.advanceTimersByTime(6000) })
+    await act(async () => { endClipNaturally('/a.ogg') })
+    fireEvent.click(screen.getByText('A').closest('button')!)
+    act(() => { vi.advanceTimersByTime(1500) })
+    const [correct, responseTime] = onAnswer.mock.calls[0]
+    expect(correct).toBe(true)
+    expect(responseTime).toBe(9000)
+  })
+
 })
