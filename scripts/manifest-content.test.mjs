@@ -93,3 +93,23 @@ test('every species has the learner-facing copy the cards and quizzes render', (
     assert.ok(species.habitat.length > 0, `${species.id} has no habitat tags`)
   }
 })
+
+
+test('production photos have precise credits and bounded responsive thumbnails', () => {
+  for (const species of manifest.species) {
+    const photo = species.photo
+    assert.ok(photo.creator.trim(), `${species.id} has no creator credit`)
+    assert.match(photo.source_url, /^https:\/\/commons\.wikimedia\.org\/wiki\/File:/)
+    assert.match(photo.license_url, /^https:\/\//)
+    assert.notEqual(photo.license, 'CC-BY-SA (Wikipedia)')
+    assert.ok(photo.width <= 960 && photo.height > 0, species.id)
+    const candidates = photo.srcset.split(', ')
+    assert.equal(candidates.length, 2)
+    for (const candidate of candidates) {
+      assert.match(candidate, /^https:\/\/thumb\.wikimedia\.org\/.*\/thumb\/.* (250|960)w$/)
+      const [, widthInUrl, descriptor] = candidate.match(/\/(\d+)px-[^ ]+ (\d+)w$/)
+      assert.equal(widthInUrl, descriptor, `${species.id} has an inaccurate width descriptor`)
+
+    }
+  }
+})

@@ -34,4 +34,13 @@ describe('BirdPhoto', () => {
     expect(photo).toHaveAttribute('data-photo-fallback', 'true')
     expect(screen.queryByRole('img')).toBeNull()
   })
+  it('removes failed responsive candidates so the bundled fallback can load', () => {
+    render(<BirdPhoto src="https://thumb.wikimedia.org/bird.jpg" srcSet="https://thumb.wikimedia.org/small.jpg 240w, https://thumb.wikimedia.org/bird.jpg 960w" alt="American Crow" />)
+    const photo = screen.getByRole('img', { name: 'American Crow' })
+    expect(photo).toHaveAttribute('srcset')
+    fireEvent.error(photo)
+    expect(photo).not.toHaveAttribute('srcset')
+    expect(photo).toHaveAttribute('src', expect.stringMatching(/^(data:image\/svg\+xml|.*bird-photo-fallback)/))
+  })
+
 })

@@ -38,6 +38,10 @@ export interface AudioClip {
 
 export interface Photo {
   url: string;
+  srcset?: string;
+  creator?: string;
+  license_url?: string;
+  source_url?: string;
   width?: number;
   height?: number;
   filename: string;

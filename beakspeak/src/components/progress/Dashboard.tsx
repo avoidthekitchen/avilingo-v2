@@ -82,6 +82,7 @@ export default function Dashboard() {
             >
               <BirdPhoto
                 src={species.photo.url}
+                srcSet={species.photo.srcset}
                 alt={species.common_name}
                 className="w-10 h-10 rounded-full object-cover"
               />

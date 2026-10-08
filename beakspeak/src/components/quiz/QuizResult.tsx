@@ -52,6 +52,7 @@ export default function QuizResult({ answers, mode, onDone }: Props) {
               >
                 <BirdPhoto
                   src={a.species.photo.url}
+                  srcSet={a.species.photo.srcset}
                   alt={a.species.common_name}
                   className="w-10 h-10 rounded-lg object-cover"
                 />

@@ -182,6 +182,7 @@ export default function SameDifferent({ item, onAnswer }: Props) {
             <div className="text-center">
               <BirdPhoto
                 src={item.targetSpecies.photo.url}
+                srcSet={item.targetSpecies.photo.srcset}
                 alt={item.targetSpecies.common_name}
                 className="w-12 h-12 rounded-lg object-cover mx-auto mb-1"
               />
@@ -193,6 +194,7 @@ export default function SameDifferent({ item, onAnswer }: Props) {
                 <div className="text-center">
                   <BirdPhoto
                     src={item.secondSpecies.photo.url}
+                    srcSet={item.secondSpecies.photo.srcset}
                     alt={item.secondSpecies.common_name}
                     className="w-12 h-12 rounded-lg object-cover mx-auto mb-1"
                   />

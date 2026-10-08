@@ -103,6 +103,7 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
             >
               <BirdPhoto
                 src={choice.photo.url}
+                srcSet={choice.photo.srcset}
                 alt=""
                 className="w-14 h-14 rounded-lg object-cover"
               />
