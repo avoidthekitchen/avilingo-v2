@@ -141,6 +141,8 @@ export default function BirdCard({ species }: Props) {
       <div className="relative" style={{ minHeight: '45%' }}>
         <BirdPhoto
           src={species.photo.url}
+          srcSet={species.photo.srcset}
+          sizes="(max-width: 430px) 100vw, 430px"
           alt={species.common_name}
           className="w-full h-full object-cover"
           style={{ maxHeight: '340px', minHeight: '200px', objectPosition: '50% 42%' }}

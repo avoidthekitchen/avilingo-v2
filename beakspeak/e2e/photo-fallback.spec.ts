@@ -1,7 +1,7 @@
 import { expect, test } from './fixtures'
 
 test('failed bird photos use the bundled fallback throughout the learner journey', async ({ app, page }) => {
-  await page.route('https://upload.wikimedia.org/**', route => route.fulfill({
+  await page.route('https://*.wikimedia.org/**', route => route.fulfill({
     status: 200,
     contentType: 'image/jpeg',
     body: 'unavailable photo',

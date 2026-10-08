@@ -13,7 +13,7 @@
       "clips_per_species": "One or more songs and one or more calls"
     },
     "photos": {
-      "primary": "Wikimedia Commons (CC-BY, CC-BY-SA, CC0)",
+      "primary": "Wikimedia Commons (CC BY, CC BY-SA, public domain)",
       "fallback": "USFWS National Digital Library (public domain)",
       "per_species": "1 primary photo showing key field marks"
     },
@@ -47,13 +47,17 @@
         "calls": []
       },
       "photo": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/9/97/American_robin_%2871307%29.jpg",
-        "width": 3444,
-        "height": 2584,
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/American_robin_%2871307%29.jpg/960px-American_robin_%2871307%29.jpg",
+        "width": 960,
+        "height": 720,
         "filename": "American_robin_(71307).jpg",
-        "source": "wikipedia_infobox",
-        "license": "CC-BY-SA (Wikipedia)",
-        "wikipedia_page": "https://en.wikipedia.org/wiki/American%20robin"
+        "source": "wikimedia_commons",
+        "license": "CC BY-SA 4.0",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/American%20robin",
+        "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/American_robin_%2871307%29.jpg/250px-American_robin_%2871307%29.jpg 250w, https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/American_robin_%2871307%29.jpg/960px-American_robin_%2871307%29.jpg 960w",
+        "creator": "Rhododendrites",
+        "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:American_robin_(71307).jpg"
       },
       "wikipedia_audio": [
         {
@@ -98,13 +102,17 @@
         "calls": []
       },
       "photo": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Corvus-brachyrhynchos-001.jpg",
-        "width": 1536,
-        "height": 1536,
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Corvus-brachyrhynchos-001.jpg/960px-Corvus-brachyrhynchos-001.jpg",
+        "width": 960,
+        "height": 960,
         "filename": "Corvus-brachyrhynchos-001.jpg",
-        "source": "wikipedia_infobox",
-        "license": "CC-BY-SA (Wikipedia)",
-        "wikipedia_page": "https://en.wikipedia.org/wiki/American%20crow"
+        "source": "wikimedia_commons",
+        "license": "CC BY-SA 3.0",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/American%20crow",
+        "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Corvus-brachyrhynchos-001.jpg/250px-Corvus-brachyrhynchos-001.jpg 250w, https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Corvus-brachyrhynchos-001.jpg/960px-Corvus-brachyrhynchos-001.jpg 960w",
+        "creator": "Mdf",
+        "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Corvus-brachyrhynchos-001.jpg"
       },
       "wikipedia_audio": [
         {
@@ -151,13 +159,17 @@
         "calls": []
       },
       "photo": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/0/00/Song_sparrow_in_Prospect_Park_%2893031%29.jpg",
-        "width": 3257,
-        "height": 2284,
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Song_sparrow_in_Prospect_Park_%2893031%29.jpg/960px-Song_sparrow_in_Prospect_Park_%2893031%29.jpg",
+        "width": 960,
+        "height": 673,
         "filename": "Song_sparrow_in_Prospect_Park_(93031).jpg",
-        "source": "wikipedia_infobox",
-        "license": "CC-BY-SA (Wikipedia)",
-        "wikipedia_page": "https://en.wikipedia.org/wiki/Song%20sparrow"
+        "source": "wikimedia_commons",
+        "license": "CC BY-SA 4.0",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Song%20sparrow",
+        "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Song_sparrow_in_Prospect_Park_%2893031%29.jpg/250px-Song_sparrow_in_Prospect_Park_%2893031%29.jpg 250w, https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Song_sparrow_in_Prospect_Park_%2893031%29.jpg/960px-Song_sparrow_in_Prospect_Park_%2893031%29.jpg 960w",
+        "creator": "Rhododendrites",
+        "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Song_sparrow_in_Prospect_Park_(93031).jpg"
       },
       "wikipedia_audio": [
         {
@@ -196,13 +208,17 @@
         "calls": []
       },
       "photo": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/5/55/Junco_hyemalis_hyemalis_CT1_%28cropped%29.jpg",
-        "width": 2536,
-        "height": 1692,
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Junco_hyemalis_hyemalis_CT1_%28cropped%29.jpg/960px-Junco_hyemalis_hyemalis_CT1_%28cropped%29.jpg",
+        "width": 960,
+        "height": 641,
         "filename": "Junco_hyemalis_hyemalis_CT1_(cropped).jpg",
-        "source": "wikipedia_infobox",
-        "license": "CC-BY-SA (Wikipedia)",
-        "wikipedia_page": "https://en.wikipedia.org/wiki/Dark-eyed%20junco"
+        "source": "wikimedia_commons",
+        "license": "CC BY-SA 3.0",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Dark-eyed%20junco",
+        "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Junco_hyemalis_hyemalis_CT1_%28cropped%29.jpg/250px-Junco_hyemalis_hyemalis_CT1_%28cropped%29.jpg 250w, https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Junco_hyemalis_hyemalis_CT1_%28cropped%29.jpg/960px-Junco_hyemalis_hyemalis_CT1_%28cropped%29.jpg 960w",
+        "creator": "Cephas",
+        "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Junco_hyemalis_hyemalis_CT1_(cropped).jpg"
       }
     },
     {
@@ -231,13 +247,17 @@
         "calls": []
       },
       "photo": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Poecile-atricapilla-001.jpg",
-        "width": 1024,
-        "height": 1024,
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Poecile-atricapilla-001.jpg/960px-Poecile-atricapilla-001.jpg",
+        "width": 960,
+        "height": 960,
         "filename": "Poecile-atricapilla-001.jpg",
-        "source": "wikipedia_infobox",
-        "license": "CC-BY-SA (Wikipedia)",
-        "wikipedia_page": "https://en.wikipedia.org/wiki/Black-capped%20chickadee"
+        "source": "wikimedia_commons",
+        "license": "CC BY-SA 3.0",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Black-capped%20chickadee",
+        "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Poecile-atricapilla-001.jpg/250px-Poecile-atricapilla-001.jpg 250w, https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Poecile-atricapilla-001.jpg/960px-Poecile-atricapilla-001.jpg 960w",
+        "creator": "Mdf (copyright attribution supplied by Wikimedia Commons)",
+        "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Poecile-atricapilla-001.jpg"
       },
       "wikipedia_audio": [
         {
@@ -282,13 +302,17 @@
         "calls": []
       },
       "photo": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/d/d6/Spotted_Towhee_%2832684403303%29.jpg",
-        "width": 2273,
-        "height": 1818,
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Spotted_Towhee_%2832684403303%29.jpg/960px-Spotted_Towhee_%2832684403303%29.jpg",
+        "width": 960,
+        "height": 768,
         "filename": "Spotted_Towhee_(32684403303).jpg",
-        "source": "wikipedia_infobox",
-        "license": "CC-BY-SA (Wikipedia)",
-        "wikipedia_page": "https://en.wikipedia.org/wiki/Spotted%20towhee"
+        "source": "wikimedia_commons",
+        "license": "CC BY 2.0",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Spotted%20towhee",
+        "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Spotted_Towhee_%2832684403303%29.jpg/250px-Spotted_Towhee_%2832684403303%29.jpg 250w, https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Spotted_Towhee_%2832684403303%29.jpg/960px-Spotted_Towhee_%2832684403303%29.jpg 960w",
+        "creator": "Becky Matsubara from El Sobrante, California",
+        "license_url": "https://creativecommons.org/licenses/by/2.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Spotted_Towhee_(32684403303).jpg"
       },
       "wikipedia_audio": [
         {
@@ -327,13 +351,17 @@
         "calls": []
       },
       "photo": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/f/f1/House_finch_%2833688%292.jpg",
-        "width": 3975,
-        "height": 3122,
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/House_finch_%2833688%292.jpg/960px-House_finch_%2833688%292.jpg",
+        "width": 960,
+        "height": 754,
         "filename": "House_finch_(33688)2.jpg",
-        "source": "wikipedia_infobox",
-        "license": "CC-BY-SA (Wikipedia)",
-        "wikipedia_page": "https://en.wikipedia.org/wiki/House%20finch"
+        "source": "wikimedia_commons",
+        "license": "CC BY-SA 4.0",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/House%20finch",
+        "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/House_finch_%2833688%292.jpg/250px-House_finch_%2833688%292.jpg 250w, https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/House_finch_%2833688%292.jpg/960px-House_finch_%2833688%292.jpg 960w",
+        "creator": "Rhododendrites",
+        "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:House_finch_(33688)2.jpg"
       },
       "wikipedia_audio": [
         {
@@ -371,13 +399,17 @@
         "calls": []
       },
       "photo": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/6/60/Northern_yellow-shafted_flicker_male_%2833737%29_%28cropped%29.jpg",
-        "width": 2441,
-        "height": 2442,
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Northern_yellow-shafted_flicker_male_%2833737%29_%28cropped%29.jpg/960px-Northern_yellow-shafted_flicker_male_%2833737%29_%28cropped%29.jpg",
+        "width": 960,
+        "height": 960,
         "filename": "Northern_yellow-shafted_flicker_male_(33737)_(cropped).jpg",
-        "source": "wikipedia_infobox",
-        "license": "CC-BY-SA (Wikipedia)",
-        "wikipedia_page": "https://en.wikipedia.org/wiki/Northern%20flicker"
+        "source": "wikimedia_commons",
+        "license": "CC BY-SA 4.0",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Northern%20flicker",
+        "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Northern_yellow-shafted_flicker_male_%2833737%29_%28cropped%29.jpg/250px-Northern_yellow-shafted_flicker_male_%2833737%29_%28cropped%29.jpg 250w, https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Northern_yellow-shafted_flicker_male_%2833737%29_%28cropped%29.jpg/960px-Northern_yellow-shafted_flicker_male_%2833737%29_%28cropped%29.jpg 960w",
+        "creator": "Rhododendrites",
+        "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Northern_yellow-shafted_flicker_male_(33737)_(cropped).jpg"
       },
       "wikipedia_audio": [
         {
@@ -422,13 +454,17 @@
         "calls": []
       },
       "photo": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Steller%27s_Jay_flagstaff_arizona.jpg",
-        "width": 1226,
-        "height": 1854,
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Steller%27s_Jay_flagstaff_arizona.jpg/960px-Steller%27s_Jay_flagstaff_arizona.jpg",
+        "width": 960,
+        "height": 1452,
         "filename": "Steller's_Jay_flagstaff_arizona.jpg",
-        "source": "wikipedia_infobox",
-        "license": "CC-BY-SA (Wikipedia)",
-        "wikipedia_page": "https://en.wikipedia.org/wiki/Steller%27s%20jay"
+        "source": "wikimedia_commons",
+        "license": "CC BY 2.0",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Steller%27s%20jay",
+        "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Steller%27s_Jay_flagstaff_arizona.jpg/250px-Steller%27s_Jay_flagstaff_arizona.jpg 250w, https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Steller%27s_Jay_flagstaff_arizona.jpg/960px-Steller%27s_Jay_flagstaff_arizona.jpg 960w",
+        "creator": "Noel Reynolds",
+        "license_url": "https://creativecommons.org/licenses/by/2.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Steller%27s_Jay_flagstaff_arizona.jpg"
       },
       "wikipedia_audio": [
         {
@@ -467,13 +503,17 @@
         "calls": []
       },
       "photo": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/7/71/Bewicks_Wren.jpg",
-        "width": 1746,
-        "height": 1746,
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Bewicks_Wren.jpg/960px-Bewicks_Wren.jpg",
+        "width": 960,
+        "height": 960,
         "filename": "Bewicks_Wren.jpg",
-        "source": "wikipedia_infobox",
-        "license": "CC-BY-SA (Wikipedia)",
-        "wikipedia_page": "https://en.wikipedia.org/wiki/Bewick%27s%20wren"
+        "source": "wikimedia_commons",
+        "license": "CC BY 2.0",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Bewick%27s%20wren",
+        "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Bewicks_Wren.jpg/250px-Bewicks_Wren.jpg 250w, https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Bewicks_Wren.jpg/960px-Bewicks_Wren.jpg 960w",
+        "creator": "Minette Layne",
+        "license_url": "https://creativecommons.org/licenses/by/2.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Bewicks_Wren.jpg"
       },
       "wikipedia_audio": [
         {
@@ -518,13 +558,17 @@
         "calls": []
       },
       "photo": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Anna%27s_hummingbird.jpg",
-        "width": 2763,
-        "height": 1784,
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Anna%27s_hummingbird.jpg/960px-Anna%27s_hummingbird.jpg",
+        "width": 960,
+        "height": 620,
         "filename": "Anna's_hummingbird.jpg",
-        "source": "wikipedia_infobox",
-        "license": "CC-BY-SA (Wikipedia)",
-        "wikipedia_page": "https://en.wikipedia.org/wiki/Anna%27s%20hummingbird"
+        "source": "wikimedia_commons",
+        "license": "Public domain",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Anna%27s%20hummingbird",
+        "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Anna%27s_hummingbird.jpg/250px-Anna%27s_hummingbird.jpg 250w, https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Anna%27s_hummingbird.jpg/960px-Anna%27s_hummingbird.jpg 960w",
+        "creator": "Robert McMorran, United States Fish and Wildlife Service",
+        "license_url": "https://commons.wikimedia.org/wiki/File:Anna%27s_hummingbird.jpg",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Anna%27s_hummingbird.jpg"
       },
       "wikipedia_audio": [
         {
@@ -562,13 +606,17 @@
         "calls": []
       },
       "photo": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/9/94/Chestnut-backed_Chickadee_2154ab_%28cropped%29.jpg",
-        "width": 2447,
-        "height": 1855,
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/Chestnut-backed_Chickadee_2154ab_%28cropped%29.jpg/960px-Chestnut-backed_Chickadee_2154ab_%28cropped%29.jpg",
+        "width": 960,
+        "height": 728,
         "filename": "Chestnut-backed_Chickadee_2154ab_(cropped).jpg",
-        "source": "wikipedia_infobox",
-        "license": "CC-BY-SA (Wikipedia)",
-        "wikipedia_page": "https://en.wikipedia.org/wiki/Chestnut-backed%20chickadee"
+        "source": "wikimedia_commons",
+        "license": "CC BY-SA 4.0",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Chestnut-backed%20chickadee",
+        "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/Chestnut-backed_Chickadee_2154ab_%28cropped%29.jpg/250px-Chestnut-backed_Chickadee_2154ab_%28cropped%29.jpg 250w, https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/Chestnut-backed_Chickadee_2154ab_%28cropped%29.jpg/960px-Chestnut-backed_Chickadee_2154ab_%28cropped%29.jpg 960w",
+        "creator": "VJAnderson",
+        "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Chestnut-backed_Chickadee_2154ab_(cropped).jpg"
       }
     },
     {
@@ -597,13 +645,17 @@
         "calls": []
       },
       "photo": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/d/d7/BushtitMale.jpg",
-        "width": 2868,
-        "height": 2294,
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/BushtitMale.jpg/960px-BushtitMale.jpg",
+        "width": 960,
+        "height": 768,
         "filename": "BushtitMale.jpg",
-        "source": "wikipedia_infobox",
-        "license": "CC-BY-SA (Wikipedia)",
-        "wikipedia_page": "https://en.wikipedia.org/wiki/American%20bushtit"
+        "source": "wikimedia_commons",
+        "license": "CC BY-SA 4.0",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/American%20bushtit",
+        "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/BushtitMale.jpg/250px-BushtitMale.jpg 250w, https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/BushtitMale.jpg/960px-BushtitMale.jpg 960w",
+        "creator": "Polinova",
+        "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:BushtitMale.jpg"
       },
       "wikipedia_audio": [
         {
@@ -641,13 +693,17 @@
         "calls": []
       },
       "photo": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Zonotrichia_atricapilla_-British_Columbia%2C_Canada-8.jpg",
-        "width": 4928,
-        "height": 3264,
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Zonotrichia_atricapilla_-British_Columbia%2C_Canada-8.jpg/960px-Zonotrichia_atricapilla_-British_Columbia%2C_Canada-8.jpg",
+        "width": 960,
+        "height": 636,
         "filename": "Zonotrichia_atricapilla_-British_Columbia,_Canada-8.jpg",
-        "source": "wikipedia_infobox",
-        "license": "CC-BY-SA (Wikipedia)",
-        "wikipedia_page": "https://en.wikipedia.org/wiki/Golden-crowned%20sparrow"
+        "source": "wikimedia_commons",
+        "license": "CC BY 2.0",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Golden-crowned%20sparrow",
+        "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Zonotrichia_atricapilla_-British_Columbia%2C_Canada-8.jpg/250px-Zonotrichia_atricapilla_-British_Columbia%2C_Canada-8.jpg 250w, https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Zonotrichia_atricapilla_-British_Columbia%2C_Canada-8.jpg/960px-Zonotrichia_atricapilla_-British_Columbia%2C_Canada-8.jpg 960w",
+        "creator": "Alejandro Erickson",
+        "license_url": "https://creativecommons.org/licenses/by/2.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Zonotrichia_atricapilla_-British_Columbia,_Canada-8.jpg"
       }
     },
     {
@@ -676,13 +732,17 @@
         "calls": []
       },
       "photo": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg",
-        "width": 1776,
-        "height": 2372,
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg/960px-Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg",
+        "width": 960,
+        "height": 1282,
         "filename": "Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg",
-        "source": "wikipedia_infobox",
-        "license": "CC-BY-SA (Wikipedia)",
-        "wikipedia_page": "https://en.wikipedia.org/wiki/Common%20starling"
+        "source": "wikimedia_commons",
+        "license": "CC BY-SA 3.0",
+        "wikipedia_page": "https://en.wikipedia.org/wiki/Common%20starling",
+        "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg/250px-Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg 250w, https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg/960px-Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg 960w",
+        "creator": "PierreSelim",
+        "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg"
       },
       "wikipedia_audio": [
         {

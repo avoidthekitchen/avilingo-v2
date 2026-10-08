@@ -1,6 +1,7 @@
 import { useAppStore } from '../../store/appStore'
 import BirdPhoto from '../shared/BirdPhoto'
 import ExternalLink from '../shared/ExternalLink'
+import PhotoAttribution from '../shared/PhotoAttribution'
 
 export default function CreditsPage() {
   const manifest = useAppStore(s => s.manifest)
@@ -11,7 +12,12 @@ export default function CreditsPage() {
     <div className="p-4">
       <h1 className="text-2xl font-bold text-text mb-2">Credits & Attribution</h1>
       <p className="text-sm text-text-muted mb-6">
-        All audio recordings and photos are used under Creative Commons licenses.
+        Each recording and photo retains its own license, listed below.
+      </p>
+
+      <p className="text-sm text-text-muted mb-6">
+        Recordings are trimmed and volume-normalized from the originals. Photos are
+        displayed at reduced size; source pages retain any earlier cropping history.
       </p>
 
       <div className="space-y-6">
@@ -20,6 +26,7 @@ export default function CreditsPage() {
             <div className="flex items-center gap-3 mb-3">
               <BirdPhoto
                 src={species.photo.url}
+                srcSet={species.photo.srcset}
                 alt={species.common_name}
                 className="w-10 h-10 rounded-full object-cover"
               />
@@ -33,15 +40,7 @@ export default function CreditsPage() {
               <h4 className="text-xs font-medium text-text-muted uppercase tracking-wide mb-1">
                 Photo
               </h4>
-              <p className="text-xs text-text-muted">
-                {species.photo.license} ·{' '}
-                <ExternalLink
-                  href={species.photo.wikipedia_page}
-                  className="text-primary underline"
-                >
-                  Wikipedia
-                </ExternalLink>
-              </p>
+              <div className="text-xs"><PhotoAttribution photo={species.photo} /></div>
             </div>
 
             <div>
@@ -58,7 +57,10 @@ export default function CreditsPage() {
                     >
                       XC{clip.xc_id}
                     </ExternalLink>{' '}
-                    · {clip.type} · {clip.license}
+                    · {clip.type} ·{' '}
+                    <ExternalLink href={clip.license} className="text-primary underline break-all">
+                      {clip.license}
+                    </ExternalLink>
                   </p>
                 ))}
               </div>
@@ -69,7 +71,7 @@ export default function CreditsPage() {
 
       <div className="mt-8 text-center text-xs text-text-muted pb-4">
         <p>BeakSpeak v{manifest.version}</p>
-        <p>Audio from Xeno-canto · Photos from Wikipedia</p>
+        <p>Audio from Xeno-canto · Photos from Wikimedia Commons</p>
       </div>
     </div>
   )
