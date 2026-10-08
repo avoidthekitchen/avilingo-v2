@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useAppStore } from '../../store/appStore'
+import { playAudioToCompletion } from '../../adapters/audio'
 import type { QuizItem } from '../../core/types'
 import AudioPlaybackControl from '../shared/AudioPlaybackControl'
 import BirdPhoto from '../shared/BirdPhoto'
@@ -14,36 +15,65 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
   const audioPlayer = useAppStore(s => s.audioPlayer)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [showingResult, setShowingResult] = useState(false)
-  const startTime = useRef(0)
-  // Auto-play clip on mount
-  useEffect(() => {
-    startTime.current = Date.now()
-    audioPlayer.play(item.clip.audio_url).catch(() => {})
-  }, [item, audioPlayer])
+  // Failed autoplay must not make listening to the first successful retry count
+  // against recall. Later replays keep the original clock rather than resetting it.
+  const startTime = useRef<number | null>(null)
+  const firstListenComplete = useRef(false)
+  const playbackRequest = useRef(0)
+  const playQuestionClip = useCallback(async () => {
+    const request = ++playbackRequest.current
+    const measureFirstListen = !firstListenComplete.current
+    if (measureFirstListen) startTime.current = null
+    try {
+      await playAudioToCompletion(audioPlayer, item.clip.audio_url)
+      if (request !== playbackRequest.current || !measureFirstListen) return
+      firstListenComplete.current = true
+      startTime.current = Date.now()
+    } catch {
+      if (request === playbackRequest.current && measureFirstListen) {
+        startTime.current = Date.now()
+      }
+    }
+  }, [audioPlayer, item.clip.audio_url])
 
-  // Stop audio when the quiz question unmounts (quit/complete/navigate)
   useEffect(() => {
-    return () => { audioPlayer.stop() }
+    firstListenComplete.current = false
+    void playQuestionClip()
+    return () => { playbackRequest.current += 1 }
+  }, [item, playQuestionClip])
+
+  const responseTimeMs = useCallback(
+    () => (startTime.current === null ? 0 : Date.now() - startTime.current),
+    [],
+  )
+
+  // Stop audio and cancel a pending auto-advance when the question unmounts
+  // (quit/complete/navigate), so a quit inside the 1.5 s window records nothing.
+  const autoAdvanceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => {
+    return () => {
+      if (autoAdvanceRef.current !== null) clearTimeout(autoAdvanceRef.current)
+      audioPlayer.stop()
+    }
   }, [audioPlayer])
 
   const handleSelect = useCallback((speciesId: string) => {
     if (showingResult) return
 
-    const responseTime = Date.now() - startTime.current
+    const responseTime = responseTimeMs()
     const correct = speciesId === item.targetSpecies.id
     setSelectedId(speciesId)
     setShowingResult(true)
 
     if (correct) {
-      setTimeout(() => onAnswer(true, responseTime), 1500)
+      autoAdvanceRef.current = setTimeout(() => onAnswer(true, responseTime), 1500)
     }
     // For incorrect, user must tap "Next"
-  }, [showingResult, item, onAnswer])
+  }, [showingResult, item, onAnswer, responseTimeMs])
 
   const handleNext = useCallback(() => {
-    const responseTime = Date.now() - startTime.current
-    onAnswer(false, responseTime)
-  }, [onAnswer])
+    onAnswer(false, responseTimeMs())
+  }, [onAnswer, responseTimeMs])
 
   if (!item.choices) return null
 
@@ -55,7 +85,7 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
         message={showingResult ? (isCorrect ? 'Correct!' : `That was ${item.targetSpecies.common_name}`) : ''}
       />
       <div className="text-center mb-4">
-        <AudioPlaybackControl audioPlayer={audioPlayer} url={item.clip.audio_url} />
+        <AudioPlaybackControl audioPlayer={audioPlayer} url={item.clip.audio_url} onPlay={playQuestionClip} />
       </div>
 
       <p className="text-lg font-semibold text-text text-center mb-4">
@@ -86,7 +116,7 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
             >
               <BirdPhoto
                 src={choice.photo.url}
-                alt={choice.common_name}
+                alt=""
                 className="w-14 h-14 rounded-lg object-cover"
               />
               <span className="font-medium text-text">{choice.common_name}</span>

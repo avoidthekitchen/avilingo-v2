@@ -73,7 +73,7 @@ const tests = run('test', ['simulator', 'test',
   '--scheme', 'Smoke', '--simulator-id', simulator.simulatorId,
   '--derived-data-path', join(artifacts, 'test-derived-data'),
   '--extra-args', '-parallel-testing-enabled', 'NO'])
-if (tests.summary?.counts?.passed !== 3 || tests.summary?.counts?.failed !== 0) {
-  throw new Error('Expected exactly three passing simulator smoke tests.')
+if (tests.summary?.counts?.passed !== 2 || tests.summary?.counts?.failed !== 0) {
+  throw new Error('Expected exactly two passing simulator smoke tests.')
 }
-console.log('iOS smoke passed: navigation, background/foreground, force-quit persistence.')
+console.log('iOS smoke passed: background/foreground and force-quit persistence.')

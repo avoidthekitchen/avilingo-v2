@@ -61,7 +61,7 @@ export default function LearnTab() {
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-text">Learn Birds</h1>
         <p className="text-text-muted mt-1">
-          {introducedCount} of {manifest.target_species_count} birds introduced
+          {`${introducedCount} of ${manifest.target_species_count} birds introduced`}
         </p>
         <div className="mt-2 h-2 bg-border rounded-full overflow-hidden">
           <div
@@ -101,10 +101,10 @@ export default function LearnTab() {
               }`}
             >
               <div className="flex items-center justify-between mb-2">
-                <h3 className="font-semibold text-text">
+                <span className="font-semibold text-text">
                   {completed && '✓ '}
                   Lesson {lesson.lesson}: {lesson.title}
-                </h3>
+                </span>
                 {!available && !completed ? (
                   <span className="text-xs text-text-muted">🔒</span>
                 ) : available && !completed ? (
@@ -116,10 +116,10 @@ export default function LearnTab() {
                   <div key={s.id} className="flex min-w-0 items-center gap-1.5">
                     <BirdPhoto
                       src={s.photo.url}
-                      alt={s.common_name}
+                      alt=""
                       className="h-8 w-8 shrink-0 rounded-full object-cover"
                     />
-                    <span className="min-w-0 break-words text-xs leading-tight text-text-muted">{s.common_name}</span>
+                    <span className="min-w-0 break-words hyphenate-long-words text-xs leading-tight text-text-muted">{s.common_name}</span>
                   </div>
                 ))}
               </div>

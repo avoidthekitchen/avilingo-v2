@@ -10,6 +10,18 @@ vi.mock('../../store/appStore', () => ({
   useAppStore: (selector: (state: Record<string, unknown>) => unknown) => selector(mockState),
 }))
 
+const { buildIntroQuizSpy, buildReviewQuizSpy } = vi.hoisted(() => ({
+  buildIntroQuizSpy: vi.fn(),
+  buildReviewQuizSpy: vi.fn(),
+}))
+
+vi.mock('../../core/lesson', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../core/lesson')>()
+  buildIntroQuizSpy.mockImplementation(actual.buildIntroQuiz)
+  buildReviewQuizSpy.mockImplementation(actual.buildReviewQuiz)
+  return { ...actual, buildIntroQuiz: buildIntroQuizSpy, buildReviewQuiz: buildReviewQuizSpy }
+})
+
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
   motion: {
@@ -220,5 +232,44 @@ describe('LearnSession redo mode', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Back' }))
 
     expect(onComplete).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('LearnSession quiz item stability', () => {
+  beforeEach(() => {
+    buildIntroQuizSpy.mockClear()
+    buildReviewQuizSpy.mockClear()
+    mockState = {
+      manifest: makeManifest(),
+      getIntroducedSpecies: () => ['a', 'b', 'c'].map(id => makeSpecies(id)),
+      introduceSpecies: vi.fn(async () => {}),
+    }
+  })
+
+  it('builds the warm-up review once, not on every render', () => {
+    const lesson = makeLesson(2, ['d', 'e', 'f'])
+    const { rerender } = render(<LearnSession lesson={lesson} onComplete={() => {}} />)
+    expect(screen.getByText('Quick Review')).toBeInTheDocument()
+
+    rerender(<LearnSession lesson={lesson} onComplete={() => {}} />)
+    rerender(<LearnSession lesson={lesson} onComplete={() => {}} />)
+
+    expect(buildReviewQuizSpy).toHaveBeenCalledTimes(1)
+  })
+
+  it('builds the intro quiz once when the cards are finished', () => {
+    const lesson = makeLesson(2, ['d', 'e', 'f'])
+    const { rerender } = render(<LearnSession lesson={lesson} mode="unlock" onComplete={() => {}} />)
+
+    fireEvent.click(screen.getByRole('button', { name: /Next/ }))
+    fireEvent.click(screen.getByRole('button', { name: /Next/ }))
+    fireEvent.click(screen.getByRole('button', { name: /Start Quiz/ }))
+    expect(screen.getByText('Intro Quiz')).toBeInTheDocument()
+
+    rerender(<LearnSession lesson={lesson} mode="unlock" onComplete={() => {}} />)
+    rerender(<LearnSession lesson={lesson} mode="unlock" onComplete={() => {}} />)
+
+    expect(buildIntroQuizSpy).toHaveBeenCalledTimes(1)
+    expect(buildReviewQuizSpy).not.toHaveBeenCalled()
   })
 })

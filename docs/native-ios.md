@@ -19,10 +19,14 @@ move into the App Xcode project later; its scope does not depend on its project
 location. The newest available compatible iPhone simulator is selected; set
 `IOS_SIMULATOR_ID` to use a particular installed device.
 
-Three tests run:
+Cold launch waits up to 30 seconds for WKWebView's remote accessibility tree;
+controls must be hittable before their single tap. These waits accommodate cold
+CI simulator startup without retrying a failed learner action. The introduced
+species summary is one text node, so the persistence assertion compares its
+actual count instead of a separately exposed “birds introduced” suffix.
 
-- **Navigation** asserts Learn Birds appears, taps Lesson 1 by its accessibility
-  label, and asserts American Crow appears. It does not complete a lesson.
+Two tests run:
+
 - **Background and foreground** opens Lesson 1, starts a clip, sends the app to
   the Home Screen, reactivates it, and asserts the session came back and
   playback is not wedged. XCUITest cannot see whether the clip actually stopped —
@@ -43,11 +47,12 @@ audio from the committed metadata lock (no new metadata/API key required), cache
 the downloads and generated clips, and uploads JSON results, logs, and the XCTest
 result bundle. Local evidence lives in the ignored `.artifacts/ios-smoke/` folder.
 The runner fails on tool-reported errors even when the CLI exits with status zero,
-and requires exactly three passing tests.
+and requires exactly two passing tests.
 
 XcodeBuildMCP's `snapshot-ui` did not traverse WKWebView's remote accessibility
-child in our iOS 26.3/26.5 checks. XCTest did find and tap the HTML controls on both
-runtimes. This smoke uses `xcodebuildmcp simulator test`; it does not depend on
+child in our iOS 26.3/26.5 checks (the smoke also passes on iOS 27.0 with
+Xcode 27). XCTest did find and tap the HTML controls on both runtimes. This
+smoke uses `xcodebuildmcp simulator test`; it does not depend on
 coordinate tapping or the snapshot interface. It does not verify audio audibility,
 silent-switch routing, exact stop-on-background behavior, VoiceOver quality,
 sustained performance, signing, or physical installation.
@@ -67,7 +72,7 @@ WebKit reported `TypeError: undefined is not an object (evaluating
 Capacitor's `setupCordovaCompatibility()` observes the scene entering foreground
 and evaluates the resume event before the JavaScript bridge exists on cold start.
 BeakSpeak currently has no listener for this document event; initialization and
-the element-based navigation test succeed. This is a confirmed dropped early
+the native lifecycle smoke succeed. This is a confirmed dropped early
 resume event, not evidence of a failed asset request or React initialization.
 
 No vendor patch or blanket error suppression is applied. Initialization does not
@@ -168,3 +173,23 @@ npm run lint
 npm run test:unit
 npm run test:e2e
 ```
+
+Browser checks use a strict preview port so they cannot silently reach a build in
+another checkout. For concurrent worktrees, set `BEAKSPEAK_E2E_PORT` to a distinct
+port for each browser suite. Keep native and browser builds serial within one
+worktree because both generate `beakspeak/dist/`.
+
+The app window is created by SceneDelegate. Info.plist must not also select a main
+or scene storyboard, and the delegate configuration keeps storyboard nil. This
+preserves one Capacitor controller per scene instead of competing bootstrap paths.
+The launch storyboard remains separate and is still used.
+
+The playback smoke query includes both normal and retry labels for the same Song
+control. After foreground recovery and another play attempt it must become
+hittable and enabled again; a temporary loading state cannot pass that readiness
+check. The smoke does not infer audio audibility from an enabled control.
+
+The native launch wordmark, window, and web-view background use BeakSpeak's warm
+light palette. Native chrome deliberately stays light while the app has one
+light theme, including when the device uses dark mode. The launch wordmark and
+initial React loader share their size and safe-area-centered placement.

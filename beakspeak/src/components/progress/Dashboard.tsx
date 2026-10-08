@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useAppStore } from '../../store/appStore'
 import AudioButton from '../shared/AudioButton'
 import BirdPhoto from '../shared/BirdPhoto'
+import { formatNextReview } from '../../core/formatNextReview'
 
 export default function Dashboard() {
   const manifest = useAppStore(s => s.manifest)
@@ -11,6 +12,33 @@ export default function Dashboard() {
   const getDueForReview = useAppStore(s => s.getDueForReview)
   const resetProgress = useAppStore(s => s.resetProgress)
   const [confirming, setConfirming] = useState(false)
+  const [now, setNow] = useState(() => Date.now())
+
+  useEffect(() => {
+    const refresh = () => setNow(Date.now())
+    const refreshOnVisibility = () => {
+      if (document.visibilityState === 'visible') refresh()
+    }
+    const timer = window.setInterval(refresh, 60_000)
+    document.addEventListener('visibilitychange', refreshOnVisibility)
+    window.addEventListener('focus', refresh)
+    return () => {
+      window.clearInterval(timer)
+      document.removeEventListener('visibilitychange', refreshOnVisibility)
+      window.removeEventListener('focus', refresh)
+    }
+  }, [])
+
+
+  // AudioButton re-subscribes to the player whenever its clips prop changes identity,
+  // so give each row a stable array instead of a fresh one per render.
+  const clipsBySpecies = useMemo(
+    () => new Map((manifest?.species ?? []).map(species => [species.id, {
+      song: species.audio_clips.songs[0] ? [species.audio_clips.songs[0]] : null,
+      call: species.audio_clips.calls[0] ? [species.audio_clips.calls[0]] : null,
+    }])),
+    [manifest],
+  )
 
   if (!manifest) return null
 
@@ -51,6 +79,7 @@ export default function Dashboard() {
       <div className="space-y-2">
         {manifest.species.map(species => {
           const progress = allProgress.get(species.id)
+          const clips = clipsBySpecies.get(species.id)
           const stateLabel = !progress?.introduced
             ? 'New'
             : progress.state === 'new'
@@ -81,22 +110,22 @@ export default function Dashboard() {
                 <p className="text-xs text-text-muted">
                   {progress?.reps ?? 0} reps
                   {progress?.nextReview && (
-                    <> · Next: {new Date(progress.nextReview).toLocaleDateString()}</>
+                    <> · {formatNextReview(progress.nextReview, now)}</>
                   )}
                 </p>
-                {(species.audio_clips.songs[0] || species.audio_clips.calls[0]) && (
+                {(clips?.song || clips?.call) && (
                   <div className="mt-2 flex flex-wrap gap-2">
-                    {species.audio_clips.songs[0] && (
+                    {clips.song && (
                       <AudioButton
-                        clips={[species.audio_clips.songs[0]]}
+                        clips={clips.song}
                         label="Song"
                         speciesId={species.id}
                         variant="primary"
                       />
                     )}
-                    {species.audio_clips.calls[0] && (
+                    {clips.call && (
                       <AudioButton
-                        clips={[species.audio_clips.calls[0]]}
+                        clips={clips.call}
                         label="Call"
                         speciesId={species.id}
                         variant="primary"

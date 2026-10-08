@@ -61,3 +61,27 @@ test('the smoke runner expects exactly the number of XCTest cases that exist', (
   const expected = Number(iosSmoke.match(/counts\?\.passed !== (\d+)/)[1])
   assert.equal(testCases, expected)
 })
+
+test('the iOS marketing version matches the package version shown in Credits', () => {
+  assert.deepEqual([...new Set(settingValues('MARKETING_VERSION'))], [packageJson.version])
+})
+
+test('the app declares that it uses only exempt encryption', () => {
+  assert.match(infoPlist, /<key>ITSAppUsesNonExemptEncryption<\/key>\s*<false\/>/)
+})
+
+
+test('programmatic scene setup does not also request storyboard windows', () => {
+  assert.doesNotMatch(infoPlist, /<key>(UISceneStoryboardFile|UIMainStoryboardFile)<\/key>/)
+  assert.match(infoPlist, /<key>UILaunchStoryboardName<\/key>\s*<string>LaunchScreen<\/string>/)
+  assert.match(read('../beakspeak/ios/App/App/AppDelegate.swift'), /config\.storyboard = nil/)
+})
+
+
+test('launch and native chrome use the existing light BeakSpeak presentation', () => {
+  const launch = read('../beakspeak/ios/App/App/Base.lproj/LaunchScreen.storyboard')
+  assert.match(launch, /text="BeakSpeak"/)
+  assert.doesNotMatch(launch, /image="Splash"/)
+  assert.match(capacitorConfig, /backgroundColor: '#FAF8F5'/)
+  assert.match(infoPlist, /<key>UIUserInterfaceStyle<\/key>\s*<string>Light<\/string>/)
+})
