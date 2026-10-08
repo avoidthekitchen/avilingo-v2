@@ -21,7 +21,7 @@ export default function QuizResult({ answers, mode, onDone }: Props) {
   const percentage = total > 0 ? Math.round((correctCount / total) * 100) : 0
 
   return (
-    <div className="p-4 flex flex-col h-full">
+    <div className="p-4 flex flex-col min-h-full">
       <div className="text-center mb-6">
         <p className="text-5xl mb-4">
           {percentage >= 80 ? '🎉' : percentage >= 60 ? '👍' : '💪'}

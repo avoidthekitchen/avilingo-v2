@@ -99,7 +99,7 @@ export default function LearnTab() {
                   ? 'bg-success/10 border-success/30'
                   : available
                   ? 'bg-card border-border hover:border-primary active:border-primary active:scale-[0.98] active:bg-primary/5 cursor-pointer'
-                  : 'bg-border/30 border-border/50 opacity-60 hover:border-primary/40 active:scale-[0.98] cursor-pointer'
+                  : 'bg-border/30 border-border/50 hover:border-primary/40 active:scale-[0.98] cursor-pointer'
               }`}
             >
               <div className="flex items-center justify-between mb-2">
@@ -113,7 +113,7 @@ export default function LearnTab() {
                   <span className="text-text-muted">›</span>
                 ) : null}
               </div>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="lesson-species grid gap-2">
                 {species.map(s => (
                   <div key={s.id} className="flex min-w-0 items-center gap-1.5">
                     <BirdPhoto

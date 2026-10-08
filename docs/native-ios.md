@@ -203,6 +203,17 @@ These recovery paths preserve the existing storage-adapter boundary. A future
 native adapter must also implement atomic saveProgressBatch and clearAll. They
 do not migrate disposable beta data or substitute for issue #32's distributed
 native-storage gate.
+## System text size
+
+The native controller maps UIKit's Dynamic Type body metric to the shared
+--app-text-scale typography token at document load, preference changes, and
+foreground recovery. It retains Capacitor's other WebKit scripts when updating
+its own injection. Text scales independently from margins and photos. Lesson
+species rows reflow, quiz names wrap, and navigation labels scale up to 200 percent
+while the main content honors the full native accessibility size.
+
+Validate larger accessibility sizes in the simulator and with VoiceOver on a
+physical iPhone; browser large-text flows are additional shared-layout evidence.
 
 The native launch wordmark, window, and web-view background use BeakSpeak's warm
 light palette. Native chrome deliberately stays light while the app has one
