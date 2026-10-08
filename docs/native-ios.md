@@ -203,3 +203,8 @@ These recovery paths preserve the existing storage-adapter boundary. A future
 native adapter must also implement atomic saveProgressBatch and clearAll. They
 do not migrate disposable beta data or substitute for issue #32's distributed
 native-storage gate.
+
+The native launch wordmark, window, and web-view background use BeakSpeak's warm
+light palette. Native chrome deliberately stays light while the app has one
+light theme, including when the device uses dark mode. The launch wordmark and
+initial React loader share their size and safe-area-centered placement.
