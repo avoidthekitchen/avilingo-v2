@@ -4,6 +4,7 @@ const config: CapacitorConfig = {
   appId: 'com.unformedideas.beakspeak',
   appName: 'BeakSpeak',
   webDir: 'dist',
+  ios: { backgroundColor: '#FAF8F5' },
   experimental: {
     ios: {
       spm: {
