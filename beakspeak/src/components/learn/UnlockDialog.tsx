@@ -97,8 +97,8 @@ export default function UnlockDialog({
         <h2 className="mb-3 text-2xl font-semibold text-text" id="unlock-dialog-title">
           {title}
         </h2>
-        <p className="mb-3 text-sm leading-6 text-text" id="unlock-dialog-explanation">{explanation}</p>
-        <p className="mb-6 text-sm leading-6 text-text-muted" id="unlock-dialog-consequence">{consequence}</p>
+        <p className="mb-3 text-sm leading-relaxed text-text" id="unlock-dialog-explanation">{explanation}</p>
+        <p className="mb-6 text-sm leading-relaxed text-text-muted" id="unlock-dialog-consequence">{consequence}</p>
 
         <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
           <button

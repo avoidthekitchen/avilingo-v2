@@ -138,16 +138,16 @@ export default function BirdCard({ species }: Props) {
   return (
     <div className="flex h-full min-h-0 flex-col overflow-x-hidden overflow-y-auto rounded-2xl border border-border bg-card shadow-sm">
       {/* Photo section */}
-      <div className="relative" style={{ minHeight: '45%' }}>
+      <div className="relative grid" style={{ minHeight: '45%' }}>
         <BirdPhoto
           src={species.photo.url}
           alt={species.common_name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover col-start-1 row-start-1"
           style={{ maxHeight: '340px', minHeight: '200px', objectPosition: '50% 42%' }}
         />
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-          <h2 className="text-white text-xl font-bold">{species.common_name}</h2>
-          <p className="text-white/80 text-sm italic">{species.scientific_name}</p>
+        <div className="relative col-start-1 row-start-1 self-end bg-gradient-to-t from-black/70 to-transparent p-4">
+          <h2 className="break-words text-white text-xl font-bold">{species.common_name}</h2>
+          <p className="break-words text-white/80 text-sm italic">{species.scientific_name}</p>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {species.habitat.map(h => (
               <span

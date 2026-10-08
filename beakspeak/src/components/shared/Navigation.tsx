@@ -14,7 +14,7 @@ export default function Navigation() {
   return (
     <nav
       aria-label="Main"
-      className="fixed bottom-0 left-0 right-0 bg-card border-t border-border z-40"
+      className="app-navigation fixed bottom-0 left-0 right-0 bg-card border-t border-border z-40"
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
     >
       <div
@@ -36,7 +36,7 @@ export default function Navigation() {
                 : 'text-text-muted'
             }`}
           >
-            <span className="text-lg mb-0.5">{tab.icon}</span>
+            <span className="tab-icon text-lg mb-0.5">{tab.icon}</span>
             {tab.label}
           </button>
         ))}

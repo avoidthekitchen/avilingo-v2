@@ -188,3 +188,15 @@ The playback smoke query includes both normal and retry labels for the same Song
 control. After foreground recovery and another play attempt it must become
 hittable and enabled again; a temporary loading state cannot pass that readiness
 check. The smoke does not infer audio audibility from an enabled control.
+
+## System text size
+
+The native controller maps UIKit's Dynamic Type body metric to the shared
+--app-text-scale typography token at document load, preference changes, and
+foreground recovery. It retains Capacitor's other WebKit scripts when updating
+its own injection. Text scales independently from margins and photos. Lesson
+species rows reflow, quiz names wrap, and navigation labels scale up to 200 percent
+while the main content honors the full native accessibility size.
+
+Validate larger accessibility sizes in the simulator and with VoiceOver on a
+physical iPhone; browser large-text flows are additional shared-layout evidence.
