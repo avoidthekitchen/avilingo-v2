@@ -67,6 +67,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let config = UISceneConfiguration(name: "Default Configuration",
                                           sessionRole: connectingSceneSession.role)
         config.delegateClass = SceneDelegate.self
+        // SceneDelegate owns the window. A storyboard-created window would add a
+        // second Capacitor controller and compete for first-launch interaction.
+        config.storyboard = nil
         return config
     }
 }

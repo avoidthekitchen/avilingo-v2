@@ -69,3 +69,10 @@ test('the iOS marketing version matches the package version shown in Credits', (
 test('the app declares that it uses only exempt encryption', () => {
   assert.match(infoPlist, /<key>ITSAppUsesNonExemptEncryption<\/key>\s*<false\/>/)
 })
+
+
+test('programmatic scene setup does not also request storyboard windows', () => {
+  assert.doesNotMatch(infoPlist, /<key>(UISceneStoryboardFile|UIMainStoryboardFile)<\/key>/)
+  assert.match(infoPlist, /<key>UILaunchStoryboardName<\/key>\s*<string>LaunchScreen<\/string>/)
+  assert.match(read('../beakspeak/ios/App/App/AppDelegate.swift'), /config\.storyboard = nil/)
+})
