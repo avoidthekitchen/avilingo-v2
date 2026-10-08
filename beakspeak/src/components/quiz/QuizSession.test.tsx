@@ -18,8 +18,8 @@ vi.mock('../../core/quiz', () => ({
 }))
 
 vi.mock('./ThreeChoiceQuiz', () => ({
-  default: ({ onAnswer }: { onAnswer: (correct: boolean, responseTimeMs: number) => void }) => (
-    <button onClick={() => onAnswer(false, 1200)}>Answer Question</button>
+  default: ({ onAnswer }: { onAnswer: (correct: boolean, responseTimeMs: number, chosenId: string) => void }) => (
+    <button onClick={() => onAnswer(false, 1200, 'b')}>Answer Question</button>
   ),
 }))
 
@@ -129,6 +129,8 @@ describe('QuizSession practice mode', () => {
     await screen.findByText('Needs More Practice')
     expect(mockState.updateProgress).toHaveBeenCalledTimes(1)
     expect(log).toHaveBeenCalledTimes(2)
+    expect(log).toHaveBeenNthCalledWith(1, 'a', 'b')
+    expect(log).toHaveBeenNthCalledWith(2, 'a', 'b')
   })
 
   it('retries the same frozen card after a progress write fails', async () => {
@@ -143,4 +145,13 @@ describe('QuizSession practice mode', () => {
     expect(save).toHaveBeenNthCalledWith(2, 'a', firstCard)
   })
 
+
+  it('logs a wrong review answer as a confusion between the two specific birds', async () => {
+    render(<QuizSession mode="review" onComplete={vi.fn()} />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Answer Question' }))
+
+    await vi.waitFor(() => expect(mockState.logConfusion).toHaveBeenCalledWith('a', 'b'))
+    expect(mockState.updateProgress).toHaveBeenCalledTimes(1)
+  })
 })

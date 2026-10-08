@@ -113,7 +113,7 @@ describe('ThreeChoiceQuiz response timing', () => {
     fireEvent.click(screen.getByText('A').closest('button')!)
     act(() => { vi.advanceTimersByTime(1500) })
 
-    expect(onAnswer).toHaveBeenCalledWith(true, 0)
+    expect(onAnswer).toHaveBeenCalledWith(true, 0, 'a')
   })
 
   it('starts timing when playback is blocked so the learner is not penalised', async () => {
@@ -143,6 +143,18 @@ describe('ThreeChoiceQuiz response timing', () => {
 
     expect(onAnswer).not.toHaveBeenCalled()
   })
+
+  it('reports which bird the learner picked so confusions can be logged', async () => {
+    const onAnswer = vi.fn()
+    render(<ThreeChoiceQuiz item={makeItem()} onAnswer={onAnswer} />)
+    await act(async () => { await Promise.resolve() })
+
+    fireEvent.click(screen.getByText('B').closest('button')!)
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    expect(onAnswer).toHaveBeenCalledWith(false, expect.any(Number), 'b')
+  })
+
   it('measures recall after listening to a manual retry of failed autoplay', async () => {
     audioPlayer.play = vi.fn()
       .mockImplementationOnce(async () => { emit('error', '/a.ogg'); throw new Error('blocked') })

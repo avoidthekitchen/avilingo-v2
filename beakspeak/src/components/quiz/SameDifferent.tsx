@@ -7,7 +7,10 @@ import FeedbackAnnouncement from '../shared/FeedbackAnnouncement'
 
 interface Props {
   item: QuizItem
-  onAnswer: (correct: boolean, responseTimeMs: number) => void
+  // chosenId names the species the learner confused the target with: the second
+  // clip's species when they called a pair "same", or the target itself when they
+  // failed to recognise two clips of one bird.
+  onAnswer: (correct: boolean, responseTimeMs: number, chosenId: string) => void
 }
 
 type PlayPhase = 'clip1' | 'pause' | 'clip2' | 'ready' | 'answered'
@@ -84,14 +87,14 @@ export default function SameDifferent({ item, onAnswer }: Props) {
     setPlayPhase('answered')
 
     if (correct) {
-      autoAdvanceRef.current = setTimeout(() => onAnswer(true, responseTime), 1500)
+      autoAdvanceRef.current = setTimeout(() => onAnswer(true, responseTime, item.targetSpecies.id), 1500)
     }
-  }, [playPhase, item.isSame, onAnswer])
+  }, [playPhase, item.isSame, item.targetSpecies.id, onAnswer])
 
   const handleNext = useCallback(() => {
     const responseTime = Date.now() - startTime.current
-    onAnswer(false, responseTime)
-  }, [onAnswer])
+    onAnswer(false, responseTime, item.secondSpecies?.id ?? item.targetSpecies.id)
+  }, [onAnswer, item.secondSpecies?.id, item.targetSpecies.id])
 
   const isCorrect = selectedAnswer === item.isSame
   const isAnswered = playPhase === 'answered'

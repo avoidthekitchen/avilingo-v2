@@ -76,7 +76,7 @@ export default function QuizSession({ mode, onComplete }: Props) {
     }
   }, [items.length, updateProgress, logConfusion])
 
-  const handleAnswer = useCallback((correct: boolean, responseTimeMs: number, chosenId = 'unknown') => {
+  const handleAnswer = useCallback((correct: boolean, responseTimeMs: number, chosenId: string) => {
     const item = items[currentIndex]
     if (!item || pendingAnswer.current) return
     const rating = ratingFromOutcome(correct, responseTimeMs, item.exerciseType)
