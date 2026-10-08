@@ -21,4 +21,17 @@ describe('BirdPhoto', () => {
     expect(photo).not.toHaveAttribute('src', 'https://upload.wikimedia.org/bird.jpg')
     expect(photo).toHaveClass('bird-photo')
   })
+
+  it('keeps a decorative photo decorative when it falls back', () => {
+    const { container } = render(
+      <BirdPhoto src="https://upload.wikimedia.org/bird.jpg" alt="" />,
+    )
+
+    const photo = container.querySelector('img')!
+    fireEvent.error(photo)
+
+    expect(photo).toHaveAttribute('alt', '')
+    expect(photo).toHaveAttribute('data-photo-fallback', 'true')
+    expect(screen.queryByRole('img')).toBeNull()
+  })
 })
