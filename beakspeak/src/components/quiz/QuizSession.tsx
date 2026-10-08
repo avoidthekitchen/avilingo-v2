@@ -35,7 +35,7 @@ export default function QuizSession({ mode, onComplete }: Props) {
     return buildQuizSession(allProgress, manifest, lastPlayedClipId)
   })
 
-  const handleAnswer = useCallback(async (correct: boolean, responseTimeMs: number) => {
+  const handleAnswer = useCallback(async (correct: boolean, responseTimeMs: number, chosenId: string) => {
     const item = items[currentIndex]
     if (!item) return
 
@@ -48,7 +48,7 @@ export default function QuizSession({ mode, onComplete }: Props) {
       await updateProgress(item.targetSpecies.id, updated)
 
       if (!correct) {
-        await logConfusion(item.targetSpecies.id, 'unknown')
+        await logConfusion(item.targetSpecies.id, chosenId)
       }
     }
 
