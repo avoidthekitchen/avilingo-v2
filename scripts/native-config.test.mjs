@@ -76,3 +76,12 @@ test('programmatic scene setup does not also request storyboard windows', () => 
   assert.match(infoPlist, /<key>UILaunchStoryboardName<\/key>\s*<string>LaunchScreen<\/string>/)
   assert.match(read('../beakspeak/ios/App/App/AppDelegate.swift'), /config\.storyboard = nil/)
 })
+
+
+test('launch and native chrome use the existing light BeakSpeak presentation', () => {
+  const launch = read('../beakspeak/ios/App/App/Base.lproj/LaunchScreen.storyboard')
+  assert.match(launch, /text="BeakSpeak"/)
+  assert.doesNotMatch(launch, /image="Splash"/)
+  assert.match(capacitorConfig, /backgroundColor: '#FAF8F5'/)
+  assert.match(infoPlist, /<key>UIUserInterfaceStyle<\/key>\s*<string>Light<\/string>/)
+})
