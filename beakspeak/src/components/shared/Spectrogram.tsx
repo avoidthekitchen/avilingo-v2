@@ -5,7 +5,6 @@ interface Props {
   data: SpectrogramData
   currentTime: number
   duration: number
-  isPlaying: boolean
   onSeek: (time: number) => void
 }
 

@@ -200,4 +200,30 @@ describe('SameDifferent audio sequence', () => {
     })
     expect(onAnswer).not.toHaveBeenCalled()
   })
+
+  it('does not record a correct answer if the question unmounts during auto-advance', async () => {
+    const controlled = makeControllablePlayer()
+    audioPlayer = controlled.player
+    const onAnswer = vi.fn()
+
+    const { unmount } = render(<SameDifferent item={makeItem()} onAnswer={onAnswer} />)
+    await act(async () => { await Promise.resolve() })
+    await act(async () => {
+      controlled.finishNaturally()
+      await Promise.resolve()
+      vi.advanceTimersByTime(1500)
+    })
+    await act(async () => {
+      controlled.finishNaturally()
+      await Promise.resolve()
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: 'Same' }))
+    unmount()
+    act(() => {
+      vi.advanceTimersByTime(1500)
+    })
+
+    expect(onAnswer).not.toHaveBeenCalled()
+  })
 })
