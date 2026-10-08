@@ -9,6 +9,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = scene as? UIWindowScene else { return }
 
         window = UIWindow(windowScene: windowScene)
+        window?.backgroundColor = UIColor(red: 250.0 / 255, green: 248.0 / 255, blue: 245.0 / 255, alpha: 1)
+        window?.overrideUserInterfaceStyle = .light
         window?.rootViewController = BeakSpeakViewController()
         window?.makeKeyAndVisible()
 

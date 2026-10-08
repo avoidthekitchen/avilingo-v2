@@ -200,3 +200,8 @@ while the main content honors the full native accessibility size.
 
 Validate larger accessibility sizes in the simulator and with VoiceOver on a
 physical iPhone; browser large-text flows are additional shared-layout evidence.
+
+The native launch wordmark, window, and web-view background use BeakSpeak's warm
+light palette. Native chrome deliberately stays light while the app has one
+light theme, including when the device uses dark mode. The launch wordmark and
+initial React loader share their size and safe-area-centered placement.
