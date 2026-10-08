@@ -10,6 +10,7 @@ const tabs: Array<{ id: Tab; label: string; icon: string }> = [
 export default function Navigation() {
   const activeTab = useAppStore(s => s.activeTab)
   const setTab = useAppStore(s => s.setTab)
+  const sessionActive = useAppStore(s => s.sessionActive)
 
   return (
     <nav
@@ -27,6 +28,8 @@ export default function Navigation() {
         {tabs.map(tab => (
           <button
             key={tab.id}
+            disabled={sessionActive}
+            title={sessionActive ? "Use Back or Quit to leave this session" : undefined}
             onClick={() => setTab(tab.id)}
             aria-current={activeTab === tab.id ? 'page' : undefined}
             aria-label={tab.label}
@@ -41,6 +44,8 @@ export default function Navigation() {
           </button>
         ))}
         <button
+          disabled={sessionActive}
+          title={sessionActive ? 'Use Back or Quit to leave this session' : undefined}
           onClick={() => setTab('credits')}
           aria-current={activeTab === 'credits' ? 'page' : undefined}
           className={`min-w-11 px-3 py-2 text-xs transition-colors ${

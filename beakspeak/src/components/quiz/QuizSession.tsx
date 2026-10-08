@@ -6,6 +6,7 @@ import { createNewProgress } from '../../core/fsrs'
 import ThreeChoiceQuiz from './ThreeChoiceQuiz'
 import SameDifferent from './SameDifferent'
 import QuizResult from './QuizResult'
+import { useSessionNavigation } from '../shared/useSessionNavigation'
 import type { Species } from '../../core/types'
 
 interface Props {
@@ -29,6 +30,7 @@ export default function QuizSession({ mode, onComplete }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState<QuizAnswer[]>([])
   const [showResults, setShowResults] = useState(false)
+  useSessionNavigation(!showResults)
 
   const [items] = useState(() => {
     if (!manifest) return []
