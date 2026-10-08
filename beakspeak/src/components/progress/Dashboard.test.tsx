@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { act, render, screen } from '@testing-library/react'
 import Dashboard from './Dashboard'
 import type { AudioClip, Manifest, Species, UserProgress } from '../../core/types'
 
@@ -98,6 +98,7 @@ function makeProgress(speciesId: string, overrides: Partial<UserProgress> = {}):
 }
 
 describe('Dashboard audio shortcuts', () => {
+  afterEach(() => vi.useRealTimers())
   beforeEach(() => {
     audioButtonMock.mockClear()
 
@@ -174,4 +175,62 @@ describe('Dashboard audio shortcuts', () => {
     expect(audioButtonMock).toHaveBeenCalledTimes(3)
     expect(screen.getByText('Northern Rough-winged Swallow')).toBeInTheDocument()
   })
+
+  it('describes the next review relative to now instead of as a bare date', () => {
+    const species = makeSpecies({ id: 'amro', common_name: 'American Robin' })
+    mockState = {
+      manifest: makeManifest([species]),
+      allProgress: new Map([['amro', makeProgress('amro', { nextReview: Date.now() + 10 * 60_000 })]]),
+      getIntroducedSpecies: () => [species],
+      getDueForReview: () => [],
+      resetProgress: vi.fn(),
+      setTab: vi.fn(),
+    }
+
+    render(<Dashboard />)
+
+    expect(screen.getByText(/Due in 10 min/)).toBeInTheDocument()
+  })
+  it('refreshes the countdown and due count while Progress stays open', () => {
+    vi.useFakeTimers()
+    const referenceTime = new Date(2026, 9, 7, 12).getTime()
+    vi.setSystemTime(referenceTime)
+    const species = makeSpecies({ id: 'amro', common_name: 'American Robin' })
+    const progress = makeProgress('amro', { nextReview: referenceTime + 10 * 60_000 })
+    mockState = {
+      manifest: makeManifest([species]),
+      allProgress: new Map([['amro', progress]]),
+      getIntroducedSpecies: () => [species],
+      getDueForReview: () => progress.nextReview! <= Date.now() ? [progress] : [],
+      resetProgress: vi.fn(),
+      setTab: vi.fn(),
+    }
+    render(<Dashboard />)
+    expect(screen.getByText(/Due in 10 min/)).toBeInTheDocument()
+    act(() => { vi.advanceTimersByTime(60_000) })
+    expect(screen.getByText(/Due in 9 min/)).toBeInTheDocument()
+    act(() => { vi.advanceTimersByTime(9 * 60_000) })
+    expect(screen.getByText(/Due now/)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Start Review (1 due)' })).toBeInTheDocument()
+  })
+
+  it('refreshes immediately when the app becomes visible after a clock jump', () => {
+    vi.useFakeTimers()
+    const referenceTime = new Date(2026, 9, 7, 12).getTime()
+    vi.setSystemTime(referenceTime)
+    const species = makeSpecies({ id: 'amro', common_name: 'American Robin' })
+    mockState = {
+      manifest: makeManifest([species]),
+      allProgress: new Map([['amro', makeProgress('amro', { nextReview: referenceTime + 10 * 60_000 })]]),
+      getIntroducedSpecies: () => [species],
+      getDueForReview: () => [],
+      resetProgress: vi.fn(),
+      setTab: vi.fn(),
+    }
+    render(<Dashboard />)
+    vi.setSystemTime(referenceTime + 11 * 60_000)
+    act(() => { document.dispatchEvent(new Event('visibilitychange')) })
+    expect(screen.getByText(/Due now/)).toBeInTheDocument()
+  })
+
 })
