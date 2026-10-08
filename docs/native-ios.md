@@ -19,6 +19,12 @@ move into the App Xcode project later; its scope does not depend on its project
 location. The newest available compatible iPhone simulator is selected; set
 `IOS_SIMULATOR_ID` to use a particular installed device.
 
+Cold launch waits up to 30 seconds for WKWebView's remote accessibility tree;
+controls must be hittable before their single tap. These waits accommodate cold
+CI simulator startup without retrying a failed learner action. The introduced
+species summary is one text node, so the persistence assertion compares its
+actual count instead of a separately exposed “birds introduced” suffix.
+
 Two tests run:
 
 - **Background and foreground** opens Lesson 1, starts a clip, sends the app to
@@ -167,3 +173,18 @@ npm run lint
 npm run test:unit
 npm run test:e2e
 ```
+
+Browser checks use a strict preview port so they cannot silently reach a build in
+another checkout. For concurrent worktrees, set `BEAKSPEAK_E2E_PORT` to a distinct
+port for each browser suite. Keep native and browser builds serial within one
+worktree because both generate `beakspeak/dist/`.
+
+The app window is created by SceneDelegate. Info.plist must not also select a main
+or scene storyboard, and the delegate configuration keeps storyboard nil. This
+preserves one Capacitor controller per scene instead of competing bootstrap paths.
+The launch storyboard remains separate and is still used.
+
+The playback smoke query includes both normal and retry labels for the same Song
+control. After foreground recovery and another play attempt it must become
+hittable and enabled again; a temporary loading state cannot pass that readiness
+check. The smoke does not infer audio audibility from an enabled control.
