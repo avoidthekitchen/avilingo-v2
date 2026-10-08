@@ -178,3 +178,8 @@ Browser checks use a strict preview port so they cannot silently reach a build i
 another checkout. For concurrent worktrees, set `BEAKSPEAK_E2E_PORT` to a distinct
 port for each browser suite. Keep native and browser builds serial within one
 worktree because both generate `beakspeak/dist/`.
+
+The app window is created by SceneDelegate. Info.plist must not also select a main
+or scene storyboard, and the delegate configuration keeps storyboard nil. This
+preserves one Capacitor controller per scene instead of competing bootstrap paths.
+The launch storyboard remains separate and is still used.
