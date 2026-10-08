@@ -21,7 +21,9 @@ test('failed bird photos use the bundled fallback throughout the learner journey
   await page.getByRole('button', { name: /Start Review \(3 due\)/i }).click()
   await page.getByRole('button', { name: 'Start Review' }).click()
   await expect(page.getByText('1 / 3')).toBeVisible()
-  await expect(page.getByRole('img', { name: /photo unavailable$/ })).toHaveCount(3)
+  // Choice photos are decorative (the label names the bird), so count by fallback state.
+  await expect(page.locator('[data-photo-fallback="true"]')).toHaveCount(3)
+  await expect(page.getByRole('button', { name: /^(American Crow|Steller's Jay|Northern Flicker)$/ })).toHaveCount(3)
 
   for (let answer = 1; answer <= 3; answer += 1) {
     await page.locator('button').filter({ has: page.locator('img') }).first().click()

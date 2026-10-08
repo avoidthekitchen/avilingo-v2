@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useAppStore } from '../../store/appStore'
+import { playAudioToCompletion } from '../../adapters/audio'
 import type { QuizItem } from '../../core/types'
 import AudioPlaybackControl from '../shared/AudioPlaybackControl'
 import BirdPhoto from '../shared/BirdPhoto'
@@ -14,36 +15,52 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
   const audioPlayer = useAppStore(s => s.audioPlayer)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [showingResult, setShowingResult] = useState(false)
-  const startTime = useRef(0)
-  // Auto-play clip on mount
+  // Response time is measured from the end of the first playback (or from the moment
+  // playback fails or is stopped), so the grade reflects recall rather than how long
+  // the clip was. Answering before the clip ends counts as an immediate recall.
+  const startTime = useRef<number | null>(null)
   useEffect(() => {
-    startTime.current = Date.now()
-    audioPlayer.play(item.clip.audio_url).catch(() => {})
+    let cancelled = false
+    startTime.current = null
+    const markReady = () => {
+      if (!cancelled && startTime.current === null) startTime.current = Date.now()
+    }
+    playAudioToCompletion(audioPlayer, item.clip.audio_url).then(markReady, markReady)
+    return () => { cancelled = true }
   }, [item, audioPlayer])
 
-  // Stop audio when the quiz question unmounts (quit/complete/navigate)
+  const responseTimeMs = useCallback(
+    () => (startTime.current === null ? 0 : Date.now() - startTime.current),
+    [],
+  )
+
+  // Stop audio and cancel a pending auto-advance when the question unmounts
+  // (quit/complete/navigate), so a quit inside the 1.5 s window records nothing.
+  const autoAdvanceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   useEffect(() => {
-    return () => { audioPlayer.stop() }
+    return () => {
+      if (autoAdvanceRef.current !== null) clearTimeout(autoAdvanceRef.current)
+      audioPlayer.stop()
+    }
   }, [audioPlayer])
 
   const handleSelect = useCallback((speciesId: string) => {
     if (showingResult) return
 
-    const responseTime = Date.now() - startTime.current
+    const responseTime = responseTimeMs()
     const correct = speciesId === item.targetSpecies.id
     setSelectedId(speciesId)
     setShowingResult(true)
 
     if (correct) {
-      setTimeout(() => onAnswer(true, responseTime), 1500)
+      autoAdvanceRef.current = setTimeout(() => onAnswer(true, responseTime), 1500)
     }
     // For incorrect, user must tap "Next"
-  }, [showingResult, item, onAnswer])
+  }, [showingResult, item, onAnswer, responseTimeMs])
 
   const handleNext = useCallback(() => {
-    const responseTime = Date.now() - startTime.current
-    onAnswer(false, responseTime)
-  }, [onAnswer])
+    onAnswer(false, responseTimeMs())
+  }, [onAnswer, responseTimeMs])
 
   if (!item.choices) return null
 
@@ -86,7 +103,7 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
             >
               <BirdPhoto
                 src={choice.photo.url}
-                alt={choice.common_name}
+                alt=""
                 className="w-14 h-14 rounded-lg object-cover"
               />
               <span className="font-medium text-text">{choice.common_name}</span>

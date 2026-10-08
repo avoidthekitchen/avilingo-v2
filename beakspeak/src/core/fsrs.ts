@@ -1,16 +1,15 @@
 import { createEmptyCard, fsrs, generatorParameters, Rating, type Card, type Grade } from 'ts-fsrs'
 import type { UserProgress, ExerciseType } from './types'
 
-const params = generatorParameters({
+// FSRS-6 default weights. An earlier 17-value vector (FSRS-4.5 layout) was passed here
+// and silently auto-filled to 21 by ts-fsrs, so it did not mean what it was meant to.
+// Retention and interval cap are the only deliberate departures from the defaults.
+export const schedulerParameters = generatorParameters({
   request_retention: 0.85,
   maximum_interval: 180,
-  w: [
-    0.3, 0.6, 1.8, 4.5,
-    5.0, 1.0, 0.75, 0.0, 1.5, 0.1, 1.0, 2.0, 0.05, 0.3, 1.4, 0.2, 2.8,
-  ],
 })
 
-const scheduler = fsrs(params)
+const scheduler = fsrs(schedulerParameters)
 
 function progressToCard(progress: UserProgress): Card {
   const card = createEmptyCard()
