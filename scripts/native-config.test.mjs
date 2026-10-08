@@ -45,7 +45,8 @@ test('the app declares the iPhone-portrait, iOS 18.4 target the spec commits to'
 
 test('every Capacitor plugin the app depends on is linked into the native package', () => {
   const plugins = Object.keys(packageJson.dependencies)
-    .filter(name => name.startsWith('@capacitor/') && !['@capacitor/core', '@capacitor/ios'].includes(name))
+    .filter(name => (name.startsWith('@capacitor/') || name.startsWith('@capacitor-community/')) &&
+      !['@capacitor/core', '@capacitor/ios'].includes(name))
   assert.ok(plugins.length > 0)
   for (const plugin of plugins) {
     assert.match(
@@ -66,8 +67,18 @@ test('the iOS marketing version matches the package version shown in Credits', (
   assert.deepEqual([...new Set(settingValues('MARKETING_VERSION'))], [packageJson.version])
 })
 
-test('the app declares that it uses only exempt encryption', () => {
-  assert.match(infoPlist, /<key>ITSAppUsesNonExemptEncryption<\/key>\s*<false\/>/)
+test('SQLite builds leave export classification to the distribution questionnaire until reviewed', () => {
+  assert.doesNotMatch(infoPlist, /<key>ITSAppUsesNonExemptEncryption<\/key>/)
+})
+
+test('native SQLite uses the backed-up application-support directory without database encryption', () => {
+  assert.match(capacitorConfig, /iosDatabaseLocation: 'Library\/Application Support\/BeakSpeak'/)
+  assert.match(capacitorConfig, /iosIsEncryption: false/)
+  const scene = read('../beakspeak/ios/App/App/SceneDelegate.swift')
+  assert.match(scene, /registerPluginInstance\(BeakSpeakStoragePlugin\(\)\)/)
+  assert.match(scene, /\.applicationSupportDirectory/)
+  assert.match(scene, /appendingPathComponent\("BeakSpeak", isDirectory: true\)/)
+  assert.match(scene, /isExcludedFromBackup = false/)
 })
 
 

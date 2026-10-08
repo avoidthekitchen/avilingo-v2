@@ -2,6 +2,7 @@ import { useAppStore } from '../../store/appStore'
 import BirdPhoto from '../shared/BirdPhoto'
 import ExternalLink from '../shared/ExternalLink'
 import PhotoAttribution from '../shared/PhotoAttribution'
+import nativeStorageLicenses from '../../assets/native-storage-licenses.txt?raw'
 
 export default function CreditsPage() {
   const manifest = useAppStore(s => s.manifest)
@@ -73,6 +74,10 @@ export default function CreditsPage() {
         <p>BeakSpeak v{manifest.version}</p>
         <p>Audio from Xeno-canto · Photos from Wikimedia Commons</p>
       </div>
+      <details className="mt-4 text-sm text-text-muted pb-4">
+        <summary className="cursor-pointer py-3 text-primary">Open source storage licenses</summary>
+        <pre className="mt-2 whitespace-pre-wrap break-words text-xs font-sans">{nativeStorageLicenses}</pre>
+      </details>
     </div>
   )
 }

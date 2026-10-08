@@ -2,7 +2,7 @@
 
 ## Automated simulator smoke check
 
-Install Xcode with an iPhone simulator running iOS 18.4 or newer, Node 22+, uv,
+Install Xcode with an iPhone simulator running iOS 18.4 or newer, Node 22.13+, uv,
 ffmpeg, and `xcodebuildmcp@2.7.0`. Reconstruct audio on a fresh checkout with
 `uv run python3 manual_audio.py`, then run from `beakspeak/`:
 
@@ -34,7 +34,8 @@ Two tests run:
   stop-on-background behavior still need the physical-device checks below.
 - **Force-quit persistence** uses Skip Ahead to introduce species, terminates the
   app, relaunches it, and asserts the Introduced Species count is unchanged. This
-  covers Dexie durability across an ordinary force quit on the simulator only.
+  covers native SQLite durability across an ordinary force quit on the simulator
+  only; it does not complete the physical-device TestFlight storage gate.
 
 These tests cover native integration seams that Playwright cannot reach. Use the
 shortest learner-visible setup needed for each seam. Playwright owns the complete
@@ -90,7 +91,7 @@ Only the iOS platform is configured. The target is portrait iPhone on iOS 18.4 o
 
 ## Prerequisites
 
-- Node.js 22 or newer
+- Node.js 22.13 or newer (the storage contract tests use built-in `node:sqlite`)
 - Python 3.12+, `uv`, `ffmpeg`, and `ffprobe` for the offline audio-content check
 - Xcode with an iOS platform installed
 - For physical installation: an Apple ID added in Xcode and an iPhone with Developer Mode enabled
@@ -193,16 +194,22 @@ check. The smoke does not infer audio audibility from an enabled control.
 
 If progress cannot be read, the app retains the loaded content and offers bird
 sounds and credits while preventing progress writes. Retry explicitly reopens
-IndexedDB without resetting saved data. Lessons save their species in one atomic
+the web IndexedDB connection without resetting saved data; native initialization
+and storage calls remain retryable. Lessons save their species in one atomic
 batch, and reset clears progress plus confusion history in one transaction.
 Failed lesson, Skip Ahead, review, and reset writes show a recoverable state.
+Native load failures explain when an app update or full quit/relaunch is needed.
+Only malformed saved records offer a separate, confirmed erase-and-start-over
+action; newer-schema data remains protected. Native loads have a deadline while
+their outstanding operations remain serialized.
 Review retry keeps the originally scheduled card and tracks completed writes so
 an error while logging confusion cannot apply the same review twice.
 
-These recovery paths preserve the existing storage-adapter boundary. A future
-native adapter must also implement atomic saveProgressBatch and clearAll. They
-do not migrate disposable beta data or substitute for issue #32's distributed
-native-storage gate.
+The iOS app now uses SQLite behind the same storage-adapter boundary, with atomic
+saveProgressBatch and clearAll. Web continues using Dexie. The first SQLite build
+starts fresh without migrating disposable beta data. See
+[native storage](native-storage.md) for the backend decision, backup policy,
+schema upgrades, tester transition text, and issue #32's pending TestFlight gate.
 
 ## System text size
 
