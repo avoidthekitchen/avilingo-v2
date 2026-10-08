@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import type { Species } from '../../core/types'
 import type { SpectrogramData } from '../../core/spectrogram'
 import { useAppStore } from '../../store/appStore'
-import { computeSpectrogram } from '../../core/spectrogram'
+import { getSpectrogram } from '../../adapters/spectrogramCache'
+import type { AudioPlayer } from '../../adapters/audio'
 import AudioButton from '../shared/AudioButton'
 import AttributionInfo from '../shared/AttributionInfo'
 import Spectrogram from '../shared/Spectrogram'
@@ -21,7 +22,6 @@ export default function BirdCard({ species }: Props) {
 
   const [activeClipType, setActiveClipType] = useState<'songs' | 'calls'>('songs')
   const [activeClipIndex, setActiveClipIndex] = useState(0)
-  const [currentTime, setCurrentTime] = useState(0)
 
   const activeClips = species.audio_clips[activeClipType]
   const activeClip = activeClips[activeClipIndex] ?? activeClips[0]
@@ -34,7 +34,7 @@ export default function BirdCard({ species }: Props) {
     const buffer = audioPlayer.getBuffer(activeClipUrl)
     if (!buffer) return initialCache
 
-    initialCache.set(activeClipUrl, computeSpectrogram(buffer))
+    initialCache.set(activeClipUrl, getSpectrogram(buffer))
     return initialCache
   })
   const spectrogramCacheRef = useRef(spectrogramCache)
@@ -59,7 +59,7 @@ export default function BirdCard({ species }: Props) {
       if (prev.has(url)) return prev
 
       const next = new Map(prev)
-      next.set(url, computeSpectrogram(resolvedBuffer))
+      next.set(url, getSpectrogram(resolvedBuffer))
       return next
     })
   }, [audioPlayer])
@@ -90,11 +90,7 @@ export default function BirdCard({ species }: Props) {
 
   // Track active clip type/index based on what the player is playing
   useEffect(() => {
-    const unsub = audioPlayer.onStateChange((state) => {
-      // Always reset playhead when idle (covers both explicit stop and natural end)
-      if (state === 'idle') {
-        setCurrentTime(0)
-      }
+    const unsub = audioPlayer.onStateChange(() => {
       const url = audioPlayer.getActiveUrl()
       if (!url) return
       const songIdx = species.audio_clips.songs.findIndex(c => c.audio_url === url)
@@ -113,14 +109,6 @@ export default function BirdCard({ species }: Props) {
     })
     return unsub
   }, [audioPlayer, cacheSpectrogramForUrl, species])
-
-  // Drive playhead via progress subscription
-  useEffect(() => {
-    const unsub = audioPlayer.onProgress((time) => {
-      setCurrentTime(time)
-    })
-    return unsub
-  }, [audioPlayer])
 
   // Stop playback when the card unmounts (e.g. ← Back button bypasses swipe handlers)
   useEffect(() => () => { audioPlayer.stop() }, [audioPlayer])
@@ -188,9 +176,9 @@ export default function BirdCard({ species }: Props) {
         </div>
 
         {/* Spectrogram */}
-        <Spectrogram
+        <LiveSpectrogram
+          audioPlayer={audioPlayer}
           data={spectrogramData}
-          currentTime={currentTime}
           duration={duration}
           onSeek={handleSeek}
         />
@@ -202,4 +190,16 @@ export default function BirdCard({ species }: Props) {
       </div>
     </div>
   )
+}
+
+// Progress changes only redraw the playhead, leaving photos, labels and buttons alone.
+function LiveSpectrogram({ audioPlayer, data, duration, onSeek }: {
+  audioPlayer: AudioPlayer; data: SpectrogramData; duration: number; onSeek: (time: number) => void
+}) {
+  const [currentTime, setCurrentTime] = useState(0)
+  useEffect(() => audioPlayer.onProgress(time => setCurrentTime(time)), [audioPlayer])
+  useEffect(() => audioPlayer.onStateChange(state => {
+    if (state === 'idle') setCurrentTime(0)
+  }), [audioPlayer])
+  return <Spectrogram data={data} duration={duration} currentTime={currentTime} onSeek={onSeek} />
 }
