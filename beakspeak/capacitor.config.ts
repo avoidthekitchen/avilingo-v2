@@ -5,6 +5,12 @@ const config: CapacitorConfig = {
   appName: 'BeakSpeak',
   webDir: 'dist',
   ios: { backgroundColor: '#FAF8F5' },
+  plugins: {
+    CapacitorSQLite: {
+      iosDatabaseLocation: 'Library/Application Support/BeakSpeak',
+      iosIsEncryption: false,
+    },
+  },
   experimental: {
     ios: {
       spm: {

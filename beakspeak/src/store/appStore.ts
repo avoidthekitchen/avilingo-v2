@@ -4,7 +4,8 @@ import { loadManifest } from '../core/manifest'
 import { isLessonComplete } from '../core/lesson'
 import { isDue } from '../core/fsrs'
 import { WebAudioPlayer, type AudioPlayer } from '../adapters/audio'
-import { DexieStorage, type StorageAdapter } from '../adapters/storage'
+import type { StorageAdapter } from '../adapters/storage'
+import { createStorage } from '../adapters/createStorage'
 
 interface AppState {
   // State
@@ -44,7 +45,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   allProgress: new Map(),
   lastPlayedClipId: new Map(),
   audioPlayer: new WebAudioPlayer(),
-  storage: new DexieStorage(),
+  storage: createStorage(),
   initialized: false,
   initializing: false,
   progressLoadError: false,

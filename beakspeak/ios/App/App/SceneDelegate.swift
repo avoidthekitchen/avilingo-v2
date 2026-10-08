@@ -35,6 +35,7 @@ class BeakSpeakViewController: CAPBridgeViewController {
 
     override func capacitorDidLoad() {
         super.capacitorDidLoad()
+        bridge?.registerPluginInstance(BeakSpeakStoragePlugin())
         refreshTextScale()
         for name in [UIContentSizeCategory.didChangeNotification, UIApplication.didBecomeActiveNotification] {
             textObservers.append(NotificationCenter.default.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
@@ -61,5 +62,35 @@ class BeakSpeakViewController: CAPBridgeViewController {
         textScaleScript = script
         controller.addUserScript(script)
         webView.evaluateJavaScript(source, completionHandler: nil)
+    }
+}
+
+// The SQLite community plugin excludes newly created directories from backup.
+// Apply BeakSpeak's policy before opening a connection, including after updates.
+@objc(BeakSpeakStoragePlugin)
+public class BeakSpeakStoragePlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "BeakSpeakStoragePlugin"
+    public let jsName = "BeakSpeakStorage"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "prepare", returnType: CAPPluginReturnPromise)
+    ]
+
+    @objc func prepare(_ call: CAPPluginCall) {
+        do {
+            let manager = FileManager.default
+            var directory = try manager.url(for: .applicationSupportDirectory, in: .userDomainMask,
+                                            appropriateFor: nil, create: true)
+                .appendingPathComponent("BeakSpeak", isDirectory: true)
+            try manager.createDirectory(at: directory, withIntermediateDirectories: true,
+                                        attributes: [.protectionKey: FileProtectionType.completeUntilFirstUserAuthentication])
+            try manager.setAttributes([.protectionKey: FileProtectionType.completeUntilFirstUserAuthentication],
+                                      ofItemAtPath: directory.path)
+            var values = URLResourceValues()
+            values.isExcludedFromBackup = false
+            try directory.setResourceValues(values)
+            call.resolve()
+        } catch {
+            call.reject("Saved progress storage could not be prepared", nil, error)
+        }
     }
 }

@@ -47,4 +47,25 @@ describe('Dexie storage contract', () => {
     expect(await storage.getAllProgress()).toEqual([existing])
     expect(await storage.getConfusionLog()).toHaveLength(1)
   })
+
+  it('reports read and write failures without losing committed records', async () => {
+    const existing = createNewProgress('a')
+    const event = { targetId: 'a', chosenId: 'b', timestamp: 123 }
+    await storage.saveProgress(existing)
+    await storage.logConfusion(event)
+    vi.spyOn(IDBObjectStore.prototype, 'get').mockImplementationOnce(() => {
+      throw new DOMException('unavailable', 'UnknownError')
+    })
+    await expect(storage.getProgress('a')).rejects.toThrow('unavailable')
+    vi.spyOn(IDBObjectStore.prototype, 'put').mockImplementationOnce(() => {
+      throw new DOMException('quota', 'QuotaExceededError')
+    })
+    await expect(storage.saveProgress({ ...existing, reps: 9 })).rejects.toThrow('quota')
+    vi.spyOn(IDBObjectStore.prototype, 'add').mockImplementationOnce(() => {
+      throw new DOMException('quota', 'QuotaExceededError')
+    })
+    await expect(storage.logConfusion(event)).rejects.toThrow('quota')
+    expect(await storage.getProgress('a')).toEqual(existing)
+    expect(await storage.getConfusionLog()).toEqual([expect.objectContaining(event)])
+  })
 })

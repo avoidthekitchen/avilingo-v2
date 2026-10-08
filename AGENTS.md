@@ -10,7 +10,8 @@ A Duolingo-style bird song identification trainer. React SPA deployed to Cloudfl
 | Styling | Tailwind CSS | 4.2 |
 | Animation | Framer Motion | 12.38 |
 | State | Zustand | 5.0 |
-| Storage | Dexie (IndexedDB) | 4.4 |
+| Web storage | Dexie (IndexedDB) | 4.4 |
+| Native storage | @capacitor-community/sqlite | 8.1 |
 | Spaced repetition | ts-fsrs | 5.3 |
 | Build | Vite | 8.0 |
 | Language | TypeScript | 6.0 |
@@ -55,7 +56,7 @@ rpi/                 ← Timestamped research and plan documents
   research/          ← Learning science and design research
 ```
 
-No backend. No client-side router. All data served as static files. State managed in-memory (Zustand) with persistence to IndexedDB (Dexie).
+No backend. No client-side router. All data served as static files. State managed in-memory (Zustand) with persistence to Dexie on web and native SQLite on iOS.
 
 ---
 
@@ -89,9 +90,16 @@ Minimal state management. Single store at `beakspeak/src/store/appStore.ts` hold
 Typed IndexedDB wrapper. Used for persisting user progress and confusion event logs across sessions.
 
 - Docs: https://dexie.org/docs
-- DB class at `beakspeak/src/adapters/storage.ts`
+- Web DB class and shared contract at `beakspeak/src/adapters/storage.ts`
 - Two tables: `progress` (keyed by speciesId) and `confusions` (auto-increment id)
 - DB name: `beakspeak`
+
+### Native SQLite
+
+- `beakspeak/src/adapters/createStorage.ts` selects native SQLite or web Dexie.
+- Native connection/operations: `sqliteStorage.ts`; SQL/migrations/conversion: `sqliteSchema.ts`.
+- On storage changes, read `docs/native-storage.md` for backup policy, schema preservation, failure behavior, and the pending TestFlight gate.
+- Keep platform selection at the adapter boundary and preserve the shared domain types.
 
 ### ts-fsrs 5.3
 
