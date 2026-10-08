@@ -61,3 +61,11 @@ test('the smoke runner expects exactly the number of XCTest cases that exist', (
   const expected = Number(iosSmoke.match(/counts\?\.passed !== (\d+)/)[1])
   assert.equal(testCases, expected)
 })
+
+test('the iOS marketing version matches the package version shown in Credits', () => {
+  assert.deepEqual([...new Set(settingValues('MARKETING_VERSION'))], [packageJson.version])
+})
+
+test('the app declares that it uses only exempt encryption', () => {
+  assert.match(infoPlist, /<key>ITSAppUsesNonExemptEncryption<\/key>\s*<false\/>/)
+})

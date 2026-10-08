@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useAppStore } from '../../store/appStore'
 import AudioButton from '../shared/AudioButton'
 import BirdPhoto from '../shared/BirdPhoto'
+import { formatNextReview } from '../../core/formatNextReview'
 
 export default function Dashboard() {
   const manifest = useAppStore(s => s.manifest)
@@ -11,6 +12,23 @@ export default function Dashboard() {
   const getDueForReview = useAppStore(s => s.getDueForReview)
   const resetProgress = useAppStore(s => s.resetProgress)
   const [confirming, setConfirming] = useState(false)
+  const [now, setNow] = useState(() => Date.now())
+
+  useEffect(() => {
+    const refresh = () => setNow(Date.now())
+    const refreshOnVisibility = () => {
+      if (document.visibilityState === 'visible') refresh()
+    }
+    const timer = window.setInterval(refresh, 60_000)
+    document.addEventListener('visibilitychange', refreshOnVisibility)
+    window.addEventListener('focus', refresh)
+    return () => {
+      window.clearInterval(timer)
+      document.removeEventListener('visibilitychange', refreshOnVisibility)
+      window.removeEventListener('focus', refresh)
+    }
+  }, [])
+
 
   // AudioButton re-subscribes to the player whenever its clips prop changes identity,
   // so give each row a stable array instead of a fresh one per render.
@@ -93,7 +111,7 @@ export default function Dashboard() {
                 <p className="text-xs text-text-muted">
                   {progress?.reps ?? 0} reps
                   {progress?.nextReview && (
-                    <> · Next: {new Date(progress.nextReview).toLocaleDateString()}</>
+                    <> · {formatNextReview(progress.nextReview, now)}</>
                   )}
                 </p>
                 {(clips?.song || clips?.call) && (
