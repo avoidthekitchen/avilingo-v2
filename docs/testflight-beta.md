@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| App Store name | BeakSpeak: Learn Bird Songs (owner-selected; Apple acceptance pending) |
+| App Store name | BeakSpeak: Learn Bird Songs (confirmed by Xcode distribution setup) |
 | Installed app name | BeakSpeak |
 | Bundle identifier | `com.unformedideas.beakspeak` |
 | Paid Apple team | `33M9E5MEJ9` (owner-confirmed) |
@@ -101,11 +101,20 @@ native synchronization before Swift package resolution. The hook must be
 committed and pushed to the branch selected by the Cloud workflow. It does not
 require an XC API key or commit generated web assets.
 
-The first workflow uses a Build action. For beta distribution, configure an
-Archive action for the App scheme and choose **TestFlight and App Store** as its
-distribution preparation. Add the internal group as a TestFlight post-action
-after the app record/group exist. Retain the source lock and ordinary signing;
-do not force automatic Swift package resolution.
+The first workflow used a Build action. The saved **Default** workflow now has
+an Archive action for the App scheme, **App Store Connect** distribution
+preparation (eligible for all testers and customers), and restricted editing.
+Xcode confirmed the existing BeakSpeak app record and connected the Cloud product
+for distribution. It also created a separate Internal TestFlight Build workflow;
+use Default for the normal distribution artifact required by #31.
+
+Add the internal group as a TestFlight post-action after the group exists.
+Retain the source lock and ordinary signing; do not force automatic Swift package
+resolution. The fixed branch was pushed as `codex/xcode-cloud-testflight`, but
+Xcode's build-source picker still listed only the three older branches when
+checked. No second build was started against an outdated source. A successful
+hosted build remains pending; after merging the setup fix into main, run Default
+against main and verify the post-clone, archive, and upload results.
 
 References: [Apple custom scripts](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts),
 [Cloud dependencies](https://developer.apple.com/documentation/xcode/making-dependencies-available-to-xcode-cloud),
@@ -131,8 +140,11 @@ Evidence as of 2026-10-08:
 - The existing Capacitor decision is recorded in
   [ADR-0001](adr/0001-adopt-capacitor-for-ios.md). The physical-iPhone feasibility
   result is recorded on [issue #30](https://github.com/avoidthekitchen/avilingo-v2/issues/30#issuecomment-5689014818).
-- App record, distribution archive, upload, tester invitations/installations,
-  and TestFlight diagnostics verification remain pending.
+- Xcode confirmed the BeakSpeak App Store Connect record and completed Cloud
+  distribution setup. Default's archive action and editing restriction were saved.
+- Bash syntax, ESLint, and all 23 root tooling tests passed for the Cloud hook.
+- Distribution archive, upload, tester invitations/installations, and TestFlight
+  diagnostics verification remain pending.
 
 Close #31 only after both testers install and run the distributed build and
 TestFlight diagnostics/feedback access is verified. Record app/build identifiers,
