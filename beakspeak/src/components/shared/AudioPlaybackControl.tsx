@@ -4,9 +4,10 @@ import { useAudioStateForUrl } from '../../hooks/useAudioStateForUrl'
 interface Props {
   audioPlayer: AudioPlayer
   url: string
+  onPlay?: () => Promise<void>
 }
 
-export default function AudioPlaybackControl({ audioPlayer, url }: Props) {
+export default function AudioPlaybackControl({ audioPlayer, url, onPlay }: Props) {
   const state = useAudioStateForUrl(audioPlayer, url)
   const isLoading = state === 'loading'
   const isPlaying = state === 'playing'
@@ -28,7 +29,8 @@ export default function AudioPlaybackControl({ audioPlayer, url }: Props) {
           if (isPlaying) {
             audioPlayer.stop()
           } else {
-            audioPlayer.play(url).catch(() => {})
+            const play = onPlay ? onPlay() : audioPlayer.play(url)
+            play.catch(() => {})
           }
         }}
         disabled={isLoading}
