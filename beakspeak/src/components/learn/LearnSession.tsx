@@ -5,6 +5,7 @@ import { getSpeciesByIds } from '../../core/manifest'
 import { buildIntroQuiz, buildReviewQuiz } from '../../core/lesson'
 import type { IntroQuizItem, Lesson } from '../../core/types'
 import BirdCard from './BirdCard'
+import { useSessionNavigation } from '../shared/useSessionNavigation'
 import IntroQuiz from './IntroQuiz'
 import SaveError from '../shared/SaveError'
 
@@ -36,6 +37,7 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
   )
   const [quizItems, setQuizItems] = useState<IntroQuizItem[]>([])
   const [phase, setPhase] = useState<Phase>(reviewItems.length > 0 ? 'review' : 'cards')
+  useSessionNavigation(phase !== 'complete')
   const [cardIndex, setCardIndex] = useState(0)
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null)
   const rootRef = useRef<HTMLDivElement>(null)

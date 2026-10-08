@@ -143,6 +143,7 @@ function makeManifest(): Manifest {
 describe('LearnSession unlock mode', () => {
   beforeEach(() => {
     mockState = {
+      setSessionActive: vi.fn(),
       manifest: makeManifest(),
       getIntroducedSpecies: () => ['a', 'b', 'c'].map(id => makeSpecies(id)),
       introduceSpecies: vi.fn(async () => {}),
@@ -191,6 +192,7 @@ describe('LearnSession unlock mode', () => {
 describe('LearnSession redo mode', () => {
   beforeEach(() => {
     mockState = {
+      setSessionActive: vi.fn(),
       manifest: makeManifest(),
       getIntroducedSpecies: () => ['a', 'b', 'c'].map(id => makeSpecies(id)),
       introduceSpecies: vi.fn(async () => {}),
@@ -240,6 +242,7 @@ describe('LearnSession quiz item stability', () => {
     buildIntroQuizSpy.mockClear()
     buildReviewQuizSpy.mockClear()
     mockState = {
+      setSessionActive: vi.fn(),
       manifest: makeManifest(),
       getIntroducedSpecies: () => ['a', 'b', 'c'].map(id => makeSpecies(id)),
       introduceSpecies: vi.fn(async () => {}),

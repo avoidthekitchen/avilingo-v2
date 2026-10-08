@@ -203,6 +203,7 @@ These recovery paths preserve the existing storage-adapter boundary. A future
 native adapter must also implement atomic saveProgressBatch and clearAll. They
 do not migrate disposable beta data or substitute for issue #32's distributed
 native-storage gate.
+
 ## System text size
 
 The native controller maps UIKit's Dynamic Type body metric to the shared

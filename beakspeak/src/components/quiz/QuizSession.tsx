@@ -8,6 +8,7 @@ import SameDifferent from './SameDifferent'
 import QuizResult from './QuizResult'
 import SaveError from '../shared/SaveError'
 import type { Species, UserProgress } from '../../core/types'
+import { useSessionNavigation } from '../shared/useSessionNavigation'
 
 interface Props {
   mode: 'review' | 'practice'
@@ -43,6 +44,7 @@ export default function QuizSession({ mode, onComplete }: Props) {
   const [saveError, setSaveError] = useState(false)
   const pendingAnswer = useRef<PendingAnswer | null>(null)
   const savingRef = useRef(false)
+  useSessionNavigation(!showResults)
 
   const [items] = useState(() => {
     if (!manifest) return []

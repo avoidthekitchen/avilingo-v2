@@ -9,6 +9,7 @@ import { DexieStorage, type StorageAdapter } from '../adapters/storage'
 interface AppState {
   // State
   activeTab: Tab
+  sessionActive: boolean
   manifest: Manifest | null
   allProgress: Map<string, UserProgress>
   lastPlayedClipId: Map<string, string>
@@ -28,6 +29,7 @@ interface AppState {
   // Actions
   initialize: () => Promise<void>
   setTab: (tab: Tab) => void
+  setSessionActive: (active: boolean) => void
   updateProgress: (speciesId: string, progress: UserProgress) => Promise<void>
   introduceSpecies: (speciesIds: string[]) => Promise<void>
   logConfusion: (targetId: string, chosenId: string) => Promise<void>
@@ -37,6 +39,7 @@ interface AppState {
 
 export const useAppStore = create<AppState>((set, get) => ({
   activeTab: 'learn',
+  sessionActive: false,
   manifest: null,
   allProgress: new Map(),
   lastPlayedClipId: new Map(),
@@ -93,6 +96,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   setTab: (tab: Tab) => set({ activeTab: tab }),
+  setSessionActive: (active: boolean) => set({ sessionActive: active }),
 
   updateProgress: async (speciesId: string, progress: UserProgress) => {
     const { storage, progressLoadError } = get()
