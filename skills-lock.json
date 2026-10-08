@@ -41,7 +41,7 @@
       "source": "wshobson/agents",
       "sourceType": "github",
       "skillPath": "plugins/reverse-engineering/skills/anti-reversing-techniques/SKILL.md",
-      "computedHash": "f5125546818f0af96eaef3bea565de31784966d54c42470866e79bf80bbaa707"
+      "computedHash": "125919b1816ea009c0342215309ce68419565cbf812f7ce107fc1675b7511fa3"
     },
     "api-design-principles": {
       "source": "wshobson/agents",
@@ -137,7 +137,7 @@
       "source": "wshobson/agents",
       "sourceType": "github",
       "skillPath": "plugins/block-no-verify/skills/block-no-verify-hook/SKILL.md",
-      "computedHash": "b9eec031399f3b81ea2c896af5fb1cab4b2b1231219e8266c1c1503f2190ee9a"
+      "computedHash": "796a1fb93f78fc484a1c3e6613bfab8eefb3f46c9d949b08550aafe5c2626d33"
     },
     "brand-landingpage": {
       "source": "wshobson/agents",
@@ -215,7 +215,7 @@
       "source": "wshobson/agents",
       "sourceType": "github",
       "skillPath": "plugins/conductor/skills/context-driven-development/SKILL.md",
-      "computedHash": "69b009af0a1495ca05b6ec7511b28d56816285b9df66a31f5c6f16436148f771"
+      "computedHash": "77f167c0d5df769210e63d16d78b4dff395dc3a932bb99a0493d368c799e88ad"
     },
     "cost-optimization": {
       "source": "wshobson/agents",
@@ -305,7 +305,7 @@
       "source": "wshobson/agents",
       "sourceType": "github",
       "skillPath": "plugins/observability-monitoring/skills/distributed-tracing/SKILL.md",
-      "computedHash": "79a33edf78f2f33082cfa7b5133ff8f05f49fb91bc90dbb8776fa05dc46836ff"
+      "computedHash": "954e8da7c4cd9afaa7d93c35eb619765cb4cee2b9fa47dbd557fd50005879496"
     },
     "domain-modeling": {
       "source": "mattpocock/skills",
@@ -359,7 +359,7 @@
       "source": "wshobson/agents",
       "sourceType": "github",
       "skillPath": "plugins/plugin-eval/skills/evaluation-methodology/SKILL.md",
-      "computedHash": "7dcf134d3f3c3228bf736aee0bae4260cf180a0cc883a0c16f003d939dc043aa"
+      "computedHash": "e5de9bca5c8a8013724ac662488a362ddbb4692eab32a0cf8be9b2cb3ff0da76"
     },
     "event-store-design": {
       "source": "wshobson/agents",
@@ -377,7 +377,7 @@
       "source": "wshobson/agents",
       "sourceType": "github",
       "skillPath": "plugins/file-conversion/skills/file-conversion/SKILL.md",
-      "computedHash": "48507ce5a1f6fdf018b7e85f0178c67761a961442e816bbbee1c1d0adeb683ba"
+      "computedHash": "a602887b1a250a439541035edd26be7f94badbd85109e6edce566279cd5c87c3"
     },
     "finetuning-method-selection": {
       "source": "wshobson/agents",
@@ -407,19 +407,19 @@
       "source": "wshobson/agents",
       "sourceType": "github",
       "skillPath": "plugins/cicd-automation/skills/github-actions-templates/SKILL.md",
-      "computedHash": "93e92fd674dea084628e95f9c48af806f9672ac08f815c84f85adedb55742c59"
+      "computedHash": "26d9b7d4392712d3ff500ff535c8f68c03820111e22af74fd579f58f605b2166"
     },
     "gitlab-ci-patterns": {
       "source": "wshobson/agents",
       "sourceType": "github",
       "skillPath": "plugins/cicd-automation/skills/gitlab-ci-patterns/SKILL.md",
-      "computedHash": "294fe3b5ac78ca7f15ec3e5257e6963b0a659e95700d782739fcb4b065496a83"
+      "computedHash": "d482feab394b74df91f50fbf464021c5b16f181284cf495c8e1d04f11f928421"
     },
     "gitops-workflow": {
       "source": "wshobson/agents",
       "sourceType": "github",
       "skillPath": "plugins/kubernetes-operations/skills/gitops-workflow/SKILL.md",
-      "computedHash": "e8df22024090440fce624e6a99faca4b66aa267a428b5a63a0c0416fa4eb2629"
+      "computedHash": "877ef7e21cdf863257e7fe06154d629f510bbe8467485bd3970519e292e18424"
     },
     "go-concurrency-patterns": {
       "source": "wshobson/agents",
@@ -431,7 +431,7 @@
       "source": "wshobson/agents",
       "sourceType": "github",
       "skillPath": "plugins/game-development/skills/godot-gdscript-patterns/SKILL.md",
-      "computedHash": "da390e553f8533575a5f9b94c9a7a1aed5abf629a3f687f97c8c8d5b65bac873"
+      "computedHash": "ed164ac7e479497168ae77f344aae6072be066ecbe56a1bb56cdb80c4d4868df"
     },
     "grafana-dashboards": {
       "source": "wshobson/agents",
