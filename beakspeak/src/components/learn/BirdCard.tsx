@@ -138,7 +138,7 @@ export default function BirdCard({ species }: Props) {
   return (
     <div className="flex h-full min-h-0 flex-col overflow-x-hidden overflow-y-auto rounded-2xl border border-border bg-card shadow-sm">
       {/* Photo section */}
-      <div className="relative grid" style={{ minHeight: '45%' }}>
+      <div className="relative grid shrink-0" style={{ minHeight: '45%' }}>
         <BirdPhoto
           src={species.photo.url}
           alt={species.common_name}

@@ -18,9 +18,11 @@ test('300% text keeps the lesson, quiz and navigation usable', async ({ page, ap
     await expect(title).toBeVisible()
     const bounds = await title.evaluate(node => {
       const card = node.closest('.rounded-2xl')!
-      return { title: node.getBoundingClientRect().top, card: card.getBoundingClientRect().top }
+      const caption = node.parentElement!
+      return { title: node.getBoundingClientRect().top, card: card.getBoundingClientRect().top, captionBottom: caption.getBoundingClientRect().bottom, infoTop: caption.parentElement!.nextElementSibling!.getBoundingClientRect().top }
     })
     expect(bounds.title).toBeGreaterThanOrEqual(bounds.card)
+    expect(bounds.captionBottom).toBeLessThanOrEqual(bounds.infoTop + 1)
     await page.getByRole('button', { name: /Next|Start Quiz/ }).click()
   }
   await app.answerIntroQuiz()
