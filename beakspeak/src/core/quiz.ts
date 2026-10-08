@@ -94,20 +94,17 @@ function buildSameDifferentItem(
   const clip1 = selectClip(target, lastPlayedClipId.get(target.id))
 
   if (isSame) {
-    // Same species: mix types (song + call) when possible
+    // Same species: contrast the roles (song vs call) when possible. The role comes
+    // from which list the clip lives in, not from its Xeno-canto type label: several
+    // curated "song" clips are labelled "call" (crows and jays do not sing), so the
+    // label cannot tell the two apart.
     const songClips = target.audio_clips.songs
     const callClips = target.audio_clips.calls
-    let clip2: AudioClip
-
-    if (clip1.type.includes('call') && songClips.length > 0) {
-      clip2 = songClips[Math.floor(Math.random() * songClips.length)]
-    } else if (callClips.length > 0) {
-      clip2 = callClips[Math.floor(Math.random() * callClips.length)]
-    } else {
-      // Fall back to different clip of same type
-      const others = [...songClips, ...callClips].filter(c => c.xc_id !== clip1.xc_id)
-      clip2 = others[Math.floor(Math.random() * others.length)] ?? clip1
-    }
+    const clip1IsCall = callClips.some(c => c.xc_id === clip1.xc_id)
+    const otherRole = (clip1IsCall ? songClips : callClips).filter(c => c.xc_id !== clip1.xc_id)
+    const sameRole = (clip1IsCall ? callClips : songClips).filter(c => c.xc_id !== clip1.xc_id)
+    const candidates = otherRole.length > 0 ? otherRole : sameRole
+    const clip2 = candidates[Math.floor(Math.random() * candidates.length)] ?? clip1
 
     return {
       targetSpecies: target,
