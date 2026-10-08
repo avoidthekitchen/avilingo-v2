@@ -111,6 +111,26 @@ jobs:
       - name: Unit tests
         run: npm run test:unit
 
+      # Browser audio coverage decodes the real gitignored production clips.
+      # Jobs have separate filesystems, so the macOS reconstruction is not enough.
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.12'
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .cache/manual-audio
+            beakspeak/public/content/audio/manual
+          key: web-audio-${{ runner.os }}-${{ hashFiles('content/audio-selections.toml', 'content/audio-metadata.lock.json', 'manual_audio.py') }}
+
+      - name: Reconstruct locked production audio
+        working-directory: .
+        run: uv run python3 manual_audio.py
+
+      - name: Validate production audio before browser playback
+        run: npm run content:check
+
       - name: Mobile E2E
         run: npm run test:e2e
 
