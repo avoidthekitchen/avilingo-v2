@@ -28,20 +28,29 @@ export function computeSpectrogram(
     hannWindow[i] = 0.5 * (1 - Math.cos((2 * Math.PI * i) / (fftSize - 1)))
   }
 
+  // Reuse work arrays and roots of unity across every time bin.
+  const real = new Float64Array(fftSize)
+  const imag = new Float64Array(fftSize)
+  const cos = new Float64Array(fftSize / 2)
+  const sin = new Float64Array(fftSize / 2)
+  for (let i = 0; i < cos.length; i++) {
+    const angle = -2 * Math.PI * i / fftSize
+    cos[i] = Math.cos(angle)
+    sin[i] = Math.sin(angle)
+  }
   const magnitudes: Float32Array[] = []
   let globalMax = 0
 
   for (let t = 0; t < timeBins; t++) {
     const offset = t * hopSize
-    const real = new Float64Array(fftSize)
-    const imag = new Float64Array(fftSize)
+    imag.fill(0)
 
     for (let i = 0; i < fftSize; i++) {
       const sampleIdx = offset + i
       real[i] = (sampleIdx < length ? samples[sampleIdx] : 0) * hannWindow[i]
     }
 
-    fft(real, imag)
+    fft(real, imag, cos, sin)
 
     const mags = new Float32Array(frequencyBins)
     for (let i = 0; i < frequencyBins; i++) {
@@ -73,7 +82,7 @@ export function computeSpectrogram(
 }
 
 /** In-place radix-2 Cooley-Tukey FFT. Arrays must be power-of-2 length. */
-function fft(real: Float64Array, imag: Float64Array): void {
+function fft(real: Float64Array, imag: Float64Array, cos: Float64Array, sin: Float64Array): void {
   const n = real.length
   if (n <= 1) return
 
@@ -95,16 +104,15 @@ function fft(real: Float64Array, imag: Float64Array): void {
   // Butterfly passes
   for (let size = 2; size <= n; size *= 2) {
     const halfSize = size / 2
-    const angle = -2 * Math.PI / size
+    const rootStride = n / size
     for (let i = 0; i < n; i += size) {
       for (let k = 0; k < halfSize; k++) {
-        const theta = angle * k
-        const cos = Math.cos(theta)
-        const sin = Math.sin(theta)
+        const c = cos[k * rootStride]
+        const s = sin[k * rootStride]
         const idx = i + k
         const idx2 = idx + halfSize
-        const tReal = cos * real[idx2] - sin * imag[idx2]
-        const tImag = sin * real[idx2] + cos * imag[idx2]
+        const tReal = c * real[idx2] - s * imag[idx2]
+        const tImag = s * real[idx2] + c * imag[idx2]
         real[idx2] = real[idx] - tReal
         imag[idx2] = imag[idx] - tImag
         real[idx] += tReal

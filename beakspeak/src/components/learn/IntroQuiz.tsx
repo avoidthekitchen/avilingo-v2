@@ -151,7 +151,7 @@ export default function IntroQuiz({ items, onComplete, onBack }: Props) {
                   alt=""
                   className="w-14 h-14 rounded-lg object-cover"
                 />
-                <span className="font-medium text-text">{choice.common_name}</span>
+                <span className="min-w-0 break-words hyphenate-long-words font-medium text-text">{choice.common_name}</span>
               </button>
             )
           })}

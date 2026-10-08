@@ -11,6 +11,16 @@
   --color-border: #E5E1DB;
   --color-card: #FFFFFF;
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --text-xs: calc(.75rem * var(--app-text-scale, 1));
+  --text-sm: calc(.875rem * var(--app-text-scale, 1));
+  --text-base: calc(1rem * var(--app-text-scale, 1));
+  --text-lg: calc(1.125rem * var(--app-text-scale, 1));
+  --text-xl: calc(1.25rem * var(--app-text-scale, 1));
+  --text-2xl: calc(1.5rem * var(--app-text-scale, 1));
+  --text-3xl: calc(1.875rem * var(--app-text-scale, 1));
+  --text-4xl: calc(2.25rem * var(--app-text-scale, 1));
+  --text-5xl: calc(3rem * var(--app-text-scale, 1));
+
 }
 
 html, body, #root {
@@ -21,6 +31,7 @@ html, body, #root {
 
 body {
   font-family: var(--font-sans);
+  font-size: var(--text-base);
   background-color: var(--color-bg);
   color: var(--color-text);
   -webkit-font-smoothing: antialiased;
@@ -45,8 +56,8 @@ button {
 }
 
 .app-scroll-region {
-  padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
-  scroll-padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(4rem * min(var(--app-text-scale, 1), 2) + env(safe-area-inset-bottom, 0px));
+  scroll-padding-bottom: calc(4rem * min(var(--app-text-scale, 1), 2) + env(safe-area-inset-bottom, 0px));
 }
 
 .safe-area-dialog {
@@ -64,4 +75,16 @@ button {
   -webkit-hyphenate-limit-before: 5;
   -webkit-hyphenate-limit-after: 4;
   hyphenate-limit-chars: 10 5 4;
+}
+
+/* Tab labels reach 200% while retaining all four destinations at larger native
+   accessibility sizes. Main content follows the full system text scale. */
+.app-navigation button {
+  font-size: calc(.75rem * min(var(--app-text-scale, 1), 2));
+}
+.app-navigation .tab-icon {
+  font-size: calc(1.125rem * min(var(--app-text-scale, 1), 2));
+}
+.lesson-species {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(6rem * var(--app-text-scale, 1))), 1fr));
 }

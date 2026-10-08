@@ -189,6 +189,33 @@ control. After foreground recovery and another play attempt it must become
 hittable and enabled again; a temporary loading state cannot pass that readiness
 check. The smoke does not infer audio audibility from an enabled control.
 
+## Storage failure recovery
+
+If progress cannot be read, the app retains the loaded content and offers bird
+sounds and credits while preventing progress writes. Retry explicitly reopens
+IndexedDB without resetting saved data. Lessons save their species in one atomic
+batch, and reset clears progress plus confusion history in one transaction.
+Failed lesson, Skip Ahead, review, and reset writes show a recoverable state.
+Review retry keeps the originally scheduled card and tracks completed writes so
+an error while logging confusion cannot apply the same review twice.
+
+These recovery paths preserve the existing storage-adapter boundary. A future
+native adapter must also implement atomic saveProgressBatch and clearAll. They
+do not migrate disposable beta data or substitute for issue #32's distributed
+native-storage gate.
+
+## System text size
+
+The native controller maps UIKit's Dynamic Type body metric to the shared
+--app-text-scale typography token at document load, preference changes, and
+foreground recovery. It retains Capacitor's other WebKit scripts when updating
+its own injection. Text scales independently from margins and photos. Lesson
+species rows reflow, quiz names wrap, and navigation labels scale up to 200 percent
+while the main content honors the full native accessibility size.
+
+Validate larger accessibility sizes in the simulator and with VoiceOver on a
+physical iPhone; browser large-text flows are additional shared-layout evidence.
+
 The native launch wordmark, window, and web-view background use BeakSpeak's warm
 light palette. Native chrome deliberately stays light while the app has one
 light theme, including when the device uses dark mode. The launch wordmark and

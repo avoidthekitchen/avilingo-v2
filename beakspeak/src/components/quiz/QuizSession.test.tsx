@@ -100,6 +100,7 @@ describe('QuizSession practice mode', () => {
       manifest: makeManifest(),
       allProgress: new Map(),
       lastPlayedClipId: new Map(),
+      setSessionActive: vi.fn(),
       updateProgress: vi.fn(),
       logConfusion: vi.fn(),
     }
@@ -118,6 +119,33 @@ describe('QuizSession practice mode', () => {
     expect(screen.getByText('Needs More Practice')).toBeInTheDocument()
     expect(screen.getByText(/didn’t change your review schedule|didn't change your review schedule/i)).toBeInTheDocument()
   })
+  it('retries a log failure without scheduling or saving the review twice', async () => {
+    const log = vi.mocked(mockState.logConfusion as ReturnType<typeof vi.fn>)
+    log.mockRejectedValueOnce(new Error('quota')).mockResolvedValue(undefined)
+    render(<QuizSession mode="review" onComplete={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Answer Question' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('could not be fully saved')
+    expect(mockState.updateProgress).toHaveBeenCalledTimes(1)
+    fireEvent.click(screen.getByRole('button', { name: 'Retry saving' }))
+    await screen.findByText('Needs More Practice')
+    expect(mockState.updateProgress).toHaveBeenCalledTimes(1)
+    expect(log).toHaveBeenCalledTimes(2)
+    expect(log).toHaveBeenNthCalledWith(1, 'a', 'b')
+    expect(log).toHaveBeenNthCalledWith(2, 'a', 'b')
+  })
+
+  it('retries the same frozen card after a progress write fails', async () => {
+    const save = vi.mocked(mockState.updateProgress as ReturnType<typeof vi.fn>)
+    save.mockRejectedValueOnce(new Error('quota')).mockResolvedValue(undefined)
+    render(<QuizSession mode="review" onComplete={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Answer Question' }))
+    await screen.findByRole('alert')
+    const firstCard = save.mock.calls[0][1]
+    fireEvent.click(screen.getByRole('button', { name: 'Retry saving' }))
+    await screen.findByText('Needs More Practice')
+    expect(save).toHaveBeenNthCalledWith(2, 'a', firstCard)
+  })
+
 
   it('logs a wrong review answer as a confusion between the two specific birds', async () => {
     render(<QuizSession mode="review" onComplete={vi.fn()} />)

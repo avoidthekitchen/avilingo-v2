@@ -4,6 +4,7 @@ import type { UserProgress, ConfusionEvent } from '../core/types'
 export interface StorageAdapter {
   getProgress(speciesId: string): Promise<UserProgress | undefined>
   saveProgress(progress: UserProgress): Promise<void>
+  saveProgressBatch(progress: UserProgress[]): Promise<void>
   getAllProgress(): Promise<UserProgress[]>
   getConfusionLog(): Promise<ConfusionEvent[]>
   logConfusion(event: ConfusionEvent): Promise<void>
@@ -38,7 +39,13 @@ export class DexieStorage implements StorageAdapter {
     await this.db.progress.put(progress)
   }
 
+  async saveProgressBatch(progress: UserProgress[]): Promise<void> {
+    await this.db.transaction('rw', this.db.progress, () => this.db.progress.bulkPut(progress))
+  }
+
   async getAllProgress(): Promise<UserProgress[]> {
+    // Explicitly reopen after an earlier automatic open failed; Dexie retains that error.
+    await this.db.open()
     return this.db.progress.toArray()
   }
 
@@ -51,7 +58,9 @@ export class DexieStorage implements StorageAdapter {
   }
 
   async clearAll(): Promise<void> {
-    await this.db.progress.clear()
-    await this.db.confusions.clear()
+    await this.db.transaction('rw', this.db.progress, this.db.confusions, async () => {
+      await this.db.progress.clear()
+      await this.db.confusions.clear()
+    })
   }
 }

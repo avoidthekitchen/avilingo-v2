@@ -22,8 +22,8 @@
   "dependencies": {
     "@capacitor/app": "^8.1.1",
     "@capacitor/app-launcher": "^8.0.1",
-    "@capacitor/core": "^8.5.0",
-    "@capacitor/ios": "^8.5.0",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/ios": "^8.5.3",
     "dexie": "^4.4.2",
     "framer-motion": "^12.38.0",
     "react": "^19.2.4",
@@ -32,7 +32,7 @@
     "zustand": "^5.0.12"
   },
   "devDependencies": {
-    "@capacitor/cli": "^8.5.0",
+    "@capacitor/cli": "^8.5.3",
     "@eslint/js": "^9.39.4",
     "@playwright/test": "^1.59.1",
     "@tailwindcss/vite": "^4.2.2",
@@ -45,13 +45,20 @@
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
+    "fake-indexeddb": "^6.2.5",
     "globals": "^17.4.0",
     "jsdom": "^29.0.2",
     "tailwindcss": "^4.2.2",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.0",
-    "vite": "^8.0.4",
-    "vitest": "^4.1.4",
-    "wrangler": "^4.83.0"
+    "vite": "^8.3.3",
+    "vitest": "^4.1.11",
+    "wrangler": "^4.148.0"
+  },
+  "overrides": {
+    "xcode": {
+      "uuid": "^11.1.1"
+    },
+    "sharp": "^0.35.5"
   }
 }
