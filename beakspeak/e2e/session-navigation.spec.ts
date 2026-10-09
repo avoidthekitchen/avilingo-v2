@@ -78,7 +78,7 @@ for (const correct of [true, false]) {
     await expect(page.getByRole('paragraph').filter({ hasText: correct ? /^Correct!$/ : /^That was / })).toBeVisible()
     await page.getByRole('button', { name: 'Progress', exact: true }).click()
     const dialog = page.getByRole('alertdialog', { name: 'End this review?' })
-    await expect(dialog).toContainText('Answers so far are saved.')
+    await expect(dialog).toContainText("Answers you've chosen are saved.")
     await dialog.getByRole('button', { name: 'End review' }).click()
     await expect(page.getByRole('heading', { name: 'Progress' })).toBeVisible()
     await expect(page.getByText(/^1 reps(?: ·|$)/)).toHaveCount(1)
@@ -101,7 +101,7 @@ test('leaving a review from the tab bar keeps saved answers and opens the tapped
 
   await page.getByRole('button', { name: /← Quit/ }).click()
   const dialog = page.getByRole('alertdialog', { name: 'End this review?' })
-  await expect(dialog).toContainText('Answers so far are saved.')
+  await expect(dialog).toContainText("Answers you've chosen are saved.")
   await dialog.getByRole('button', { name: 'Keep going' }).click()
   await expect(page.getByText('1 / 3')).toBeVisible()
 

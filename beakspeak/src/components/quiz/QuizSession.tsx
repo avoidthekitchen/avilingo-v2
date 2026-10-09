@@ -113,7 +113,7 @@ export default function QuizSession({ mode, onComplete }: Props) {
           title: 'End this review?',
           message: saveError
             ? 'Your answer could not be fully saved. We’ll retry saving it before ending this review.'
-            : "Answers so far are saved. Your current answer will be saved before you leave. You'll skip the rest of this session and its summary.",
+            : "Answers you've chosen are saved. You'll skip the rest of this session and its summary.",
           confirmLabel: 'End review',
           cancelLabel: 'Keep going',
         }
