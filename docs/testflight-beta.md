@@ -215,8 +215,9 @@ Local archive `2.0.0 (2)` includes this credit and retains the permanent bundle
 identifier and owner-confirmed encryption declaration. Typecheck, lint, all
 230 app / 23 tooling unit tests, native synchronization, and both native smoke
 tests passed. The credit was also checked through About in the browser.
-The App Store Connect upload is pending renewal of the owner's Xcode account
-session; Xcode reported that it could not authenticate. Build 1 remains available.
+The owner renewed the Xcode account session and Organizer confirmed a successful
+normal App Store Connect upload of `2.0.0 (2)` on 2026-10-09. Apple processing and
+Internal Beta assignment remain pending. Build 1 remains available.
 After build 2 is processed and assigned to Internal Beta, use TestFlight's Update
 button without deleting the installed app, and check that existing progress remains.
 
