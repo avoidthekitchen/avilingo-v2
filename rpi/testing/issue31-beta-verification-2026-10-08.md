@@ -82,6 +82,16 @@ and diagnostics/feedback evidence.
 
 ## Completion boundary
 
+Final update — 2026-10-09: the owner confirmed Individual enrollment for the paid
+team and legal-name seller acceptance, approved the beta privacy summary, and
+completed the physical-iPhone checks for `2.0.0 (2)` on iPhone 15 / iOS 26.6.2.
+App Store Connect independently verified installation/device details, received
+screenshot feedback, and crash-feedback access. The owner explicitly deferred
+waiting for a populated session count. Together with the earlier partner-waiting
+deferral, this completes #31's agreed first-beta scope. The historical pending
+items above describe earlier checkpoints; see the final release checklist for
+current evidence. Issue #32 remains separate, and PR #66 has not been merged.
+
 Keep #31 open until the remaining first-beta human/account gates have evidence.
 Record the deferred partner work separately. Do not mark
 the app as a release candidate from unit, simulator, archive, or upload checks

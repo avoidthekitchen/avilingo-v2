@@ -1,5 +1,17 @@
 # Internal TestFlight beta — issue #31
 
+## Completion — 2026-10-09
+
+Issue #31's owner-approved first-beta scope is complete. The owner confirmed
+Apple Developer Program enrollment as **Individual** for team `33M9E5MEJ9`,
+accepted the legal-name seller, approved the beta privacy summary, and completed
+the installed `2.0.0 (2)` physical-iPhone checks recorded below. Screenshot
+feedback receipt and crash-feedback access were verified in App Store Connect.
+Partner acceptance/access narrowing/installation and a populated session-count
+recheck are explicitly deferred, non-blocking follow-ups. Issue #32's deeper
+storage-update gate remains separate. PR #66 remains the implementation review
+artifact; closing this distribution issue does not imply it has been merged.
+
 ## Distribution configuration
 
 | Field | Value |
@@ -228,7 +240,7 @@ record the remaining account decisions and installed-beta evidence.
 
 | Check | Who | Evidence needed |
 |---|---|---|
-| Individual-account seller identity | Owner | Legal-name seller acceptance confirmed on 2026-10-09; Individual means enrollment in the owner's personal name rather than an organization |
+| Individual-account seller identity | Completed | Owner confirmed Individual enrollment for team `33M9E5MEJ9` and legal-name seller acceptance on 2026-10-09 |
 | Encryption/export determination | Completed for this build | Owner-confirmed OS-only algorithm answer accepted; reassess when the implementation changes |
 | Collaborator invitation | Completed for the first beta | Marketing invitation sent with BeakSpeak selected; owner deferred acceptance and app-scope verification/narrowing as later follow-up |
 | Distributed build installed | Owner now; bird expert later | TestFlight version/build plus device/iOS, successful cold launch, and one short lesson/quiz/review/Progress pass |
@@ -261,8 +273,8 @@ was accessible with **No Crash Feedback**. Sessions still displayed a dash;
 [Apple says tester metrics can take up to 24 hours](https://developer.apple.com/help/app-store-connect/test-a-beta-version/view-and-manage-tester-information).
 No crash needs to be deliberately generated. The owner approved the beta privacy
 summary and deferred waiting for the session count on 2026-10-09; the metric
-recheck does not block #31 closure. Individual membership-type confirmation
-remains pending. These observations do not claim
+recheck does not block #31 closure. The owner subsequently confirmed Individual
+membership type for the paid team. These observations do not claim
 VoiceOver, larger-text, or issue #32's deeper database inspection passed.
 
 ### Deferred partner follow-up
