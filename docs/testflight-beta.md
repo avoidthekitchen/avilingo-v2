@@ -192,13 +192,17 @@ Evidence as of 2026-10-08:
 - The owner sent the Marketing invitation after the BeakSpeak selection step.
   Apple's pending-user list displays **All Apps** and disables Edit App Access
   for that invitation. BeakSpeak is the only registered app. After acceptance,
-  verify and explicitly narrow access to BeakSpeak before marking app-limited
-  collaborator access complete. Invitation acceptance, partner group membership,
-  installed-beta evidence, and TestFlight diagnostics verification remain pending.
+  verify and explicitly narrow access to BeakSpeak after acceptance. On
+  2026-10-08 the owner explicitly accepted the invitation stage as complete for
+  the first beta and deferred waiting for partner acceptance/installation.
+  Partner follow-up does not block this first-beta handoff. Owner installation
+  and TestFlight diagnostics evidence remain pending.
 
-Close #31 only after both testers install and run the distributed build and
-TestFlight diagnostics/feedback access is verified. Record app/build identifiers,
-device/iOS versions, and the results. The ordinary SQLite-to-SQLite TestFlight
+Close #31 after the owner's installed-beta and diagnostics checks, plus the
+remaining ownership/privacy confirmations, have evidence. Partner acceptance,
+scope verification, and installation are explicitly deferred at the owner's
+request for this first beta. Record app/build identifiers, device/iOS versions,
+and the results. The ordinary SQLite-to-SQLite TestFlight
 update and deeper storage inspection remain the separate
 [issue #32 gate](native-storage.md#physical-device-testflight-gate-pending).
 
@@ -211,10 +215,10 @@ record the remaining account decisions and installed-beta evidence.
 |---|---|---|
 | Individual-account seller identity | Owner | Confirm enrollment type and acceptance of Apple's legal-name seller identity |
 | Encryption/export determination | Completed for this build | Owner-confirmed OS-only algorithm answer accepted; reassess when the implementation changes |
-| Collaborator access | Owner / release operator | Marketing role limited to this app, with invitation sent and accepted; no finance, reports, or developer-resource access |
-| Same distributed build installed | Owner and bird expert | TestFlight version/build plus device/iOS, successful cold launch, and one short lesson/quiz/review/Progress pass |
+| Collaborator invitation | Completed for the first beta | Marketing invitation sent with BeakSpeak selected; owner deferred acceptance and app-scope verification/narrowing as later follow-up |
+| Distributed build installed | Owner now; bird expert later | TestFlight version/build plus device/iOS, successful cold launch, and one short lesson/quiz/review/Progress pass |
 | TestFlight diagnostics | Owner / release operator | Verify installation status, device details, sessions, and access to the crash-feedback views |
-| Screenshot feedback | Bird expert, then owner | Submit one TestFlight screenshot with a short note and verify it arrives in App Store Connect |
+| Screenshot feedback | Owner now; bird expert later | Submit one TestFlight screenshot with a short note and verify it arrives in App Store Connect |
 
 A clean run need not produce a crash to prove that the crash-feedback view is
 available. Do not deliberately crash the app or add an analytics SDK for this
@@ -234,3 +238,10 @@ force-quit/relaunch to confirm the app opens safely. Silent-switch audio,
 background recovery, VoiceOver, and larger text remain useful device checks;
 do not mark unperformed checks as passed. Do not substitute a direct Xcode
 installation or a simulator run for installation through TestFlight.
+
+### Deferred partner follow-up
+
+After Armand accepts the App Store Connect invitation, verify/narrow his app
+access to BeakSpeak, add him to Internal Beta, and verify the same-build install
+and screenshot feedback. The owner's 2026-10-08 instruction explicitly defers
+waiting for these steps; invitation sending is done for this first-beta scope.

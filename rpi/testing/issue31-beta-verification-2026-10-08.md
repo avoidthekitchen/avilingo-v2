@@ -50,7 +50,8 @@ Standards findings: **0**.
 ## Spec
 
 Independent read-only review found no confirmed code gap, wrong implementation,
-or unjustified scope expansion. Four acceptance groups remain partial:
+or unjustified scope expansion. The review identified the following acceptance
+areas; the owner's subsequent partner-waiting deferral is recorded below:
 
 1. Individual-account enrollment type and legal-name seller acceptance need
    owner confirmation.
@@ -60,7 +61,9 @@ or unjustified scope expansion. Four acceptance groups remain partial:
 3. The owner sent the Marketing invitation. After acceptance, verify/narrow app
    scope to BeakSpeak: the pending-user list shows All Apps, and its Edit App
    Access action is disabled. BeakSpeak is the only current app. Partner group
-   membership and both same-build TestFlight installations remain pending.
+   membership and the expert's same-build TestFlight installation are deferred
+   follow-up by the owner's explicit 2026-10-08 instruction. The invitation stage
+   is done for the first-beta scope; the owner's own installation remains pending.
 4. Actual sessions/device details, crash-view access, and received screenshot
    feedback need installed-beta evidence. No third-party diagnostics SDK was added.
 
@@ -70,11 +73,16 @@ upload, and the ADR's commitment, device evidence, alternatives, and exit criter
 are supported. Optional Cloud preparation remains available for later use; the
 first beta uses the owner-selected local route.
 
-Spec review: **0 implementation defects; 4 partial human/account gates**.
+Spec review: **0 implementation defects**. The original review identified
+ownership, privacy, collaborator scope, installation, and diagnostics gates.
+The owner subsequently deferred partner acceptance/scope/installation; the
+remaining first-beta checks are ownership/privacy confirmation, owner installation,
+and diagnostics/feedback evidence.
 
 ## Completion boundary
 
-Keep #31 open until the remaining human/account gates have evidence. Do not mark
+Keep #31 open until the remaining first-beta human/account gates have evidence.
+Record the deferred partner work separately. Do not mark
 the app as a release candidate from unit, simulator, archive, or upload checks
 alone. The SQLite-to-SQLite TestFlight update and confusion-history inspection
 remain the separate #32 acceptance gate. See
