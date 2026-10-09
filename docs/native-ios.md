@@ -214,7 +214,9 @@ The iOS app now uses SQLite behind the same storage-adapter boundary, with atomi
 saveProgressBatch and clearAll. Web continues using Dexie. The first SQLite build
 starts fresh without migrating disposable beta data. See
 [native storage](native-storage.md) for the backend decision, backup policy,
-schema upgrades, tester transition text, and issue #32's pending TestFlight gate.
+schema upgrades, tester transition text, and the deferred physical verification
+follow-up in issue #68. The owner accepted #32 for the initial early release on
+2026-10-09.
 
 ## System text size
 

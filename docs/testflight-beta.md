@@ -216,7 +216,7 @@ scope verification, and installation are explicitly deferred at the owner's
 request for this first beta. Record app/build identifiers, device/iOS versions,
 and the results. The ordinary SQLite-to-SQLite TestFlight
 update and deeper storage inspection remain the separate
-[issue #32 gate](native-storage.md#physical-device-testflight-gate-pending).
+[storage verification follow-up](native-storage.md#physical-device-testflight-verification-deferred-follow-up-68).
 
 ## Human completion checklist for #31
 
@@ -283,3 +283,15 @@ After Armand accepts the App Store Connect invitation, verify/narrow his app
 access to BeakSpeak, add him to Internal Beta, and verify the same-build install
 and screenshot feedback. The owner's 2026-10-08 instruction explicitly defers
 waiting for these steps; invitation sending is done for this first-beta scope.
+
+
+## Storage acceptance update — 2026-10-09
+
+The owner subsequently confirmed build 1 → build 2 preserved visible progress
+without uninstalling, and reset remained empty after force-quit/relaunch. The
+owner accepted #32 for the initial early release and requested moving deeper
+physical confusion-history inspection and controlled native failure/retry to
+[issue #68](https://github.com/avoidthekitchen/avilingo-v2/issues/68). Issue #32 is
+closed under that revised scope. Earlier references to its separate pending gate
+are historical; the deferred checks are not claimed as passed and do not block
+initial-release preparation.
