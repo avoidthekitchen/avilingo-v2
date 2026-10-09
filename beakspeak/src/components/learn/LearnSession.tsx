@@ -7,6 +7,7 @@ import type { IntroQuizItem, Lesson } from '../../core/types'
 import BirdCard from './BirdCard'
 import { useSessionNavigation } from '../shared/useSessionNavigation'
 import IntroQuiz from './IntroQuiz'
+import BirdIllustration from '../shared/BirdIllustration'
 import SaveError from '../shared/SaveError'
 
 type Phase = 'review' | 'cards' | 'quiz' | 'saving' | 'save-error' | 'complete'
@@ -197,7 +198,7 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
   // Phase: complete
   return (
     <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
-      <p className="text-4xl mb-4">🎉</p>
+      <BirdIllustration variant="celebrating" className="mb-4" />
       <h2 className="text-xl font-semibold text-text mb-2">
         {mode === 'redo' ? 'Refresher Complete!' : 'Lesson Complete!'}
       </h2>

@@ -1,10 +1,12 @@
 import { useAppStore } from '../../store/appStore'
+import AppIcon from './AppIcon'
+import type { AppIconName } from './AppIcon'
 import type { Tab } from '../../core/types'
 
-const tabs: Array<{ id: Tab; label: string; icon: string }> = [
-  { id: 'learn', label: 'Learn', icon: '📖' },
-  { id: 'quiz', label: 'Quiz', icon: '🎯' },
-  { id: 'progress', label: 'Progress', icon: '📊' },
+const tabs: Array<{ id: Tab; label: string; icon: AppIconName }> = [
+  { id: 'learn', label: 'Learn', icon: 'learn' },
+  { id: 'quiz', label: 'Quiz', icon: 'quiz' },
+  { id: 'progress', label: 'Progress', icon: 'progress' },
 ]
 
 export default function Navigation() {
@@ -39,7 +41,7 @@ export default function Navigation() {
                 : 'text-text-muted'
             }`}
           >
-            <span className="tab-icon text-lg mb-0.5">{tab.icon}</span>
+            <AppIcon name={tab.icon} className="tab-icon mb-0.5" />
             {tab.label}
           </button>
         ))}

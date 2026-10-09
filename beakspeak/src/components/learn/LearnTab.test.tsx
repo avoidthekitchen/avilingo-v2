@@ -153,6 +153,7 @@ describe('LearnTab locked lesson dialog', () => {
   it('opens a dialog when a locked lesson is clicked', () => {
     render(<LearnTab />)
 
+    expect(screen.getByRole('button', { name: /lesson 2: lesson 2/i })).toHaveAccessibleName(/Locked lesson/)
     fireEvent.click(screen.getByRole('button', { name: /lesson 2: lesson 2/i }))
 
     expect(screen.getByRole('dialog')).toBeInTheDocument()
