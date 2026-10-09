@@ -122,8 +122,10 @@ requires examining off-device retention and the use of IP addresses.
 ### Prepared portal responses
 
 Use **Yes, data is collected from this app**, with **No** for tracking for every
-listed type. This is a conservative disclosure of remote-photo and voluntary
-support paths, not a claim that BeakSpeak uploads learning records. Select:
+listed type. This is a conservative disclosure of the remote-photo path, not a
+claim that BeakSpeak uploads learning records. Once photos are bundled
+([#70](https://github.com/avoidthekitchen/avilingo-v2/issues/70)) and that build
+is the one submitted, the answer becomes **Data Not Collected**. Select:
 
 | Apple data type | Purpose | Linked to user | Basis |
 |---|---|---|---|
@@ -131,9 +133,6 @@ support paths, not a claim that BeakSpeak uploads learning records. Select:
 | Other Usage Data | App Functionality; Analytics | Yes | Wikimedia receives requested image URLs and request times as part of delivering photos; its policy describes studying service usage. No quiz answers or learning history are sent. |
 | Coarse Location | App Functionality; Analytics | Yes | Wikimedia's policy describes IP-derived geography for security, service optimization, and aggregated regional usage. BeakSpeak does not request GPS or precise location. |
 | Other Data Types | App Functionality | Yes | Retained IP addresses used for network/security operations; no claim that they are advertising or persistent device IDs. |
-| Email Address | App Functionality | Yes | The sender address received when the user emails support. |
-| Customer Support | App Functionality | Yes | The voluntarily supplied message, device/app details, and support correspondence. |
-| Photos or Videos | App Functionality | Yes | Optional screenshots or attachments sent with a support request. These are not automatically read from the photo library. |
 
 These provider classifications are **inferences from Wikimedia's published
 policy**, not a provider-specific retention audit. Its automatic-request section
@@ -144,11 +143,12 @@ no evidence that identifiers are removed *before* collection, as Apple requires
 for an unlinked answer. Later aggregation alone does not establish unlinking.
 Do not select advertising, marketing, personalization, or tracking purposes.
 
-Disclose voluntary support rather than relying on Apple's optional-feedback
-exception: external email does not provide the specified in-app submission
-interface. Support attachments stay associated with the sender. This packet
-covers the support paths offered on the published page, not speculative access
-to all device photos or recordings.
+Support email is not declared (owner decision, 2026-10-09). Apple's label
+covers data the app transmits off the device. BeakSpeak has no in-app support
+form and never sends support messages: its About page links to the public
+Support page, and any email is composed and sent by the user's own mail app.
+Re-declare Email Address and Customer Support if an in-app feedback or support
+form is ever added.
 
 Do not select local learning progress, quiz answers, confusion history, bundled
 bird recordings, user/device IDs, precise location, purchases, contacts, or
