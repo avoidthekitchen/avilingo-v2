@@ -15,6 +15,10 @@
 | Tester group | Internal Beta |
 | Distribution | Normal App Store Connect upload, then internal group assignment |
 
+The owner selected a local Xcode archive/upload for the first beta on 2026-10-08.
+Xcode Cloud remains configured for later use; merging its setup PR is not a
+prerequisite for this local upload.
+
 The bundle identifier is the installed application's permanent identity. Moving
 the website to another domain does not require changing it. Retain it across
 updates to preserve the app's identity and local storage. Website/support/privacy
@@ -143,8 +147,20 @@ Evidence as of 2026-10-08:
 - Xcode confirmed the BeakSpeak App Store Connect record and completed Cloud
   distribution setup. Default's archive action and editing restriction were saved.
 - Bash syntax, ESLint, and all 23 root tooling tests passed for the Cloud hook.
-- Distribution archive, upload, tester invitations/installations, and TestFlight
-  diagnostics verification remain pending.
+- Local Xcode archive `2.0.0 (1)` completed on 2026-10-08. The archive has the
+  permanent bundle ID, iOS 18.4 minimum, all 30 manifest-referenced audio clips,
+  and the Capacitor, Cordova, SQLCipher, and ZIPFoundation privacy manifests.
+- Apple's Organizer validation passed all checks for `2.0.0 (1)`.
+- Organizer confirmed a successful normal App Store Connect upload of `2.0.0 (1)`.
+  Local evidence is stored in ignored `.artifacts/testflight/local-upload-complete.jpg`
+  and `.artifacts/testflight/archive-audit.json`.
+- The beta description and supplied Gmail plus-address feedback contact were
+  accepted and saved in App Store Connect. Internal Beta was created with manual
+  build assignment; App Store Connect confirmed the owner as its first tester.
+- Both GitHub CI jobs passed for the setup PR, including iOS simulator smoke.
+- Apple's build processing/export-compliance determination, build assignment,
+  collaborator invitation/installation, and TestFlight diagnostics verification
+  remain pending.
 
 Close #31 only after both testers install and run the distributed build and
 TestFlight diagnostics/feedback access is verified. Record app/build identifiers,
