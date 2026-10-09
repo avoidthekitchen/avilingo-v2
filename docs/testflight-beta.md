@@ -216,8 +216,10 @@ identifier and owner-confirmed encryption declaration. Typecheck, lint, all
 230 app / 23 tooling unit tests, native synchronization, and both native smoke
 tests passed. The credit was also checked through About in the browser.
 The owner renewed the Xcode account session and Organizer confirmed a successful
-normal App Store Connect upload of `2.0.0 (2)` on 2026-10-09. Apple processing and
-Internal Beta assignment remain pending. Build 1 remains available.
+normal App Store Connect upload of `2.0.0 (2)` on 2026-10-09. Apple processed build
+`c74efe5c-78ec-47e6-ba14-2e86e0bf2642` and Internal Beta now shows both builds with
+status **Testing**. Build-specific What to Test was saved, including the creator
+credit and updating without deletion to check progress preservation. Build 1 remains available.
 After build 2 is processed and assigned to Internal Beta, use TestFlight's Update
 button without deleting the installed app, and check that existing progress remains.
 
@@ -242,7 +244,7 @@ device identifiers, or feedback payloads in public repository files:
 
 | Person | Version / build | Device / iOS | Installed and launched | Session visible | Screenshot feedback received |
 |---|---|---|---|---|---|
-| Owner | 2.0.0 (1) | Pending | Owner confirmed installed/opened and seems to work on 2026-10-09; testing still in progress | Pending | Pending |
+| Owner | 2.0.0 (1) | iPhone 15 / iOS 26.6.2 (TestFlight verified 2026-10-09) | Owner confirmed installed/opened and seems to work on 2026-10-09; Apple shows Installed; testing still in progress | Not yet shown | Pending |
 | Bird expert | Pending | Pending | Pending | Pending | Pending |
 
 The learner smoke is deliberately short: introduce birds through one lesson,
