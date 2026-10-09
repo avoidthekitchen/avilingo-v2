@@ -6,6 +6,8 @@ routes = [
   { pattern = "unformedideas.com/beakspeak/*", zone_name = "unformedideas.com" },
   { pattern = "www.unformedideas.com/beakspeak", zone_name = "unformedideas.com" },
   { pattern = "www.unformedideas.com/beakspeak/*", zone_name = "unformedideas.com" },
+  { pattern = "beakspeak.app", custom_domain = true },
+  { pattern = "www.beakspeak.app", custom_domain = true },
 ]
 
 [assets]
