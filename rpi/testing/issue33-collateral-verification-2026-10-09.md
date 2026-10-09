@@ -95,3 +95,32 @@ incorrect implementation. Metadata has not been submitted to Apple.
 
 Final review findings: Standards 0; Spec 0. Off-machine public-page checks passed
 as recorded above.
+
+## Later change (same day): move to beakspeak.app
+
+After this record, the owner moved BeakSpeak's public home to `beakspeak.app`
+and switched the support contact to `support@beakspeak.app` (receipt confirmed
+by the owner). See `docs/adr/0002-move-public-web-presence-to-beakspeak-app.md`.
+The route and fallback results above describe the earlier deployment.
+
+Rollout: the unformedideas Worker was deployed first with `_redirects`
+(version `b58cdff9-d041-4610-8aee-7e34adf70ece`), then this Worker with only
+the `beakspeak.app` custom domains (version
+`e6fb09c9-8986-4bea-a4b5-48d782cc2d1a`). `wrangler deploy` did not remove the
+four old `unformedideas.com/beakspeak*` zone routes; they were deleted through
+the Cloudflare API with owner approval.
+
+Unauthenticated HTTPS checks against the public deployment:
+
+| URL | Result |
+|---|---|
+| `beakspeak.app/`, `www.beakspeak.app/` | 200, BeakSpeak landing page |
+| `beakspeak.app/beakspeak` | 307 to `/beakspeak/` |
+| `beakspeak.app/beakspeak/` | 200, BeakSpeak app |
+| `beakspeak.app/beakspeak/support/` | 200, Support · BeakSpeak; `support@beakspeak.app` present |
+| `beakspeak.app/beakspeak/privacy/` | 200, Privacy · BeakSpeak; `support@beakspeak.app` and Wikimedia analytics disclosure present |
+| `beakspeak.app/beakspeak/information.css` | 200, `text/css` |
+| `beakspeak.app/beakspeak/nope`, `beakspeak.app/nope` | 404, Not found · BeakSpeak |
+| `beakspeak.app/whistlewood/` | 200, Whistlewood (whistlewood repo) |
+| `unformedideas.com/beakspeak`, `/beakspeak/`, `/beakspeak/support/`, `/beakspeak/privacy/?x=1` and `www.` variants | 301 to the same path on `beakspeak.app` (query preserved) |
+| `unformedideas.com/`, `unformedideas.com/biopunk/` | 200, unrelated routes unaffected |

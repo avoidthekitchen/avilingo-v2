@@ -5,8 +5,8 @@ test('public support and privacy pages work without starting the app', async ({ 
   expect(response?.status()).toBe(200)
   await expect(page).toHaveTitle('Support · BeakSpeak')
   await expect(page.getByRole('heading', { name: 'BeakSpeak support' })).toBeVisible()
-  await expect(page.getByRole('link', { name: 'support@verybusypeople.com' })).toHaveAttribute(
-    'href', 'mailto:support@verybusypeople.com?subject=BeakSpeak%20support',
+  await expect(page.getByRole('link', { name: 'support@beakspeak.app' })).toHaveAttribute(
+    'href', 'mailto:support@beakspeak.app?subject=BeakSpeak%20support',
   )
   const stylesheet = await request.get('/beakspeak/information.css')
   expect(stylesheet.status()).toBe(200)
@@ -16,8 +16,8 @@ test('public support and privacy pages work without starting the app', async ({ 
   await expect(page).toHaveTitle('Privacy · BeakSpeak')
   await expect(page.getByRole('heading', { name: 'BeakSpeak privacy' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Learning progress stays on your device' })).toBeVisible()
-  await expect(page.getByRole('link', { name: 'support@verybusypeople.com' })).toHaveAttribute(
-    'href', 'mailto:support@verybusypeople.com?subject=BeakSpeak%20privacy',
+  await expect(page.getByRole('link', { name: 'support@beakspeak.app' })).toHaveAttribute(
+    'href', 'mailto:support@beakspeak.app?subject=BeakSpeak%20privacy',
   )
   await page.reload()
   await expect(page.getByRole('heading', { name: 'BeakSpeak privacy' })).toBeVisible()
@@ -31,9 +31,9 @@ test('About exposes the public support and privacy destinations', async ({ page,
   await page.getByRole('button', { name: 'About' }).click()
   const navigation = page.getByRole('navigation', { name: 'Support and privacy' })
   await expect(navigation.getByRole('link', { name: 'Support' })).toHaveAttribute(
-    'href', 'https://unformedideas.com/beakspeak/support/',
+    'href', 'https://beakspeak.app/beakspeak/support/',
   )
   await expect(navigation.getByRole('link', { name: 'Privacy' })).toHaveAttribute(
-    'href', 'https://unformedideas.com/beakspeak/privacy/',
+    'href', 'https://beakspeak.app/beakspeak/privacy/',
   )
 })

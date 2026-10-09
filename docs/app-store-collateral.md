@@ -17,10 +17,10 @@ This packet prepares metadata; it does not submit the app for review.
 | Secondary category | Reference |
 | Price | Free; no in-app purchases |
 | Platform | Portrait iPhone, iOS 18.4 or newer |
-| Support URL | https://unformedideas.com/beakspeak/support/ |
-| Public support contact | support@verybusypeople.com (owner-selected) |
-| Privacy Policy URL | https://unformedideas.com/beakspeak/privacy/ |
-| Marketing URL (optional) | https://unformedideas.com/beakspeak/ |
+| Support URL | https://beakspeak.app/beakspeak/support/ |
+| Public support contact | support@beakspeak.app (owner-confirmed receipt, 2026-10-09) |
+| Privacy Policy URL | https://beakspeak.app/beakspeak/privacy/ |
+| Marketing URL (optional) | https://beakspeak.app/beakspeak/ |
 
 ### Description
 
@@ -194,13 +194,17 @@ at upload; required device slots can change.
 ## Publication and submission checklist
 
 - Publish the support contact only after its monitored destination is confirmed.
+  The owner confirmed receipt at `support@beakspeak.app` on 2026-10-09.
 - Build with `bash scripts/build-site.sh` and deploy using the existing Worker.
-  All public files must remain under `/beakspeak/`; retain the four existing
-  route patterns in `wrangler.toml`. The root site's landing page belongs to
-  the separate unformedideas repository.
-- Check demo, Support, Privacy, and stylesheet on the public custom domain
-  without authentication from an external fetcher, including navigation back
-  to the demo. A SPA fallback response is not proof the information page works.
+  Public BeakSpeak pages live under `beakspeak.app/beakspeak/`; `/whistlewood/`
+  belongs to the whistlewood repo. Deploy the unformedideas repo's legacy
+  redirect before removing old routes, so `unformedideas.com/beakspeak/...`
+  links shipped in TestFlight build 2 keep working (see ADR 0002).
+- Check demo, Support, Privacy, and stylesheet on `beakspeak.app` without
+  authentication from an external fetcher, including navigation back to the
+  demo. Also check that legacy `unformedideas.com/beakspeak/support/` and
+  `/privacy/` return 301 to their `beakspeak.app` equivalents, and that an
+  unknown `/beakspeak/...` path returns 404. A SPA fallback response is not proof the information page works.
 - Record the live check results and the mail-routing/receipt evidence.
 - Paste metadata and review notes into App Store Connect; select the shipping
   build, fill private review contact, confirm the prepared privacy responses, and

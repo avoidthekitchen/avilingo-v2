@@ -2,7 +2,7 @@
 
 A Duolingo-style web app for learning Seattle-area bird songs and calls. Flash-card style introduction, spaced repetition reviews, and discrimination exercises — all in a mobile-first PWA. Bird recordings are selected explicitly by Xeno-canto ID in a small TOML file, then resolved, trimmed, normalized, and attributed by a reproducible content sync.
 
-**Live at:** [unformedideas.com/beakspeak](https://unformedideas.com/beakspeak/)
+**Live at:** [beakspeak.app/beakspeak](https://beakspeak.app/beakspeak/)
 
 <table>
   <tr>
@@ -241,7 +241,7 @@ CI currently performs:
 
 ## Deploying
 
-BeakSpeak is deployed from this repo to the `/beakspeak/` route on `unformedideas.com`. The root landing page is owned by the `unformedideas` repo, and other projects are deployed from other repos.
+BeakSpeak is deployed from this repo to `beakspeak.app`. This repo serves the landing page at `/`, a not-found page, and the app with its Support and Privacy pages under `/beakspeak/`. Whistlewood at `/whistlewood/` is deployed from the `whistlewood` repo on more specific routes.
 
 ```bash
 # Build and assemble the BeakSpeak deploy artifact
@@ -251,14 +251,7 @@ bash scripts/build-site.sh
 npx --prefix beakspeak wrangler deploy
 ```
 
-This serves only:
-
-- `unformedideas.com/beakspeak`
-- `unformedideas.com/beakspeak/`
-- `www.unformedideas.com/beakspeak`
-- `www.unformedideas.com/beakspeak/`
-
-Do not add the root `unformedideas.com/` landing page or other project assets to this repo. Root content belongs in `unformedideas`; other projects are deployed from other repos.
+The Worker uses the `beakspeak.app` and `www.beakspeak.app` custom domains (`beakspeak.app` is canonical). Legacy `unformedideas.com/beakspeak*` URLs are 301-redirected to `beakspeak.app/beakspeak/` by the `unformedideas` repo, which owns the `unformedideas.com` landing page. Do not add `unformedideas.com` routes or other projects' assets to this repo.
 
 ## Project structure
 
