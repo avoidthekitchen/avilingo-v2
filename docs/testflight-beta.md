@@ -77,7 +77,7 @@ provides the developer with tester activity, device/build information, crash
 reports, and feedback submitted through TestFlight. BeakSpeak includes no
 third-party analytics or advertising SDK.
 
-This is review text, not a published privacy-policy URL or a completed App Store
+The owner approved this beta privacy summary on 2026-10-09. This is not a published privacy-policy URL or a completed App Store
 privacy declaration. Verify the shipping archive and dependencies before making
 those declarations. Insert the owner's feedback contact in the published policy.
 
@@ -259,8 +259,10 @@ TestFlight screenshot feedback. App Store Connect independently showed the
 screenshot for `2.0.0 (2)` and the matching device/OS, and its Crash Feedback view
 was accessible with **No Crash Feedback**. Sessions still displayed a dash;
 [Apple says tester metrics can take up to 24 hours](https://developer.apple.com/help/app-store-connect/test-a-beta-version/view-and-manage-tester-information).
-No crash needs to be deliberately generated. Individual membership-type and
-privacy-summary confirmations remain pending. These observations do not claim
+No crash needs to be deliberately generated. The owner approved the beta privacy
+summary and deferred waiting for the session count on 2026-10-09; the metric
+recheck does not block #31 closure. Individual membership-type confirmation
+remains pending. These observations do not claim
 VoiceOver, larger-text, or issue #32's deeper database inspection passed.
 
 ### Deferred partner follow-up
