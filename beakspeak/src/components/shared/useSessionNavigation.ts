@@ -7,7 +7,7 @@ interface SessionNavigation {
   active: boolean
   prompt: SessionExitPrompt
   busy?: boolean
-  onExit: () => void
+  onExit: () => void | Promise<boolean>
 }
 
 /**

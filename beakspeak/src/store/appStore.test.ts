@@ -108,23 +108,24 @@ describe('leaving a session', () => {
     expect(exit).not.toHaveBeenCalled()
   })
 
-  it('exits the session and opens the tapped tab on confirm', () => {
+  it('exits the session and opens the tapped tab on confirm', async () => {
     const exit = vi.fn()
     useAppStore.getState().setSessionGuard({ prompt, busy: false, exit })
     useAppStore.getState().navigateTo('quiz')
-    useAppStore.getState().confirmSessionExit()
+    await useAppStore.getState().confirmSessionExit()
     expect(exit).toHaveBeenCalledTimes(1)
     expect(useAppStore.getState()).toMatchObject({ activeTab: 'quiz', pendingSessionExit: null })
   })
 
-  it("treats the session's own tab and its Back control as a return to that tab's start", () => {
+  it("treats the session's own tab and its Back control as a return to that tab's start", async () => {
     const exit = vi.fn()
     useAppStore.getState().setSessionGuard({ prompt, busy: false, exit })
     useAppStore.getState().navigateTo('learn')
-    useAppStore.getState().confirmSessionExit()
+    await useAppStore.getState().confirmSessionExit()
+    useAppStore.getState().setSessionGuard({ prompt, busy: false, exit })
     useAppStore.getState().requestSessionExit()
     expect(useAppStore.getState().pendingSessionExit).toEqual({ tab: null })
-    useAppStore.getState().confirmSessionExit()
+    await useAppStore.getState().confirmSessionExit()
     expect(exit).toHaveBeenCalledTimes(2)
     expect(useAppStore.getState().activeTab).toBe('learn')
   })
@@ -134,6 +135,32 @@ describe('leaving a session', () => {
     useAppStore.getState().navigateTo('progress')
     useAppStore.getState().requestSessionExit()
     expect(useAppStore.getState()).toMatchObject({ activeTab: 'learn', pendingSessionExit: null })
+  })
+
+  it('waits for the exit save and ignores repeated confirmation/navigation', async () => {
+    let finish!: (saved: boolean) => void
+    const exit = vi.fn(() => new Promise<boolean>(resolve => { finish = resolve }))
+    useAppStore.getState().setSessionGuard({ prompt, busy: false, exit })
+    useAppStore.getState().navigateTo('progress')
+    const leaving = useAppStore.getState().confirmSessionExit()
+    await useAppStore.getState().confirmSessionExit()
+    useAppStore.getState().navigateTo('credits')
+    useAppStore.getState().cancelSessionExit()
+    expect(exit).toHaveBeenCalledTimes(1)
+    expect(useAppStore.getState().pendingSessionExit).toEqual({ tab: 'progress' })
+    expect(useAppStore.getState().activeTab).toBe('learn')
+    finish(true)
+    await leaving
+    expect(useAppStore.getState().activeTab).toBe('progress')
+  })
+
+  it('keeps the current tab and permits retry when exit saving fails', async () => {
+    useAppStore.getState().setSessionGuard({ prompt, busy: false, exit: vi.fn(async () => false) })
+    useAppStore.getState().navigateTo('progress')
+    await useAppStore.getState().confirmSessionExit()
+    expect(useAppStore.getState()).toMatchObject({ activeTab: 'learn', sessionGuard: { busy: false } })
+    useAppStore.getState().requestSessionExit()
+    expect(useAppStore.getState().pendingSessionExit).toEqual({ tab: null })
   })
 
   it('closes an open confirmation when the session ends on its own', () => {

@@ -27,9 +27,23 @@ function Dialog({ title, message, confirmLabel, cancelLabel, busy }: DialogProps
     cancelButtonRef.current?.focus()
     return () => {
       // Leaving unmounts the control that opened the dialog; only return focus if it survived.
-      if (returnFocus?.isConnected) returnFocus.focus()
+      queueMicrotask(() => {
+        if (returnFocus?.isConnected) returnFocus.focus()
+        else if (document.activeElement === document.body) {
+          // Completion can remove Back/Quit while the dialog is open.
+          const heading = document.querySelector<HTMLElement>('main h1, main h2')
+          if (heading) {
+            heading.tabIndex = -1
+            heading.focus()
+          }
+        }
+      })
     }
   }, [])
+
+  useEffect(() => {
+    if (busy) dialogRef.current?.focus()
+  }, [busy])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -74,10 +88,12 @@ function Dialog({ title, message, confirmLabel, cancelLabel, busy }: DialogProps
       >
         <h2 className="mb-3 text-2xl font-semibold text-text" id="leave-session-title">{title}</h2>
         <p className="mb-6 text-sm leading-relaxed text-text" id="leave-session-message">{message}</p>
+        {busy && <p role="status" className="mb-3 text-sm text-text-muted">Saving progress…</p>}
         <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
           <button
             ref={cancelButtonRef}
-            className="rounded-full bg-primary px-5 py-3 text-sm font-medium text-white"
+            className="rounded-full bg-primary px-5 py-3 text-sm font-medium text-white disabled:opacity-50"
+            disabled={busy}
             onClick={cancelSessionExit}
           >
             {cancelLabel}

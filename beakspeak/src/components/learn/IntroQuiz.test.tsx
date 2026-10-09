@@ -107,7 +107,7 @@ describe('IntroQuiz back navigation', () => {
     expect(onBack).toHaveBeenCalledTimes(1)
   })
 
-  it('cancels pending auto-advance when Back is pressed after a correct answer', () => {
+  it('keeps auto-advance when Back opens a confirmation and the quiz stays mounted', () => {
     vi.useFakeTimers()
 
     const onBack = vi.fn()
@@ -129,7 +129,7 @@ describe('IntroQuiz back navigation', () => {
     })
 
     expect(onBack).toHaveBeenCalledTimes(1)
-    expect(onComplete).not.toHaveBeenCalled()
+    expect(onComplete).toHaveBeenCalledWith([{ correct: true }])
   })
 
   it('clears pending auto-advance on unmount', () => {

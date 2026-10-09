@@ -21,7 +21,8 @@ export interface SessionExitGuard {
   prompt: SessionExitPrompt
   /** A save is in flight; leaving now could discard it. */
   busy: boolean
-  exit: () => void
+  /** Async exits save a marked answer first; false keeps the session open on failure. */
+  exit: () => void | Promise<boolean>
 }
 
 interface AppState {
@@ -53,7 +54,7 @@ interface AppState {
   setSessionGuard: (guard: SessionExitGuard | null) => void
   navigateTo: (tab: Tab) => void
   requestSessionExit: () => void
-  confirmSessionExit: () => void
+  confirmSessionExit: () => Promise<void>
   cancelSessionExit: () => void
   updateProgress: (speciesId: string, progress: UserProgress) => Promise<void>
   introduceSpecies: (speciesIds: string[]) => Promise<void>
@@ -146,15 +147,23 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ pendingSessionExit: { tab: null } })
   },
 
-  confirmSessionExit: () => {
+  confirmSessionExit: async () => {
     const { sessionGuard, pendingSessionExit } = get()
-    if (!pendingSessionExit || sessionGuard?.busy) return
-    set({ pendingSessionExit: null })
-    sessionGuard?.exit()
+    if (!pendingSessionExit || !sessionGuard || sessionGuard.busy) return
+    set({ sessionGuard: { ...sessionGuard, busy: true } })
+    const exited = await sessionGuard.exit()
+    if (exited === false) {
+      const currentGuard = get().sessionGuard
+      set({ pendingSessionExit: null, sessionGuard: currentGuard ? { ...currentGuard, busy: false } : null })
+      return
+    }
+    set({ sessionGuard: null, pendingSessionExit: null })
     if (pendingSessionExit.tab) set({ activeTab: pendingSessionExit.tab })
   },
 
-  cancelSessionExit: () => set({ pendingSessionExit: null }),
+  cancelSessionExit: () => {
+    if (!get().sessionGuard?.busy) set({ pendingSessionExit: null })
+  },
 
   updateProgress: async (speciesId: string, progress: UserProgress) => {
     const { storage, progressLoadError } = get()

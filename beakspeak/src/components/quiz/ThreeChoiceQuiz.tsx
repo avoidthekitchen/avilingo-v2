@@ -11,9 +11,10 @@ interface Props {
   // chosenId is the species the learner picked; it lets a wrong answer be logged as
   // a confusion between two specific birds.
   onAnswer: (correct: boolean, responseTimeMs: number, chosenId: string) => void
+  onAnswerMarked?: (correct: boolean, responseTimeMs: number, chosenId: string) => void
 }
 
-export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
+export default function ThreeChoiceQuiz({ item, onAnswer, onAnswerMarked }: Props) {
   const audioPlayer = useAppStore(s => s.audioPlayer)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [showingResult, setShowingResult] = useState(false)
@@ -66,12 +67,13 @@ export default function ThreeChoiceQuiz({ item, onAnswer }: Props) {
     const correct = speciesId === item.targetSpecies.id
     setSelectedId(speciesId)
     setShowingResult(true)
+    onAnswerMarked?.(correct, responseTime, speciesId)
 
     if (correct) {
       autoAdvanceRef.current = setTimeout(() => onAnswer(true, responseTime, speciesId), 1500)
     }
     // For incorrect, user must tap "Next"
-  }, [showingResult, item, onAnswer, responseTimeMs])
+  }, [showingResult, item, onAnswer, onAnswerMarked, responseTimeMs])
 
   const handleNext = useCallback(() => {
     onAnswer(false, responseTimeMs(), selectedId ?? item.targetSpecies.id)

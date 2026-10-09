@@ -132,9 +132,10 @@ describe('ThreeChoiceQuiz response timing', () => {
     expect(responseTime).toBeGreaterThanOrEqual(2000)
   })
 
-  it('does not record a correct answer if the question unmounts during auto-advance', async () => {
+  it('retains the marked answer for exit but cancels advance when unmounted during feedback', async () => {
     const onAnswer = vi.fn()
-    const { unmount } = render(<ThreeChoiceQuiz item={makeItem()} onAnswer={onAnswer} />)
+    const onAnswerMarked = vi.fn()
+    const { unmount } = render(<ThreeChoiceQuiz item={makeItem()} onAnswer={onAnswer} onAnswerMarked={onAnswerMarked} />)
     await act(async () => { await Promise.resolve() })
 
     fireEvent.click(screen.getByText('A').closest('button')!)
@@ -142,6 +143,7 @@ describe('ThreeChoiceQuiz response timing', () => {
     act(() => { vi.advanceTimersByTime(1500) })
 
     expect(onAnswer).not.toHaveBeenCalled()
+    expect(onAnswerMarked).toHaveBeenCalledExactlyOnceWith(true, 0, 'a')
   })
 
   it('reports which bird the learner picked so confusions can be logged', async () => {

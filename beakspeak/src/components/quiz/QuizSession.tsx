@@ -49,28 +49,10 @@ export default function QuizSession({ mode, onComplete }: Props) {
     if (!manifest) return []
     return buildQuizSession(allProgress, manifest, lastPlayedClipId)
   })
-  const requestExit = useSessionNavigation({
-    active: !showResults && items.length > 0,
-    busy: saving,
-    prompt: mode === 'review'
-      ? {
-          title: 'End this review?',
-          message: "Answers so far are saved. You'll skip the rest of this session and its summary.",
-          confirmLabel: 'End review',
-          cancelLabel: 'Keep going',
-        }
-      : {
-          title: 'End this practice?',
-          message: "You'll lose your place and this session's summary. Practice doesn't change your review schedule.",
-          confirmLabel: 'End practice',
-          cancelLabel: 'Keep going',
-        },
-    onExit: onComplete,
-  })
-
-  const savePendingAnswer = useCallback(async () => {
+  const savePendingAnswer = useCallback(async (advance = true) => {
     const pending = pendingAnswer.current
-    if (!pending || savingRef.current) return
+    if (savingRef.current) return false
+    if (!pending) return true
     savingRef.current = true
     setSaving(true)
     setSaveError(false)
@@ -85,17 +67,23 @@ export default function QuizSession({ mode, onComplete }: Props) {
       }
       setAnswers(prev => [...prev, pending.result])
       pendingAnswer.current = null
-      if (pending.index + 1 >= items.length) setShowResults(true)
-      else setCurrentIndex(pending.index + 1)
+      if (advance) {
+        if (pending.index + 1 >= items.length) setShowResults(true)
+        else setCurrentIndex(pending.index + 1)
+      }
+      return true
     } catch {
       setSaveError(true)
+      return false
     } finally {
       savingRef.current = false
       setSaving(false)
     }
   }, [items.length, updateProgress, logConfusion])
 
-  const handleAnswer = useCallback((correct: boolean, responseTimeMs: number, chosenId: string) => {
+  // Capture a marked answer before its feedback timer/Next submits it, so
+  // confirming exit can durably save it using the same retry-safe path.
+  const handleAnswerMarked = useCallback((correct: boolean, responseTimeMs: number, chosenId: string) => {
     const item = items[currentIndex]
     if (!item || pendingAnswer.current) return
     const rating = ratingFromOutcome(correct, responseTimeMs, item.exerciseType)
@@ -110,8 +98,37 @@ export default function QuizSession({ mode, onComplete }: Props) {
       logPending: mode === 'review' && !correct,
       chosenId,
     }
+  }, [items, currentIndex, allProgress, mode])
+
+  const handleAnswer = useCallback((correct: boolean, responseTimeMs: number, chosenId: string) => {
+    handleAnswerMarked(correct, responseTimeMs, chosenId)
     void savePendingAnswer()
-  }, [items, currentIndex, allProgress, mode, savePendingAnswer])
+  }, [handleAnswerMarked, savePendingAnswer])
+
+  const requestExit = useSessionNavigation({
+    active: !showResults && items.length > 0,
+    busy: saving,
+    prompt: mode === 'review'
+      ? {
+          title: 'End this review?',
+          message: saveError
+            ? 'Your answer could not be fully saved. We’ll retry saving it before ending this review.'
+            : "Answers so far are saved. Your current answer will be saved before you leave. You'll skip the rest of this session and its summary.",
+          confirmLabel: 'End review',
+          cancelLabel: 'Keep going',
+        }
+      : {
+          title: 'End this practice?',
+          message: "You'll lose your place and this session's summary. Practice doesn't change your review schedule.",
+          confirmLabel: 'End practice',
+          cancelLabel: 'Keep going',
+        },
+    onExit: async () => {
+      if (mode === 'review' && !await savePendingAnswer(false)) return false
+      onComplete()
+      return true
+    },
+  })
 
   if (!manifest || items.length === 0) {
     return (
@@ -154,12 +171,14 @@ export default function QuizSession({ mode, onComplete }: Props) {
             key={currentIndex}
             item={currentItem}
             onAnswer={handleAnswer}
+            onAnswerMarked={handleAnswerMarked}
           />
         ) : (
           <SameDifferent
             key={currentIndex}
             item={currentItem}
             onAnswer={handleAnswer}
+            onAnswerMarked={handleAnswerMarked}
           />
         )}
       </div>
