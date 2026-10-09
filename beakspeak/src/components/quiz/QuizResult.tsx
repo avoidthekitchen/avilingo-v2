@@ -1,5 +1,5 @@
-import BirdIllustration from '../shared/BirdIllustration'
 import type { Species } from '../../core/types'
+import BirdIllustration from '../shared/BirdIllustration'
 import BirdPhoto from '../shared/BirdPhoto'
 
 interface QuizAnswer {

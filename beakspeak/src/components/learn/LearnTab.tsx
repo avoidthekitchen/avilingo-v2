@@ -109,7 +109,9 @@ export default function LearnTab() {
                   Lesson {lesson.lesson}: {lesson.title}
                 </span>
                 {!available && !completed ? (
-                  <span role="img" aria-label="Locked lesson"><AppIcon name="lock" className="h-4 w-4 text-text-muted" /></span>
+                  <span role="img" aria-label="Locked lesson">
+                    <AppIcon name="lock" className="h-[1em] w-[1em] text-text-muted" />
+                  </span>
                 ) : available && !completed ? (
                   <span className="text-text-muted">›</span>
                 ) : null}

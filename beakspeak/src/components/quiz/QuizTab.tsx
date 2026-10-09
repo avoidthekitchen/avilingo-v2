@@ -1,9 +1,9 @@
-import BirdIllustration from '../shared/BirdIllustration'
 import { useState } from 'react'
 import { getLessons } from '../../core/manifest'
 import { getNextLesson, isLessonAvailable } from '../../core/lesson'
 import { useAppStore } from '../../store/appStore'
 import QuizSession from './QuizSession'
+import BirdIllustration from '../shared/BirdIllustration'
 
 export default function QuizTab() {
   const manifest = useAppStore(s => s.manifest)

@@ -1,4 +1,3 @@
-import BirdIllustration from '../shared/BirdIllustration'
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAppStore } from '../../store/appStore'
@@ -8,6 +7,7 @@ import type { IntroQuizItem, Lesson } from '../../core/types'
 import BirdCard from './BirdCard'
 import { useSessionNavigation } from '../shared/useSessionNavigation'
 import IntroQuiz from './IntroQuiz'
+import BirdIllustration from '../shared/BirdIllustration'
 import SaveError from '../shared/SaveError'
 
 type Phase = 'review' | 'cards' | 'quiz' | 'saving' | 'save-error' | 'complete'
