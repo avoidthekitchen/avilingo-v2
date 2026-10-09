@@ -1,7 +1,10 @@
 # Issue #33 verification — October 9, 2026
 
 Baseline: `c3fb6314a1ee8620d1ab1775041cd6cc525f5a32`.
-Current branch: `codex/custom-bird-assets`.
+Initial branch: `codex/custom-bird-assets`; checkout changed externally to `main`
+before commit. Issue #33 was committed on the then-current `main` branch.
+Review baseline: `f147bd24b163c7c9b66b06f60fa0432efbbd2a00`, excluding the
+intervening artwork commit from issue #33 review.
 Existing skills/documentation changes were present before work began and are
 excluded from this issue's commit.
 
@@ -36,12 +39,59 @@ excluded from this issue's commit.
   simulator build/launch and capture provide additional packaging evidence.
 - No App Store metadata, privacy answers, or release submission was published
   in App Store Connect. The packet distinguishes prepared responses from portal
-  actions and identifies the remaining privacy-classification submission gate.
+  actions and provides explicit conservative privacy responses for owner confirmation before
+  portal publication.
 
 ## Public publication
 
-Pending deployment and external unauthenticated URL verification.
+Published the existing BeakSpeak Worker with version ID
+`1d3165e2-51a7-4596-8b16-721d9a787ef9`. All four route patterns remain confined
+to `/beakspeak` and `/beakspeak/*` on apex and www hostnames.
+
+Unauthenticated HTTPS checks against the public deployment (not the development
+server) returned 200 on both hostnames:
+
+| Path | Content type / title |
+|---|---|
+| `/beakspeak/` | `text/html`, BeakSpeak |
+| `/beakspeak/support/` | `text/html`, Support · BeakSpeak; chosen email present |
+| `/beakspeak/privacy/` | `text/html`, Privacy · BeakSpeak; chosen email present |
+| `/beakspeak/information.css` | `text/css` |
+| `/` | `text/html`, Unformed Ideas (separate root preserved) |
+
+The separate unauthenticated in-app browser confirmed Support → Privacy → demo
+navigation and the five loaded lessons with 0 of 15 birds introduced. Local
+browser fixtures were not used for this public check. Raw curl results are saved
+in ignored `.artifacts/app-store/public-url-checks.json`. The external web-reader
+service could not access the domain; Python urllib also received 403. Curl and
+the actual browser both succeeded without authentication. No security settings
+were changed. An independent off-machine check through Jina Reader then successfully fetched
+the canonical Support, Privacy, and demo URLs, returning the correct titles,
+policy content, chosen support contact, and all five rendered lessons without
+authentication. Only public URLs
+were supplied to that service; no private content or credentials were sent.
 
 ## Independent review
 
-Pending standards/spec review against the baseline.
+Reviewed only the issue #33 commit against
+`f147bd24b163c7c9b66b06f60fa0432efbbd2a00`; unrelated changes were excluded.
+
+### Standards
+
+No Standards findings. The changes preserve the `/beakspeak/` deployment
+boundary, shared React UI, adapter boundary, generated native assets, and
+Playwright product-flow ownership. Backup/reset descriptions agree with native
+storage documentation. Screenshot provenance distinguishes simulator captures
+from physical-device evidence. No actionable baseline smells were identified.
+
+### Spec
+
+The initial review found one partial requirement: privacy responses stopped at
+assessment rather than offering explicit prepared portal answers. The corrected
+packet supplies conservative responses, purpose/linkage selections, and evidence
+for remote photo requests and voluntary support. A second independent review
+confirmed that correction resolves the finding, with no scope creep or other
+incorrect implementation. Metadata has not been submitted to Apple.
+
+Final review findings: Standards 0; Spec 0. Off-machine public-page checks passed
+as recorded above.

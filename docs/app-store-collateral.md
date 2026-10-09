@@ -119,20 +119,52 @@ sites load its content. Do **not** infer “Data Not Collected” solely from th
 absence of analytics SDKs. Apple's [label guidance](https://developer.apple.com/app-store/app-privacy-details/)
 requires examining off-device retention and the use of IP addresses.
 
-Prepared decision sheet for the shipping version:
+### Prepared portal responses
 
-| Data / path | Prepared answer |
-|---|---|
-| Learning progress, quiz answers, confusion history | Not collected; processed/stored only on device |
-| Bundled bird recordings | Not user audio data; no recording/upload |
-| Wikimedia photo request IP and headers | Assess retained request logs as Other Diagnostic Data for App Functionality; no tracking. Do not claim unlinking without evidence of de-identification. Confirm provider treatment before publishing the label. |
-| Voluntary support email and attachments | Email Address / Customer Support if disclosed; App Functionality, linked to sender, no tracking. Optional-disclosure eligibility must be checked against Apple's conditions; external email is not an in-app submission form. |
-| Apple distribution/TestFlight | Apple's own collection is covered by Apple; developer-accessible feedback/diagnostics must be assessed for use and retention. Beta feedback is not hidden app telemetry. |
+Use **Yes, data is collected from this app**, with **No** for tracking for every
+listed type. This is a conservative disclosure of remote-photo and voluntary
+support paths, not a claim that BeakSpeak uploads learning records. Select:
 
-The public policy describes these network and support paths. The owner must
-resolve the Wikimedia retention/classification and support-disclosure decisions
-against the final shipping build before publishing App Store privacy answers.
-This is an explicit submission gate, not an approved “Data Not Collected” label.
+| Apple data type | Purpose | Linked to user | Basis |
+|---|---|---|---|
+| Other Diagnostic Data | App Functionality; Analytics | Yes | Wikimedia receives device/browser/OS headers and request times; its policy describes security, performance improvement, and usage analysis. |
+| Other Usage Data | App Functionality; Analytics | Yes | Wikimedia receives requested image URLs and request times as part of delivering photos; its policy describes studying service usage. No quiz answers or learning history are sent. |
+| Coarse Location | App Functionality; Analytics | Yes | Wikimedia's policy describes IP-derived geography for security, service optimization, and aggregated regional usage. BeakSpeak does not request GPS or precise location. |
+| Other Data Types | App Functionality | Yes | Retained IP addresses used for network/security operations; no claim that they are advertising or persistent device IDs. |
+| Email Address | App Functionality | Yes | The sender address received when the user emails support. |
+| Customer Support | App Functionality | Yes | The voluntarily supplied message, device/app details, and support correspondence. |
+| Photos or Videos | App Functionality | Yes | Optional screenshots or attachments sent with a support request. These are not automatically read from the photo library. |
+
+These provider classifications are **inferences from Wikimedia's published
+policy**, not a provider-specific retention audit. Its automatic-request section
+explicitly covers third-party tools loading Wikimedia content and describes
+performance, security, and usage purposes; its IP-address section describes
+geographical inference and regional aggregates. Select Linked because there is
+no evidence that identifiers are removed *before* collection, as Apple requires
+for an unlinked answer. Later aggregation alone does not establish unlinking.
+Do not select advertising, marketing, personalization, or tracking purposes.
+
+Disclose voluntary support rather than relying on Apple's optional-feedback
+exception: external email does not provide the specified in-app submission
+interface. Support attachments stay associated with the sender. This packet
+covers the support paths offered on the published page, not speculative access
+to all device photos or recordings.
+
+Do not select local learning progress, quiz answers, confusion history, bundled
+bird recordings, user/device IDs, precise location, purchases, contacts, or
+microphone audio: the app does not transmit those data. External source pages
+open in the user's browser, not an embedded unrestricted web view. Apple's own
+platform collection is Apple's responsibility; the shipping app adds no Apple
+analytics framework or custom crash collector. TestFlight feedback and any
+individual diagnostic reports retained by the developer must be reassessed if
+repurposed into a shipping data-collection workflow.
+
+At submission, the owner should confirm that support is used only as described,
+that the shipping archive retains these dependencies/network paths, and that no
+additional telemetry or retained individual diagnostics have been introduced.
+Publish these prepared answers, or refine the provider categories with
+provider-specific evidence; do not replace them with “Data Not Collected” merely
+because SDK manifests are empty. No portal declaration has been made here.
 
 ## Export compliance
 
@@ -171,5 +203,5 @@ at upload; required device slots can change.
   to the demo. A SPA fallback response is not proof the information page works.
 - Record the live check results and the mail-routing/receipt evidence.
 - Paste metadata and review notes into App Store Connect; select the shipping
-  build, fill private review contact, resolve the privacy decision sheet, and
+  build, fill private review contact, confirm the prepared privacy responses, and
   upload screenshot assets. Release submission remains a separate owner action.
