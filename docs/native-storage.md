@@ -39,10 +39,16 @@ device backup settings. Deleting and reinstalling the app without restoring a
 backup starts fresh. This work adds no cloud sync or independent export feature.
 
 The community plugin still links SQLCipher in unencrypted mode, plus ZIPFoundation.
-Their open source notices are bundled and available in Credits. The previous
-`ITSAppUsesNonExemptEncryption = false` declaration has been removed. During #31,
-complete Apple's export compliance questionnaire for the actual linked binary;
-set a permanent declaration only after that classification is confirmed. References:
+Their open source notices are bundled and available in Credits. During #31, the
+shipping `2.0.0 (1)` archive was inspected: SQLCipher uses the CommonCrypto
+provider, the plugin's cryptographic helpers use Apple's CryptoKit/CommonCrypto,
+and no non-OS algorithm implementation was found in the inspected app. The owner
+confirmed **None of the algorithms mentioned above** in Apple's algorithm
+questionnaire, and Apple cleared the build for internal-group assignment.
+`ITSAppUsesNonExemptEncryption = false` now preserves that reviewed declaration
+for this dependency configuration. Re-audit it when cryptographic dependencies or
+features change; disabling database encryption alone is not the justification.
+See [the beta record](testflight-beta.md) for the audit and owner decision. References:
 [plugin dependency notice](https://github.com/capacitor-community/sqlite#installation),
 [Apple's declaration guidance](https://developer.apple.com/documentation/bundleresources/information-property-list/itsappusesnonexemptencryption).
 

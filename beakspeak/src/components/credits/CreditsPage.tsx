@@ -12,6 +12,9 @@ export default function CreditsPage() {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold text-text mb-2">Credits & Attribution</h1>
+      <p className="text-sm text-text mb-6">
+        Created by Jason Wu and Armand Ian Lucas
+      </p>
       <p className="text-sm text-text-muted mb-6">
         Each recording and photo retains its own license, listed below.
       </p>

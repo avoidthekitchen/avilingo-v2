@@ -139,11 +139,16 @@ If Xcode reports that the iOS platform is not installed, add it from Xcode > Set
 1. Run `npm run native:sync`.
 2. Run `npm run native:open`.
 3. In Xcode, select the **App** target and open **Signing & Capabilities**.
-4. Enable automatic signing and select the product owner's Personal Team. Xcode can install this feasibility build with a free Apple account.
+4. Enable automatic signing and select the product owner's Apple Developer team. TestFlight distribution uses the paid team `33M9E5MEJ9`; a free Personal Team is sufficient only for a direct feasibility install.
 5. Connect and unlock the iPhone, trust the Mac if prompted, enable Developer Mode on the phone, and select it as the run destination.
 6. Press **Run**. If iOS asks, trust the developer profile under Settings > General > VPN & Device Management.
 
 Cold-launch the installed Home Screen app and confirm that BeakSpeak appears without browser chrome, a blank screen, or missing local interface assets. Complete the physical-device checks from issue #26 before treating the feasibility gate as passed; command-line compilation cannot validate signing, installation, silent-switch audio, lifecycle behavior, or real-device rendering.
+
+For an internal TestFlight upload, follow the configuration and acceptance record
+in [internal beta distribution](testflight-beta.md). Retain the permanent bundle
+identifier when moving the website to another domain. The web address and native
+application identity are independent.
 
 ### Audio acceptance for issue #29
 

@@ -60,9 +60,9 @@ The app is a single-page app with no backend — all data is served as static fi
 
 ## Running on iPhone with Capacitor
 
-The iOS feasibility app packages the same React application as the web build. It targets portrait iPhones on iOS 18.4 or newer; Android is intentionally not configured.
+The iOS app packages the same React application as the web build. It targets portrait iPhones on iOS 18.4 or newer; Android is intentionally not configured.
 
-See [`docs/native-ios.md`](docs/native-ios.md) for the complete build, synchronization, Personal Team signing, physical-device launch, and web-regression workflow.
+See [`docs/native-ios.md`](docs/native-ios.md) for the complete build, synchronization, signing, physical-device launch, and web-regression workflow. Internal beta configuration, tester instructions, and distribution evidence are tracked in [`docs/testflight-beta.md`](docs/testflight-beta.md).
 
 The normal development loop is:
 

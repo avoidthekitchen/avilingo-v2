@@ -67,8 +67,8 @@ test('the iOS marketing version matches the package version shown in Credits', (
   assert.deepEqual([...new Set(settingValues('MARKETING_VERSION'))], [packageJson.version])
 })
 
-test('SQLite builds leave export classification to the distribution questionnaire until reviewed', () => {
-  assert.doesNotMatch(infoPlist, /<key>ITSAppUsesNonExemptEncryption<\/key>/)
+test('native builds retain the owner-confirmed Apple-OS encryption declaration', () => {
+  assert.match(infoPlist, /<key>ITSAppUsesNonExemptEncryption<\/key>\s*<false\s*\/>/)
 })
 
 test('native SQLite uses the backed-up application-support directory without database encryption', () => {
