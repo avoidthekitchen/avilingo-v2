@@ -135,6 +135,24 @@ the encryption determination for the actual archive before setting a permanent
 The disabled setting alone does not establish an exemption.
 [Apple export-compliance guidance](https://developer.apple.com/help/app-store-connect/manage-app-information/overview-of-export-compliance/).
 
+For the uploaded `2.0.0 (1)` archive, the follow-up audit found SQLCipher's
+CommonCrypto provider symbol and Apple CCCryptor/CCHmac/PBKDF/Security imports.
+The plugin's JSON encryption helpers use Apple's CryptoKit/CommonCrypto.
+Capacitor's hash helper uses CommonCrypto, and the bundled Dexie promise scheduler
+uses WebCrypto SHA-512. The app's own source has no encryption implementation;
+no additional non-OS implementation was found in the inspected source,
+dependencies, JavaScript assets, or native symbols.
+
+The recommended technical answer to Apple's exact algorithm question is
+**None of the algorithms mentioned above**, meaning neither proprietary
+algorithms nor standard algorithms implemented outside Apple's OS. This is an
+inference from the audit and Apple's OS-only category, not a claim that the
+binary contains no cryptographic capability or a formal ruling on every export
+obligation. Owner confirmation and portal submission remain pending. Record
+Apple's resulting documentation requirement once the answer is saved.
+[Apple's algorithm categories](https://developer.apple.com/help/app-store-connect/reference/app-information/export-compliance-documentation-for-encryption/),
+[detailed research](../rpi/research/testflight-human-checkpoints-2026-10-08.md#addendum-shipping-builds-algorithm-question).
+
 Evidence as of 2026-10-08:
 
 - Merged-build CI passed, including native simulator smoke:
@@ -158,6 +176,13 @@ Evidence as of 2026-10-08:
   accepted and saved in App Store Connect. Internal Beta was created with manual
   build assignment; App Store Connect confirmed the owner as its first tester.
 - Both GitHub CI jobs passed for the setup PR, including iOS simulator smoke.
+- The current implementation passed typecheck, lint, all 230 application and
+  23 root tooling tests, and both local native smoke tests (iPhone 18 Pro /
+  iOS 27.0). Browser E2E was not rerun locally for these documentation/account
+  changes; the GitHub web job already covers that suite.
+- Build-specific What to Test was saved and verified on `2.0.0 (1)`, including
+  beta scope, earlier browser-storage no-migration, and keeping the app installed
+  for the later #32 update check.
 - Apple processed `2.0.0 (1)` as build `42ee5d0e-acf9-4331-8221-9dd5a5c2e69e`.
   It is currently **Missing Compliance**. Its encryption questionnaire remains
   unsubmitted; the owner must resolve it before tester build assignment.
