@@ -21,6 +21,15 @@ audibility with the silent switch, lifecycle behavior, signing, and VoiceOver.
 The feasibility gate has now passed and the product owner has chosen to make
 Capacitor the release architecture for iOS.
 
+The owner recorded the physical-device evidence on
+[issue #30](https://github.com/avoidthekitchen/avilingo-v2/issues/30#issuecomment-5689014818)
+on 2026-09-15: iPhone 15, iOS 26.6.2; Learn → introductory quiz → review →
+Progress and Skip Ahead passed; background/foreground navigation and audio
+recovered; termination and cold relaunch worked; and external credit/source links
+opened in the browser. The owner reported no crashes or performance problems in
+that session. Forced photo failure and VoiceOver were explicitly deferred, so
+this decision does not claim physical-device evidence for those checks.
+
 ## Decision Drivers
 
 - Preserve a single React application and shared learning-domain logic.
@@ -97,7 +106,8 @@ must not be edited directly.
   evaluate React Native / Expo.
 - Keep the web and native build modes explicit: web assets use `/beakspeak/`
   URLs, while native assets use relative URLs.
-- Update the feasibility bundle identifier before the first TestFlight upload.
+- Retain the permanent bundle identifier `com.unformedideas.beakspeak` across
+  TestFlight and App Store updates. The earlier feasibility identity is disposable.
 
 ## Related Documentation
 

@@ -158,12 +158,48 @@ Evidence as of 2026-10-08:
   accepted and saved in App Store Connect. Internal Beta was created with manual
   build assignment; App Store Connect confirmed the owner as its first tester.
 - Both GitHub CI jobs passed for the setup PR, including iOS simulator smoke.
-- Apple's build processing/export-compliance determination, build assignment,
-  collaborator invitation/installation, and TestFlight diagnostics verification
-  remain pending.
+- Apple processed `2.0.0 (1)` as build `42ee5d0e-acf9-4331-8221-9dd5a5c2e69e`.
+  It is currently **Missing Compliance**. Its encryption questionnaire remains
+  unsubmitted; the owner must resolve it before tester build assignment.
+- Armand's Marketing invitation has been prepared with only BeakSpeak selected.
+  Final access confirmation, sending/acceptance, build assignment, installed-beta
+  evidence, and TestFlight diagnostics verification remain pending.
 
 Close #31 only after both testers install and run the distributed build and
 TestFlight diagnostics/feedback access is verified. Record app/build identifiers,
 device/iOS versions, and the results. The ordinary SQLite-to-SQLite TestFlight
 update and deeper storage inspection remain the separate
 [issue #32 gate](native-storage.md#physical-device-testflight-gate-pending).
+
+## Human completion checklist for #31
+
+The successful upload alone does not complete the issue. Use this checklist to
+record the remaining account decisions and installed-beta evidence.
+
+| Check | Who | Evidence needed |
+|---|---|---|
+| Individual-account seller identity | Owner | Confirm enrollment type and acceptance of Apple's legal-name seller identity |
+| Encryption/export determination | Owner, with the archive audit | Complete the actual build questionnaire; record the classification and any required documents before enabling testing |
+| Collaborator access | Owner / release operator | Marketing role limited to this app, with invitation sent and accepted; no finance, reports, or developer-resource access |
+| Same distributed build installed | Owner and bird expert | TestFlight version/build plus device/iOS, successful cold launch, and one short lesson/quiz/review/Progress pass |
+| TestFlight diagnostics | Owner / release operator | Verify installation status, device details, sessions, and access to the crash-feedback views |
+| Screenshot feedback | Bird expert, then owner | Submit one TestFlight screenshot with a short note and verify it arrives in App Store Connect |
+
+A clean run need not produce a crash to prove that the crash-feedback view is
+available. Do not deliberately crash the app or add an analytics SDK for this
+check. Keep the app installed for the later #32 update-preservation gate.
+
+Record observations here or on #31 without including private tester addresses,
+device identifiers, or feedback payloads in public repository files:
+
+| Person | Version / build | Device / iOS | Installed and launched | Session visible | Screenshot feedback received |
+|---|---|---|---|---|---|
+| Owner | Pending | Pending | Pending | Pending | Pending |
+| Bird expert | Pending | Pending | Pending | Pending | Pending |
+
+The learner smoke is deliberately short: introduce birds through one lesson,
+complete its quiz, use Review when available, inspect Progress, play a sound, and
+force-quit/relaunch to confirm the app opens safely. Silent-switch audio,
+background recovery, VoiceOver, and larger text remain useful device checks;
+do not mark unperformed checks as passed. Do not substitute a direct Xcode
+installation or a simulator run for installation through TestFlight.
