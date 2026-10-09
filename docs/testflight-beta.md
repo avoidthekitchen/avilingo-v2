@@ -244,7 +244,7 @@ device identifiers, or feedback payloads in public repository files:
 
 | Person | Version / build | Device / iOS | Installed and launched | Session visible | Screenshot feedback received |
 |---|---|---|---|---|---|
-| Owner | 2.0.0 (1) | iPhone 15 / iOS 26.6.2 (TestFlight verified 2026-10-09) | Owner confirmed installed/opened and seems to work on 2026-10-09; Apple shows Installed; testing still in progress | Not yet shown | Pending |
+| Owner | 2.0.0 (2) | iPhone 15 / iOS 26.6.2 (TestFlight verified 2026-10-09) | Owner confirmed lessons/quizzes, silent-switch audio, screen lock, backgrounding, force quit, Review and Progress checks; Apple shows Installed | Not yet shown | Received and verified 2026-10-09 |
 | Bird expert | Pending | Pending | Pending | Pending | Pending |
 
 The learner smoke is deliberately short: introduce birds through one lesson,
@@ -253,6 +253,15 @@ force-quit/relaunch to confirm the app opens safely. Silent-switch audio,
 background recovery, VoiceOver, and larger text remain useful device checks;
 do not mark unperformed checks as passed. Do not substitute a direct Xcode
 installation or a simulator run for installation through TestFlight.
+
+On 2026-10-09, the owner reported the above physical-device checks and submitted
+TestFlight screenshot feedback. App Store Connect independently showed the
+screenshot for `2.0.0 (2)` and the matching device/OS, and its Crash Feedback view
+was accessible with **No Crash Feedback**. Sessions still displayed a dash;
+[Apple says tester metrics can take up to 24 hours](https://developer.apple.com/help/app-store-connect/test-a-beta-version/view-and-manage-tester-information).
+No crash needs to be deliberately generated. Individual membership-type and
+privacy-summary confirmations remain pending. These observations do not claim
+VoiceOver, larger-text, or issue #32's deeper database inspection passed.
 
 ### Deferred partner follow-up
 
