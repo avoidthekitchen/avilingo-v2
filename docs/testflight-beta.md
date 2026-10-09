@@ -283,3 +283,39 @@ After Armand accepts the App Store Connect invitation, verify/narrow his app
 access to BeakSpeak, add him to Internal Beta, and verify the same-build install
 and screenshot feedback. The owner's 2026-10-08 instruction explicitly defers
 waiting for these steps; invitation sending is done for this first-beta scope.
+
+
+## Custom artwork build — 2026-10-09
+
+PR #67 merged as `f147bd2` after both GitHub CI jobs passed. The next beta
+uses version `2.0.0`, build `3`, prepared from an isolated checkout of that
+merged source. It includes the custom navigation icons, two decorative bird
+illustrations, and the lesson lock icon that follows accessibility text size.
+
+All 230 app unit tests, 23 root tooling tests, ESLint, native synchronization,
+and both local iOS simulator smoke tests passed. The native build also passed
+TypeScript compilation. PR #67's browser suite passed in CI, and the updated
+300% text test passed locally before merging.
+
+Xcode produced a signed arm64 archive `2.0.0 (3)` on 2026-10-09. The archive
+audit confirmed the permanent bundle identifier, iOS 18.4 minimum, the retained
+owner-approved encryption declaration, all 30 production audio clips, both
+bird illustrations, and four dependency privacy manifests. Its packaged web
+files match the validated native synchronization output byte for byte.
+
+The archive is prepared but has not been uploaded or assigned to Internal Beta.
+Upload requires the owner's explicit authorization. Local audit evidence is in
+the release checkout's ignored `.artifacts/testflight/build3-archive-audit.json`.
+
+### Build 3 What to Test
+
+Update from build 2 through TestFlight without deleting BeakSpeak. Confirm
+existing introduced birds and saved learning progress remain. Check the new
+Learn, Quiz, and Progress navigation icons, bird artwork on quiz and lesson
+screens, and locked-lesson icons at larger accessibility text sizes.
+
+Complete a short lesson and quiz, try Review, inspect Progress, and play a song
+and call. Background or lock the phone during audio, return, and confirm another
+clip can play. Force-quit and reopen to verify progress remains. Submit issues
+through TestFlight screenshot feedback. Photos require a network connection;
+bundled audio is available offline.
