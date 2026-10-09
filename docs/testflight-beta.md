@@ -213,7 +213,7 @@ record the remaining account decisions and installed-beta evidence.
 
 | Check | Who | Evidence needed |
 |---|---|---|
-| Individual-account seller identity | Owner | Confirm enrollment type and acceptance of Apple's legal-name seller identity |
+| Individual-account seller identity | Owner | Legal-name seller acceptance confirmed on 2026-10-09; Individual means enrollment in the owner's personal name rather than an organization |
 | Encryption/export determination | Completed for this build | Owner-confirmed OS-only algorithm answer accepted; reassess when the implementation changes |
 | Collaborator invitation | Completed for the first beta | Marketing invitation sent with BeakSpeak selected; owner deferred acceptance and app-scope verification/narrowing as later follow-up |
 | Distributed build installed | Owner now; bird expert later | TestFlight version/build plus device/iOS, successful cold launch, and one short lesson/quiz/review/Progress pass |

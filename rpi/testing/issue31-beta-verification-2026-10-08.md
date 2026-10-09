@@ -53,8 +53,9 @@ Independent read-only review found no confirmed code gap, wrong implementation,
 or unjustified scope expansion. The review identified the following acceptance
 areas; the owner's subsequent partner-waiting deferral is recorded below:
 
-1. Individual-account enrollment type and legal-name seller acceptance need
-   owner confirmation.
+1. The owner confirmed legal-name seller acceptance on 2026-10-09. Individual
+   enrollment means the membership is in the owner's personal name rather than
+   an organization; that account type has not been independently verified here.
 2. Privacy text still needs owner review before treating that declaration gate
    as complete. The owner confirmed the audited export answer; the compliance
    hold and group-assignment gate are now resolved.
