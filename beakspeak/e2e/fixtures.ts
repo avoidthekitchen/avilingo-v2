@@ -128,6 +128,7 @@ class BeakSpeakApp {
 
     await expect(this.page.getByText('1 / 3')).toBeVisible()
     await this.page.getByRole('button', { name: /← Back/i }).click()
+    await this.page.getByRole('alertdialog').getByRole('button', { name: 'Leave lesson' }).click()
     await this.page.getByRole('button', { name: /Progress/ }).click()
 
     await expect(this.page.getByText('6', { exact: true }).first()).toBeVisible()

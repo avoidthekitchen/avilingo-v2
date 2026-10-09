@@ -8,6 +8,7 @@ import QuizTab from './quiz/QuizTab'
 import Dashboard from './progress/Dashboard'
 import CreditsPage from './credits/CreditsPage'
 import StorageRecovery from './StorageRecovery'
+import LeaveSessionDialog from './shared/LeaveSessionDialog'
 import { stopAudioDuringInterruptions } from '../adapters/audioLifecycle'
 
 export default function App() {
@@ -65,6 +66,7 @@ export default function App() {
         {activeTab === 'credits' && <CreditsPage />}
       </main>
       <Navigation />
+      <LeaveSessionDialog />
     </>
   )
 }

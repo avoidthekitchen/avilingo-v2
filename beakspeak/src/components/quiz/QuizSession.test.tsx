@@ -100,7 +100,8 @@ describe('QuizSession practice mode', () => {
       manifest: makeManifest(),
       allProgress: new Map(),
       lastPlayedClipId: new Map(),
-      setSessionActive: vi.fn(),
+      setSessionGuard: vi.fn(),
+      requestSessionExit: vi.fn(),
       updateProgress: vi.fn(),
       logConfusion: vi.fn(),
     }

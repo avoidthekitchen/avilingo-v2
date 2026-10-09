@@ -44,11 +44,28 @@ export default function QuizSession({ mode, onComplete }: Props) {
   const [saveError, setSaveError] = useState(false)
   const pendingAnswer = useRef<PendingAnswer | null>(null)
   const savingRef = useRef(false)
-  useSessionNavigation(!showResults)
 
   const [items] = useState(() => {
     if (!manifest) return []
     return buildQuizSession(allProgress, manifest, lastPlayedClipId)
+  })
+  const requestExit = useSessionNavigation({
+    active: !showResults && items.length > 0,
+    busy: saving,
+    prompt: mode === 'review'
+      ? {
+          title: 'End this review?',
+          message: "Answers so far are saved. You'll skip the rest of this session and its summary.",
+          confirmLabel: 'End review',
+          cancelLabel: 'Keep going',
+        }
+      : {
+          title: 'End this practice?',
+          message: "You'll lose your place and this session's summary. Practice doesn't change your review schedule.",
+          confirmLabel: 'End practice',
+          cancelLabel: 'Keep going',
+        },
+    onExit: onComplete,
   })
 
   const savePendingAnswer = useCallback(async () => {
@@ -116,7 +133,7 @@ export default function QuizSession({ mode, onComplete }: Props) {
   return (
     <div className="flex flex-col h-full">
       <div className="p-4 flex items-center justify-between">
-        <button disabled={saving} onClick={onComplete} className="text-sm text-text-muted">← Quit</button>
+        <button disabled={saving} onClick={requestExit} className="text-sm text-text-muted">← Quit</button>
         <p className="text-sm text-text-muted">
           {currentIndex + 1} / {items.length}
         </p>

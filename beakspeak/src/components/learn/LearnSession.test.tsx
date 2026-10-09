@@ -143,7 +143,8 @@ function makeManifest(): Manifest {
 describe('LearnSession unlock mode', () => {
   beforeEach(() => {
     mockState = {
-      setSessionActive: vi.fn(),
+      setSessionGuard: vi.fn(),
+      requestSessionExit: vi.fn(),
       manifest: makeManifest(),
       getIntroducedSpecies: () => ['a', 'b', 'c'].map(id => makeSpecies(id)),
       introduceSpecies: vi.fn(async () => {}),
@@ -192,7 +193,8 @@ describe('LearnSession unlock mode', () => {
 describe('LearnSession redo mode', () => {
   beforeEach(() => {
     mockState = {
-      setSessionActive: vi.fn(),
+      setSessionGuard: vi.fn(),
+      requestSessionExit: vi.fn(),
       manifest: makeManifest(),
       getIntroducedSpecies: () => ['a', 'b', 'c'].map(id => makeSpecies(id)),
       introduceSpecies: vi.fn(async () => {}),
@@ -223,7 +225,7 @@ describe('LearnSession redo mode', () => {
     expect(screen.getByRole('button', { name: 'Back to Lessons' })).toBeInTheDocument()
   })
 
-  it('routes quiz Back to lesson exit', () => {
+  it('routes quiz Back through the leave-session confirmation', () => {
     const onComplete = vi.fn()
 
     render(<LearnSession lesson={makeLesson(2, ['d', 'e', 'f'])} mode="redo" onComplete={onComplete} />)
@@ -233,7 +235,8 @@ describe('LearnSession redo mode', () => {
     fireEvent.click(screen.getByRole('button', { name: /start quiz/i }))
     fireEvent.click(screen.getByRole('button', { name: 'Back' }))
 
-    expect(onComplete).toHaveBeenCalledTimes(1)
+    expect(mockState.requestSessionExit).toHaveBeenCalledTimes(1)
+    expect(onComplete).not.toHaveBeenCalled()
   })
 })
 
@@ -242,7 +245,8 @@ describe('LearnSession quiz item stability', () => {
     buildIntroQuizSpy.mockClear()
     buildReviewQuizSpy.mockClear()
     mockState = {
-      setSessionActive: vi.fn(),
+      setSessionGuard: vi.fn(),
+      requestSessionExit: vi.fn(),
       manifest: makeManifest(),
       getIntroducedSpecies: () => ['a', 'b', 'c'].map(id => makeSpecies(id)),
       introduceSpecies: vi.fn(async () => {}),
