@@ -18,7 +18,7 @@ verified portal text, cryptographic-audit facts, and this verification report.
 | Normal App Store Connect upload | Complete | Preserves eligibility for later external/App Store distribution |
 | Apple processing/compliance | Complete | Owner confirmed None of the listed non-OS algorithms; Apple cleared the build for group assignment |
 | Beta description, feedback contact, What to Test | Saved and verified | Scope and disposable earlier browser-storage/no-migration wording |
-| Internal group | One tester / one build | `2.0.0 (1)` assigned; owner status Invited |
+| Internal group | One tester / one build, Testing | `2.0.0 (1)` assigned; owner status Invited |
 | Partner invitation | Sent by owner | Marketing; app-access editing disabled until acceptance, with All Apps displayed for the pending invitation |
 | Future build declaration | Passed red/green configuration test and native smoke | Source Info.plist now declares `ITSAppUsesNonExemptEncryption=false` for the reviewed implementation |
 

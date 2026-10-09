@@ -187,7 +187,7 @@ Evidence as of 2026-10-08:
   for the later #32 update check.
 - Apple processed `2.0.0 (1)` as build `42ee5d0e-acf9-4331-8221-9dd5a5c2e69e`.
   The owner completed the encryption answer; the compliance gate cleared and the
-  build was added to Internal Beta. The owner is its first tester, with status
+  build was added to Internal Beta with status **Testing**. The owner is its first tester, with status
   **Invited** on 2026-10-08.
 - The owner sent the Marketing invitation after the BeakSpeak selection step.
   Apple's pending-user list displays **All Apps** and disables Edit App Access
