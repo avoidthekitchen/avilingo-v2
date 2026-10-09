@@ -129,10 +129,9 @@ the confirmed paid team and retain uploaded symbols. Audit the actual archive fo
 identity, version/build, bundled content, permissions, and dependency privacy
 manifests before uploading.
 
-The SQLite plugin links SQLCipher with database encryption disabled. Complete
-the encryption determination for the actual archive before setting a permanent
-`ITSAppUsesNonExemptEncryption` value or answering the portal questionnaire.
-The disabled setting alone does not establish an exemption.
+The SQLite plugin links SQLCipher with database encryption disabled. The actual
+archive was audited before the owner confirmed the portal answer. The disabled
+setting alone does not establish an exemption.
 [Apple export-compliance guidance](https://developer.apple.com/help/app-store-connect/manage-app-information/overview-of-export-compliance/).
 
 For the uploaded `2.0.0 (1)` archive, the follow-up audit found SQLCipher's
@@ -148,8 +147,11 @@ The recommended technical answer to Apple's exact algorithm question is
 algorithms nor standard algorithms implemented outside Apple's OS. This is an
 inference from the audit and Apple's OS-only category, not a claim that the
 binary contains no cryptographic capability or a formal ruling on every export
-obligation. Owner confirmation and portal submission remain pending. Record
-Apple's resulting documentation requirement once the answer is saved.
+obligation. The owner confirmed this answer on 2026-10-08; Apple accepted it and
+allowed internal-group assignment without further documentation in this flow.
+The source Info.plist now declares `ITSAppUsesNonExemptEncryption = false` for
+future builds with the same reviewed implementation. The existing uploaded
+archive did not contain that key; its answer was supplied in App Store Connect.
 [Apple's algorithm categories](https://developer.apple.com/help/app-store-connect/reference/app-information/export-compliance-documentation-for-encryption/),
 [detailed research](../rpi/research/testflight-human-checkpoints-2026-10-08.md#addendum-shipping-builds-algorithm-question).
 
@@ -184,11 +186,15 @@ Evidence as of 2026-10-08:
   beta scope, earlier browser-storage no-migration, and keeping the app installed
   for the later #32 update check.
 - Apple processed `2.0.0 (1)` as build `42ee5d0e-acf9-4331-8221-9dd5a5c2e69e`.
-  It is currently **Missing Compliance**. Its encryption questionnaire remains
-  unsubmitted; the owner must resolve it before tester build assignment.
-- Armand's Marketing invitation has been prepared with only BeakSpeak selected.
-  Final access confirmation, sending/acceptance, build assignment, installed-beta
-  evidence, and TestFlight diagnostics verification remain pending.
+  The owner completed the encryption answer; the compliance gate cleared and the
+  build was added to Internal Beta. The owner is its first tester, with status
+  **Invited** on 2026-10-08.
+- The owner sent the Marketing invitation after the BeakSpeak selection step.
+  Apple's pending-user list displays **All Apps** and disables Edit App Access
+  for that invitation. BeakSpeak is the only registered app. After acceptance,
+  verify and explicitly narrow access to BeakSpeak before marking app-limited
+  collaborator access complete. Invitation acceptance, partner group membership,
+  installed-beta evidence, and TestFlight diagnostics verification remain pending.
 
 Close #31 only after both testers install and run the distributed build and
 TestFlight diagnostics/feedback access is verified. Record app/build identifiers,
@@ -204,7 +210,7 @@ record the remaining account decisions and installed-beta evidence.
 | Check | Who | Evidence needed |
 |---|---|---|
 | Individual-account seller identity | Owner | Confirm enrollment type and acceptance of Apple's legal-name seller identity |
-| Encryption/export determination | Owner, with the archive audit | Complete the actual build questionnaire; record the classification and any required documents before enabling testing |
+| Encryption/export determination | Completed for this build | Owner-confirmed OS-only algorithm answer accepted; reassess when the implementation changes |
 | Collaborator access | Owner / release operator | Marketing role limited to this app, with invitation sent and accepted; no finance, reports, or developer-resource access |
 | Same distributed build installed | Owner and bird expert | TestFlight version/build plus device/iOS, successful cold launch, and one short lesson/quiz/review/Progress pass |
 | TestFlight diagnostics | Owner / release operator | Verify installation status, device details, sessions, and access to the crash-feedback views |

@@ -52,3 +52,15 @@ Owner checklist before saving the answer:
 2. Confirm the whole-app audit finds no proprietary crypto or additional non-OS algorithm implementation, including static dependencies and JavaScript.
 3. Review the OS-only inference above and distinguish it from claiming “no cryptography”; save **None** only if that accurately describes the app.
 4. Record the selected answer and Apple's resulting documentation requirement. If the owner needs an authoritative determination about the bundled, inactive SQLCipher capability or remaining export obligations, provide these exact facts to Apple's export process/BIS; do not substitute a blanket exemption claim. No inquiry or declaration was submitted during research. [Apple's determination/contact workflow](https://developer.apple.com/help/app-store-connect/manage-app-information/determine-and-upload-app-encryption-documentation/)
+
+### Owner decision after the audit
+
+On 2026-10-08 the owner confirmed **None of the algorithms mentioned above** in
+the actual `2.0.0 (1)` questionnaire. Apple cleared the compliance hold and allowed
+assignment to Internal Beta without further documentation in this flow. The app
+and dependency audit additionally found CryptoKit/CommonCrypto helpers and a
+WebCrypto SHA-512 promise-scheduler call; no non-OS implementation was identified.
+The source Info.plist now records `ITSAppUsesNonExemptEncryption=false` for this
+reviewed configuration. Revisit that declaration if cryptographic dependencies
+or features change. This records the owner-approved Apple workflow result, not a
+general ruling on every export obligation.

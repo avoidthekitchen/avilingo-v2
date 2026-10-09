@@ -16,14 +16,18 @@ verified portal text, cryptographic-audit facts, and this verification report.
 | Native production archive | Passed | `2.0.0 (1)`, permanent bundle ID, all 30 audio clips, four dependency privacy manifests |
 | Apple validation | Passed | Organizer reported all validation checks passed |
 | Normal App Store Connect upload | Complete | Preserves eligibility for later external/App Store distribution |
-| Apple processing | Complete, Missing Compliance | Build `42ee5d0e-acf9-4331-8221-9dd5a5c2e69e`; owner declaration pending |
+| Apple processing/compliance | Complete | Owner confirmed None of the listed non-OS algorithms; Apple cleared the build for group assignment |
 | Beta description, feedback contact, What to Test | Saved and verified | Scope and disposable earlier browser-storage/no-migration wording |
-| Internal group | Created, owner added | Manual build assignment; actual assignment is blocked by compliance |
+| Internal group | One tester / one build | `2.0.0 (1)` assigned; owner status Invited |
+| Partner invitation | Sent by owner | Marketing; app-access editing disabled until acceptance, with All Apps displayed for the pending invitation |
+| Future build declaration | Passed red/green configuration test and native smoke | Source Info.plist now declares `ITSAppUsesNonExemptEncryption=false` for the reviewed implementation |
 
-Local Node was v26.11.0. Browser E2E was not rerun locally: this continuation
-changed documentation and account metadata, and the GitHub web job already
-exercised the production browser suite. `test:ci` was not run. No new runtime
-learner code or test seam was introduced during this continuation.
+Local Node was v26.11.0. Typecheck, lint, the complete unit suite, and native smoke
+were rerun after the owner-confirmed Info.plist change. The existing configuration
+test first failed for the missing declaration, then passed after adding it.
+Browser E2E was not rerun locally: no learner behavior changed, and the GitHub web
+job already exercised that suite. `test:ci` was not run. No new learner code or
+test seam was introduced.
 
 Ignored evidence includes `.artifacts/testflight/archive-audit.json`,
 `crypto-audit.json`, `local-upload-complete.jpg`, `encryption-question.jpg`, and
@@ -50,11 +54,13 @@ or unjustified scope expansion. Four acceptance groups remain partial:
 
 1. Individual-account enrollment type and legal-name seller acceptance need
    owner confirmation.
-2. The audited export-compliance answer and privacy text need owner review;
-   the actual build is Missing Compliance until its questionnaire is submitted.
-3. The app-only Marketing invitation needs final confirmation/sending and
-   acceptance, followed by build assignment and both same-build TestFlight
-   installations.
+2. Privacy text still needs owner review before treating that declaration gate
+   as complete. The owner confirmed the audited export answer; the compliance
+   hold and group-assignment gate are now resolved.
+3. The owner sent the Marketing invitation. After acceptance, verify/narrow app
+   scope to BeakSpeak: the pending-user list shows All Apps, and its Edit App
+   Access action is disabled. BeakSpeak is the only current app. Partner group
+   membership and both same-build TestFlight installations remain pending.
 4. Actual sessions/device details, crash-view access, and received screenshot
    feedback need installed-beta evidence. No third-party diagnostics SDK was added.
 
