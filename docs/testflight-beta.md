@@ -208,6 +208,18 @@ update and deeper storage inspection remain the separate
 
 ## Human completion checklist for #31
 
+### Creator-credit update — 2026-10-09
+
+The About page now displays **Created by Jason Wu and Armand Ian Lucas**.
+Local archive `2.0.0 (2)` includes this credit and retains the permanent bundle
+identifier and owner-confirmed encryption declaration. Typecheck, lint, all
+230 app / 23 tooling unit tests, native synchronization, and both native smoke
+tests passed. The credit was also checked through About in the browser.
+The App Store Connect upload is pending renewal of the owner's Xcode account
+session; Xcode reported that it could not authenticate. Build 1 remains available.
+After build 2 is processed and assigned to Internal Beta, use TestFlight's Update
+button without deleting the installed app, and check that existing progress remains.
+
 The successful upload alone does not complete the issue. Use this checklist to
 record the remaining account decisions and installed-beta evidence.
 
@@ -229,7 +241,7 @@ device identifiers, or feedback payloads in public repository files:
 
 | Person | Version / build | Device / iOS | Installed and launched | Session visible | Screenshot feedback received |
 |---|---|---|---|---|---|
-| Owner | Pending | Pending | Pending | Pending | Pending |
+| Owner | 2.0.0 (1) | Pending | Owner confirmed installed/opened and seems to work on 2026-10-09; testing still in progress | Pending | Pending |
 | Bird expert | Pending | Pending | Pending | Pending | Pending |
 
 The learner smoke is deliberately short: introduce birds through one lesson,
