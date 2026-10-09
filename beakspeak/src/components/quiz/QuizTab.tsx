@@ -1,3 +1,4 @@
+import BirdIllustration from '../shared/BirdIllustration'
 import { useState } from 'react'
 import { getLessons } from '../../core/manifest'
 import { getNextLesson, isLessonAvailable } from '../../core/lesson'
@@ -34,7 +35,7 @@ export default function QuizTab() {
   if (introduced.length === 0) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
-        <p className="text-4xl mb-4">🐦</p>
+        <BirdIllustration className="mb-4" />
         <h2 className="text-xl font-semibold text-text mb-2">No birds introduced yet</h2>
         <p className="text-text-muted mb-6">Start by learning some birds first!</p>
         <button
@@ -49,7 +50,7 @@ export default function QuizTab() {
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
-      <p className="text-4xl mb-4">🎯</p>
+      <BirdIllustration className="mb-4" />
       <h2 className="text-xl font-semibold text-text mb-2">Quiz</h2>
 
       {dueForReview.length > 0 ? (

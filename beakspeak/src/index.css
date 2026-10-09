@@ -83,7 +83,8 @@ button {
   font-size: calc(.75rem * min(var(--app-text-scale, 1), 2));
 }
 .app-navigation .tab-icon {
-  font-size: calc(1.125rem * min(var(--app-text-scale, 1), 2));
+  width: calc(1.5rem * min(var(--app-text-scale, 1), 2));
+  height: calc(1.5rem * min(var(--app-text-scale, 1), 2));
 }
 .lesson-species {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(6rem * var(--app-text-scale, 1))), 1fr));

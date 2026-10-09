@@ -1,3 +1,4 @@
+import BirdIllustration from '../shared/BirdIllustration'
 import type { Species } from '../../core/types'
 import BirdPhoto from '../shared/BirdPhoto'
 
@@ -23,9 +24,7 @@ export default function QuizResult({ answers, mode, onDone }: Props) {
   return (
     <div className="p-4 flex flex-col min-h-full">
       <div className="text-center mb-6">
-        <p className="text-5xl mb-4">
-          {percentage >= 80 ? '🎉' : percentage >= 60 ? '👍' : '💪'}
-        </p>
+        <BirdIllustration variant={percentage >= 80 ? 'celebrating' : 'listening'} className="mx-auto mb-4" />
         <h2 className="text-2xl font-bold text-text">
           {correctCount} / {total}
         </h2>

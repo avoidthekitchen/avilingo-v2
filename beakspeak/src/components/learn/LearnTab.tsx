@@ -6,6 +6,7 @@ import { getSpeciesByIds } from '../../core/manifest'
 import LearnSession from './LearnSession'
 import type { Lesson } from '../../core/types'
 import UnlockDialog from './UnlockDialog'
+import AppIcon from '../shared/AppIcon'
 import BirdPhoto from '../shared/BirdPhoto'
 
 type LearnLaunch = {
@@ -108,7 +109,7 @@ export default function LearnTab() {
                   Lesson {lesson.lesson}: {lesson.title}
                 </span>
                 {!available && !completed ? (
-                  <span className="text-xs text-text-muted">🔒</span>
+                  <span role="img" aria-label="Locked lesson"><AppIcon name="lock" className="h-4 w-4 text-text-muted" /></span>
                 ) : available && !completed ? (
                   <span className="text-text-muted">›</span>
                 ) : null}
