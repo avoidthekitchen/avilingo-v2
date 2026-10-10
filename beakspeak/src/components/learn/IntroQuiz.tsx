@@ -73,9 +73,10 @@ export default function IntroQuiz({ items, onComplete, onBack }: Props) {
   }, [advance, clearAutoAdvanceTimeout, showingResult, current])
 
   const handleBack = useCallback(() => {
-    clearAutoAdvanceTimeout()
+    // Back asks for confirmation. Only unmounting on confirmed exit cancels
+    // auto-advance; dismissing the dialog must leave this question able to progress.
     onBack?.()
-  }, [clearAutoAdvanceTimeout, onBack])
+  }, [onBack])
 
   const feedbackRef = useRef<HTMLDivElement>(null)
   const isCorrect = !current || selectedId === current.targetSpecies.id

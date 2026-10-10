@@ -11,8 +11,9 @@ const tabs: Array<{ id: Tab; label: string; icon: AppIconName }> = [
 
 export default function Navigation() {
   const activeTab = useAppStore(s => s.activeTab)
-  const setTab = useAppStore(s => s.setTab)
-  const sessionActive = useAppStore(s => s.sessionActive)
+  const navigateTo = useAppStore(s => s.navigateTo)
+  // Only briefly true while a session saves an answer or lesson.
+  const saving = useAppStore(s => s.sessionGuard?.busy ?? false)
 
   return (
     <nav
@@ -30,12 +31,11 @@ export default function Navigation() {
         {tabs.map(tab => (
           <button
             key={tab.id}
-            disabled={sessionActive}
-            title={sessionActive ? "Use Back or Quit to leave this session" : undefined}
-            onClick={() => setTab(tab.id)}
+            disabled={saving}
+            onClick={() => navigateTo(tab.id)}
             aria-current={activeTab === tab.id ? 'page' : undefined}
             aria-label={tab.label}
-            className={`flex-1 flex flex-col items-center py-2 text-xs transition-colors ${
+            className={`flex-1 flex flex-col items-center py-2 text-xs transition-colors disabled:opacity-50 ${
               activeTab === tab.id
                 ? 'text-primary font-semibold'
                 : 'text-text-muted'
@@ -46,11 +46,10 @@ export default function Navigation() {
           </button>
         ))}
         <button
-          disabled={sessionActive}
-          title={sessionActive ? 'Use Back or Quit to leave this session' : undefined}
-          onClick={() => setTab('credits')}
+          disabled={saving}
+          onClick={() => navigateTo('credits')}
           aria-current={activeTab === 'credits' ? 'page' : undefined}
-          className={`min-w-11 px-3 py-2 text-xs transition-colors ${
+          className={`min-w-11 px-3 py-2 text-xs transition-colors disabled:opacity-50 ${
             activeTab === 'credits' ? 'text-primary' : 'text-text-muted'
           }`}
         >

@@ -11,11 +11,12 @@ interface Props {
   // clip's species when they called a pair "same", or the target itself when they
   // failed to recognise two clips of one bird.
   onAnswer: (correct: boolean, responseTimeMs: number, chosenId: string) => void
+  onAnswerMarked?: (correct: boolean, responseTimeMs: number, chosenId: string) => void
 }
 
 type PlayPhase = 'clip1' | 'pause' | 'clip2' | 'ready' | 'answered'
 
-export default function SameDifferent({ item, onAnswer }: Props) {
+export default function SameDifferent({ item, onAnswer, onAnswerMarked }: Props) {
   const audioPlayer = useAppStore(s => s.audioPlayer)
   const [playPhase, setPlayPhase] = useState<PlayPhase | 'blocked'>('clip1')
   const [selectedAnswer, setSelectedAnswer] = useState<boolean | null>(null)
@@ -85,11 +86,12 @@ export default function SameDifferent({ item, onAnswer }: Props) {
     const correct = answeredSame === item.isSame
     setSelectedAnswer(answeredSame)
     setPlayPhase('answered')
+    onAnswerMarked?.(correct, responseTime, correct ? item.targetSpecies.id : item.secondSpecies?.id ?? item.targetSpecies.id)
 
     if (correct) {
       autoAdvanceRef.current = setTimeout(() => onAnswer(true, responseTime, item.targetSpecies.id), 1500)
     }
-  }, [playPhase, item.isSame, item.targetSpecies.id, onAnswer])
+  }, [playPhase, item.isSame, item.targetSpecies.id, item.secondSpecies?.id, onAnswer, onAnswerMarked])
 
   const handleNext = useCallback(() => {
     const responseTime = Date.now() - startTime.current

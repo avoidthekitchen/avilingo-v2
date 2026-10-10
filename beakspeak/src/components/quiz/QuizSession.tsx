@@ -43,42 +43,53 @@ export default function QuizSession({ mode, onComplete }: Props) {
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState(false)
   const pendingAnswer = useRef<PendingAnswer | null>(null)
-  const savingRef = useRef(false)
-  useSessionNavigation(!showResults)
+  const saveInFlight = useRef<Promise<boolean> | null>(null)
+  const exitingRef = useRef(false)
 
   const [items] = useState(() => {
     if (!manifest) return []
     return buildQuizSession(allProgress, manifest, lastPlayedClipId)
   })
-
-  const savePendingAnswer = useCallback(async () => {
+  const savePendingAnswer = useCallback((advance = true): Promise<boolean> => {
+    if (saveInFlight.current) return saveInFlight.current
     const pending = pendingAnswer.current
-    if (!pending || savingRef.current) return
-    savingRef.current = true
+    if (!pending) return Promise.resolve(true)
     setSaving(true)
     setSaveError(false)
-    try {
-      if (pending.progress && !pending.progressSaved) {
-        await updateProgress(pending.result.species.id, pending.progress)
-        pending.progressSaved = true
+    const save = (async () => {
+      try {
+        if (pending.progress && !pending.progressSaved) {
+          await updateProgress(pending.result.species.id, pending.progress)
+          pending.progressSaved = true
+        }
+        if (pending.logPending) {
+          await logConfusion(pending.result.species.id, pending.chosenId)
+          pending.logPending = false
+        }
+        setAnswers(prev => [...prev, pending.result])
+        pendingAnswer.current = null
+        // A confirmed exit can join an auto-advance save already in progress.
+        // Save its answer, but don't mount or play another question on the way out.
+        if (advance && !exitingRef.current) {
+          if (pending.index + 1 >= items.length) setShowResults(true)
+          else setCurrentIndex(pending.index + 1)
+        }
+        return true
+      } catch {
+        setSaveError(true)
+        return false
       }
-      if (pending.logPending) {
-        await logConfusion(pending.result.species.id, pending.chosenId)
-        pending.logPending = false
-      }
-      setAnswers(prev => [...prev, pending.result])
-      pendingAnswer.current = null
-      if (pending.index + 1 >= items.length) setShowResults(true)
-      else setCurrentIndex(pending.index + 1)
-    } catch {
-      setSaveError(true)
-    } finally {
-      savingRef.current = false
+    })().finally(() => {
+      saveInFlight.current = null
       setSaving(false)
-    }
+    })
+    saveInFlight.current = save
+    return save
   }, [items.length, updateProgress, logConfusion])
 
-  const handleAnswer = useCallback((correct: boolean, responseTimeMs: number, chosenId: string) => {
+  // Capture a marked answer before its feedback timer/Next submits it, so
+  // confirming exit can durably save it using the same retry-safe path.
+  const handleAnswerMarked = useCallback((correct: boolean, responseTimeMs: number, chosenId: string) => {
     const item = items[currentIndex]
     if (!item || pendingAnswer.current) return
     const rating = ratingFromOutcome(correct, responseTimeMs, item.exerciseType)
@@ -93,8 +104,41 @@ export default function QuizSession({ mode, onComplete }: Props) {
       logPending: mode === 'review' && !correct,
       chosenId,
     }
+  }, [items, currentIndex, allProgress, mode])
+
+  const handleAnswer = useCallback((correct: boolean, responseTimeMs: number, chosenId: string) => {
+    handleAnswerMarked(correct, responseTimeMs, chosenId)
     void savePendingAnswer()
-  }, [items, currentIndex, allProgress, mode, savePendingAnswer])
+  }, [handleAnswerMarked, savePendingAnswer])
+
+  const requestExit = useSessionNavigation({
+    active: !showResults && items.length > 0,
+    busy: saving,
+    prompt: mode === 'review'
+      ? {
+          title: 'End this review?',
+          message: saveError
+            ? 'Your answer could not be fully saved. We’ll retry saving it before ending this review.'
+            : "Answers you've chosen are saved. You'll skip the rest of this session and its summary.",
+          confirmLabel: 'End review',
+          cancelLabel: 'Keep going',
+        }
+      : {
+          title: 'End this practice?',
+          message: "You'll lose your place and this session's summary. Practice doesn't change your review schedule.",
+          confirmLabel: 'End practice',
+          cancelLabel: 'Keep going',
+        },
+    onExit: async () => {
+      exitingRef.current = true
+      if (mode === 'review' && !await savePendingAnswer(false)) {
+        exitingRef.current = false
+        return false
+      }
+      onComplete()
+      return true
+    },
+  })
 
   if (!manifest || items.length === 0) {
     return (
@@ -116,7 +160,7 @@ export default function QuizSession({ mode, onComplete }: Props) {
   return (
     <div className="flex flex-col h-full">
       <div className="p-4 flex items-center justify-between">
-        <button disabled={saving} onClick={onComplete} className="text-sm text-text-muted">← Quit</button>
+        <button disabled={saving} onClick={requestExit} className="text-sm text-text-muted">← Quit</button>
         <p className="text-sm text-text-muted">
           {currentIndex + 1} / {items.length}
         </p>
@@ -137,12 +181,14 @@ export default function QuizSession({ mode, onComplete }: Props) {
             key={currentIndex}
             item={currentItem}
             onAnswer={handleAnswer}
+            onAnswerMarked={handleAnswerMarked}
           />
         ) : (
           <SameDifferent
             key={currentIndex}
             item={currentItem}
             onAnswer={handleAnswer}
+            onAnswerMarked={handleAnswerMarked}
           />
         )}
       </div>

@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import QuizSession from './QuizSession'
 import type { Manifest, QuizItem, Species } from '../../core/types'
+import type { SessionExitGuard } from '../../store/appStore'
 
 const { buildQuizSessionMock } = vi.hoisted(() => ({
   buildQuizSessionMock: vi.fn(),
@@ -18,8 +19,14 @@ vi.mock('../../core/quiz', () => ({
 }))
 
 vi.mock('./ThreeChoiceQuiz', () => ({
-  default: ({ onAnswer }: { onAnswer: (correct: boolean, responseTimeMs: number, chosenId: string) => void }) => (
-    <button onClick={() => onAnswer(false, 1200, 'b')}>Answer Question</button>
+  default: ({ onAnswer, onAnswerMarked }: {
+    onAnswer: (correct: boolean, responseTimeMs: number, chosenId: string) => void
+    onAnswerMarked: (correct: boolean, responseTimeMs: number, chosenId: string) => void
+  }) => (
+    <>
+      <button onClick={() => onAnswerMarked(false, 1200, 'b')}>Mark Question</button>
+      <button onClick={() => onAnswer(false, 1200, 'b')}>Answer Question</button>
+    </>
   ),
 }))
 
@@ -100,7 +107,8 @@ describe('QuizSession practice mode', () => {
       manifest: makeManifest(),
       allProgress: new Map(),
       lastPlayedClipId: new Map(),
-      setSessionActive: vi.fn(),
+      setSessionGuard: vi.fn(),
+      requestSessionExit: vi.fn(),
       updateProgress: vi.fn(),
       logConfusion: vi.fn(),
     }
@@ -154,5 +162,36 @@ describe('QuizSession practice mode', () => {
 
     await vi.waitFor(() => expect(mockState.logConfusion).toHaveBeenCalledWith('a', 'b'))
     expect(mockState.updateProgress).toHaveBeenCalledTimes(1)
+  })
+
+  it('saves a marked answer on exit without advancing to another question', async () => {
+    const onComplete = vi.fn()
+    render(<QuizSession mode="review" onComplete={onComplete} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Mark Question' }))
+    expect(mockState.updateProgress).not.toHaveBeenCalled()
+    const register = vi.mocked(mockState.setSessionGuard as ReturnType<typeof vi.fn>)
+    const guard = register.mock.calls.at(-1)![0] as SessionExitGuard
+    await act(async () => { expect(await guard.exit()).toBe(true) })
+    expect(mockState.updateProgress).toHaveBeenCalledTimes(1)
+    expect(mockState.logConfusion).toHaveBeenCalledWith('a', 'b')
+    expect(onComplete).toHaveBeenCalledTimes(1)
+    expect(screen.queryByText('Needs More Practice')).not.toBeInTheDocument()
+  })
+
+  it('keeps a failed exit save retryable without double-counting a saved card', async () => {
+    const log = vi.mocked(mockState.logConfusion as ReturnType<typeof vi.fn>)
+    log.mockRejectedValueOnce(new Error('quota')).mockResolvedValue(undefined)
+    const onComplete = vi.fn()
+    render(<QuizSession mode="review" onComplete={onComplete} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Mark Question' }))
+    const register = vi.mocked(mockState.setSessionGuard as ReturnType<typeof vi.fn>)
+    const guard = register.mock.calls.at(-1)![0] as SessionExitGuard
+    await act(async () => { expect(await guard.exit()).toBe(false) })
+    expect(onComplete).not.toHaveBeenCalled()
+    expect(screen.getByRole('alert')).toHaveTextContent('could not be fully saved')
+    await act(async () => { expect(await guard.exit()).toBe(true) })
+    expect(mockState.updateProgress).toHaveBeenCalledTimes(1)
+    expect(log).toHaveBeenCalledTimes(2)
+    expect(onComplete).toHaveBeenCalledTimes(1)
   })
 })

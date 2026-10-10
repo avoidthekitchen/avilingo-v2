@@ -8,10 +8,29 @@ import type { StorageAdapter } from '../adapters/storage'
 import { createStorage } from '../adapters/createStorage'
 import { StorageLoadError, type StorageFailureKind } from '../adapters/storageErrors'
 
+/** Copy for the confirmation shown before an in-progress session is abandoned. */
+export interface SessionExitPrompt {
+  title: string
+  message: string
+  confirmLabel: string
+  cancelLabel: string
+}
+
+/** Registered by a running lesson or quiz so navigation can leave it deliberately. */
+export interface SessionExitGuard {
+  prompt: SessionExitPrompt
+  /** A save is in flight; leaving now could discard it. */
+  busy: boolean
+  /** Async exits save a marked answer first; false keeps the session open on failure. */
+  exit: () => void | Promise<boolean>
+}
+
 interface AppState {
   // State
   activeTab: Tab
-  sessionActive: boolean
+  sessionGuard: SessionExitGuard | null
+  /** Set while the leave-session confirmation is open; tab is where to go after leaving. */
+  pendingSessionExit: { tab: Tab | null } | null
   manifest: Manifest | null
   allProgress: Map<string, UserProgress>
   lastPlayedClipId: Map<string, string>
@@ -32,7 +51,11 @@ interface AppState {
   // Actions
   initialize: () => Promise<void>
   setTab: (tab: Tab) => void
-  setSessionActive: (active: boolean) => void
+  setSessionGuard: (guard: SessionExitGuard | null) => void
+  navigateTo: (tab: Tab) => void
+  requestSessionExit: () => void
+  confirmSessionExit: () => Promise<void>
+  cancelSessionExit: () => void
   updateProgress: (speciesId: string, progress: UserProgress) => Promise<void>
   introduceSpecies: (speciesIds: string[]) => Promise<void>
   logConfusion: (targetId: string, chosenId: string) => Promise<void>
@@ -43,7 +66,8 @@ interface AppState {
 
 export const useAppStore = create<AppState>((set, get) => ({
   activeTab: 'learn',
-  sessionActive: false,
+  sessionGuard: null,
+  pendingSessionExit: null,
   manifest: null,
   allProgress: new Map(),
   lastPlayedClipId: new Map(),
@@ -101,7 +125,51 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   setTab: (tab: Tab) => set({ activeTab: tab }),
-  setSessionActive: (active: boolean) => set({ sessionActive: active }),
+  setSessionGuard: (guard: SessionExitGuard | null) =>
+    set(guard ? { sessionGuard: guard } : { sessionGuard: null, pendingSessionExit: null }),
+
+  // Session state lives in the session component, so switching tabs mid-session would
+  // discard it. Tab taps during a session ask first; tapping the session's own tab
+  // returns to that tab's start, matching iOS tab bar behavior.
+  navigateTo: (tab: Tab) => {
+    const { sessionGuard } = get()
+    if (!sessionGuard) {
+      set({ activeTab: tab })
+      return
+    }
+    if (sessionGuard.busy) return
+    set({ pendingSessionExit: { tab } })
+  },
+
+  requestSessionExit: () => {
+    const { sessionGuard } = get()
+    if (!sessionGuard || sessionGuard.busy) return
+    set({ pendingSessionExit: { tab: null } })
+  },
+
+  confirmSessionExit: async () => {
+    const { sessionGuard, pendingSessionExit } = get()
+    if (!pendingSessionExit || !sessionGuard || sessionGuard.busy) return
+    set({ sessionGuard: { ...sessionGuard, busy: true } })
+    let exited: void | boolean
+    try {
+      exited = await sessionGuard.exit()
+    } catch {
+      // Unexpected callback failures must unlock the session just like failed saves.
+      exited = false
+    }
+    if (exited === false) {
+      const currentGuard = get().sessionGuard
+      set({ pendingSessionExit: null, sessionGuard: currentGuard ? { ...currentGuard, busy: false } : null })
+      return
+    }
+    set({ sessionGuard: null, pendingSessionExit: null })
+    if (pendingSessionExit.tab) set({ activeTab: pendingSessionExit.tab })
+  },
+
+  cancelSessionExit: () => {
+    if (!get().sessionGuard?.busy) set({ pendingSessionExit: null })
+  },
 
   updateProgress: async (speciesId: string, progress: UserProgress) => {
     const { storage, progressLoadError } = get()
@@ -180,7 +248,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       await storage.clearAll()
       get().audioPlayer.stop()
       set({
-        allProgress: new Map(), lastPlayedClipId: new Map(), activeTab: 'learn', sessionActive: false,
+        allProgress: new Map(), lastPlayedClipId: new Map(), activeTab: 'learn', sessionGuard: null, pendingSessionExit: null,
         progressLoadError: false, progressLoadFailure: null,
       })
     } finally {
