@@ -51,3 +51,18 @@ test('bundled bird photos load from the app throughout the learner journey', asy
   await expect(page.getByRole('heading', { name: /\d+ \/ 3/ })).toBeVisible()
   await app.expectBundledPhotosLoaded()
 })
+
+// Guards the helper itself: a photo that falls back after it rendered must not
+// slip out of the check by no longer matching the photo selector.
+test('the bundled-photo check fails when a photo falls back late', async ({ app, page }) => {
+  await page.route('**/content/bird-photos/amcr-*.jpg', async route => {
+    await new Promise(resolve => setTimeout(resolve, 1_000))
+    await route.fulfill({ status: 200, contentType: 'image/jpeg', body: 'corrupt photo' })
+  })
+
+  await app.resetProgress()
+  await page.getByRole('button', { name: 'About' }).click()
+  await expect(page.getByRole('heading', { name: 'Credits & Attribution' })).toBeVisible()
+  await expect(app.expectBundledPhotosLoaded(15)).rejects.toThrow(/fallbacks/)
+  await expect(page.locator('[data-photo-fallback="true"]')).toHaveCount(1)
+})

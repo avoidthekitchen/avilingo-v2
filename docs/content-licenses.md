@@ -22,7 +22,8 @@ copies of the 250-pixel and 960-pixel thumbnails Wikimedia Commons generates for
 each file, downloaded byte for byte by `bundle_photos.py` on October 9, 2026 and
 committed under `beakspeak/public/content/bird-photos/`. BeakSpeak does not crop,
 recolor, re-encode, or otherwise edit them. `content/photo-metadata.lock.json`
-records each copy's source thumbnail URL, pixel size, byte count, and SHA-256 hash.
+records each copy's bundled path, source thumbnail URL, Commons file page,
+pixel size, byte count, and SHA-256 hash.
 `bundle_photos.py --check` verifies that every bundled file matches the lock and
 comes from the Commons file named in the manifest's credits. Builds do not query
 Wikimedia.

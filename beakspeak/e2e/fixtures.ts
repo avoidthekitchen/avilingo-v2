@@ -137,18 +137,25 @@ class BeakSpeakApp {
 
   // Every rendered bird photo must be a bundled copy that actually decoded. The
   // illustration fallback would otherwise hide a broken path or srcset candidate.
+  // A photo that fails to decode swaps its src to the illustration and leaves the
+  // photo selector, so the count, fallbacks and decode state are read in one snapshot.
   async expectBundledPhotosLoaded(count?: number) {
-    const photos = this.page.locator('img[src*="/content/bird-photos/"]')
-    if (count === undefined) {
-      await expect(photos.first()).toBeVisible()
-    } else {
-      await expect(photos).toHaveCount(count)
-    }
-    await expect(this.page.locator('[data-photo-fallback]')).toHaveCount(0)
-    await expect.poll(() => photos.evaluateAll(images => images
-      .map(image => image as HTMLImageElement)
-      .filter(image => !image.complete || image.naturalWidth === 0 || !image.currentSrc.includes('/beakspeak/content/bird-photos/'))
-      .map(image => image.currentSrc || image.src))).toEqual([])
+    await expect.poll(() => this.page.evaluate(() => {
+      const photos = [...document.querySelectorAll<HTMLImageElement>('img[src*="/content/bird-photos/"]')]
+      return {
+        hasPhotos: photos.length > 0,
+        photos: photos.length,
+        fallbacks: document.querySelectorAll('[data-photo-fallback]').length,
+        undecoded: photos
+          .filter(image => !image.complete || image.naturalWidth === 0 || !image.currentSrc.includes('/beakspeak/content/bird-photos/'))
+          .map(image => image.currentSrc || image.src),
+      }
+    })).toMatchObject({
+      hasPhotos: true,
+      fallbacks: 0,
+      undecoded: [],
+      ...(count === undefined ? {} : { photos: count }),
+    })
   }
 }
 

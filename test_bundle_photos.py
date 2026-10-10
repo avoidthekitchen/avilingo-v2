@@ -8,6 +8,7 @@ from bundle_photos import (
     BundledPhotoError,
     check_photos,
     commons_thumbnail_url,
+    download_photo,
     expected_photos,
     image_size,
     sync_photos,
@@ -104,6 +105,24 @@ def test_image_size_reads_jpeg_and_png_headers():
         image_size(b"<html>rate limited</html>")
 
 
+@pytest.mark.parametrize("data", [make_jpeg(960, 641)[:26], make_png(250, 100)[:20]])
+def test_image_size_reports_truncated_images_as_unreadable(data):
+    with pytest.raises(BundledPhotoError, match="truncated"):
+        image_size(data)
+
+
+def test_download_retries_a_truncated_body(monkeypatch):
+    monkeypatch.setattr("bundle_photos.time.sleep", lambda seconds: None)
+    url = commons_thumbnail_url("American_robin_(71307).jpg", 960)
+    bodies = iter([make_jpeg(960, 720)[:26], make_jpeg(960, 720)])
+
+    class FlakySession:
+        def get(self, url: str, **kwargs):
+            return FakeResponse(next(bodies))
+
+    assert download_photo(url, session=FlakySession()) == make_jpeg(960, 720)
+
+
 def test_sync_downloads_locks_and_then_checks_offline(paths):
     write_base(paths["base_manifest_path"], {"amro": photo_entry("amro", "American_robin_(71307).jpg")})
     session = FakeSession(thumbnails("American_robin_(71307).jpg"))
@@ -113,9 +132,11 @@ def test_sync_downloads_locks_and_then_checks_offline(paths):
     assert result["downloaded"] == ["amro-250.jpg", "amro-960.jpg"]
     assert len(session.calls) == 2
     assert (paths["photo_dir"] / "amro-960.jpg").read_bytes() == make_jpeg(960, 720)
-    lock = json.loads(paths["lock_path"].read_text())
-    assert lock["photos"]["amro-960.jpg"]["source_url"] == commons_thumbnail_url("American_robin_(71307).jpg", 960)
-    assert lock["photos"]["amro-960.jpg"]["pixel_height"] == 720
+    locked = json.loads(paths["lock_path"].read_text())["photos"]["amro-960.jpg"]
+    assert locked["path"] == "/content/bird-photos/amro-960.jpg"
+    assert locked["thumbnail_url"] == commons_thumbnail_url("American_robin_(71307).jpg", 960)
+    assert locked["source_url"] == "https://commons.wikimedia.org/wiki/File:American_robin_(71307).jpg"
+    assert locked["pixel_height"] == 720
     assert check_photos(**paths) == []
 
     rerun = sync_photos(**paths, session=OfflineSession())
@@ -211,6 +232,14 @@ def test_manifest_photos_must_be_local_and_match_their_commons_source(change, me
 
     with pytest.raises(BundledPhotoError, match=message):
         expected_photos({"species": [{"id": "amro", "photo": photo}]})
+
+
+@pytest.mark.parametrize("species_ids", [[""], ["amro", "amro"]])
+def test_manifest_species_ids_must_be_present_and_unique(species_ids):
+    species = [{"id": species_id, "photo": photo_entry("amro", "American_robin_(71307).jpg")} for species_id in species_ids]
+
+    with pytest.raises(BundledPhotoError, match="missing or duplicate species ID"):
+        expected_photos({"species": species})
 
 
 def test_percent_encoded_source_urls_name_the_same_commons_file():

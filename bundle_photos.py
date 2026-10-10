@@ -26,7 +26,7 @@ from urllib.parse import quote, unquote
 import requests
 
 
-LOCK_SCHEMA_VERSION = 1
+LOCK_SCHEMA_VERSION = 2
 PHOTO_URL_PREFIX = "/content/bird-photos/"
 COMMONS_THUMB_ROOT = "https://thumb.wikimedia.org/wikipedia/commons/thumb"
 COMMONS_FILE_PAGE_PREFIX = "https://commons.wikimedia.org/wiki/File:"
@@ -47,7 +47,11 @@ def _hash_bytes(data: bytes) -> str:
 
 
 def _hash_file(path: Path) -> str:
-    return _hash_bytes(path.read_bytes())
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def commons_thumbnail_url(filename: str, width: int) -> str:
@@ -71,8 +75,12 @@ def parse_srcset(srcset: str) -> list[tuple[str, int]]:
 def expected_photos(base_manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
     """Map each bundled filename to the Commons thumbnail it must contain."""
     expected: dict[str, dict[str, Any]] = {}
+    seen: set[str] = set()
     for species in base_manifest.get("species", []):
         species_id = str(species.get("id", ""))
+        if not re.fullmatch(r"[A-Za-z0-9_-]+", species_id) or species_id in seen:
+            raise BundledPhotoError(f"Base manifest has a missing or duplicate species ID: {species_id!r}")
+        seen.add(species_id)
         photo = species.get("photo") or {}
         context = f"{species_id} photo"
         commons_name = str(photo.get("filename", "")).replace(" ", "_")
@@ -81,7 +89,8 @@ def expected_photos(base_manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
         extension = Path(commons_name).suffix.lower()
         if extension not in SUPPORTED_EXTENSIONS:
             raise BundledPhotoError(f"{context} has unsupported file type {extension!r}")
-        if unquote(str(photo.get("source_url", ""))) != COMMONS_FILE_PAGE_PREFIX + commons_name:
+        commons_page = str(photo.get("source_url", ""))
+        if unquote(commons_page) != COMMONS_FILE_PAGE_PREFIX + commons_name:
             raise BundledPhotoError(f"{context} source_url does not name {commons_name}")
 
         candidates = parse_srcset(str(photo.get("srcset", "")))
@@ -95,7 +104,9 @@ def expected_photos(base_manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
             expected[filename] = {
                 "species_id": species_id,
                 "width": width,
-                "source_url": commons_thumbnail_url(commons_name, width),
+                "path": url,
+                "thumbnail_url": commons_thumbnail_url(commons_name, width),
+                "source_url": commons_page,
             }
 
         largest_url, largest_width = max(candidates, key=lambda candidate: candidate[1])
@@ -110,6 +121,14 @@ def expected_photos(base_manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
 
 def image_size(data: bytes) -> tuple[int, int]:
     """Read pixel dimensions from a JPEG or PNG without decoding it."""
+    try:
+        return _image_size(data)
+    except struct.error as exc:
+        # A truncated body ends mid-header; treat it like any other unreadable download.
+        raise BundledPhotoError("Downloaded file is a truncated JPEG or PNG image") from exc
+
+
+def _image_size(data: bytes) -> tuple[int, int]:
     if data.startswith(b"\x89PNG\r\n\x1a\n") and data[12:16] == b"IHDR":
         return struct.unpack(">II", data[16:24])
     if data.startswith(b"\xff\xd8"):
@@ -160,11 +179,16 @@ def load_lock(path: str | Path = DEFAULT_LOCK, *, required: bool = False) -> dic
 
 def _write_json_atomic(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
-        temp_path = Path(handle.name)
-        json.dump(value, handle, indent=2, ensure_ascii=False)
-        handle.write("\n")
-    temp_path.replace(path)
+    temp_path: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+            temp_path = Path(handle.name)
+            json.dump(value, handle, indent=2, ensure_ascii=False)
+            handle.write("\n")
+        temp_path.replace(path)
+    finally:
+        if temp_path is not None:
+            temp_path.unlink(missing_ok=True)
 
 
 def download_photo(url: str, *, session: Any = requests, attempts: int = 3) -> bytes:
@@ -210,7 +234,7 @@ def sync_photos(
         if (
             not force
             and old is not None
-            and old.get("source_url") == wanted["source_url"]
+            and all(old.get(key) == value for key, value in wanted.items())
             and path.is_file()
             and _hash_file(path) == old.get("sha256")
         ):
@@ -218,11 +242,11 @@ def sync_photos(
             reused.append(filename)
             continue
 
-        data = download_photo(wanted["source_url"], session=session)
+        data = download_photo(wanted["thumbnail_url"], session=session)
         pixel_width, pixel_height = image_size(data)
         if pixel_width != wanted["width"]:
             raise BundledPhotoError(
-                f"{wanted['source_url']} is {pixel_width}px wide, not the {wanted['width']}w its srcset declares"
+                f"{wanted['thumbnail_url']} is {pixel_width}px wide, not the {wanted['width']}w its srcset declares"
             )
         staged[filename] = data
         next_photos[filename] = {
@@ -273,7 +297,7 @@ def check_photos(
         if locked is None:
             errors.append(f"Photo lock is missing {filename}; run the photo sync")
             continue
-        if locked.get("source_url") != wanted["source_url"]:
+        if any(locked.get(key) != value for key, value in wanted.items()):
             errors.append(f"Photo lock for {filename} does not match the Commons file in the manifest; run the photo sync")
         if locked.get("pixel_width") != wanted["width"]:
             errors.append(f"{filename} is {locked.get('pixel_width')}px wide, not {wanted['width']}w")

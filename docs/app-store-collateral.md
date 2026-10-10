@@ -137,9 +137,9 @@ Select **Data Not Collected**. Use it only for a build that bundles its photos.
 Mark it in App Store Connect only when that build is the one submitted, and only
 after the native network check below passes on it.
 
-No build is submitted until this work is done. Build 3, the last internal
-TestFlight build, still loads photos from Wikimedia and must not be submitted.
-Build 4 is the first build archived with bundled photos.
+No build is submitted until this work is done. Builds 1–4 load photos from
+Wikimedia and must not be submitted. Build 5 is the first build archived with
+bundled photos.
 
 Native network check, required for the submitted build: install it on a device or
 simulator, then complete a lesson, its introductory quiz, a review, Progress, and

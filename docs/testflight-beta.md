@@ -81,8 +81,8 @@ your device's backup settings. BeakSpeak provides no account or cloud progress
 sync. Resetting progress removes the saved learning records and confusion history.
 
 Bird photos load from Wikimedia servers. Photo requests disclose ordinary
-network request information to that provider. (This describes builds 1–3.
-Build 4 and later bundle their photos and make no such requests; the public
+network request information to that provider. (This describes builds 1–4.
+Build 5 and later bundle their photos and make no such requests; the public
 Privacy page describes current builds.) Opening a source or credit link
 launches the linked website in your browser, where that website's policies apply.
 
@@ -335,18 +335,12 @@ clip can play. Force-quit and reopen to verify progress remains. Submit issues
 through TestFlight screenshot feedback. Photos require a network connection;
 bundled audio is available offline.
 
-## Session-exit confirmation and bundled-photo build — pending
+## Session-exit confirmation build — pending
 
 The next beta is version `2.0.0`, build `4`, archived from `main` at or after
-the merge of #70 (bundled photos). Build `3` was archived before PR #71 merged, so it
+`4b04c02` (PR #71's merge). Build `3` was archived before PR #71 merged, so it
 still has the disabled tab bar during lessons and quizzes. Build 4 also carries
-the beakspeak.app support and privacy pages from #33. No build is released or
-submitted for review until #70 is done.
-
-#70 bundles the 15 bird photos with the app. Build 3 loaded them from Wikimedia;
-build 4 makes no network requests during learning. Before App Store submission,
-record the native network check for build 4 in
-[the App Store collateral](app-store-collateral.md#prepared-portal-responses).
+the beakspeak.app support and privacy pages from #33.
 
 PR #71 replaces the disabled tab bar with a confirmation. During a lesson,
 refresher, review, or practice, tapping a tab or the session's own Back/Quit asks
@@ -372,6 +366,24 @@ Then complete a short lesson and quiz, play a song and call, lock the phone
 during audio, return, and confirm another clip plays. Force-quit and reopen to
 verify progress remains. Submit issues through TestFlight screenshot feedback.
 
+## Bundled-photo build — pending
+
+The beta after build 4 is version `2.0.0`, build `5`, archived from `main` at or
+after the merge of #70. #70 bundles the 15 bird photos with the app. Builds 1–4
+loaded them from Wikimedia; build 5 makes no network requests during learning.
+Builds 1–4 must not be submitted for App Store review.
+Before App Store submission, record the native network check for build 5 in
+[the App Store collateral](app-store-collateral.md#prepared-portal-responses).
+
+Record the archive audit and the Organizer upload result here once the owner
+has archived and uploaded build 5.
+
+### Build 5 What to Test
+
+Update from build 4 through TestFlight without deleting BeakSpeak, and confirm
+existing introduced birds and saved progress remain.
+
 Turn on airplane mode, then open a lesson, a quiz, Progress, and About. Every
 bird photo should appear. A bird illustration in place of a photo is a bug;
-report it with the bird's name.
+report it with the bird's name. Play a song and call to confirm audio also works
+offline.

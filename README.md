@@ -116,7 +116,7 @@ Sync fetches metadata for new IDs, caches untouched sources under `.cache/manual
 
 ## Bundled photos
 
-Bird photos ship with the app and the web demo, so learning makes no third-party requests. Each species' `photo` in `content/manifest-base.json` names its Wikimedia Commons file and lists local `srcset` candidates such as `/content/bird-photos/amro-250.jpg 250w`. `bundle_photos.py` downloads Wikimedia's own thumbnail of that file at each width, byte for byte, and records the source URL, size and SHA-256 in `content/photo-metadata.lock.json`. The photos are committed under `beakspeak/public/content/bird-photos/`.
+Bird photos ship with the app and the web demo, so learning makes no third-party requests. Each species' `photo` in `content/manifest-base.json` names its Wikimedia Commons file and lists local `srcset` candidates such as `/content/bird-photos/amro-250.jpg 250w`. `bundle_photos.py` downloads Wikimedia's own thumbnail of that file at each width, byte for byte, and records each file's path, thumbnail URL, Commons page, pixel size, byte count and SHA-256 in `content/photo-metadata.lock.json`. The photos are committed under `beakspeak/public/content/bird-photos/`.
 
 ```bash
 # After changing a species' photo in manifest-base.json (contacts Wikimedia).
