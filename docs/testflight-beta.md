@@ -378,6 +378,10 @@ Before App Store submission, record the native network check for build 5 in
 Record the archive audit and the Organizer upload result here once the owner
 has archived and uploaded build 5.
 
+The bundled photos add about 5 MB to build 5 compared with build 4. On
+2026-10-09 the owner ran the native network check on build 5 on a physical
+iPhone 15 (iOS 27) and observed no network requests during learning.
+
 ### Build 5 What to Test
 
 Update from build 4 through TestFlight without deleting BeakSpeak, and confirm

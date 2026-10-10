@@ -150,7 +150,7 @@ Record the build number, date, and method below before changing the label.
 
 | Build | Date | Method | Result |
 |---|---|---|---|
-| _pending_ | | | |
+| 5 | 2026-10-09 | Owner, on a physical iPhone 15 running iOS 27 | No network requests observed during learning |
 
 Support email is not declared (owner decision, 2026-10-09). Apple's label
 covers data the app transmits off the device. BeakSpeak has no in-app support
