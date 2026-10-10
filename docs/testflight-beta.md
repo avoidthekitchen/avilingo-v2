@@ -332,3 +332,34 @@ and call. Background or lock the phone during audio, return, and confirm another
 clip can play. Force-quit and reopen to verify progress remains. Submit issues
 through TestFlight screenshot feedback. Photos require a network connection;
 bundled audio is available offline.
+
+## Session-exit confirmation build — pending
+
+The next beta is version `2.0.0`, build `4`, archived from `main` at or after
+`4b04c02` (PR #71's merge). Build `3` was archived before PR #71 merged, so it
+still has the disabled tab bar during lessons and quizzes. Build 4 also carries
+the beakspeak.app support and privacy pages from #33.
+
+PR #71 replaces the disabled tab bar with a confirmation. During a lesson,
+refresher, review, or practice, tapping a tab or the session's own Back/Quit asks
+before leaving. Tapping the current tab returns to its start. Leaving a review
+saves answers already chosen.
+
+Record the archive audit and the Organizer upload result here once the owner
+has archived and uploaded build 4.
+
+### Build 4 What to Test
+
+Update from build 3 through TestFlight without deleting BeakSpeak, and confirm
+existing introduced birds and saved progress remain.
+
+During a lesson, tap Progress. Choose Keep learning and confirm the lesson
+continues where you left it. Tap Progress again and choose Leave lesson; confirm
+Progress opens. Repeat with Back inside a lesson and with the Learn tab itself.
+In a review, answer one question, tap Quit, and choose End review; confirm
+the answered bird's next review time changed. In practice, confirm leaving
+doesn't change review times.
+
+Then complete a short lesson and quiz, play a song and call, lock the phone
+during audio, return, and confirm another clip plays. Force-quit and reopen to
+verify progress remains. Submit issues through TestFlight screenshot feedback.
