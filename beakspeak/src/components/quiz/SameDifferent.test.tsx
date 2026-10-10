@@ -206,12 +206,13 @@ describe('SameDifferent audio sequence', () => {
     expect(onAnswer).toHaveBeenCalledWith(false, expect.any(Number), 'a')
   })
 
-  it('does not record a correct answer if the question unmounts during auto-advance', async () => {
+  it('retains the marked answer for exit but cancels advance when unmounted during feedback', async () => {
     const controlled = makeControllablePlayer()
     audioPlayer = controlled.player
     const onAnswer = vi.fn()
+    const onAnswerMarked = vi.fn()
 
-    const { unmount } = render(<SameDifferent item={makeItem()} onAnswer={onAnswer} />)
+    const { unmount } = render(<SameDifferent item={makeItem()} onAnswer={onAnswer} onAnswerMarked={onAnswerMarked} />)
     await act(async () => { await Promise.resolve() })
     await act(async () => {
       controlled.finishNaturally()
@@ -230,6 +231,7 @@ describe('SameDifferent audio sequence', () => {
     })
 
     expect(onAnswer).not.toHaveBeenCalled()
+    expect(onAnswerMarked).toHaveBeenCalledExactlyOnceWith(true, 0, 'a')
   })
 
 

@@ -18,6 +18,14 @@ export default function CreditsPage() {
       <p className="text-sm text-text-muted mb-6">
         Each recording and photo retains its own license, listed below.
       </p>
+      <nav aria-label="Support and privacy" className="flex gap-6 text-sm mb-6">
+        <ExternalLink href="https://beakspeak.app/beakspeak/support/" className="text-primary underline py-3">
+          Support
+        </ExternalLink>
+        <ExternalLink href="https://beakspeak.app/beakspeak/privacy/" className="text-primary underline py-3">
+          Privacy
+        </ExternalLink>
+      </nav>
 
       <p className="text-sm text-text-muted mb-6">
         Recordings are trimmed and volume-normalized from the originals. Photos are

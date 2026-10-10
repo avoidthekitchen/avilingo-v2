@@ -96,6 +96,13 @@ final class SmokeTests: XCTestCase {
         XCTAssertTrue(back.waitForExistence(timeout: 10), app.debugDescription)
         tapWhenReady(back, in: app)
 
+        // An existing container may launch this lesson as a refresher instead.
+        let leave = app.buttons.matching(
+            NSPredicate(format: "label == %@ OR label == %@", "Leave lesson", "Leave refresher")
+        ).firstMatch
+        XCTAssertTrue(leave.waitForExistence(timeout: 5), app.debugDescription)
+        tapWhenReady(leave, in: app)
+
         guard let introduced = introducedSpeciesCount(app) else {
             return XCTFail("Could not read the introduced-species summary. \(app.debugDescription)")
         }

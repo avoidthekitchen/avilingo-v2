@@ -125,11 +125,14 @@ exercise the production adapter, store, and UI for corrupted records, unsupporte
 schema versions, and stalled loads. This complements real SQLite contract tests;
 it does not exercise the actual iOS plugin or complete the TestFlight gate.
 
-## Physical-device TestFlight gate (pending)
+## Physical-device TestFlight verification (deferred follow-up #68)
 
-Implementation and simulator tests can proceed while #31's human distribution
-steps are in progress. Issue #32 remains open until this gate has recorded evidence.
-Neither a browser test nor a direct Xcode install completes the TestFlight gate.
+On 2026-10-09 the owner accepted the implemented storage and existing automated
+and physical-device evidence for the initial early release, and deferred the
+deeper checks below to [issue #68](https://github.com/avoidthekitchen/avilingo-v2/issues/68).
+They do not block closing #32 or preparing that release. Deferred checks are not
+reported as passed; browser or simulator evidence does not prove their physical
+TestFlight behavior.
 
 1. After #31 enables distribution, install SQLite TestFlight build A. Confirm the
    deliberate fresh Guided Path and record the device/iOS and version/build.
@@ -143,9 +146,9 @@ Neither a browser test nor a direct Xcode install completes the TestFlight gate.
 5. Reset progress. Confirm a clean Guided Path and empty progress/confusion tables,
    including after another force-quit. Exercise a recoverable native storage
    failure in a test build and confirm retry does not overwrite committed records.
-6. Record build numbers, device/iOS, results, and attached evidence on #32 before
-   calling any build a release candidate. If history or failure inspection cannot
-   be demonstrated on the distributed build, keep that criterion pending.
+6. Record build numbers, device/iOS, results, and attached evidence on #68.
+   If history or failure inspection cannot be demonstrated on the distributed
+   build, keep that follow-up criterion pending.
 
 Confusion history has no learner-facing viewer. Verify it through the app's
 database in an available device-container inspection workflow; preserve that
@@ -158,7 +161,7 @@ Evidence record:
 
 | Check | Device / iOS | Build A → B | Result / evidence |
 |---|---|---|---|
-| Force-quit progress and confusion history | Pending | Pending | Pending |
-| Ordinary SQLite-to-SQLite update | Pending | Pending | Pending |
-| Reset clears both tables across relaunch | Pending | Pending | Pending |
+| Force-quit progress and confusion history | iPhone 15 / iOS 26.6.2 | 2.0.0 (2) | Owner confirmed visible progress; physical confusion-table inspection pending |
+| Ordinary SQLite-to-SQLite update | iPhone 15 / iOS 26.6.2 | 2.0.0 (1) → (2) | Owner confirmed ordinary update without deletion and preserved progress on October 9; hidden confusion history pending |
+| Reset clears both tables across relaunch | iPhone 15 / iOS 26.6.2 | 2.0.0 (2) | Owner confirmed reset stayed empty after force quit/relaunch on October 9; both-table removal passes SQLite tests, physical confusion-table inspection pending |
 | Controlled native failure and retry | Pending | Pending | Pending |

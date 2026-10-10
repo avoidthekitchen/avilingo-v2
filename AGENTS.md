@@ -171,10 +171,11 @@ Deployed as a Worker with no script — pure static asset serving. Requests to s
 - Static assets docs: https://developers.cloudflare.com/workers/static-assets
 - Wrangler CLI docs: https://developers.cloudflare.com/workers/wrangler
 - Config: `wrangler.toml` at repo root
-- Routes: `unformedideas.com/beakspeak`, `unformedideas.com/beakspeak/*`, `www.unformedideas.com/beakspeak`, and `www.unformedideas.com/beakspeak/*`
-- `not_found_handling = "single-page-application"` for SPA fallback
+- Routes: custom domains `beakspeak.app` and `www.beakspeak.app` (canonical host: `beakspeak.app`)
+- `not_found_handling = "404-page"`: unknown paths get `dist/404.html`. The app has no client-side path routes, so it needs no SPA fallback.
 - No `main` script, no `run_worker_first` — zero invocation costs
 - Deploy: `npx --prefix beakspeak wrangler deploy`
+- `wrangler deploy` adds routes but does not remove zone routes dropped from `wrangler.toml`; delete those in the Cloudflare dashboard or API and verify.
 
 ### Content Pipeline (Python)
 
@@ -204,18 +205,20 @@ cd beakspeak && npm run dev
 # Run tests
 cd beakspeak && npx vitest run
 
-# Build and deploy to unformedideas.com/beakspeak/
+# Build and deploy to beakspeak.app (app at beakspeak.app/beakspeak/)
 bash scripts/build-site.sh
 npx --prefix beakspeak wrangler deploy
 ```
 
 Deployment boundary:
 
-- This repo owns only the BeakSpeak app at `/beakspeak/`.
-- `scripts/build-site.sh` assembles `dist/beakspeak/` for the route and `dist/index.html` as the Worker SPA fallback.
-- The root landing page is owned by the `unformedideas` repo.
-- Other projects on unformedideas.com are owned by their own respective repos.
-- Do not reintroduce `site/index.html` or deploy this Worker to `unformedideas.com/*`.
+- `beakspeak.app` is the canonical public home for BeakSpeak and its related projects (see `docs/adr/0002-move-public-web-presence-to-beakspeak-app.md`).
+- This repo owns `beakspeak.app` and `www.beakspeak.app`: the landing page at `/` (`site/index.html`), the not-found page (`site/404.html`), and the app plus its public Support and Privacy pages under `/beakspeak/`.
+- `/whistlewood/` on both hosts is owned and deployed by the `whistlewood` repo through more specific Worker routes. Do not build or copy Whistlewood assets here.
+- `scripts/build-site.sh` assembles `dist/index.html`, `dist/404.html`, and `dist/beakspeak/`.
+- Public URLs, including the app's About links and App Store metadata, use `https://beakspeak.app/beakspeak/...`. The public support contact is `support@beakspeak.app`.
+- `unformedideas.com` is a separate landing page owned by the `unformedideas` repo. It 301-redirects legacy `unformedideas.com/beakspeak*` URLs to `beakspeak.app/beakspeak/`; TestFlight build 2 and older links depend on that redirect. Do not add `unformedideas.com` routes to this Worker.
+- The iOS bundle identifier stays `com.unformedideas.beakspeak`. It is a permanent App Store identity, not a URL, and cannot change after upload.
 
 ## Testing Guidance For Agents
 

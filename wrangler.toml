@@ -1,13 +1,14 @@
 name = "beakspeak"
 compatibility_date = "2026-04-14"
 
+# beakspeak.app is the canonical host. /whistlewood/* on these hosts is owned by
+# the whistlewood repo's more specific routes. Legacy unformedideas.com/beakspeak
+# URLs are 301-redirected to beakspeak.app by the unformedideas repo.
 routes = [
-  { pattern = "unformedideas.com/beakspeak", zone_name = "unformedideas.com" },
-  { pattern = "unformedideas.com/beakspeak/*", zone_name = "unformedideas.com" },
-  { pattern = "www.unformedideas.com/beakspeak", zone_name = "unformedideas.com" },
-  { pattern = "www.unformedideas.com/beakspeak/*", zone_name = "unformedideas.com" },
+  { pattern = "beakspeak.app", custom_domain = true },
+  { pattern = "www.beakspeak.app", custom_domain = true },
 ]
 
 [assets]
 directory = "./dist"
-not_found_handling = "single-page-application"
+not_found_handling = "404-page"

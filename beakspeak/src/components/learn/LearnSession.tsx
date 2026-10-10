@@ -38,7 +38,24 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
   )
   const [quizItems, setQuizItems] = useState<IntroQuizItem[]>([])
   const [phase, setPhase] = useState<Phase>(reviewItems.length > 0 ? 'review' : 'cards')
-  useSessionNavigation(phase !== 'complete')
+  const requestExit = useSessionNavigation({
+    active: phase !== 'complete',
+    busy: phase === 'saving',
+    prompt: mode === 'redo'
+      ? {
+          title: 'Leave this refresher?',
+          message: "You'll lose your place and need to start the refresher over.",
+          confirmLabel: 'Leave refresher',
+          cancelLabel: 'Keep learning',
+        }
+      : {
+          title: 'Leave this lesson?',
+          message: "You'll lose this lesson's progress. These birds aren't saved as introduced until you finish the quiz.",
+          confirmLabel: 'Leave lesson',
+          cancelLabel: 'Keep learning',
+        },
+    onExit: onComplete,
+  })
   const [cardIndex, setCardIndex] = useState(0)
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null)
   const rootRef = useRef<HTMLDivElement>(null)
@@ -100,7 +117,7 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
           <p className="text-sm text-secondary font-medium">Quick Review</p>
           <p className="text-xs text-text-muted">Let's warm up with some familiar birds</p>
         </div>
-        <IntroQuiz items={reviewItems} onComplete={handleReviewComplete} onBack={onComplete} />
+        <IntroQuiz items={reviewItems} onComplete={handleReviewComplete} onBack={requestExit} />
       </div>
     )
   }
@@ -114,7 +131,7 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
       <div ref={rootRef} tabIndex={-1} className="flex flex-col h-full focus:outline-none">
         <div className="p-4 flex items-center justify-between">
           <button
-            onClick={onComplete}
+            onClick={requestExit}
             className="text-sm text-text-muted"
           >
             ← Back
@@ -190,7 +207,7 @@ export default function LearnSession({ lesson, mode = 'normal', onComplete }: Pr
           <p className="text-sm text-primary font-medium">Quick Quiz</p>
           <p className="text-xs text-text-muted">Test the birds you just met!</p>
         </div>
-        <IntroQuiz items={quizItems} onComplete={handleQuizComplete} onBack={onComplete} />
+        <IntroQuiz items={quizItems} onComplete={handleQuizComplete} onBack={requestExit} />
       </div>
     )
   }

@@ -216,7 +216,7 @@ scope verification, and installation are explicitly deferred at the owner's
 request for this first beta. Record app/build identifiers, device/iOS versions,
 and the results. The ordinary SQLite-to-SQLite TestFlight
 update and deeper storage inspection remain the separate
-[issue #32 gate](native-storage.md#physical-device-testflight-gate-pending).
+[storage verification follow-up](native-storage.md#physical-device-testflight-verification-deferred-follow-up-68).
 
 ## Human completion checklist for #31
 
@@ -285,6 +285,18 @@ and screenshot feedback. The owner's 2026-10-08 instruction explicitly defers
 waiting for these steps; invitation sending is done for this first-beta scope.
 
 
+## Storage acceptance update — 2026-10-09
+
+The owner subsequently confirmed build 1 → build 2 preserved visible progress
+without uninstalling, and reset remained empty after force-quit/relaunch. The
+owner accepted #32 for the initial early release and requested moving deeper
+physical confusion-history inspection and controlled native failure/retry to
+[issue #68](https://github.com/avoidthekitchen/avilingo-v2/issues/68). Issue #32 is
+closed under that revised scope. Earlier references to its separate pending gate
+are historical; the deferred checks are not claimed as passed and do not block
+initial-release preparation.
+
+
 ## Custom artwork build — 2026-10-09
 
 PR #67 merged as `f147bd2` after both GitHub CI jobs passed. The next beta
@@ -303,9 +315,10 @@ owner-approved encryption declaration, all 30 production audio clips, both
 bird illustrations, and four dependency privacy manifests. Its packaged web
 files match the validated native synchronization output byte for byte.
 
-The archive is prepared but has not been uploaded or assigned to Internal Beta.
-Upload requires the owner's explicit authorization. Local audit evidence is in
-the release checkout's ignored `.artifacts/testflight/build3-archive-audit.json`.
+The owner uploaded this archive from Xcode Organizer; Organizer recorded a
+successful App Store Connect upload of build `3` at 2026-10-09 21:13 UTC. Local
+audit evidence is in the release checkout's ignored
+`.artifacts/testflight/build3-archive-audit.json`.
 
 ### Build 3 What to Test
 
