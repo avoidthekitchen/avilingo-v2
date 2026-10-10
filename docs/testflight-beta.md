@@ -295,3 +295,71 @@ physical confusion-history inspection and controlled native failure/retry to
 closed under that revised scope. Earlier references to its separate pending gate
 are historical; the deferred checks are not claimed as passed and do not block
 initial-release preparation.
+
+
+## Custom artwork build — 2026-10-09
+
+PR #67 merged as `f147bd2` after both GitHub CI jobs passed. The next beta
+uses version `2.0.0`, build `3`, prepared from an isolated checkout of that
+merged source. It includes the custom navigation icons, two decorative bird
+illustrations, and the lesson lock icon that follows accessibility text size.
+
+All 230 app unit tests, 23 root tooling tests, ESLint, native synchronization,
+and both local iOS simulator smoke tests passed. The native build also passed
+TypeScript compilation. PR #67's browser suite passed in CI, and the updated
+300% text test passed locally before merging.
+
+Xcode produced a signed arm64 archive `2.0.0 (3)` on 2026-10-09. The archive
+audit confirmed the permanent bundle identifier, iOS 18.4 minimum, the retained
+owner-approved encryption declaration, all 30 production audio clips, both
+bird illustrations, and four dependency privacy manifests. Its packaged web
+files match the validated native synchronization output byte for byte.
+
+The owner uploaded this archive from Xcode Organizer; Organizer recorded a
+successful App Store Connect upload of build `3` at 2026-10-09 21:13 UTC. Local
+audit evidence is in the release checkout's ignored
+`.artifacts/testflight/build3-archive-audit.json`.
+
+### Build 3 What to Test
+
+Update from build 2 through TestFlight without deleting BeakSpeak. Confirm
+existing introduced birds and saved learning progress remain. Check the new
+Learn, Quiz, and Progress navigation icons, bird artwork on quiz and lesson
+screens, and locked-lesson icons at larger accessibility text sizes.
+
+Complete a short lesson and quiz, try Review, inspect Progress, and play a song
+and call. Background or lock the phone during audio, return, and confirm another
+clip can play. Force-quit and reopen to verify progress remains. Submit issues
+through TestFlight screenshot feedback. Photos require a network connection;
+bundled audio is available offline.
+
+## Session-exit confirmation build — pending
+
+The next beta is version `2.0.0`, build `4`, archived from `main` at or after
+`4b04c02` (PR #71's merge). Build `3` was archived before PR #71 merged, so it
+still has the disabled tab bar during lessons and quizzes. Build 4 also carries
+the beakspeak.app support and privacy pages from #33.
+
+PR #71 replaces the disabled tab bar with a confirmation. During a lesson,
+refresher, review, or practice, tapping a tab or the session's own Back/Quit asks
+before leaving. Tapping the current tab returns to its start. Leaving a review
+saves answers already chosen.
+
+Record the archive audit and the Organizer upload result here once the owner
+has archived and uploaded build 4.
+
+### Build 4 What to Test
+
+Update from build 3 through TestFlight without deleting BeakSpeak, and confirm
+existing introduced birds and saved progress remain.
+
+During a lesson, tap Progress. Choose Keep learning and confirm the lesson
+continues where you left it. Tap Progress again and choose Leave lesson; confirm
+Progress opens. Repeat with Back inside a lesson and with the Learn tab itself.
+In a review, answer one question, tap Quit, and choose End review; confirm
+the answered bird's next review time changed. In practice, confirm leaving
+doesn't change review times.
+
+Then complete a short lesson and quiz, play a song and call, lock the phone
+during audio, return, and confirm another clip plays. Force-quit and reopen to
+verify progress remains. Submit issues through TestFlight screenshot feedback.
