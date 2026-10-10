@@ -1,7 +1,9 @@
 import { expect, test } from './fixtures'
 
-test('failed bird photos use the bundled fallback throughout the learner journey', async ({ app, page }) => {
-  await page.route('https://*.wikimedia.org/**', route => route.fulfill({
+// Photos are bundled, so this only fires if a packaged file is missing or corrupt.
+// The illustration is a safety net; bundled-photos.spec.ts fails if it shows in normal use.
+test('failed bird photos use the illustration fallback throughout the learner journey', async ({ app, page }) => {
+  await page.route('**/content/bird-photos/**', route => route.fulfill({
     status: 200,
     contentType: 'image/jpeg',
     body: 'unavailable photo',

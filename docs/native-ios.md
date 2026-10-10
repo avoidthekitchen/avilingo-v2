@@ -92,11 +92,11 @@ Only the iOS platform is configured. The target is portrait iPhone on iOS 18.4 o
 ## Prerequisites
 
 - Node.js 22.13 or newer (the storage contract tests use built-in `node:sqlite`)
-- Python 3.12+, `uv`, `ffmpeg`, and `ffprobe` for the offline audio-content check
+- Python 3.12+, `uv`, `ffmpeg`, and `ffprobe` for the offline audio and photo checks
 - Xcode with an iOS platform installed
 - For physical installation: an Apple ID added in Xcode and an iPhone with Developer Mode enabled
 
-Run `uv run python3 manual_audio.py` from the repository root first if the production audio files have not been generated locally.
+Run `uv run python3 manual_audio.py` from the repository root first if the production audio files have not been generated locally. Bird photos are committed under `beakspeak/public/content/bird-photos/` and need no generation step.
 
 ## Build and synchronize
 
@@ -109,10 +109,10 @@ npm run native:sync
 
 This command:
 
-1. verifies `content/audio-selections.toml`, its metadata lock, the runtime manifest, and local production audio without contacting Xeno-canto;
+1. verifies `content/audio-selections.toml`, its metadata lock, the runtime manifest, and local production audio without contacting Xeno-canto, then verifies the committed bundled photos against `content/photo-metadata.lock.json` without contacting Wikimedia;
 2. type-checks and builds the app in Vite's `native` mode;
-3. removes unreferenced local photos, legacy audio, archive media, and Finder metadata from the output;
-4. verifies that the packaged Ogg/Opus file set exactly matches the production manifest; and
+3. removes legacy research photos, legacy audio, archive media, and Finder metadata from the output;
+4. verifies that the packaged Ogg/Opus files and bundled photos exactly match the production manifest; and
 5. runs `cap sync ios` to copy the clean bundle and update native dependencies.
 
 The synchronized web output under `ios/App/App/public/` is generated and gitignored. Never edit it directly.

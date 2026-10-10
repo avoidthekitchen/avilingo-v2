@@ -17,15 +17,44 @@ artifact or future license agreement.
 
 ## Photos
 
-The existing photos remain remote. Wikimedia's imageinfo API supplied the
-thumbnail URLs, artist metadata, license names, and file sources on
-October 7, 2026. Their exact metadata is committed in manifest-base.json and the
-runtime manifest. JPEG headers were inspected for all 30 small/large resources:
-small candidates are 250 pixels wide and large candidates are 960 pixels wide.
-The API rounds requested sizes to these supported buckets, so srcset uses the
-verified intrinsic widths without duplicate resources. Builds do not query Wikimedia. The shared image fallback
-removes responsive candidates after an error so a failed host cannot prevent
-using the bundled placeholder.
+The photos are bundled with the app and the web demo. They are redistributed
+copies of the 250-pixel and 960-pixel thumbnails Wikimedia Commons generates for
+each file, downloaded byte for byte by `bundle_photos.py` on October 9, 2026 and
+committed under `beakspeak/public/content/bird-photos/`. BeakSpeak does not crop,
+recolor, re-encode, or otherwise edit them. `content/photo-metadata.lock.json`
+records each copy's bundled path, source thumbnail URL, Commons file page,
+pixel size, byte count, and SHA-256 hash.
+`bundle_photos.py --check` verifies that every bundled file matches the lock and
+comes from the Commons file named in the manifest's credits. Builds do not query
+Wikimedia.
+
+Wikimedia's imageinfo API supplied the artist metadata, license names, and file
+sources on October 7, 2026. Their exact metadata is committed in manifest-base.json
+and the runtime manifest.
+
+Redistribution keeps every obligation that applies to each photo:
+
+- The photos use four different license terms: CC BY-SA 4.0, CC BY-SA 3.0,
+  CC BY 2.0, and public domain. Keep each photo's exact license and version as
+  listed below. Do not generalize them to a single license.
+- Producing a smaller copy at a different resolution is a technical change the
+  licenses permit. Under CC BY-SA 4.0, changes of this kind alone do not create
+  adapted material. This does not remove any obligation. Redistributed copies still
+  need the creator credit, the license name and link, and a link to the source, and
+  BY-SA copies may not carry added terms that restrict what recipients can do. The
+  Credits page provides the credits and links for every photo.
+- Do not edit the image content. A crop, color change, or composite would be an
+  adaptation and would bring ShareAlike obligations for the edited file.
+- App Store distribution wraps the whole app bundle in Apple's FairPlay DRM, and
+  the BY-SA licenses forbid applying technological measures that restrict
+  recipients' permitted uses. BeakSpeak does not add any restriction to the photo
+  files themselves, and the same files remain freely available from Commons and
+  from the web demo. This is a known consideration, not a resolved legal question.
+  Review it again before any change to how the app is distributed or sold.
+
+The shared image fallback stays as a safety net. If a bundled file is missing or
+corrupt, it removes the responsive candidates and shows the bundled illustration.
+Tests fail if the fallback appears during normal use.
 
 | Bird | Creator credit | License | Source |
 |---|---|---|---|
@@ -50,8 +79,8 @@ used GFDL-self on June 26, 2007, and the current file has been relicensed under
 CC BY-SA 3.0. The Black-capped Chickadee credit retains the copyright attribution
 provided by Commons rather than presenting its metadata's assumed author as an
 independently verified identity. Some original file sources are already cropped;
-the source pages preserve those earlier changes. BeakSpeak displays reduced-size
-versions.
+the source pages preserve those earlier changes. BeakSpeak bundles Wikimedia's
+reduced-size versions of the current files.
 
 ## Audio
 

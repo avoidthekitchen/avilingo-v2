@@ -8,7 +8,7 @@
     "build": "npm run build:web",
     "build:web": "tsc -b && vite build --mode web",
     "build:native": "npm run content:check && tsc -b && vite build --mode native && bash ../scripts/prune-runtime-content.sh dist/content",
-    "content:check": "cd .. && uv run python3 manual_audio.py --check",
+    "content:check": "cd .. && uv run python3 manual_audio.py --check && uv run python3 bundle_photos.py --check",
     "native:sync": "npm run build:native && cap sync ios",
     "native:open": "cap open ios",
     "lint": "cd .. && eslint beakspeak scripts --config beakspeak/eslint.config.js",

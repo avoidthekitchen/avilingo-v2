@@ -43,10 +43,11 @@ Features:
 - Progress saved on your iPhone, with a reset option.
 - Recording and photo source credits in About.
 
-Free to use, with no account, advertising, or subscriptions. Bird recordings and
-learning content are bundled with the iPhone app. Photos require an internet
-connection; a bird illustration appears when a photo cannot load. Progress is
-local to your device and does not sync with the web demo or other devices.
+Free to use, with no account, advertising, or subscriptions. Bird photos,
+recordings, and learning content are bundled with the iPhone app, so lessons,
+quizzes, and reviews work without an internet connection. Source and support
+links open in your browser and need one. Progress is local to your device and
+does not sync with the web demo or other devices.
 
 ### Age-rating questionnaire
 
@@ -77,9 +78,11 @@ introductory questions, continue to the lesson list, then open Quiz to start a
 review. Progress shows introduced birds and review scheduling. About lists
 recording/photo credits and public Support and Privacy links.
 
-All 30 production bird recordings and learning content are bundled. Photos are
-requested from Wikimedia; if unavailable, a bundled bird illustration replaces
-them without preventing learning. Complete offline operation is not promised.
+Photos and audio are bundled: all 15 bird photos, all 30 production bird
+recordings, and the learning content ship in the app, and the learner flow makes
+no network requests. Lessons, quizzes, and reviews work in airplane mode. Credit,
+Support, and Privacy links open external pages in the browser and need a
+connection.
 
 Tap a play control to start/replay a sound. If automatic playback is blocked,
 Tap to play sound retries immediately. Spectrograms support seeking. In
@@ -112,36 +115,42 @@ no collected data or tracking; required-reason local file/disk API entries are
 distinct from collection. An empty SDK manifest alone does not establish that
 all runtime network providers collect nothing.
 
-Remote Wikimedia image requests reveal IP addresses and request headers.
-Wikimedia's [privacy policy](https://foundation.wikimedia.org/wiki/Policy:Privacy_policy)
-says it receives IP addresses and usage information, including when third-party
-sites load its content. Do **not** infer “Data Not Collected” solely from the
-absence of analytics SDKs. Apple's [label guidance](https://developer.apple.com/app-store/app-privacy-details/)
-requires examining off-device retention and the use of IP addresses.
+Bird photos are bundled ([#70](https://github.com/avoidthekitchen/avilingo-v2/issues/70)),
+so the app no longer requests images from Wikimedia. Earlier builds did, and
+those requests revealed IP addresses and request headers to Wikimedia under its
+[privacy policy](https://foundation.wikimedia.org/wiki/Policy:Privacy_policy).
+Do **not** infer “Data Not Collected” solely from the absence of analytics SDKs.
+Apple's [label guidance](https://developer.apple.com/app-store/app-privacy-details/)
+covers data collected by the app *and* its third-party partners, including any
+runtime network provider. The evidence for this label is the submitted build's
+observed network behavior, not the source tree alone.
+
+Automated evidence: the Playwright fixture fails any test whose page requests a
+host other than the app's own origin. `bundled-photos.spec.ts` walks Credits,
+the lesson list, a lesson card, the introductory quiz, Progress, and a review,
+and checks that every photo decoded from the bundle. The native app runs the
+same React code from its packaged files.
 
 ### Prepared portal responses
 
-Use **Yes, data is collected from this app**, with **No** for tracking for every
-listed type. This is a conservative disclosure of the remote-photo path, not a
-claim that BeakSpeak uploads learning records. Once photos are bundled
-([#70](https://github.com/avoidthekitchen/avilingo-v2/issues/70)) and that build
-is the one submitted, the answer becomes **Data Not Collected**. Select:
+Select **Data Not Collected**. Use it only for a build that bundles its photos.
+Mark it in App Store Connect only when that build is the one submitted, and only
+after the native network check below passes on it.
 
-| Apple data type | Purpose | Linked to user | Basis |
+No build is submitted until this work is done. Builds 1–4 load photos from
+Wikimedia and must not be submitted. Build 5 is the first build archived with
+bundled photos.
+
+Native network check, required for the submitted build: install it on a device or
+simulator, then complete a lesson, its introductory quiz, a review, Progress, and
+About in airplane mode. Every photo must appear (no bird illustrations), and
+audio must play. Then repeat with network inspection (for example a proxy or
+Xcode's network instrument) and confirm the learner flow makes no requests at all.
+Record the build number, date, and method below before changing the label.
+
+| Build | Date | Method | Result |
 |---|---|---|---|
-| Other Diagnostic Data | App Functionality; Analytics | Yes | Wikimedia receives device/browser/OS headers and request times; its policy describes security, performance improvement, and usage analysis. |
-| Other Usage Data | App Functionality; Analytics | Yes | Wikimedia receives requested image URLs and request times as part of delivering photos; its policy describes studying service usage. No quiz answers or learning history are sent. |
-| Coarse Location | App Functionality; Analytics | Yes | Wikimedia's policy describes IP-derived geography for security, service optimization, and aggregated regional usage. BeakSpeak does not request GPS or precise location. |
-| Other Data Types | App Functionality | Yes | Retained IP addresses used for network/security operations; no claim that they are advertising or persistent device IDs. |
-
-These provider classifications are **inferences from Wikimedia's published
-policy**, not a provider-specific retention audit. Its automatic-request section
-explicitly covers third-party tools loading Wikimedia content and describes
-performance, security, and usage purposes; its IP-address section describes
-geographical inference and regional aggregates. Select Linked because there is
-no evidence that identifiers are removed *before* collection, as Apple requires
-for an unlinked answer. Later aggregation alone does not establish unlinking.
-Do not select advertising, marketing, personalization, or tracking purposes.
+| 5 | 2026-10-09 | Owner, on a physical iPhone 15 running iOS 27 | No network requests observed during learning |
 
 Support email is not declared (owner decision, 2026-10-09). Apple's label
 covers data the app transmits off the device. BeakSpeak has no in-app support
@@ -160,11 +169,11 @@ individual diagnostic reports retained by the developer must be reassessed if
 repurposed into a shipping data-collection workflow.
 
 At submission, the owner should confirm that support is used only as described,
-that the shipping archive retains these dependencies/network paths, and that no
-additional telemetry or retained individual diagnostics have been introduced.
-Publish these prepared answers, or refine the provider categories with
-provider-specific evidence; do not replace them with “Data Not Collected” merely
-because SDK manifests are empty. No portal declaration has been made here.
+that the shipping archive contains only the dependencies audited above, that the
+native network check is recorded for that build, and that no additional
+telemetry or retained individual diagnostics have been introduced. Update the
+public Privacy page, these App Review notes, and the portal answers together so
+they all describe the submitted build. No portal declaration has been made here.
 
 ## Export compliance
 

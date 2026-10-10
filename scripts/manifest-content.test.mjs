@@ -53,7 +53,7 @@ test('clips and photos carry the attribution the Credits page renders', () => {
     assert.match(clip.license, /^https:\/\/creativecommons\.org\//, clip.xc_id)
   }
   for (const species of manifest.species) {
-    assert.match(species.photo.url, /^https:\/\//, species.id)
+    assert.match(species.photo.url, new RegExp(`^/content/bird-photos/${species.id}-960\\.jpg$`), species.id)
     assert.match(species.photo.wikipedia_page, /^https:\/\//, species.id)
     assert.notEqual(species.photo.license, '', `${species.id} photo has no licence`)
   }
@@ -88,10 +88,11 @@ test('production photos have precise credits and bounded responsive thumbnails',
     const candidates = photo.srcset.split(', ')
     assert.equal(candidates.length, 2)
     for (const candidate of candidates) {
-      assert.match(candidate, /^https:\/\/thumb\.wikimedia\.org\/.*\/thumb\/.* (250|960)w$/)
-      const [, widthInUrl, descriptor] = candidate.match(/\/(\d+)px-[^ ]+ (\d+)w$/)
-      assert.equal(widthInUrl, descriptor, `${species.id} has an inaccurate width descriptor`)
-
+      // Bundled copies of Wikimedia's thumbnails; bundle_photos.py --check verifies the bytes.
+      const [, id, widthInName, descriptor] = candidate.match(/^\/content\/bird-photos\/([a-z]+)-(\d+)\.jpg (\d+)w$/) ?? []
+      assert.equal(id, species.id, `${species.id} has a non-bundled srcset candidate: ${candidate}`)
+      assert.equal(widthInName, descriptor, `${species.id} has an inaccurate width descriptor`)
+      assert.match(descriptor, /^(250|960)$/)
     }
   }
 })

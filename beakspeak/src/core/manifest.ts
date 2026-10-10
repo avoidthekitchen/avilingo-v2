@@ -12,15 +12,27 @@ export async function loadManifest(): Promise<Manifest> {
   if (!response.ok) {
     throw new Error(`Failed to load manifest: ${response.status}`)
   }
-  const manifest: Manifest = await response.json()
+  return resolveManifestAssets(await response.json())
+}
 
-  // Prefix content URLs so they resolve correctly when served from a subpath
+export function resolveSrcset(srcset: string, baseUrl = import.meta.env.BASE_URL): string {
+  return srcset
+    .split(',')
+    .map(candidate => {
+      const [url, ...descriptors] = candidate.trim().split(/\s+/)
+      return [resolveAssetUrl(url, baseUrl), ...descriptors].join(' ')
+    })
+    .join(', ')
+}
+
+// Prefix content URLs so they resolve correctly when served from a subpath
+export function resolveManifestAssets(manifest: Manifest, baseUrl = import.meta.env.BASE_URL): Manifest {
   for (const species of manifest.species) {
-    species.photo.url = resolveAssetUrl(species.photo.url)
-    for (const clip of species.audio_clips.songs) clip.audio_url = resolveAssetUrl(clip.audio_url)
-    for (const clip of species.audio_clips.calls) clip.audio_url = resolveAssetUrl(clip.audio_url)
+    species.photo.url = resolveAssetUrl(species.photo.url, baseUrl)
+    if (species.photo.srcset) species.photo.srcset = resolveSrcset(species.photo.srcset, baseUrl)
+    for (const clip of species.audio_clips.songs) clip.audio_url = resolveAssetUrl(clip.audio_url, baseUrl)
+    for (const clip of species.audio_clips.calls) clip.audio_url = resolveAssetUrl(clip.audio_url, baseUrl)
   }
-
   return manifest
 }
 
