@@ -3,7 +3,8 @@
 
 Reads tier1_seattle_birds_populated.json, downloads all audio clips and photos,
 normalizes audio with ffmpeg (loudnorm, trim ≤20s, OGG Opus 96kbps),
-resizes photos to 800px wide, and generates a manifest.json with local paths.
+resizes photos to 800px wide into .cache/legacy-photos/ (research copies, never
+shipped), and generates a manifest.json with local audio paths.
 
 Prerequisites: Python 3, requests, Pillow, ffmpeg installed locally.
 Usage: uv run python3 download_media.py
@@ -27,7 +28,9 @@ from populate_content import build_export_audio_clips, load_pool_file, normalize
 INPUT_FILE = "tier1_seattle_birds_populated.json"
 OUTPUT_DIR = Path("beakspeak/public/content")
 AUDIO_DIR = OUTPUT_DIR / "audio"
-PHOTO_DIR = OUTPUT_DIR / "photos"
+# Research copies only. Kept outside public/ so Vite never ships them; the app
+# serves the bundled photos in public/content/bird-photos/ instead.
+PHOTO_DIR = Path(".cache/legacy-photos")
 MANIFEST_OUT = OUTPUT_DIR / "manifest.json"
 
 PHOTO_MAX_WIDTH = 800
@@ -315,12 +318,11 @@ def process_species(species: dict, manifest_species: dict, export_mode: str) -> 
 
     # Process photo
     photo_url = species["photo"]["url"]
+    # The research copy is not web-served, so the manifest keeps its photo URL.
     local_photo = PHOTO_DIR / f"{sid}.jpg"
-    local_photo_url = f"/content/photos/{sid}.jpg"
 
     if local_photo.exists():
         print(f"  Skip (exists): photo")
-        manifest_species["photo"]["url"] = local_photo_url
     else:
         # Resolve via Wikimedia API to get a proper downloadable URL
         resolved_url = get_wikimedia_download_url(photo_url)
@@ -332,9 +334,7 @@ def process_species(species: dict, manifest_species: dict, export_mode: str) -> 
                 tmp_path = Path(tmp.name)
 
             if download_file(resolved_url, tmp_path, "photo"):
-                if resize_photo(tmp_path, local_photo):
-                    manifest_species["photo"]["url"] = local_photo_url
-                else:
+                if not resize_photo(tmp_path, local_photo):
                     print(f"  WARNING: photo resize failed for {sid}")
             tmp_path.unlink(missing_ok=True)
 

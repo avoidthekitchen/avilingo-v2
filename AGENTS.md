@@ -46,7 +46,7 @@ content/audio-selections.toml      ← Production audio source of truth (XC IDs 
 content/audio-metadata.lock.json   ← Resolved XC metadata, trim windows, and output hashes
 content/manifest-base.json         ← Non-audio content used to generate the runtime manifest
 manual_audio.py      ← Production manual-audio sync, encoder, manifest builder, and offline checker
-download_media.py    ← Content pipeline: downloads audio + photos, builds manifest
+download_media.py    ← Legacy research pipeline: downloads audio + photos (photos to .cache/legacy-photos/), builds manifest
 export_app_audio.py  ← App-audio export: regenerates manual trim outputs + manifest from existing local app audio
 populate_content.py  ← Content pipeline: queries Xeno-canto + Wikipedia, ranks mixed candidates
 tier1_seattle_birds_populated.json  ← Legacy candidate pool (not used by production audio builds)
@@ -185,6 +185,7 @@ Production audio is a manual, declarative content build and is not part of the a
 - `manual_audio.py` resolves new XC metadata, validates species and licenses, caches untouched sources, chooses a sustained-energy window of at most 10 seconds when no trim is supplied, performs one trim/loudness-normalization/Opus encode, and generates the runtime manifest.
 - `content/audio-metadata.lock.json` preserves metadata, resolved automatic windows, source/output hashes, and algorithm versions. Ordinary builds use `manual_audio.py --check` and never contact Xeno-canto.
 - Generated audio lives under `beakspeak/public/content/audio/manual/` and source downloads under `.cache/manual-audio/`; both are gitignored and reconstructed by `uv run python3 manual_audio.py`.
+- Legacy research photos from `download_media.py` live in `.cache/legacy-photos/` (gitignored, served by `admin/server.py` at `/photos/`). Keep them out of `beakspeak/public/`, which Vite copies into every build.
 - `XC_API_KEY` is required only when resolving a new XC ID or using `--refresh-metadata`.
 - `populate_content.py`, `download_media.py`, `export_app_audio.py`, and `admin/` are the legacy candidate-research workflow. They remain callable but must not generate or overwrite production audio or `manifest.json` during normal build/deploy work.
 - Managed with `uv` (see `pyproject.toml`): https://docs.astral.sh/uv

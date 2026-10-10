@@ -20,7 +20,7 @@ from populate_content import load_pool_file, normalize_segment_payload, save_poo
 
 POOL_FILE = REPO_ROOT / "tier1_seattle_birds_populated.json"
 AUDIO_DIR = REPO_ROOT / "beakspeak/public/content/audio"
-PHOTO_DIR = REPO_ROOT / "beakspeak/public/content/photos"
+PHOTO_DIR = REPO_ROOT / ".cache/legacy-photos"
 ADMIN_DIR = Path(__file__).parent
 PORT = 8765
 VALID_SELECTED_ROLES = {"none", "song", "call"}

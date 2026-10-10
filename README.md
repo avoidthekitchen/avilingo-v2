@@ -114,7 +114,7 @@ Sync fetches metadata for new IDs, caches untouched sources under `.cache/manual
 
 `content/audio-metadata.lock.json` and the generated manifest are checked in. The normal site build never contacts Xeno-canto; it fails with sync guidance when selections, metadata, the manifest, or local audio assets are stale or missing.
 
-The previous candidate-ranking, BirdNET, and local Audio Admin workflow remains available as a legacy research tool, but it no longer supplies production audio or the runtime manifest.
+The previous candidate-ranking, BirdNET, and local Audio Admin workflow remains available as a legacy research tool, but it no longer supplies production audio or the runtime manifest. Its photo downloads (`download_media.py`) go to the gitignored `.cache/legacy-photos/`, outside `beakspeak/public/`, so builds never include them.
 
 ## Testing
 
@@ -260,7 +260,6 @@ beakspeak/
   public/content/
     manifest.json          # Species data with local audio/photo paths
     audio/manual/          # Generated manual-selection OGG clips (gitignored)
-    photos/                # JPEG photos (gitignored)
   src/
     core/                  # Pure TS — no React/DOM deps (portable to iOS later)
       types.ts             # All shared interfaces
