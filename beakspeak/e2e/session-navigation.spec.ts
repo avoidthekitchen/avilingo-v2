@@ -2,6 +2,26 @@ import { test, expect } from './fixtures'
 
 const lessonChoices = /American Crow|Steller's Jay|Northern Flicker/
 
+test('cancelling without a focused opener leaves the bird heading untouched', async ({ app, page }) => {
+  await app.gotoHome()
+  await page.getByRole('button', { name: /Lesson 1:/ }).click()
+  const heading = page.getByRole('heading', { name: 'American Crow' })
+  await expect(heading).toBeVisible()
+  // Reproduce a touch opener that dispatches a click without receiving DOM focus.
+  await page.getByRole('button', { name: 'Progress', exact: true }).evaluate(button => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
+    button.click()
+  })
+  const dialog = page.getByRole('alertdialog', { name: 'Leave this lesson?' })
+  await expect(dialog).toBeVisible()
+  await dialog.getByRole('button', { name: 'Keep learning' }).click()
+  await expect(dialog).toBeHidden()
+  await expect(heading).not.toBeFocused()
+  await expect(heading).not.toHaveAttribute('tabindex', '-1')
+  await page.getByRole('button', { name: /Next/i }).click()
+  await expect(page.getByRole('heading', { name: "Steller's Jay" })).toBeVisible()
+})
+
 test('tab taps during a lesson ask before abandoning it', async ({ app, page }) => {
   await app.gotoHome()
   await page.getByRole('button', { name: /Lesson 1:/ }).click()

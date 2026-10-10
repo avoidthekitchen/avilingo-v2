@@ -30,13 +30,14 @@ function Dialog({ title, message, confirmLabel, cancelLabel, busy }: DialogProps
     return () => {
       // Leaving unmounts the control that opened the dialog; only return focus if it survived.
       queueMicrotask(() => {
-        if (returnFocus?.isConnected) returnFocus.focus()
-        else if (document.activeElement === document.body) {
-          // Completion can remove Back/Quit while the dialog is open.
+        if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true })
+        else if (!useAppStore.getState().sessionGuard && document.activeElement === document.body) {
+          // Only an ended session needs a new focus target. Cancelling should
+          // leave the current lesson's headings and reading position alone.
           const heading = document.querySelector<HTMLElement>('main h1, main h2')
           if (heading) {
             heading.tabIndex = -1
-            heading.focus()
+            heading.focus({ preventScroll: true })
           }
         }
       })
