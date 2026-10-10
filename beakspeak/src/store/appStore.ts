@@ -151,7 +151,13 @@ export const useAppStore = create<AppState>((set, get) => ({
     const { sessionGuard, pendingSessionExit } = get()
     if (!pendingSessionExit || !sessionGuard || sessionGuard.busy) return
     set({ sessionGuard: { ...sessionGuard, busy: true } })
-    const exited = await sessionGuard.exit()
+    let exited: void | boolean
+    try {
+      exited = await sessionGuard.exit()
+    } catch {
+      // Unexpected callback failures must unlock the session just like failed saves.
+      exited = false
+    }
     if (exited === false) {
       const currentGuard = get().sessionGuard
       set({ pendingSessionExit: null, sessionGuard: currentGuard ? { ...currentGuard, busy: false } : null })

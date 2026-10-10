@@ -163,6 +163,29 @@ describe('leaving a session', () => {
     expect(useAppStore.getState().pendingSessionExit).toEqual({ tab: null })
   })
 
+  it.each(['throw', 'reject'] as const)('unlocks navigation when the exit callback fails with %s', async failure => {
+    const exit = vi.fn<() => void | Promise<boolean>>()
+      .mockImplementationOnce(() => {
+        if (failure === 'throw') throw new Error('Unexpected exit failure')
+        return Promise.reject(new Error('Unexpected exit failure'))
+      })
+      .mockResolvedValue(true)
+    useAppStore.getState().setSessionGuard({ prompt, busy: false, exit })
+    useAppStore.getState().navigateTo('progress')
+    await expect(useAppStore.getState().confirmSessionExit()).resolves.toBeUndefined()
+    expect(useAppStore.getState()).toMatchObject({
+      activeTab: 'learn', pendingSessionExit: null, sessionGuard: { busy: false, exit },
+    })
+
+    useAppStore.getState().navigateTo('credits')
+    useAppStore.getState().cancelSessionExit()
+    expect(useAppStore.getState().pendingSessionExit).toBeNull()
+    useAppStore.getState().navigateTo('progress')
+    await useAppStore.getState().confirmSessionExit()
+    expect(exit).toHaveBeenCalledTimes(2)
+    expect(useAppStore.getState()).toMatchObject({ activeTab: 'progress', sessionGuard: null, pendingSessionExit: null })
+  })
+
   it('closes an open confirmation when the session ends on its own', () => {
     useAppStore.getState().setSessionGuard({ prompt, busy: false, exit: vi.fn() })
     useAppStore.getState().navigateTo('progress')

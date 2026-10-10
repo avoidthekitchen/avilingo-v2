@@ -119,3 +119,40 @@ test('leaving a review from the tab bar keeps saved answers and opens the tapped
   await page.getByRole('button', { name: 'Quiz', exact: true }).click()
   await expect(page.getByRole('button', { name: 'Start Review', exact: true })).toBeVisible()
 })
+
+test('a fast automatic save failure keeps keyboard focus inside the confirmation', async ({ app, page }) => {
+  await page.addInitScript(() => { Math.random = () => 0.5 })
+  await app.completeLessonOne()
+  await page.getByRole('button', { name: 'Quiz', exact: true }).click()
+  await page.getByRole('button', { name: 'Start Review', exact: true }).click()
+  await expect(page.getByText('1 / 3')).toBeVisible()
+  await page.clock.install()
+  await page.clock.pauseAt(new Date())
+
+  // Fail just the next write, so dismissing the dialog can still retry the answer.
+  await page.evaluate(() => {
+    const put = IDBObjectStore.prototype.put
+    IDBObjectStore.prototype.put = () => {
+      IDBObjectStore.prototype.put = put
+      throw new DOMException('Disk full', 'QuotaExceededError')
+    }
+  })
+  await page.getByRole('button', { name: lessonChoices }).first().click()
+  await page.getByRole('button', { name: 'Progress', exact: true }).click()
+  const dialog = page.getByRole('alertdialog', { name: 'End this review?' })
+  await expect(dialog).toBeVisible()
+  await page.clock.runFor(1600)
+  // This checks the background error without making it keyboard-interactive.
+  await expect(page.getByRole('alert')).toContainText('could not be fully saved')
+  const cancel = dialog.getByRole('button', { name: 'Keep going' })
+  const confirm = dialog.getByRole('button', { name: 'End review' })
+  await expect(cancel).toBeFocused()
+  await page.keyboard.press('Shift+Tab')
+  await expect(confirm).toBeFocused()
+  await page.keyboard.press('Tab')
+  await expect(cancel).toBeFocused()
+  await page.keyboard.press('Escape')
+  await expect(dialog).toBeHidden()
+  await page.getByRole('button', { name: 'Retry saving' }).click()
+  await expect(page.getByText('2 / 3')).toBeVisible()
+})

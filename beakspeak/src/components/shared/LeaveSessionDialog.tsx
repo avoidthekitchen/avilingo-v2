@@ -49,6 +49,19 @@ function Dialog({ title, message, confirmLabel, cancelLabel, busy }: DialogProps
   }, [busy])
 
   useEffect(() => {
+    // Background error screens may autofocus even when a fast save batches away
+    // the busy transition. Contain those focus moves for the dialog's lifetime.
+    const containFocus = (event: FocusEvent) => {
+      const dialog = dialogRef.current
+      if (!dialog || !(event.target instanceof Node) || dialog.contains(event.target)) return
+      if (busy) dialog.focus()
+      else cancelButtonRef.current?.focus()
+    }
+    document.addEventListener('focusin', containFocus)
+    return () => document.removeEventListener('focusin', containFocus)
+  }, [busy])
+
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') cancelSessionExit()
     }

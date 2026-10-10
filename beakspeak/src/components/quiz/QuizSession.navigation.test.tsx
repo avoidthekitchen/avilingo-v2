@@ -42,6 +42,34 @@ function Review() {
   </>
 }
 
+it('contains focus when an automatic save fails before busy state renders', async () => {
+  const save = vi.fn<() => Promise<void>>().mockRejectedValue(new Error('disk full'))
+  useAppStore.setState({ storage: { ...initial.storage, saveProgress: save } })
+  render(<Review />)
+  fireEvent.click(screen.getByRole('button', { name: 'Mark correct answer' }))
+  act(() => useAppStore.getState().navigateTo('progress'))
+
+  await act(async () => {
+    answer.current()
+    await Promise.resolve()
+    await Promise.resolve()
+  })
+  expect(screen.getByRole('alert')).toHaveTextContent('could not be fully saved')
+  expect(screen.getByRole('alertdialog')).toBeInTheDocument()
+  expect(screen.getByRole('button', { name: 'Keep going' })).toHaveFocus()
+
+  // Background controls must not be able to steal focus from the open dialog.
+  screen.getByRole('button', { name: 'Quit session' }).focus()
+  expect(screen.getByRole('button', { name: 'Keep going' })).toHaveFocus()
+  fireEvent.click(screen.getByRole('button', { name: 'Keep going' }))
+  expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument()
+  expect(useAppStore.getState().activeTab).toBe('learn')
+  save.mockImplementation(async () => {})
+  await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Retry saving' })))
+  expect(save).toHaveBeenCalledTimes(2)
+  expect(useAppStore.getState().allProgress.get(manifestData.species[0].id)?.reps).toBe(1)
+})
+
 it.each([true, false])('honors a confirmed exit racing with auto-save (save succeeds: %s)', async succeeds => {
   let finish!: () => void
   let fail!: (error: Error) => void
