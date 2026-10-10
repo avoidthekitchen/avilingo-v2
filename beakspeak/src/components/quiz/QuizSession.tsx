@@ -43,42 +43,48 @@ export default function QuizSession({ mode, onComplete }: Props) {
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState(false)
   const pendingAnswer = useRef<PendingAnswer | null>(null)
-  const savingRef = useRef(false)
+  const saveInFlight = useRef<Promise<boolean> | null>(null)
+  const exitingRef = useRef(false)
 
   const [items] = useState(() => {
     if (!manifest) return []
     return buildQuizSession(allProgress, manifest, lastPlayedClipId)
   })
-  const savePendingAnswer = useCallback(async (advance = true) => {
+  const savePendingAnswer = useCallback((advance = true): Promise<boolean> => {
+    if (saveInFlight.current) return saveInFlight.current
     const pending = pendingAnswer.current
-    if (savingRef.current) return false
-    if (!pending) return true
-    savingRef.current = true
+    if (!pending) return Promise.resolve(true)
     setSaving(true)
     setSaveError(false)
-    try {
-      if (pending.progress && !pending.progressSaved) {
-        await updateProgress(pending.result.species.id, pending.progress)
-        pending.progressSaved = true
+    const save = (async () => {
+      try {
+        if (pending.progress && !pending.progressSaved) {
+          await updateProgress(pending.result.species.id, pending.progress)
+          pending.progressSaved = true
+        }
+        if (pending.logPending) {
+          await logConfusion(pending.result.species.id, pending.chosenId)
+          pending.logPending = false
+        }
+        setAnswers(prev => [...prev, pending.result])
+        pendingAnswer.current = null
+        // A confirmed exit can join an auto-advance save already in progress.
+        // Save its answer, but don't mount or play another question on the way out.
+        if (advance && !exitingRef.current) {
+          if (pending.index + 1 >= items.length) setShowResults(true)
+          else setCurrentIndex(pending.index + 1)
+        }
+        return true
+      } catch {
+        setSaveError(true)
+        return false
       }
-      if (pending.logPending) {
-        await logConfusion(pending.result.species.id, pending.chosenId)
-        pending.logPending = false
-      }
-      setAnswers(prev => [...prev, pending.result])
-      pendingAnswer.current = null
-      if (advance) {
-        if (pending.index + 1 >= items.length) setShowResults(true)
-        else setCurrentIndex(pending.index + 1)
-      }
-      return true
-    } catch {
-      setSaveError(true)
-      return false
-    } finally {
-      savingRef.current = false
+    })().finally(() => {
+      saveInFlight.current = null
       setSaving(false)
-    }
+    })
+    saveInFlight.current = save
+    return save
   }, [items.length, updateProgress, logConfusion])
 
   // Capture a marked answer before its feedback timer/Next submits it, so
@@ -124,7 +130,11 @@ export default function QuizSession({ mode, onComplete }: Props) {
           cancelLabel: 'Keep going',
         },
     onExit: async () => {
-      if (mode === 'review' && !await savePendingAnswer(false)) return false
+      exitingRef.current = true
+      if (mode === 'review' && !await savePendingAnswer(false)) {
+        exitingRef.current = false
+        return false
+      }
       onComplete()
       return true
     },

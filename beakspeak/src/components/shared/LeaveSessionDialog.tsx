@@ -23,7 +23,9 @@ function Dialog({ title, message, confirmLabel, cancelLabel, busy }: DialogProps
   const cancelButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
-    const returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const returnFocus = document.activeElement instanceof HTMLElement && document.activeElement !== document.body
+      ? document.activeElement
+      : null
     cancelButtonRef.current?.focus()
     return () => {
       // Leaving unmounts the control that opened the dialog; only return focus if it survived.
@@ -43,6 +45,7 @@ function Dialog({ title, message, confirmLabel, cancelLabel, busy }: DialogProps
 
   useEffect(() => {
     if (busy) dialogRef.current?.focus()
+    else cancelButtonRef.current?.focus()
   }, [busy])
 
   useEffect(() => {
@@ -77,7 +80,11 @@ function Dialog({ title, message, confirmLabel, cancelLabel, busy }: DialogProps
           }
           const first = focusable[0]
           const last = focusable[focusable.length - 1]
-          if (e.shiftKey && document.activeElement === first) {
+          if (document.activeElement === dialogRef.current) {
+            e.preventDefault()
+            if (e.shiftKey) last.focus()
+            else first.focus()
+          } else if (e.shiftKey && document.activeElement === first) {
             e.preventDefault()
             last.focus()
           } else if (!e.shiftKey && document.activeElement === last) {

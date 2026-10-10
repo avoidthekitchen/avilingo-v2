@@ -50,8 +50,8 @@ export default function ThreeChoiceQuiz({ item, onAnswer, onAnswerMarked }: Prop
     [],
   )
 
-  // Stop audio and cancel a pending auto-advance when the question unmounts
-  // (quit/complete/navigate), so a quit inside the 1.5 s window records nothing.
+  // Stop audio and cancel auto-advance when the question unmounts.
+  // QuizSession saves a marked answer separately when confirming exit.
   const autoAdvanceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   useEffect(() => {
     return () => {

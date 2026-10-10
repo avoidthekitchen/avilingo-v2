@@ -22,6 +22,12 @@ test('tab taps during a lesson ask before abandoning it', async ({ app, page }) 
   await page.keyboard.press('Escape')
   await expect(page.getByRole('heading', { name: "Steller's Jay" })).toBeVisible()
 
+  await page.getByRole('button', { name: 'Progress', exact: true }).click()
+  await expect(dialog).toBeVisible()
+  await page.getByTestId('leave-session-backdrop').click({ position: { x: 5, y: 5 } })
+  await expect(dialog).toBeHidden()
+  await expect(page.getByRole('heading', { name: "Steller's Jay" })).toBeVisible()
+
   await page.getByRole('button', { name: 'Learn', exact: true }).click()
   await dialog.getByRole('button', { name: 'Leave lesson' }).click()
   await expect(page.getByRole('heading', { name: 'Learn Birds' })).toBeVisible()
