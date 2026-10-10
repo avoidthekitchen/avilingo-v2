@@ -81,7 +81,9 @@ your device's backup settings. BeakSpeak provides no account or cloud progress
 sync. Resetting progress removes the saved learning records and confusion history.
 
 Bird photos load from Wikimedia servers. Photo requests disclose ordinary
-network request information to that provider. Opening a source or credit link
+network request information to that provider. (This describes builds 1–4.
+Build 5 and later bundle their photos and make no such requests; the public
+Privacy page describes current builds.) Opening a source or credit link
 launches the linked website in your browser, where that website's policies apply.
 
 The beta uses Apple's TestFlight distribution and feedback services. Apple
@@ -363,3 +365,29 @@ doesn't change review times.
 Then complete a short lesson and quiz, play a song and call, lock the phone
 during audio, return, and confirm another clip plays. Force-quit and reopen to
 verify progress remains. Submit issues through TestFlight screenshot feedback.
+
+## Bundled-photo build — pending
+
+The beta after build 4 is version `2.0.0`, build `5`, archived from `main` at or
+after the merge of #70. #70 bundles the 15 bird photos with the app. Builds 1–4
+loaded them from Wikimedia; build 5 makes no network requests during learning.
+Builds 1–4 must not be submitted for App Store review.
+Before App Store submission, record the native network check for build 5 in
+[the App Store collateral](app-store-collateral.md#prepared-portal-responses).
+
+Record the archive audit and the Organizer upload result here once the owner
+has archived and uploaded build 5.
+
+The bundled photos add about 5 MB to build 5 compared with build 4. On
+2026-10-09 the owner ran the native network check on build 5 on a physical
+iPhone 15 (iOS 27) and observed no network requests during learning.
+
+### Build 5 What to Test
+
+Update from build 4 through TestFlight without deleting BeakSpeak, and confirm
+existing introduced birds and saved progress remain.
+
+Turn on airplane mode, then open a lesson, a quiz, Progress, and About. Every
+bird photo should appear. A bird illustration in place of a photo is a bug;
+report it with the bird's name. Play a song and call to confirm audio also works
+offline.

@@ -21,9 +21,13 @@ again at submission.
 
 All four JPEGs retain the native resolution and have no alpha channel. Captures
 include only the app screen, without desktop/browser chrome, added marketing
-text, cropping, resized UI, or invented state. Actual Wikimedia photos loaded
-over the network; no test fixture or substitute image was used. Recording/photo
-credits remain in About and [content licenses](../../content-licenses.md).
+text, cropping, resized UI, or invented state. The photos are the real Wikimedia
+Commons photos. These captures predate bundling
+([#70](https://github.com/avoidthekitchen/avilingo-v2/issues/70)), so the photos
+loaded over the network then. Builds since #70 show the same images from the app
+bundle, so the captures still match. No test fixture or substitute image was
+used. Recording/photo credits remain in About and
+[content licenses](../../content-licenses.md).
 
 XcodeBuildMCP performed the Release build, install, and launch. Device Hub was
 navigated through the visible controls with computer use. Its screenshot helper

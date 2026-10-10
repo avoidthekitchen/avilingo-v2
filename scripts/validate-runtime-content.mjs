@@ -6,10 +6,21 @@ const manifest = JSON.parse(
   await readFile(join(contentBuildDir, 'manifest.json'), 'utf8'),
 )
 
-const expectedFiles = new Set()
+const PHOTO_PREFIX = '/content/bird-photos/'
+const AUDIO_PREFIX = '/content/audio/manual/'
+
+const expectedAudio = new Set()
+const expectedPhotos = new Set()
 for (const species of manifest.species) {
-  if (species.photo.url.startsWith('/content/')) {
-    throw new Error(`Manifest references a local photo that packaging removes: ${species.photo.url}`)
+  const photoUrls = [
+    species.photo.url,
+    ...(species.photo.srcset ?? '').split(',').map(candidate => candidate.trim().split(/\s+/)[0]).filter(Boolean),
+  ]
+  for (const url of photoUrls) {
+    if (!url.startsWith(PHOTO_PREFIX)) {
+      throw new Error(`Manifest references a photo that is not bundled: ${url}`)
+    }
+    expectedPhotos.add(url.slice('/content/'.length))
   }
 
   const clips = [
@@ -18,16 +29,23 @@ for (const species of manifest.species) {
   ]
 
   for (const clip of clips) {
-    if (!clip.audio_url.startsWith('/content/audio/manual/')) {
+    if (!clip.audio_url.startsWith(AUDIO_PREFIX)) {
       throw new Error(`Manifest references non-production audio: ${clip.audio_url}`)
     }
-    expectedFiles.add(clip.audio_url.slice('/content/'.length))
+    expectedAudio.add(clip.audio_url.slice('/content/'.length))
   }
 }
 
 async function collectFiles(directory) {
   const files = []
-  for (const entry of await readdir(directory, { withFileTypes: true })) {
+  let entries
+  try {
+    entries = await readdir(directory, { withFileTypes: true })
+  } catch (error) {
+    if (error.code === 'ENOENT') return files
+    throw error
+  }
+  for (const entry of entries) {
     const entryPath = join(directory, entry.name)
     if (entry.isDirectory()) {
       files.push(...await collectFiles(entryPath))
@@ -38,16 +56,21 @@ async function collectFiles(directory) {
   return files
 }
 
-const actualFiles = new Set(await collectFiles(join(contentBuildDir, 'audio', 'manual')))
-const missingFiles = [...expectedFiles].filter(file => !actualFiles.has(file))
-const unexpectedFiles = [...actualFiles].filter(file => !expectedFiles.has(file))
-
-if (missingFiles.length > 0 || unexpectedFiles.length > 0) {
+function compare(description, expectedFiles, actualFiles) {
   const details = [
-    ...missingFiles.map(file => `missing: ${file}`),
-    ...unexpectedFiles.map(file => `unexpected: ${file}`),
+    ...[...expectedFiles].filter(file => !actualFiles.has(file)).map(file => `missing: ${file}`),
+    ...[...actualFiles].filter(file => !expectedFiles.has(file)).map(file => `unexpected: ${file}`),
   ]
-  throw new Error(`Runtime audio does not match the manifest:\n${details.join('\n')}`)
+  if (details.length > 0) {
+    throw new Error(`${description} the manifest:\n${details.join('\n')}`)
+  }
 }
 
-console.log(`Validated ${actualFiles.size} manifest-referenced production audio clips.`)
+const actualAudio = new Set(await collectFiles(join(contentBuildDir, 'audio', 'manual')))
+const actualPhotos = new Set(await collectFiles(join(contentBuildDir, 'bird-photos')))
+compare('Runtime audio does not match', expectedAudio, actualAudio)
+compare('Runtime photos do not match', expectedPhotos, actualPhotos)
+
+console.log(
+  `Validated ${actualAudio.size} manifest-referenced production audio clips and ${actualPhotos.size} bundled photos.`,
+)
