@@ -10,8 +10,6 @@ fi
 
 find "$CONTENT_BUILD_DIR/audio" -mindepth 1 -maxdepth 1 ! -name manual -exec rm -rf -- {} +
 find "$CONTENT_BUILD_DIR" -mindepth 1 -maxdepth 1 -type d -name 'audio-archive-*' -exec rm -rf -- {} +
-# Legacy research photos; production photos live in bird-photos/ and are validated below.
-find "$CONTENT_BUILD_DIR" -mindepth 1 -maxdepth 1 -type d -name photos -exec rm -rf -- {} +
 find "$CONTENT_BUILD_DIR" -name '.DS_Store' -delete
 
 node "$(dirname "$0")/validate-runtime-content.mjs" "$CONTENT_BUILD_DIR"

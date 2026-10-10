@@ -5,7 +5,6 @@ dist/
 # Media assets (downloaded by download_media.py)
 public/content/audio/
 public/content/audio-archive-*/
-public/content/photos/
 
 # Editor
 .vscode/

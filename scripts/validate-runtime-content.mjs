@@ -66,6 +66,19 @@ function compare(description, expectedFiles, actualFiles) {
   }
 }
 
+// Anything outside the manifest, production audio and bundled photos would ship
+// unchecked, e.g. a stale public/content/photos/ from the legacy research pipeline.
+const strayFiles = (await collectFiles(contentBuildDir)).filter(file =>
+  file !== 'manifest.json' && !file.startsWith('audio/manual/') && !file.startsWith('bird-photos/'))
+if (strayFiles.length > 0) {
+  const details = strayFiles.map(file => `unexpected: ${file}`)
+  if (strayFiles.some(file => file.startsWith('photos/'))) {
+    details.push('Legacy research photos belong in .cache/legacy-photos/: run '
+      + '`mkdir -p .cache && mv beakspeak/public/content/photos .cache/legacy-photos` from the repo root.')
+  }
+  throw new Error(`Runtime content contains files outside the production set:\n${details.join('\n')}`)
+}
+
 const actualAudio = new Set(await collectFiles(join(contentBuildDir, 'audio', 'manual')))
 const actualPhotos = new Set(await collectFiles(join(contentBuildDir, 'bird-photos')))
 compare('Runtime audio does not match', expectedAudio, actualAudio)

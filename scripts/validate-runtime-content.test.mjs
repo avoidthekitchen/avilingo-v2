@@ -66,7 +66,7 @@ test('rejects a remote responsive candidate even when the main url is bundled', 
   assert.match(result.stderr, /Manifest references a photo that is not bundled: https:\/\/thumb\.wikimedia\.org\/a\/250px-a\.jpg/)
 })
 
-test('rejects legacy research photo paths that packaging removes', (t) => {
+test('rejects manifest references to legacy research photo paths', (t) => {
   const result = validate(makeContent(t, { photo: { url: '/content/photos/amcr.jpg' } }))
 
   assert.notEqual(result.status, 0)
@@ -82,4 +82,16 @@ test('reports missing and unreferenced bundled photos', (t) => {
   assert.match(result.stderr, /Runtime photos do not match the manifest/)
   assert.match(result.stderr, /missing: bird-photos\/amcr-250\.jpg/)
   assert.match(result.stderr, /unexpected: bird-photos\/stja-960\.jpg/)
+})
+
+test('rejects stray content outside the production set, with legacy-photo guidance', (t) => {
+  const result = validate(makeContent(t, {
+    files: ['bird-photos/amcr-250.jpg', 'bird-photos/amcr-960.jpg', 'photos/amcr.jpg', 'notes.txt'],
+  }))
+
+  assert.notEqual(result.status, 0)
+  assert.match(result.stderr, /Runtime content contains files outside the production set/)
+  assert.match(result.stderr, /unexpected: photos\/amcr\.jpg/)
+  assert.match(result.stderr, /unexpected: notes\.txt/)
+  assert.match(result.stderr, /\.cache\/legacy-photos/)
 })
