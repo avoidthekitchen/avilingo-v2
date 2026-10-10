@@ -3,7 +3,7 @@
   "algorithm_version": "sustained-energy-v1",
   "encoder_version": "opus-96k-atrim-loudnorm-v2",
   "selection_digest": "961d9f81b6a2b695d7a0fbe5d1f0cc0798cdbec5cdb0a32375a32f1d078e2a32",
-  "base_manifest_digest": "c71de6b847d2a2317c866016e82a9b507961b3a5a68e5bbfdef978f15f405df6",
+  "base_manifest_digest": "7fb7cf3c640c1c9db570b86200c2bc0ae788844af66f2cc33df9a0cd78b8381c",
   "recordings": {
     "171727": {
       "xc_id": "171727",

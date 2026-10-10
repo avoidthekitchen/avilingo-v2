@@ -1,0 +1,275 @@
+{
+  "schema_version": 1,
+  "photos": {
+    "amcr-250.jpg": {
+      "species_id": "amcr",
+      "width": 250,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Corvus-brachyrhynchos-001.jpg/250px-Corvus-brachyrhynchos-001.jpg",
+      "pixel_width": 250,
+      "pixel_height": 250,
+      "bytes": 18463,
+      "sha256": "337cd314f3ec4a79b88992130c91b168d76a1f122f3c27e0dec3e045d1cc0e69"
+    },
+    "amcr-960.jpg": {
+      "species_id": "amcr",
+      "width": 960,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Corvus-brachyrhynchos-001.jpg/960px-Corvus-brachyrhynchos-001.jpg",
+      "pixel_width": 960,
+      "pixel_height": 960,
+      "bytes": 178588,
+      "sha256": "7fa602a0f73f8f2723a08a981974b4e51d78f2824c200ccaf3cd9fd6f0dc62c3"
+    },
+    "amro-250.jpg": {
+      "species_id": "amro",
+      "width": 250,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/American_robin_%2871307%29.jpg/250px-American_robin_%2871307%29.jpg",
+      "pixel_width": 250,
+      "pixel_height": 188,
+      "bytes": 16764,
+      "sha256": "918c67a0d1c8539368be707381b74b3844f14fe46bdb3a042531ee1ec5c85b28"
+    },
+    "amro-960.jpg": {
+      "species_id": "amro",
+      "width": 960,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/American_robin_%2871307%29.jpg/960px-American_robin_%2871307%29.jpg",
+      "pixel_width": 960,
+      "pixel_height": 720,
+      "bytes": 144828,
+      "sha256": "654f20b2c71aca614df53163d399e39c391f943da540bc3d35bc07de4be3491b"
+    },
+    "anhu-250.jpg": {
+      "species_id": "anhu",
+      "width": 250,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Anna%27s_hummingbird.jpg/250px-Anna%27s_hummingbird.jpg",
+      "pixel_width": 250,
+      "pixel_height": 161,
+      "bytes": 6327,
+      "sha256": "6d1d3f8241f4d6eb25833ba2e4c521631bba53774965f5af028334b872da4050"
+    },
+    "anhu-960.jpg": {
+      "species_id": "anhu",
+      "width": 960,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Anna%27s_hummingbird.jpg/960px-Anna%27s_hummingbird.jpg",
+      "pixel_width": 960,
+      "pixel_height": 620,
+      "bytes": 55978,
+      "sha256": "fd7d9a45fb375a68955f7b1c66904fbeab8ece7be5dd7e5beeb27430ed2ff6a6"
+    },
+    "bcch-250.jpg": {
+      "species_id": "bcch",
+      "width": 250,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Poecile-atricapilla-001.jpg/250px-Poecile-atricapilla-001.jpg",
+      "pixel_width": 250,
+      "pixel_height": 250,
+      "bytes": 16129,
+      "sha256": "6d3579663971179f98e12c2b4cda179b14918e817e446b3891d1e38d7cac08c2"
+    },
+    "bcch-960.jpg": {
+      "species_id": "bcch",
+      "width": 960,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Poecile-atricapilla-001.jpg/960px-Poecile-atricapilla-001.jpg",
+      "pixel_width": 960,
+      "pixel_height": 960,
+      "bytes": 173694,
+      "sha256": "440d0b5367ff8fa61b157ea897f4779fc95633f7d2f636f128bc67d018f5cea4"
+    },
+    "bewr-250.jpg": {
+      "species_id": "bewr",
+      "width": 250,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Bewicks_Wren.jpg/250px-Bewicks_Wren.jpg",
+      "pixel_width": 250,
+      "pixel_height": 250,
+      "bytes": 17961,
+      "sha256": "85a74bb50f7b0fae04180e0be0af8f9ea9ced15c0636507fc174a68c0b79fafb"
+    },
+    "bewr-960.jpg": {
+      "species_id": "bewr",
+      "width": 960,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Bewicks_Wren.jpg/960px-Bewicks_Wren.jpg",
+      "pixel_width": 960,
+      "pixel_height": 960,
+      "bytes": 214006,
+      "sha256": "823724f9d9996fa1af4d74c11ee46bcb1ddbe9d8c0211ca684988c0bf4517898"
+    },
+    "bush-250.jpg": {
+      "species_id": "bush",
+      "width": 250,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/BushtitMale.jpg/250px-BushtitMale.jpg",
+      "pixel_width": 250,
+      "pixel_height": 200,
+      "bytes": 14854,
+      "sha256": "e233569527dc4895952b8d8a4e0149545877fb83c2eb70870e3bee6a9198c37a"
+    },
+    "bush-960.jpg": {
+      "species_id": "bush",
+      "width": 960,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/BushtitMale.jpg/960px-BushtitMale.jpg",
+      "pixel_width": 960,
+      "pixel_height": 768,
+      "bytes": 159226,
+      "sha256": "de973db3a5b9d36847abaccff14956d8a9559e91556523a8b74d35fc97108614"
+    },
+    "cbch-250.jpg": {
+      "species_id": "cbch",
+      "width": 250,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/Chestnut-backed_Chickadee_2154ab_%28cropped%29.jpg/250px-Chestnut-backed_Chickadee_2154ab_%28cropped%29.jpg",
+      "pixel_width": 250,
+      "pixel_height": 190,
+      "bytes": 11241,
+      "sha256": "3bf4665c4bc6578f9337dbaa2130fbb1ff39a4a339c6a8dbbb63f28e9dae84e1"
+    },
+    "cbch-960.jpg": {
+      "species_id": "cbch",
+      "width": 960,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/Chestnut-backed_Chickadee_2154ab_%28cropped%29.jpg/960px-Chestnut-backed_Chickadee_2154ab_%28cropped%29.jpg",
+      "pixel_width": 960,
+      "pixel_height": 728,
+      "bytes": 109421,
+      "sha256": "bbf2928471bf002502c84f702810bcb4599d5530341c48e5b5ec273043ee2bc0"
+    },
+    "deju-250.jpg": {
+      "species_id": "deju",
+      "width": 250,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Junco_hyemalis_hyemalis_CT1_%28cropped%29.jpg/250px-Junco_hyemalis_hyemalis_CT1_%28cropped%29.jpg",
+      "pixel_width": 250,
+      "pixel_height": 167,
+      "bytes": 8313,
+      "sha256": "c9a63151b637e987edf15df827ede5ab580b25ac97a640a221effca37068ac6b"
+    },
+    "deju-960.jpg": {
+      "species_id": "deju",
+      "width": 960,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Junco_hyemalis_hyemalis_CT1_%28cropped%29.jpg/960px-Junco_hyemalis_hyemalis_CT1_%28cropped%29.jpg",
+      "pixel_width": 960,
+      "pixel_height": 641,
+      "bytes": 103826,
+      "sha256": "84ade66fab9b2c328e79b0191aeddfa16411a82614da1d9b7e4924fb46bf1826"
+    },
+    "eust-250.jpg": {
+      "species_id": "eust",
+      "width": 250,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg/250px-Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg",
+      "pixel_width": 250,
+      "pixel_height": 334,
+      "bytes": 16783,
+      "sha256": "ef4ece76c482f2bc2286b5189bfce2c2ed5245877ad6634a2f8da6116a286b98"
+    },
+    "eust-960.jpg": {
+      "species_id": "eust",
+      "width": 960,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg/960px-Toulouse_-_Sturnus_vulgaris_-_2012-02-26_-_3.jpg",
+      "pixel_width": 960,
+      "pixel_height": 1282,
+      "bytes": 200945,
+      "sha256": "004bdc5ea05fae7947d156ded23d898222ff7eceaf1231d2382e259b4d5e2385"
+    },
+    "gcsp-250.jpg": {
+      "species_id": "gcsp",
+      "width": 250,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Zonotrichia_atricapilla_-British_Columbia%2C_Canada-8.jpg/250px-Zonotrichia_atricapilla_-British_Columbia%2C_Canada-8.jpg",
+      "pixel_width": 250,
+      "pixel_height": 166,
+      "bytes": 13760,
+      "sha256": "2a17f882f5db8591ea7ff1b41ddcef0c147011316ead20cb1c077b11e9bff655"
+    },
+    "gcsp-960.jpg": {
+      "species_id": "gcsp",
+      "width": 960,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Zonotrichia_atricapilla_-British_Columbia%2C_Canada-8.jpg/960px-Zonotrichia_atricapilla_-British_Columbia%2C_Canada-8.jpg",
+      "pixel_width": 960,
+      "pixel_height": 636,
+      "bytes": 113698,
+      "sha256": "c3fb2c1c04bc25afede9cd240604841e3e312da27429c80cae181a54167d7f0e"
+    },
+    "hofi-250.jpg": {
+      "species_id": "hofi",
+      "width": 250,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/House_finch_%2833688%292.jpg/250px-House_finch_%2833688%292.jpg",
+      "pixel_width": 250,
+      "pixel_height": 196,
+      "bytes": 12546,
+      "sha256": "91171944e300702d484999573e820109a0fd267eb1dcc64f4ad8353641ad8842"
+    },
+    "hofi-960.jpg": {
+      "species_id": "hofi",
+      "width": 960,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/House_finch_%2833688%292.jpg/960px-House_finch_%2833688%292.jpg",
+      "pixel_width": 960,
+      "pixel_height": 754,
+      "bytes": 117994,
+      "sha256": "579395b0bb7e6874eebb8fa10cfdac8f50a5ef69edab601163596a1a672e6fea"
+    },
+    "nofl-250.jpg": {
+      "species_id": "nofl",
+      "width": 250,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Northern_yellow-shafted_flicker_male_%2833737%29_%28cropped%29.jpg/250px-Northern_yellow-shafted_flicker_male_%2833737%29_%28cropped%29.jpg",
+      "pixel_width": 250,
+      "pixel_height": 250,
+      "bytes": 21255,
+      "sha256": "87c7e6ca891ada6599beee53ebe584d4f449edb4641a57f7d9595af0a8dc268b"
+    },
+    "nofl-960.jpg": {
+      "species_id": "nofl",
+      "width": 960,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Northern_yellow-shafted_flicker_male_%2833737%29_%28cropped%29.jpg/960px-Northern_yellow-shafted_flicker_male_%2833737%29_%28cropped%29.jpg",
+      "pixel_width": 960,
+      "pixel_height": 960,
+      "bytes": 180890,
+      "sha256": "71efc9ccd8275d545e8339c32b51bfb42e5e44555c47108f8d6593ca26c7c462"
+    },
+    "sosp-250.jpg": {
+      "species_id": "sosp",
+      "width": 250,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Song_sparrow_in_Prospect_Park_%2893031%29.jpg/250px-Song_sparrow_in_Prospect_Park_%2893031%29.jpg",
+      "pixel_width": 250,
+      "pixel_height": 175,
+      "bytes": 7958,
+      "sha256": "cd3f4b5ddede897f0edb24b252d0c5b966c7e244bd47e4f0cebdad1eff142b91"
+    },
+    "sosp-960.jpg": {
+      "species_id": "sosp",
+      "width": 960,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Song_sparrow_in_Prospect_Park_%2893031%29.jpg/960px-Song_sparrow_in_Prospect_Park_%2893031%29.jpg",
+      "pixel_width": 960,
+      "pixel_height": 673,
+      "bytes": 66237,
+      "sha256": "ddf6664bd9ae8d24000bc4ef3943cc605608947bba52b15ef73151c866834202"
+    },
+    "spto-250.jpg": {
+      "species_id": "spto",
+      "width": 250,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Spotted_Towhee_%2832684403303%29.jpg/250px-Spotted_Towhee_%2832684403303%29.jpg",
+      "pixel_width": 250,
+      "pixel_height": 200,
+      "bytes": 21286,
+      "sha256": "ee921687688321fa9b3af2bf8e7777f254954963c44db5358fcff1ee3aea049a"
+    },
+    "spto-960.jpg": {
+      "species_id": "spto",
+      "width": 960,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Spotted_Towhee_%2832684403303%29.jpg/960px-Spotted_Towhee_%2832684403303%29.jpg",
+      "pixel_width": 960,
+      "pixel_height": 768,
+      "bytes": 196904,
+      "sha256": "744e14e25f57eb8cc7d9633982004c3e40185c60386d1bcecfe4295ae8c0ad4b"
+    },
+    "stja-250.jpg": {
+      "species_id": "stja",
+      "width": 250,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Steller%27s_Jay_flagstaff_arizona.jpg/250px-Steller%27s_Jay_flagstaff_arizona.jpg",
+      "pixel_width": 250,
+      "pixel_height": 378,
+      "bytes": 32551,
+      "sha256": "ec54c4ad3bfa76c93391352b94b4d1ecc006eafaffba876c75c8cde54ecfd9ba"
+    },
+    "stja-960.jpg": {
+      "species_id": "stja",
+      "width": 960,
+      "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Steller%27s_Jay_flagstaff_arizona.jpg/960px-Steller%27s_Jay_flagstaff_arizona.jpg",
+      "pixel_width": 960,
+      "pixel_height": 1452,
+      "bytes": 269178,
+      "sha256": "d00656b3c79bda5a530dd17a874f455ab80c3e5839f521d85f1fafbdbd884df3"
+    }
+  }
+}

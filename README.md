@@ -114,6 +114,21 @@ Sync fetches metadata for new IDs, caches untouched sources under `.cache/manual
 
 `content/audio-metadata.lock.json` and the generated manifest are checked in. The normal site build never contacts Xeno-canto; it fails with sync guidance when selections, metadata, the manifest, or local audio assets are stale or missing.
 
+## Bundled photos
+
+Bird photos ship with the app and the web demo, so learning makes no third-party requests. Each species' `photo` in `content/manifest-base.json` names its Wikimedia Commons file and lists local `srcset` candidates such as `/content/bird-photos/amro-250.jpg 250w`. `bundle_photos.py` downloads Wikimedia's own thumbnail of that file at each width, byte for byte, and records the source URL, size and SHA-256 in `content/photo-metadata.lock.json`. The photos are committed under `beakspeak/public/content/bird-photos/`.
+
+```bash
+# After changing a species' photo in manifest-base.json (contacts Wikimedia).
+uv run python3 bundle_photos.py
+uv run python3 manual_audio.py   # re-syncs the generated manifest and audio lock digest
+
+# Offline verification used by the production and native builds.
+uv run python3 bundle_photos.py --check
+```
+
+Keep `creator`, `license`, `license_url` and `source_url` accurate when changing a photo, and do not edit image content. See `docs/content-licenses.md`.
+
 The previous candidate-ranking, BirdNET, and local Audio Admin workflow remains available as a legacy research tool, but it no longer supplies production audio or the runtime manifest.
 
 ## Testing
@@ -260,7 +275,8 @@ beakspeak/
   public/content/
     manifest.json          # Species data with local audio/photo paths
     audio/manual/          # Generated manual-selection OGG clips (gitignored)
-    photos/                # JPEG photos (gitignored)
+    bird-photos/           # Bundled Wikimedia Commons thumbnails (committed)
+    photos/                # Legacy research downloads from download_media.py (gitignored, never shipped)
   src/
     core/                  # Pure TS — no React/DOM deps (portable to iOS later)
       types.ts             # All shared interfaces
@@ -281,7 +297,7 @@ beakspeak/
       shared/              # Navigation, AudioButton, AttributionInfo
 ```
 
-At the repository root, `content/manifest-base.json` owns non-audio app content, `content/audio-selections.toml` owns human recording choices, and `content/audio-metadata.lock.json` records fetched metadata and generated-output state.
+At the repository root, `content/manifest-base.json` owns non-audio app content, `content/audio-selections.toml` owns human recording choices, `content/audio-metadata.lock.json` records fetched metadata and generated-output state, and `content/photo-metadata.lock.json` records the provenance and hashes of the bundled photos.
 
 ## Key design decisions
 

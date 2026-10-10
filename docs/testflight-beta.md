@@ -81,7 +81,9 @@ your device's backup settings. BeakSpeak provides no account or cloud progress
 sync. Resetting progress removes the saved learning records and confusion history.
 
 Bird photos load from Wikimedia servers. Photo requests disclose ordinary
-network request information to that provider. Opening a source or credit link
+network request information to that provider. (This describes builds 1–3.
+Build 4 and later bundle their photos and make no such requests; the public
+Privacy page describes current builds.) Opening a source or credit link
 launches the linked website in your browser, where that website's policies apply.
 
 The beta uses Apple's TestFlight distribution and feedback services. Apple
@@ -333,12 +335,18 @@ clip can play. Force-quit and reopen to verify progress remains. Submit issues
 through TestFlight screenshot feedback. Photos require a network connection;
 bundled audio is available offline.
 
-## Session-exit confirmation build — pending
+## Session-exit confirmation and bundled-photo build — pending
 
 The next beta is version `2.0.0`, build `4`, archived from `main` at or after
-`4b04c02` (PR #71's merge). Build `3` was archived before PR #71 merged, so it
+the merge of #70 (bundled photos). Build `3` was archived before PR #71 merged, so it
 still has the disabled tab bar during lessons and quizzes. Build 4 also carries
-the beakspeak.app support and privacy pages from #33.
+the beakspeak.app support and privacy pages from #33. No build is released or
+submitted for review until #70 is done.
+
+#70 bundles the 15 bird photos with the app. Build 3 loaded them from Wikimedia;
+build 4 makes no network requests during learning. Before App Store submission,
+record the native network check for build 4 in
+[the App Store collateral](app-store-collateral.md#prepared-portal-responses).
 
 PR #71 replaces the disabled tab bar with a confirmation. During a lesson,
 refresher, review, or practice, tapping a tab or the session's own Back/Quit asks
@@ -363,3 +371,7 @@ doesn't change review times.
 Then complete a short lesson and quiz, play a song and call, lock the phone
 during audio, return, and confirm another clip plays. Force-quit and reopen to
 verify progress remains. Submit issues through TestFlight screenshot feedback.
+
+Turn on airplane mode, then open a lesson, a quiz, Progress, and About. Every
+bird photo should appear. A bird illustration in place of a photo is a bug;
+report it with the bird's name.

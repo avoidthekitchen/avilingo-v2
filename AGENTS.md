@@ -45,8 +45,10 @@ scripts/             ← Build, packaging, validation, deploy, and native-smoke 
 content/audio-selections.toml      ← Production audio source of truth (XC IDs + optional original-source trims)
 content/audio-metadata.lock.json   ← Resolved XC metadata, trim windows, and output hashes
 content/manifest-base.json         ← Non-audio content used to generate the runtime manifest
+content/photo-metadata.lock.json   ← Provenance and hashes of the committed bundled photos
 manual_audio.py      ← Production manual-audio sync, encoder, manifest builder, and offline checker
-download_media.py    ← Content pipeline: downloads audio + photos, builds manifest
+bundle_photos.py     ← Production photo download (Wikimedia thumbnails, byte for byte) and offline checker
+download_media.py    ← Legacy research pipeline: downloads audio + photos, builds manifest
 export_app_audio.py  ← App-audio export: regenerates manual trim outputs + manifest from existing local app audio
 populate_content.py  ← Content pipeline: queries Xeno-canto + Wikipedia, ranks mixed candidates
 tier1_seattle_birds_populated.json  ← Legacy candidate pool (not used by production audio builds)
@@ -186,6 +188,9 @@ Production audio is a manual, declarative content build and is not part of the a
 - `content/audio-metadata.lock.json` preserves metadata, resolved automatic windows, source/output hashes, and algorithm versions. Ordinary builds use `manual_audio.py --check` and never contact Xeno-canto.
 - Generated audio lives under `beakspeak/public/content/audio/manual/` and source downloads under `.cache/manual-audio/`; both are gitignored and reconstructed by `uv run python3 manual_audio.py`.
 - `XC_API_KEY` is required only when resolving a new XC ID or using `--refresh-metadata`.
+- Bird photos are bundled, not loaded from Wikimedia. `content/manifest-base.json` lists each species' local `/content/bird-photos/{id}-{width}.jpg` srcset and the Commons file it comes from. `bundle_photos.py` downloads Wikimedia's thumbnails byte for byte into `beakspeak/public/content/bird-photos/` (committed) and records hashes in `content/photo-metadata.lock.json`. Builds run only `bundle_photos.py --check`, which never contacts Wikimedia. After editing the base manifest, re-run `uv run python3 manual_audio.py` so the audio lock's base-manifest digest and the generated manifest update.
+- `beakspeak/public/content/photos/` holds legacy research downloads. It is gitignored and pruned from every build; never reference it from the manifest.
+- The app must not request third-party hosts while learning. The Playwright fixture fails any test whose page leaves the app origin; keep it that way so the App Store "Data Not Collected" label stays true.
 - `populate_content.py`, `download_media.py`, `export_app_audio.py`, and `admin/` are the legacy candidate-research workflow. They remain callable but must not generate or overwrite production audio or `manifest.json` during normal build/deploy work.
 - Managed with `uv` (see `pyproject.toml`): https://docs.astral.sh/uv
 - Requires: Python 3.12+, ffmpeg/ffprobe, and `requests`

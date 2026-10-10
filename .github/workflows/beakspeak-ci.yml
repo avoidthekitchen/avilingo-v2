@@ -7,6 +7,8 @@ on:
       - 'content/**'
       - 'manual_audio.py'
       - 'test_manual_audio.py'
+      - 'bundle_photos.py'
+      - 'test_bundle_photos.py'
       - 'scripts/**'
       - 'pyproject.toml'
       - 'uv.lock'
@@ -19,6 +21,8 @@ on:
       - 'content/**'
       - 'manual_audio.py'
       - 'test_manual_audio.py'
+      - 'bundle_photos.py'
+      - 'test_bundle_photos.py'
       - 'scripts/**'
       - 'pyproject.toml'
       - 'uv.lock'
@@ -79,16 +83,16 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install manual audio test dependencies
+      - name: Install content pipeline test dependencies
         working-directory: .
         run: |
           python -m pip install requests pytest
           sudo apt-get update
           sudo apt-get install -y ffmpeg
 
-      - name: Manual audio tests
+      - name: Content pipeline tests
         working-directory: .
-        run: python -m pytest -q test_manual_audio.py
+        run: python -m pytest -q test_manual_audio.py test_bundle_photos.py
 
       - uses: actions/setup-node@v4
         with:
@@ -128,7 +132,7 @@ jobs:
         working-directory: .
         run: uv run python3 manual_audio.py
 
-      - name: Validate production audio before browser playback
+      - name: Validate production audio and bundled photos before browser tests
         run: npm run content:check
 
       - name: Mobile E2E

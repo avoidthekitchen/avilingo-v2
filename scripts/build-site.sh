@@ -3,15 +3,16 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
-echo "Checking manual audio content..."
+echo "Checking manual audio and bundled photos..."
 cd "$REPO_ROOT"
 uv run python3 manual_audio.py --check
+uv run python3 bundle_photos.py --check
 
 echo "Building BeakSpeak app..."
 cd "$REPO_ROOT/beakspeak"
 npm run build:web
 
-echo "Keeping only production manual audio..."
+echo "Keeping only production audio and bundled photos..."
 CONTENT_BUILD_DIR="$REPO_ROOT/beakspeak/dist/content"
 bash "$REPO_ROOT/scripts/prune-runtime-content.sh" "$CONTENT_BUILD_DIR"
 

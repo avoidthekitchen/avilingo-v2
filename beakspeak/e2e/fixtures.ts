@@ -135,10 +135,25 @@ class BeakSpeakApp {
     await expect(this.page.getByText('0 reps')).toHaveCount(15)
   }
 
+  // Every rendered bird photo must be a bundled copy that actually decoded. The
+  // illustration fallback would otherwise hide a broken path or srcset candidate.
+  async expectBundledPhotosLoaded(count?: number) {
+    const photos = this.page.locator('img[src*="/content/bird-photos/"]')
+    if (count === undefined) {
+      await expect(photos.first()).toBeVisible()
+    } else {
+      await expect(photos).toHaveCount(count)
+    }
+    await expect(this.page.locator('[data-photo-fallback]')).toHaveCount(0)
+    await expect.poll(() => photos.evaluateAll(images => images
+      .map(image => image as HTMLImageElement)
+      .filter(image => !image.complete || image.naturalWidth === 0 || !image.currentSrc.includes('/beakspeak/content/bird-photos/'))
+      .map(image => image.currentSrc || image.src))).toEqual([])
+  }
 }
 
 export const test = base.extend<{ app: BeakSpeakApp }>({
-  app: async ({ page }, runFixture) => {
+  app: async ({ page, baseURL }, runFixture) => {
     const consoleErrors: string[] = []
     page.on('console', message => {
       if (message.type() === 'error') {
@@ -149,16 +164,21 @@ export const test = base.extend<{ app: BeakSpeakApp }>({
       consoleErrors.push(error.message)
     })
 
-    // Product-flow tests should not depend on Wikimedia uptime or rate limits.
-    // The photo-fallback spec registers a later route to exercise image failure.
-    await page.route('https://*.wikimedia.org/**', route => route.fulfill({
-      status: 200,
-      contentType: 'image/svg+xml',
-      body: '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect width="80" height="80" fill="#dfe8df"/></svg>',
-    }))
+    // Photos and audio are bundled, so the app itself must never leave its origin.
+    // External links the learner taps open in a separate page and are not routed here.
+    const appOrigin = new URL(baseURL!).origin
+    const offOriginRequests: string[] = []
+    await page.route(
+      url => url.protocol.startsWith('http') && url.origin !== appOrigin,
+      route => {
+        offOriginRequests.push(route.request().url())
+        return route.abort('blockedbyclient')
+      },
+    )
 
     await runFixture(new BeakSpeakApp(page))
 
+    expect(offOriginRequests).toEqual([])
     expect(consoleErrors).toEqual([])
   },
 })

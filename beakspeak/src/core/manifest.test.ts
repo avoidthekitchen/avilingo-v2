@@ -5,8 +5,10 @@ import {
   getInTierConfuserPairs,
   getLessons,
   resolveAssetUrl,
+  resolveManifestAssets,
+  resolveSrcset,
 } from './manifest'
-import type { Manifest, Species, ConfuserPair } from './types'
+import type { AudioClip, Manifest, Species, ConfuserPair } from './types'
 
 function makeSpecies(id: string): Species {
   return {
@@ -105,8 +107,51 @@ describe('resolveAssetUrl', () => {
       .toBe('./content/audio/manual/amro/song.ogg')
   })
 
-  it('leaves remote photo URLs unchanged', () => {
-    const photoUrl = 'https://upload.wikimedia.org/example.jpg'
-    expect(resolveAssetUrl(photoUrl, './')).toBe(photoUrl)
+  it('leaves absolute URLs unchanged', () => {
+    const url = 'https://example.com/example.jpg'
+    expect(resolveAssetUrl(url, './')).toBe(url)
+  })
+})
+
+describe('resolveSrcset', () => {
+  const srcset = '/content/bird-photos/amro-250.jpg 250w, /content/bird-photos/amro-960.jpg 960w'
+
+  it('places every responsive candidate under the Cloudflare deployment route', () => {
+    expect(resolveSrcset(srcset, '/beakspeak/')).toBe(
+      '/beakspeak/content/bird-photos/amro-250.jpg 250w, /beakspeak/content/bird-photos/amro-960.jpg 960w',
+    )
+  })
+
+  it('uses relative candidates in the packaged web view', () => {
+    expect(resolveSrcset(srcset, './')).toBe(
+      './content/bird-photos/amro-250.jpg 250w, ./content/bird-photos/amro-960.jpg 960w',
+    )
+  })
+})
+
+describe('resolveManifestAssets', () => {
+  it('resolves photo, srcset and audio URLs together', () => {
+    const manifest = makeManifest(['amro'])
+    const species = manifest.species[0]
+    species.photo.url = '/content/bird-photos/amro-960.jpg'
+    species.photo.srcset = '/content/bird-photos/amro-250.jpg 250w, /content/bird-photos/amro-960.jpg 960w'
+    species.audio_clips.songs = [{ audio_url: '/content/audio/manual/amro/song-xc1.ogg' } as AudioClip]
+
+    resolveManifestAssets(manifest, '/beakspeak/')
+
+    expect(species.photo.url).toBe('/beakspeak/content/bird-photos/amro-960.jpg')
+    expect(species.photo.srcset).toBe(
+      '/beakspeak/content/bird-photos/amro-250.jpg 250w, /beakspeak/content/bird-photos/amro-960.jpg 960w',
+    )
+    expect(species.audio_clips.songs[0].audio_url).toBe('/beakspeak/content/audio/manual/amro/song-xc1.ogg')
+  })
+
+  it('tolerates a photo without responsive candidates', () => {
+    const manifest = makeManifest(['amro'])
+
+    resolveManifestAssets(manifest, './')
+
+    expect(manifest.species[0].photo.url).toBe('./test.jpg')
+    expect(manifest.species[0].photo.srcset).toBeUndefined()
   })
 })
